@@ -628,10 +628,6 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
             ? MacroList.LavaCoFactory2
             : MacroList.LavaCoFactory1;
         adventure(lavaCo, macro);
-        if (choiceFollowsFight()) {
-          print("Unexpected choice adventure here");
-          runChoice(-1);
-        }
       }
     },
   },
@@ -651,10 +647,6 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
             ? MacroList.VelvetGoldMine2
             : MacroList.VelvetGoldMine1;
         adventure(velvetGoldMine, macro);
-        if (choiceFollowsFight()) {
-          print("Unexpected choice adventure here");
-          runChoice(-1);
-        }
       }
     },
   },

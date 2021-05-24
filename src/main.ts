@@ -139,7 +139,7 @@ const mummingConstumes = new Map([
 // Community Service Starts!
 //
 export function main() {
-  sinceKolmafiaRevision(20736);
+  sinceKolmafiaRevision(20739);
 
   if (myPath() !== "Community Service") {
     checkReadyToAscend();
