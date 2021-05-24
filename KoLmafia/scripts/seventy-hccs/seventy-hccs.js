@@ -34280,6 +34280,7 @@ var MacroList = {
 }; // Replace Libram's adventureMacro functionality for now with kolmafia.js 1.0.8
 
 function adventure(loc, macro) {
+  (0,external_kolmafia_.setAutoAttack)(0);
   (0,external_kolmafia_.adv1)(loc, 0, function () {
     return macro.toString();
   });
