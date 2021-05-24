@@ -437,7 +437,6 @@ function preCoilWire() {
   checkAvailable($item`your cowboy boots`);
   cliExecute("Detective Solver");
   checkAvailable($item`gold detective badge`);
-  //smashBarrels(); // really wanna do something with these items, like autosell?
   buffUpBeginning();
   if (!have($effect`That's Just Cloud-Talk, Man`)) {
     visitUrl("place.php?whichplace=campaway&action=campaway_sky");

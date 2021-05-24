@@ -88,7 +88,7 @@ interface eventData {
 export const events: Record<string, eventData> = {
   protonicGhost: {
     max: 1,
-    current(): number {
+    current() {
       return get("ghostLocation") === null || get("feelNostalgicMonster") !== $monster`pterodactyl`
         ? this.max
         : 0;
@@ -105,7 +105,7 @@ export const events: Record<string, eventData> = {
 
   innerElf: {
     max: 0,
-    current(): number {
+    current() {
       return myLevel() < 13 || have($effect`Inner Elf`) ? this.max : -1;
     },
     run: () => {
@@ -124,7 +124,7 @@ export const events: Record<string, eventData> = {
 
   ungulith: {
     max: 0,
-    current: (): number => availableAmount($item`corrupted marrow`) - 1,
+    current: () => availableAmount($item`corrupted marrow`) - 1,
     run: () => {
       if (!have($item`photocopied monster`)) {
         whitelist(FAX_AND_SLIME_CLAN);
@@ -151,7 +151,7 @@ export const events: Record<string, eventData> = {
 
   latteCarrot: {
     max: 0,
-    current(): number {
+    current() {
       return get("latteUnlocks").includes("carrot") ? this.max : -1;
     },
     run: () => {
@@ -164,7 +164,7 @@ export const events: Record<string, eventData> = {
 
   chateauPainting: {
     max: 0,
-    current(): number {
+    current() {
       return get("_chateauMonsterFought") ? this.max : -1;
     },
     run: () => {
@@ -189,7 +189,7 @@ export const events: Record<string, eventData> = {
 
   ghostCarol: {
     max: 0,
-    current: (): number => haveEffect($effect`Do You Crush What I Crush?`) - 1,
+    current: () => haveEffect($effect`Do You Crush What I Crush?`) - 1,
     run: () => {
       equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
       useFamiliar($familiar`Ghost of Crimbo Carols`);
@@ -200,7 +200,7 @@ export const events: Record<string, eventData> = {
 
   digitize: {
     max: 1,
-    current: (): number => get("_sourceTerminalDigitizeMonsterCount"),
+    current: () => get("_sourceTerminalDigitizeMonsterCount"),
     run: () => {
       equipRetroCapeMystStats();
       selectBestFamiliar(FamiliarFlag.Default);
@@ -210,7 +210,7 @@ export const events: Record<string, eventData> = {
 
   ninjaCostume: {
     max: 1,
-    current: (): number => availableAmount($item`li'l ninja costume`),
+    current: () => availableAmount($item`li'l ninja costume`),
     run: () => {
       equip($slot`acc1`, $item`Lil' Doctor™ bag`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
@@ -221,7 +221,7 @@ export const events: Record<string, eventData> = {
 
   loveTunnel: {
     max: 3,
-    current(): number {
+    current() {
       return get("_loveTunnelUsed") ? this.max : 0;
     },
     run: () => {
@@ -243,7 +243,7 @@ export const events: Record<string, eventData> = {
 
   tenPercentBonus: {
     max: 0,
-    current: (): number => 0 - availableAmount($item`a ten-percent bonus`),
+    current: () => 0 - availableAmount($item`a ten-percent bonus`),
     run: () => {
       checkEffect($effect`That's Just Cloud-Talk, Man`);
       checkEffect($effect`Inscrutable Gaze`);
@@ -257,7 +257,7 @@ export const events: Record<string, eventData> = {
 
   upscaleDistrictKill: {
     max: 1,
-    current(): number {
+    current() {
       return have($effect`Whole Latte Love`) ? this.max : availableAmount($item`sprinkles`) - 54;
     },
     run: () => {
@@ -271,7 +271,7 @@ export const events: Record<string, eventData> = {
 
   upscaleDistrictRunaway: {
     max: 0,
-    current: (): number => haveEffect($effect`Whole Latte Love`) - 1,
+    current: () => haveEffect($effect`Whole Latte Love`) - 1,
     run: () => {
       checkEffect($effect`Ode to Booze`);
       useFamiliar($familiar`Frumious Bandersnatch`);
@@ -287,7 +287,7 @@ export const events: Record<string, eventData> = {
 
   civicCenterRunaway: {
     max: 0,
-    current: (): number => get("_gingerbreadCityTurns") - 15,
+    current: () => get("_gingerbreadCityTurns") - 15,
     run() {
       checkEffect($effect`Ode to Booze`);
       useFamiliar($familiar`Frumious Bandersnatch`);
@@ -302,7 +302,7 @@ export const events: Record<string, eventData> = {
 
   witchessRook: {
     max: 0,
-    current: (): number => haveEffect(toEffect("Sweetbreads Flambé")) - 1,
+    current: () => haveEffect(toEffect("Sweetbreads Flambé")) - 1,
     run: () => {
       acquireEffect($effect`Ur-Kel's Aria of Annoyance`);
       equipOutfit(Quest.Leveling);
@@ -315,7 +315,7 @@ export const events: Record<string, eventData> = {
 
   snojo: {
     max: 10,
-    current: (): number => get("_snojoFreeFights"),
+    current: () => get("_snojoFreeFights"),
     run: () => {
       if (get("snojoSetting").toLowerCase() !== `${$stat`Muscle`}`.toLowerCase()) {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
@@ -329,7 +329,7 @@ export const events: Record<string, eventData> = {
 
   bricko: {
     max: 3,
-    current(): number {
+    current() {
       return !have(BRICKO_TARGET_ITEM) ? this.max : get("_brickoFights");
     },
     run: () => {
@@ -341,7 +341,7 @@ export const events: Record<string, eventData> = {
 
   witchessWitch: {
     max: 0,
-    current: (): number => availableAmount($item`battle broom`) - 1,
+    current: () => availableAmount($item`battle broom`) - 1,
     run: () => {
       selectBestFamiliar(FamiliarFlag.Default);
       fightWitchess($monster`Witchess Witch`, MacroList.WitchessWitch);
@@ -351,7 +351,7 @@ export const events: Record<string, eventData> = {
 
   eldritch: {
     max: 1,
-    current(): number {
+    current() {
       return get("_eldritchHorrorEvoked") ? this.max : 0;
     },
     run: () => {
@@ -367,7 +367,7 @@ export const events: Record<string, eventData> = {
 
   gingerbreadCig: {
     max: 5,
-    current(): number {
+    current() {
       return this.max - availableAmount($item`gingerbread cigarette`);
     },
     run: () => {
@@ -378,7 +378,7 @@ export const events: Record<string, eventData> = {
 
   vote: {
     max: 1,
-    current(): number {
+    current() {
       return voterMonsterNow() ? get("_voteFreeFights") : this.max;
     },
     run: () => {
@@ -390,7 +390,7 @@ export const events: Record<string, eventData> = {
 
   godLobster: {
     max: 3,
-    current: (): number => get("_godLobsterFights"),
+    current: () => get("_godLobsterFights"),
     run: () => {
       if (events.godLobster.current() === events.godLobster.max - 1) {
         setPropertyInt(`choiceAdventure1310`, 2); // Receive a boon instead of equipment
@@ -415,7 +415,7 @@ export const events: Record<string, eventData> = {
 
   witchessKing: {
     max: 0,
-    current: (): number => availableAmount($item`dented scepter`) - 1,
+    current: () => availableAmount($item`dented scepter`) - 1,
     run: () => {
       selectBestFamiliar(FamiliarFlag.Default);
       fightWitchess($monster`Witchess King`, MacroList.FreeFight);
@@ -424,7 +424,7 @@ export const events: Record<string, eventData> = {
 
   witchess: {
     max: 5,
-    current: (): number => get("_witchessFights"),
+    current: () => get("_witchessFights"),
     run: () => {
       selectBestFamiliar(FamiliarFlag.Default);
       fightWitchess($monster`Witchess Queen`, MacroList.WitchessQueen);
@@ -433,8 +433,7 @@ export const events: Record<string, eventData> = {
 
   dmtSquare: {
     max: 0,
-    current: (): number =>
-      haveEffect($effect`Joy`) + availableAmount($item`abstraction: action`) - 1,
+    current: () => haveEffect($effect`Joy`) + availableAmount($item`abstraction: action`) - 1,
     run: () => {
       useFamiliar($familiar`Machine Elf`);
       adventureMacro(deepMachineTunnels, MacroList.DMTSquare);
@@ -444,7 +443,7 @@ export const events: Record<string, eventData> = {
 
   dmtCircle: {
     max: 0,
-    current: (): number => haveEffect($effect`Joy`) - 1,
+    current: () => haveEffect($effect`Joy`) - 1,
     run: () => {
       useFamiliar($familiar`Machine Elf`);
       adventureMacro(deepMachineTunnels, MacroList.DMTCircle);
@@ -455,7 +454,7 @@ export const events: Record<string, eventData> = {
 
   dmt: {
     max: 5,
-    current: (): number => get("_machineTunnelsAdv"),
+    current: () => get("_machineTunnelsAdv"),
     run: () => {
       useFamiliar($familiar`Machine Elf`);
       adventureMacroAuto(deepMachineTunnels, MacroList.FreeFight);
@@ -464,7 +463,7 @@ export const events: Record<string, eventData> = {
 
   lecture: {
     max: 17,
-    current: (): number => get("_pocketProfessorLectures"),
+    current: () => get("_pocketProfessorLectures"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       useFamiliar($familiar`Pocket Professor`);
@@ -474,7 +473,7 @@ export const events: Record<string, eventData> = {
 
   backupCamera: {
     max: 11,
-    current: (): number => get("_backUpUses"),
+    current: () => get("_backUpUses"),
     run: () => {
       equip($slot`acc3`, $item`backup camera`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
@@ -484,7 +483,7 @@ export const events: Record<string, eventData> = {
 
   nep: {
     max: 10,
-    current: (): number => get("_neverendingPartyFreeTurns"),
+    current: () => get("_neverendingPartyFreeTurns"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`Beach Comb`);
@@ -495,7 +494,7 @@ export const events: Record<string, eventData> = {
 
   chestXRay: {
     max: 3,
-    current: (): number => get("_chestXRayUsed"),
+    current: () => get("_chestXRayUsed"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
@@ -505,7 +504,7 @@ export const events: Record<string, eventData> = {
 
   shatterPunch: {
     max: 3,
-    current: (): number => get("_shatteringPunchUsed"),
+    current: () => get("_shatteringPunchUsed"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
@@ -515,7 +514,7 @@ export const events: Record<string, eventData> = {
 
   mobHit: {
     max: 1,
-    current(): number {
+    current() {
       return get("_gingerbreadMobHitUsed") ? this.max : 0;
     },
     run: () => {
@@ -527,7 +526,7 @@ export const events: Record<string, eventData> = {
 
   shockingLick: {
     max: 0,
-    current: (): number => 0 - get("shockingLickCharges"),
+    current: () => 0 - get("shockingLickCharges"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
@@ -537,7 +536,7 @@ export const events: Record<string, eventData> = {
 
   latteRefills: {
     max: 0,
-    current: (): number => get("_latteRefillsUsed") - 3,
+    current: () => get("_latteRefillsUsed") - 3,
     run: () => {
       checkEffect($effect`Ode to Booze`);
       equip($slot`off-hand`, $item`latte lovers member's mug`);
