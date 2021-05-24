@@ -1,5 +1,4 @@
 import {
-  adv1,
   availableAmount,
   chew,
   choiceFollowsFight,
@@ -15,7 +14,6 @@ import {
   myLevel,
   print,
   runChoice,
-  setAutoAttack,
   toEffect,
   toInt,
   use,
@@ -34,14 +32,12 @@ import {
   $skill,
   $slot,
   $stat,
-  adventureMacro,
-  adventureMacroAuto,
   ChateauMantegna,
   get,
   have,
   Macro,
 } from "libram";
-import { MacroList, mapMonster } from "./combat";
+import { adventure, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
 import {
@@ -97,7 +93,7 @@ export const events: Record<string, eventData> = {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
       const ghostLoc2 = get("ghostLocation");
-      adventureMacroAuto(ghostLoc2!, MacroList.FreeFight);
+      adventure(ghostLoc2!, MacroList.FreeFight);
       checkAvailable($item`Friendliness Beverage`);
       use($item`Friendliness Beverage`);
     },
@@ -111,10 +107,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       whitelist(FAX_AND_SLIME_CLAN);
       useFamiliar($familiar`Machine Elf`);
-      print(`${MacroList.MotherSlime}`);
-      print("Attempting to go to the slime tube");
-      setAutoAttack(0);
-      adventureMacro(slimeTube, MacroList.MotherSlime);
+      adventure(slimeTube, MacroList.MotherSlime);
       whitelist(MAIN_CLAN);
       if (!have($effect`Inner Elf`)) {
         throw "Error: somehow failed to obtain Inner Elf?";
@@ -129,15 +122,11 @@ export const events: Record<string, eventData> = {
       if (!have($item`photocopied monster`)) {
         whitelist(FAX_AND_SLIME_CLAN);
         cliExecute("fax receive");
+        whitelist(MAIN_CLAN);
       }
+      const copyID = $item`photocopied monster`.descid;
       const faxMon = $monster`Ungulith`;
-      whitelist(MAIN_CLAN);
-      if (
-        !containsText(
-          visitUrl(`desc_item.php?whichitem=${$item`photocopied monster`.descid}`),
-          `${faxMon}`
-        )
-      ) {
+      if (!containsText(visitUrl(`desc_item.php?whichitem=${copyID}`), `${faxMon}`)) {
         throw `Failed to retrieve fax of ${faxMon}`;
       }
       equip($slot`off-hand`, $item`tiny black hole`);
@@ -158,7 +147,7 @@ export const events: Record<string, eventData> = {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       checkEffect($effect`Ode to Booze`);
       useFamiliar($familiar`Frumious Bandersnatch`);
-      adventureMacroAuto(direWarren, MacroList.PickpocketFreeRun);
+      adventure(direWarren, MacroList.PickpocketFreeRun);
     },
   },
 
@@ -193,7 +182,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
       useFamiliar($familiar`Ghost of Crimbo Carols`);
-      adventureMacro(direWarren, MacroList.Banish);
+      adventure(direWarren, MacroList.Banish);
       checkEffect($effect`Do You Crush What I Crush?`);
     },
   },
@@ -204,7 +193,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equipRetroCapeMystStats();
       selectBestFamiliar(FamiliarFlag.Default);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -227,7 +216,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       spendAllMpOnLibrams();
       selectBestFamiliar(FamiliarFlag.NoAttack);
-      adventureMacroAuto(loveTunnel, MacroList.TunnelOfLOV);
+      adventure(loveTunnel, MacroList.TunnelOfLOV);
       if (handlingChoice()) {
         throw "Stuck in LOV?";
       }
@@ -263,7 +252,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equipOutfit(Quest.Sprinkles);
       useFamiliar($familiar`Chocolate Lab`);
-      adventureMacro(upscaleDistrict, MacroList.Sprinkles);
+      adventure(upscaleDistrict, MacroList.Sprinkles);
       equipOutfit(Quest.Leveling);
       checkAvailable($item`sprinkles`, 55);
     },
@@ -275,7 +264,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       checkEffect($effect`Ode to Booze`);
       useFamiliar($familiar`Frumious Bandersnatch`);
-      adventureMacroAuto(upscaleDistrict, MacroList.PickpocketFreeRun);
+      adventure(upscaleDistrict, MacroList.PickpocketFreeRun);
       if (have($item`gingerbread spice latte`)) {
         use($item`gingerbread spice latte`);
         checkAvailable($item`sprinkles`, 5);
@@ -291,7 +280,7 @@ export const events: Record<string, eventData> = {
     run() {
       checkEffect($effect`Ode to Booze`);
       useFamiliar($familiar`Frumious Bandersnatch`);
-      adventureMacroAuto(civicCenter, MacroList.PickpocketFreeRun);
+      adventure(civicCenter, MacroList.PickpocketFreeRun);
       if (this.current() === this.max) {
         if (!have($item`gingerbread cigarette`, 5)) {
           throw `Failed to obtain ${$item`gingerbread cigarette`}`;
@@ -323,7 +312,7 @@ export const events: Record<string, eventData> = {
         runChoice(1); // Don't want snojo to gain -50% myst debuffing bodyparts
       }
       selectBestFamiliar(FamiliarFlag.Default);
-      adventureMacroAuto(snojo, MacroList.FreeFight);
+      adventure(snojo, MacroList.FreeFight);
     },
   },
 
@@ -372,7 +361,7 @@ export const events: Record<string, eventData> = {
     },
     run: () => {
       selectBestFamiliar(FamiliarFlag.NoAttack);
-      adventureMacroAuto(upscaleDistrict, MacroList.FreeFight);
+      adventure(upscaleDistrict, MacroList.FreeFight);
     },
   },
 
@@ -384,7 +373,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`acc3`, $item`"I Voted!" sticker`);
       selectBestFamiliar(FamiliarFlag.Default);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -436,7 +425,7 @@ export const events: Record<string, eventData> = {
     current: () => haveEffect($effect`Joy`) + availableAmount($item`abstraction: action`) - 1,
     run: () => {
       useFamiliar($familiar`Machine Elf`);
-      adventureMacro(deepMachineTunnels, MacroList.DMTSquare);
+      adventure(deepMachineTunnels, MacroList.DMTSquare);
       checkAvailable($item`abstraction: action`);
     },
   },
@@ -446,7 +435,7 @@ export const events: Record<string, eventData> = {
     current: () => haveEffect($effect`Joy`) - 1,
     run: () => {
       useFamiliar($familiar`Machine Elf`);
-      adventureMacro(deepMachineTunnels, MacroList.DMTCircle);
+      adventure(deepMachineTunnels, MacroList.DMTCircle);
       checkAvailable($item`abstraction: joy`);
       chew($item`abstraction: joy`);
     },
@@ -457,7 +446,7 @@ export const events: Record<string, eventData> = {
     current: () => get("_machineTunnelsAdv"),
     run: () => {
       useFamiliar($familiar`Machine Elf`);
-      adventureMacroAuto(deepMachineTunnels, MacroList.FreeFight);
+      adventure(deepMachineTunnels, MacroList.FreeFight);
     },
   },
 
@@ -467,7 +456,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       useFamiliar($familiar`Pocket Professor`);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -477,7 +466,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`acc3`, $item`backup camera`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -488,7 +477,7 @@ export const events: Record<string, eventData> = {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`Beach Comb`);
       selectBestFamiliar(FamiliarFlag.Default);
-      adventureMacroAuto(neverendingParty, MacroList.FreeFight);
+      adventure(neverendingParty, MacroList.FreeFight);
     },
   },
 
@@ -498,7 +487,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -508,7 +497,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -520,7 +509,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -530,7 +519,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
-      adventureMacroAuto(toxicTeacups, MacroList.FreeFight);
+      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -544,7 +533,7 @@ export const events: Record<string, eventData> = {
         cliExecute("latte refill pumpkin cinnamon carrot");
       }
       useFamiliar($familiar`Frumious Bandersnatch`);
-      adventureMacroAuto(direWarren, MacroList.LatteGulpRunaway);
+      adventure(direWarren, MacroList.LatteGulpRunaway);
     },
   },
 } as const;
@@ -566,7 +555,7 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
     run: () => {
       if (!get("_ironicMoustache")) {
         useFamiliar($familiar`Mini-Hipster`);
-        adventureMacroAuto(noobCave, MacroList.FreeFight);
+        adventure(noobCave, MacroList.FreeFight);
         equip($slot`familiar`, $item`none`);
         checkAvailable($item`ironic moustache`);
         cliExecute(`fold ${$item`chiptune guitar`}`);
@@ -579,7 +568,7 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
       if (!get("_bagOfCandy")) {
         useFamiliar($familiar`Stocking Mimic`);
         const ghostLoc1 = get("ghostLocation");
-        adventureMacroAuto(ghostLoc1!, MacroList.FreeFight);
+        adventure(ghostLoc1!, MacroList.FreeFight);
         equip($slot`familiar`, $item`none`);
         checkAvailable($item`bag of many confections`);
       }
@@ -613,58 +602,59 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
   nanobrainy: {
     run: () => {
       if (!get("_gingerbreadClockAdvanced")) {
-        adv1(civicCenter, -1, (a, b, c) => {
-          return Macro.abort().toString();
-        });
+        adventure(civicCenter, Macro.abort());
       }
       if (!have($effect`Nanobrainy`)) {
         equip($slot`back`, $item`vampyric cloake`);
         equip($slot`off-hand`, $item`latte lovers member's mug`);
         useFamiliar($familiar`Nanorhino`);
-        adventureMacro(upscaleDistrict, MacroList.Nanobrainy);
+        adventure(upscaleDistrict, MacroList.Nanobrainy);
       }
     },
   },
 
   lavaCo: {
     run: () => {
-      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-      equip($slot`acc2`, $item`Lil' Doctor™ bag`);
-      equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
-      // TODO: Fix this junk
-      setAutoAttack(0);
-      if (!have($effect`Meteor Showered`)) {
-        adventureMacro(lavaCo, MacroList.LavaCoFactory1);
-      }
-      const lavaCoBanish = get("banishedMonsters");
-      if (lavaCoBanish.includes("lava golem") || lavaCoBanish.includes("factory overseer")) {
-        adventureMacro(lavaCo, MacroList.LavaCoFactory2);
-      }
-      if (choiceFollowsFight()) {
-        runChoice(-1);
+      while (!have($effect`Meteor Showered`)) {
+        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+        equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
+        selectBestFamiliar(FamiliarFlag.NoAttack);
+        const banished = get("banishedMonsters");
+        const macro =
+          banished.includes(`${$monster`factory overseer (male)`}`) ||
+          banished.includes(`${$monster`factory worker (male)`}`) ||
+          banished.includes(`${$monster`lava golem`}`)
+            ? MacroList.LavaCoFactory2
+            : MacroList.LavaCoFactory1;
+        adventure(lavaCo, macro);
+        if (choiceFollowsFight()) {
+          print("Unexpected choice adventure here");
+          runChoice(-1);
+        }
       }
     },
   },
 
   velvetGoldMine: {
     run: () => {
-      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-      equip($slot`acc2`, $item`Lil' Doctor™ bag`);
-      equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
-      // TODO: Fix this junk
-      setAutoAttack(0);
-      if (!have($effect`Meteor Showered`)) {
-        adventureMacro(velvetGoldMine, MacroList.VelvetGoldMine1);
-      }
-      const velvetBanish = get("banishedMonsters");
-      if (
-        velvetBanish.includes("healing crystal golem") ||
-        velvetBanish.includes("mine overseer")
-      ) {
-        adventureMacro(velvetGoldMine, MacroList.VelvetGoldMine2);
-      }
-      if (choiceFollowsFight()) {
-        runChoice(-1);
+      while (!have($effect`Meteor Showered`)) {
+        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+        equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
+        selectBestFamiliar(FamiliarFlag.NoAttack);
+        const banished = get("banishedMonsters");
+        const macro =
+          banished.includes(`${$monster`healing crystal golem`}`) ||
+          banished.includes(`${$monster`mine overseer (male)`}`) ||
+          banished.includes(`${$monster`mine worker (male)`}`)
+            ? MacroList.VelvetGoldMine2
+            : MacroList.VelvetGoldMine1;
+        adventure(velvetGoldMine, macro);
+        if (choiceFollowsFight()) {
+          print("Unexpected choice adventure here");
+          runChoice(-1);
+        }
       }
     },
   },
@@ -675,7 +665,7 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
         equip($item`vampyric cloake`);
         useSkill($skill`The Ode to Booze`);
         useFamiliar($familiar`Frumious Bandersnatch`);
-        adventureMacro(direWarren, MacroList.MistForm);
+        adventure(direWarren, MacroList.MistForm);
       }
     },
   },
@@ -708,7 +698,7 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
         equip($item`vampyric cloake`);
         useSkill($skill`The Ode to Booze`);
         useFamiliar($familiar`Frumious Bandersnatch`);
-        adventureMacro(direWarren, MacroList.BatForm);
+        adventure(direWarren, MacroList.BatForm);
       }
     },
   },

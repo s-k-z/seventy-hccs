@@ -1,4 +1,16 @@
-import { choiceFollowsFight, myHash, runChoice, toInt, toUrl, useSkill, visitUrl } from "kolmafia";
+import {
+  adv1,
+  choiceFollowsFight,
+  inMultiFight,
+  myHash,
+  runCombat,
+  runChoice,
+  toInt,
+  toUrl,
+  useSkill,
+  visitUrl,
+  myTurncount,
+} from "kolmafia";
 import { $effect, $item, $location, $monster, $skill, get, Macro } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
@@ -145,25 +157,33 @@ export const MacroList = {
   ToothlessMastiff: MeteorShowerForce,
 };
 
-export function mapMonster(location: Location, monster: Monster, autoAttack: Macro) {
+// Replace Libram's adventureMacro functionality for now with kolmafia.js 1.0.8
+export function adventure(loc: Location, macro: Macro): void {
+  adv1(loc, 0, () => macro.toString());
+  while (inMultiFight()) runCombat(() => macro.toString());
+  if (choiceFollowsFight()) visitUrl("choice.php");
+}
+
+export function mapMonster(location: Location, monster: Monster, macro: Macro) {
   if (get("_monstersMapped") < 3) {
     if (!get("mappingMonsters")) {
       useSkill($skill`Map the Monsters`);
       if (!get("mappingMonsters")) {
-        throw "Failed to map the monsters?";
+        throw "Failed to cast map the monsters?";
       }
     }
-    autoAttack.setAutoAttack();
+    const expectedTurnCount = myTurncount();
     let mapPage = visitUrl(toUrl(location));
-    if (mapPage.includes("Skeletons In Store")) {
+    while (!mapPage.includes("Leading Yourself Right to Them")) {
       mapPage = visitUrl(toUrl(location));
-    }
-    if (!mapPage.includes("Leading Yourself Right to Them")) {
-      throw "Failed to encounter map monster page";
+      if (myTurncount() > expectedTurnCount) {
+        throw "Failed to encounter map monster page and wasted a turn somehow?";
+      }
     }
     visitUrl(
       `choice.php?pwd=${myHash()}&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`
     );
+    runCombat(() => macro.toString());
     if (choiceFollowsFight()) {
       runChoice(-1);
     }
