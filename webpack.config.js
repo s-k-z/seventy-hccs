@@ -13,7 +13,7 @@ module.exports = {
   devtool: false,
   output: {
     // Change the final string here to the name you want your script to use in mafia.
-    path: path.resolve(__dirname, "..", "Mafia", "scripts", packageData.name),
+    path: path.resolve(__dirname, "KoLmafia", "scripts", packageData.name),
     filename: "[name].js",
     libraryTarget: "commonjs",
   },
