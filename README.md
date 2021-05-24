@@ -10,7 +10,9 @@ Currently it is untested and without expectations that it will work as intended.
 
 Run this command in the graphical CLI:
 
-`svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia`
+```
+svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
+```
 
 ## Requirements before Ascending
 
