@@ -40,7 +40,7 @@ Currently it is untested and without expectations that it will work as intended.
 
 ## To run the script
 
-1. Ensure you have KoLMafia r20739 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
+1. Ensure you have KoLMafia r20738 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
 2. Ensure you have Java Runtime Environment 11 or later [available here](https://adoptopenjdk.net/). (Oracle JRE 8 was not sufficient in my testing)
 3. Copy **seventy_hccs.ccs** to the KoLMafia ccs folder
 4. Copy **seventy-hccs-clans.txt** to the KoLMafia data folder and fill in your own clan and fortune teller data
