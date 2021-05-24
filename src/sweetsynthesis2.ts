@@ -73,7 +73,9 @@ export function synthesize(
   targetEffects: Effect[] = $effects`Synthesis: Smart, Synthesis: Collection, Synthesis: Learning`,
   reserveCandies: [Item, number][] = [
     [$item`Chubby and Plump bar`, 1],
-    [$item`sugar sheet`, 3],
+    [$item`sugar sheet`, 1],
+    [$item`sugar sheet`, 1],
+    [$item`sugar sheet`, 1],
   ]
 ) {
   const candies = {
@@ -99,7 +101,7 @@ export function synthesize(
     });
   }
 
-  // Simulate sweet synthesis with reserved candies omitted, add them back in one at a time until a solution is found
+  // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
   let sim: simulateResult = { result: false, pairs: [] };
   for (let i = 0; i < reserveCandies.length; i++) {
     const used = new Map<Item, number>([...reserveCandies.slice(i)]);
