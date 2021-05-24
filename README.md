@@ -6,6 +6,12 @@ This script requires a large swath of Mr. Store items and permed skills which ar
 
 Currently it is untested and without expectations that it will work as intended.
 
+## To Install
+
+Run this command in the graphical CLI:
+
+`svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia`
+
 ## Requirements before Ascending
 
 1. [Ungulith](https://kol.coldfront.net/thekolwiki/index.php/Ungulith) in a side clan fax machine
@@ -42,8 +48,8 @@ Currently it is untested and without expectations that it will work as intended.
 
 1. Ensure you have KoLMafia r20738 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
 2. Ensure you have Java Runtime Environment 11 or later [available here](https://adoptopenjdk.net/). (Oracle JRE 8 was not sufficient in my testing)
-3. Copy **seventy_hccs.ccs** to the KoLMafia ccs folder
-4. Copy **seventy-hccs-clans.txt** to the KoLMafia data folder and fill in your own clan and fortune teller data
+3. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
+4. Ensure **seventy-hccs-clans.txt** exists in the KoLMafia data folder and fill in your own clan and fortune teller data
 
    - First line is the name of the main clan containing VIP Lounge items
    - Second line is the name of the side clan containing a fax machine with Ungulith and a basement with the Mother Slime ready
