@@ -1,5 +1,7 @@
 import {
+  abort,
   autosell,
+  canInteract,
   changeMcd,
   cliExecute,
   containsText,
@@ -35,6 +37,7 @@ import {
   totalFreeRests,
   use,
   useFamiliar,
+  userConfirm,
   useSkill,
   visitUrl,
 } from "kolmafia";
@@ -101,6 +104,7 @@ import {
   Quest,
 } from "./quests";
 import { synthesize } from "./sweetsynthesis2";
+import { ascend } from "./valhalla";
 
 const choiceAdventures = new Map([
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
@@ -139,7 +143,11 @@ export function main() {
 
   if (myPath() !== "Community Service") {
     checkReadyToAscend();
-    throw "Ready to go! Run this again in Community Service with a Sauceror, Astral statuette, and Wallaby moon sign";
+    if (canInteract() && userConfirm(`Ready to Ascend into Community Service?`)) {
+      ascend();
+    } else {
+      abort();
+    }
   }
   if (myClass() !== $class`Sauceror`) {
     throw `Don't yet know how to run this as a ${myClass()}`;
