@@ -44,21 +44,13 @@ Currently it is untested and without expectations that it will work as intended.
 2. Ensure you have Java Runtime Environment 11 or later [available here](https://adoptopenjdk.net/). (Oracle JRE 8 was not sufficient in my testing)
 3. Copy **seventy_hccs.ccs** to the KoLMafia ccs folder
 4. Copy **seventy-hccs-clans.txt** to the KoLMafia data folder and fill in your own clan and fortune teller data
+
    - First line is the name of the main clan containing VIP Lounge items
    - Second line is the name of the side clan containing a fax machine with Ungulith and a basement with the Mother Slime ready
-5. Run the script file named **seventy-hccs.js** using KoLMafia
+   - Third line (optional) is the name of a character in the main clan that will reply to a fortune, ideally setup to auto-reply (for a 50% roll on an additional simple candy)
 
----
+5. Run the script file named **seventy-hccs.js** using KoLMafia
 
 ## Building from source
 
 Please refer to [kol-js-starter](https://github.com/docrostov/kol-js-starter) on how to get started.
-
----
-
-## To Do
-
-- Update combat to pass in macros as combat filters in adv1()
-- Handle using the force in That 70's Volcano
-- Clean up outfits and effects for tests
-- Fully automate going through the astral gash and making selections in Valhalla

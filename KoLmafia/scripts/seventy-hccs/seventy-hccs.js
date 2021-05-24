@@ -33948,6 +33948,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
  // Unfortunately don't have a clan with everything needed, so going to rely on a second clan for a prepped fax machine and slimetube
 // Requires a data file with main clan name on line 1 and alternate clan on line 2
+// Optional FORTUNE_TELLER_FRIEND must be a character in MAIN_CLAN
 
 var clanData = (0,external_kolmafia_.fileToArray)("seventy-hccs-clans.txt");
 var MAIN_CLAN = clanData[1];
@@ -36065,7 +36066,7 @@ function preCoilWire() {
   tryUse(1, (0,dist.$item)(main_templateObject54 || (main_templateObject54 = main_taggedTemplateLiteral(["letter from King Ralph XI"]))));
   tryUse(1, (0,dist.$item)(main_templateObject55 || (main_templateObject55 = main_taggedTemplateLiteral(["pork elf goodies sack"]))));
 
-  if ((0,dist.get)("_clanFortuneConsultUses") < 3) {
+  if ((0,dist.get)("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND && FORTUNE_TELLER_FRIEND !== "FORTUNE_TELLER_FRIEND_NAME") {
     whitelist(MAIN_CLAN);
     (0,external_kolmafia_.cliExecute)("fortune ".concat(FORTUNE_TELLER_FRIEND, " garbage garbage thick"));
   }
