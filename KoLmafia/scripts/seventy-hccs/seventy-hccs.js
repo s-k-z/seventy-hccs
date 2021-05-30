@@ -35213,6 +35213,7 @@ var events = {
       adventure(toxicTeacups, MacroList.FreeFight);
     }
   },
+  // TODO: Get a shocking lick charge, maybe?
   shockingLick: {
     max: 0,
     current: function current() {

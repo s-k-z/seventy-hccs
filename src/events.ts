@@ -513,6 +513,7 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  // TODO: Get a shocking lick charge, maybe?
   shockingLick: {
     max: 0,
     current: () => 0 - get("shockingLickCharges"),
