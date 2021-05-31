@@ -53,9 +53,9 @@ svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
 3. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
 4. Set properties in kolmafia to appropriate values:
 
-- seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
-- seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
-- seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
+   - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
+   - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
+   - seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
 
 5. Run the script file named **seventy-hccs.js** using KoLMafia
 
