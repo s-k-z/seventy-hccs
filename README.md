@@ -51,11 +51,11 @@ svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
 1. Ensure you have KoLMafia r20738 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
 2. Ensure you have Java Runtime Environment 11 or later [available here](https://adoptopenjdk.net/). (Oracle JRE 8 was not sufficient in my testing)
 3. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
-4. Ensure **seventy-hccs-clans.txt** exists in the KoLMafia data folder and fill in your own clan and fortune teller data
+4. Set properties in kolmafia to appropriate values:
 
-   - First line is the name of the main clan containing VIP Lounge items
-   - Second line is the name of the side clan containing a fax machine with Ungulith and a basement with the Mother Slime ready
-   - Third line (optional) is the name of a character in the main clan that will reply to a fortune, ideally setup to auto-reply (for a 50% roll on an additional simple candy)
+- seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
+- seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
+- seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
 
 5. Run the script file named **seventy-hccs.js** using KoLMafia
 
