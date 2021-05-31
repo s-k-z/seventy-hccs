@@ -34282,14 +34282,10 @@ var MacroList = {
 
 function adventure(loc, macro) {
   (0,external_kolmafia_.setAutoAttack)(0);
-  (0,external_kolmafia_.adv1)(loc, 0, function () {
-    return macro.toString();
-  });
+  (0,external_kolmafia_.adv1)(loc, 0, macro.toString());
 
   while ((0,external_kolmafia_.inMultiFight)()) {
-    (0,external_kolmafia_.runCombat)(function () {
-      return macro.toString();
-    });
+    (0,external_kolmafia_.runCombat)(macro.toString());
   }
 
   if ((0,external_kolmafia_.choiceFollowsFight)()) (0,external_kolmafia_.visitUrl)("choice.php");
@@ -34316,9 +34312,7 @@ function mapMonster(location, monster, macro) {
     }
 
     (0,external_kolmafia_.visitUrl)("choice.php?pwd=".concat((0,external_kolmafia_.myHash)(), "&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=").concat(monster.id));
-    (0,external_kolmafia_.runCombat)(function () {
-      return macro.toString();
-    });
+    (0,external_kolmafia_.runCombat)(macro.toString());
 
     if ((0,external_kolmafia_.choiceFollowsFight)()) {
       (0,external_kolmafia_.runChoice)(-1);
