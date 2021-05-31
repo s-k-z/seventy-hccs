@@ -33950,10 +33950,9 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 // Requires a data file with main clan name on line 1 and alternate clan on line 2
 // Optional FORTUNE_TELLER_FRIEND must be a character in MAIN_CLAN
 
-var clanData = (0,external_kolmafia_.fileToArray)("seventy-hccs-clans.txt");
-var MAIN_CLAN = clanData[1];
-var FAX_AND_SLIME_CLAN = clanData[2];
-var FORTUNE_TELLER_FRIEND = clanData[3]; // Define which BRICKO fight to use by changing BRICKO_TARGET_ITEM
+var MAIN_CLAN = (0,external_kolmafia_.getProperty)("seventyhccs_main_clan");
+var FAX_AND_SLIME_CLAN = (0,external_kolmafia_.getProperty)("seventyhccs_side_clan");
+var FORTUNE_TELLER_FRIEND = (0,external_kolmafia_.getProperty)("seventyhccs_fortune_friend"); // Define which BRICKO fight to use by changing BRICKO_TARGET_ITEM
 
 var brickoOptions = {
   "BRICKO ooze": 2,
@@ -34278,7 +34277,7 @@ var MacroList = {
   BatForm: new dist.Macro().trySkill((0,dist.$skill)(_templateObject66 || (_templateObject66 = combat_taggedTemplateLiteral(["Become a Bat"])))).step(TryBanish),
   LatteGulpRunaway: new dist.Macro().trySkill((0,dist.$skill)(_templateObject67 || (_templateObject67 = combat_taggedTemplateLiteral(["Gulp Latte"])))).step("runaway"),
   ToothlessMastiff: MeteorShowerForce
-}; // Replace Libram's adventureMacro functionality for now with kolmafia.js 1.0.8
+}; // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
 
 function adventure(loc, macro) {
   (0,external_kolmafia_.setAutoAttack)(0);
@@ -35792,6 +35791,8 @@ function main() {
   var date = new Date();
   var startTime = date.getTime();
   (0,external_kolmafia_.print)("Save the Kingdom, save the world. Community Service time!", "green");
+  if (MAIN_CLAN.length < 1) throw "seventycs_main_clan property not set";
+  if (FAX_AND_SLIME_CLAN.length < 1) throw "seventycs_side_clan not set";
   (0,external_kolmafia_.print)("Using main clan ".concat(MAIN_CLAN, " and fax/slime clan ").concat(FAX_AND_SLIME_CLAN)); // Initialize choice adventure defaults
 
   var _iterator = main_createForOfIteratorHelper(choiceAdventures),
@@ -36061,7 +36062,7 @@ function preCoilWire() {
   tryUse(1, (0,dist.$item)(main_templateObject54 || (main_templateObject54 = main_taggedTemplateLiteral(["letter from King Ralph XI"]))));
   tryUse(1, (0,dist.$item)(main_templateObject55 || (main_templateObject55 = main_taggedTemplateLiteral(["pork elf goodies sack"]))));
 
-  if ((0,dist.get)("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND && FORTUNE_TELLER_FRIEND !== "FORTUNE_TELLER_FRIEND_NAME") {
+  if ((0,dist.get)("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     whitelist(MAIN_CLAN);
     (0,external_kolmafia_.cliExecute)("fortune ".concat(FORTUNE_TELLER_FRIEND, " garbage garbage thick"));
   }

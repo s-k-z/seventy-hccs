@@ -1,13 +1,12 @@
-import { fileToArray } from "kolmafia";
+import { getProperty } from "kolmafia";
 import { $item } from "libram";
 
 // Unfortunately don't have a clan with everything needed, so going to rely on a second clan for a prepped fax machine and slimetube
 // Requires a data file with main clan name on line 1 and alternate clan on line 2
 // Optional FORTUNE_TELLER_FRIEND must be a character in MAIN_CLAN
-const clanData = fileToArray("seventy-hccs-clans.txt");
-export const MAIN_CLAN = clanData[1];
-export const FAX_AND_SLIME_CLAN = clanData[2];
-export const FORTUNE_TELLER_FRIEND = clanData[3];
+export const MAIN_CLAN = getProperty("seventyhccs_main_clan");
+export const FAX_AND_SLIME_CLAN = getProperty("seventyhccs_side_clan");
+export const FORTUNE_TELLER_FRIEND = getProperty("seventyhccs_fortune_friend");
 // Define which BRICKO fight to use by changing BRICKO_TARGET_ITEM
 const brickoOptions = {
   "BRICKO ooze": 2,

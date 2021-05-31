@@ -156,6 +156,8 @@ export function main() {
   const date = new Date();
   const startTime = date.getTime();
   print("Save the Kingdom, save the world. Community Service time!", "green");
+  if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
+  if (FAX_AND_SLIME_CLAN.length < 1) throw `seventycs_side_clan not set`;
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
   // Initialize choice adventure defaults
   for (const [key, value] of choiceAdventures) {
@@ -397,11 +399,7 @@ function preCoilWire() {
   visitUrl("tutorial.php?action=toot");
   tryUse(1, $item`letter from King Ralph XI`);
   tryUse(1, $item`pork elf goodies sack`);
-  if (
-    get("_clanFortuneConsultUses") < 3 &&
-    FORTUNE_TELLER_FRIEND &&
-    FORTUNE_TELLER_FRIEND !== "FORTUNE_TELLER_FRIEND_NAME"
-  ) {
+  if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     whitelist(MAIN_CLAN);
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
