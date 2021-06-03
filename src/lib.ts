@@ -9,7 +9,6 @@ import {
   itemAmount,
   myMeat,
   runChoice,
-  setProperty,
   toInt,
   totalTurnsPlayed,
   use,
@@ -74,10 +73,6 @@ export function cookPizza(a: Item, b: Item, c: Item, d: Item) {
     checkAvailable(f);
   });
   visitUrl(`campground.php?action=makepizza&pizza=${toInt(a)},${toInt(b)},${toInt(c)},${toInt(d)}`);
-}
-
-export function setPropertyInt(name: string, value: number) {
-  setProperty(name, `${value}`);
 }
 
 export function shrugEffect(effect: Effect) {

@@ -34028,9 +34028,6 @@ function cookPizza(a, b, c, d) {
   });
   (0,external_kolmafia_.visitUrl)("campground.php?action=makepizza&pizza=".concat((0,external_kolmafia_.toInt)(a), ",").concat((0,external_kolmafia_.toInt)(b), ",").concat((0,external_kolmafia_.toInt)(c), ",").concat((0,external_kolmafia_.toInt)(d)));
 }
-function setPropertyInt(name, value) {
-  (0,external_kolmafia_.setProperty)(name, "".concat(value));
-}
 function shrugEffect(effect) {
   if ((0,dist.have)(effect)) {
     (0,external_kolmafia_.cliExecute)("shrug ".concat(effect));
@@ -34413,7 +34410,7 @@ function scavengeDaycare() {
 
     if ((0,dist.get)("_daycareGymScavenges") < 1) {
       (0,external_kolmafia_.print)("Incrementing daycare scavenges count", "red");
-      setPropertyInt("_daycareGymScavenges", 1);
+      (0,dist.set)("_daycareGymScavenges", 1);
     }
   }
 }
@@ -35064,7 +35061,7 @@ var events = {
     },
     run: function run() {
       if (events.godLobster.current() === events.godLobster.max - 1) {
-        setPropertyInt("choiceAdventure1310", 2); // Receive a boon instead of equipment
+        (0,dist.set)("choiceAdventure1310", 2); // Receive a boon instead of equipment
       }
 
       (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject99 || (events_templateObject99 = events_taggedTemplateLiteral(["God Lobster"]))));
@@ -35773,6 +35770,8 @@ var mummingConstumes = new Map([[(0,dist.$familiar)(main_templateObject || (main
 
 function main() {
   (0,dist.sinceKolmafiaRevision)(20738);
+  var date = new Date();
+  var startTime = date.getTime();
 
   if ((0,external_kolmafia_.myPath)() !== "Community Service") {
     checkReadyToAscend();
@@ -35784,54 +35783,82 @@ function main() {
     }
   }
 
-  if ((0,external_kolmafia_.myClass)() !== (0,dist.$class)(main_templateObject6 || (main_templateObject6 = main_taggedTemplateLiteral(["Sauceror"])))) {
-    throw "Don't yet know how to run this as a ".concat((0,external_kolmafia_.myClass)());
-  }
-
-  var date = new Date();
-  var startTime = date.getTime();
-  (0,external_kolmafia_.print)("Save the Kingdom, save the world. Community Service time!", "green");
+  if ((0,external_kolmafia_.myClass)() !== (0,dist.$class)(main_templateObject6 || (main_templateObject6 = main_taggedTemplateLiteral(["Sauceror"])))) throw "Don't yet know how to run this as ".concat((0,external_kolmafia_.myClass)());
   if (MAIN_CLAN.length < 1) throw "seventycs_main_clan property not set";
   if (FAX_AND_SLIME_CLAN.length < 1) throw "seventycs_side_clan not set";
-  (0,external_kolmafia_.print)("Using main clan ".concat(MAIN_CLAN, " and fax/slime clan ").concat(FAX_AND_SLIME_CLAN)); // Initialize choice adventure defaults
+  (0,external_kolmafia_.print)("Save the Kingdom, save the world. Community Service time!", "green");
+  (0,external_kolmafia_.print)("Using main clan ".concat(MAIN_CLAN, " and fax/slime clan ").concat(FAX_AND_SLIME_CLAN));
+  var prevCCS = (0,dist.get)("customCombatScript");
+  var seventyCCS = "seventy_hccs";
+  var prevChoiceSettings = new Map();
 
   var _iterator = main_createForOfIteratorHelper(choiceAdventures),
       _step;
 
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _step$value = main_slicedToArray(_step.value, 2),
-          key = _step$value[0],
-          value = _step$value[1];
+      var _step$value = main_slicedToArray(_step.value, 1),
+          key = _step$value[0];
 
-      setPropertyInt("choiceAdventure".concat(key), value);
-    } // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
-
+      prevChoiceSettings.set(key, (0,dist.get)("choiceAdventure".concat(key)));
+    }
   } catch (err) {
     _iterator.e(err);
   } finally {
     _iterator.f();
   }
 
-  var _iterator2 = main_createForOfIteratorHelper(mummingConstumes),
-      _step2;
+  var setChoices = function setChoices(choices) {
+    var _iterator2 = main_createForOfIteratorHelper(choices),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var _step2$value = main_slicedToArray(_step2.value, 2),
+            key = _step2$value[0],
+            value = _step2$value[1];
+
+        (0,dist.set)("choiceAdventure".concat(key), value);
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+  };
 
   try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var _step2$value = main_slicedToArray(_step2.value, 2),
-          _key = _step2$value[0],
-          _value = _step2$value[1];
-
-      (0,external_kolmafia_.useFamiliar)(_key);
-      (0,external_kolmafia_.cliExecute)("mummery ".concat(_value));
-    }
-  } catch (err) {
-    _iterator2.e(err);
+    setChoices(choiceAdventures);
+    (0,external_kolmafia_.setProperty)("customCombatScript", seventyCCS);
+    doQuests();
   } finally {
-    _iterator2.f();
+    setChoices(prevChoiceSettings);
+    (0,external_kolmafia_.setProperty)("customCombatScript", prevCCS);
   }
 
-  (0,external_kolmafia_.setProperty)("ccs", "seventy_hccs");
+  var endTime = date.getTime();
+  (0,external_kolmafia_.print)("Community Service completed in ".concat((endTime - startTime) / 1000, " seconds"));
+}
+
+function doQuests() {
+  // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
+  var _iterator3 = main_createForOfIteratorHelper(mummingConstumes),
+      _step3;
+
+  try {
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var _step3$value = main_slicedToArray(_step3.value, 2),
+          key = _step3$value[0],
+          value = _step3$value[1];
+
+      (0,external_kolmafia_.useFamiliar)(key);
+      (0,external_kolmafia_.cliExecute)("mummery ".concat(value));
+    }
+  } catch (err) {
+    _iterator3.e(err);
+  } finally {
+    _iterator3.f();
+  }
 
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire(); // 60 turns down the drain 😢
@@ -35917,8 +35944,8 @@ function main() {
       // handle librams, sausages, garbage shirt, etc.
 
 
-      for (var _i = 0, _Object$values = Object.values(events); _i < _Object$values.length; _i++) {
-        var event = _Object$values[_i];
+      for (var _i2 = 0, _Object$values = Object.values(events); _i2 < _Object$values.length; _i2++) {
+        var event = _Object$values[_i2];
 
         if (event.current() < event.max) {
           event.run();
@@ -36032,8 +36059,6 @@ function main() {
   }
 
   prepAndDoQuest(Quest.Donate);
-  var endTime = date.getTime();
-  (0,external_kolmafia_.print)("Community Service completed in ".concat((endTime - startTime) / 1000, " seconds"));
 }
 
 function openQuestZones() {

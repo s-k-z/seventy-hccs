@@ -52,6 +52,7 @@ import {
   $stat,
   get,
   have,
+  set,
   sinceKolmafiaRevision,
   SourceTerminal,
 } from "libram";
@@ -85,7 +86,6 @@ import {
   acquireGumOrHermitItem,
   buyUpTo,
   checkAvailable,
-  setPropertyInt,
   shrugEffect,
   tryRunChoice,
   tryUse,
@@ -141,6 +141,9 @@ const mummingConstumes = new Map([
 export function main() {
   sinceKolmafiaRevision(20738);
 
+  const date = new Date();
+  const startTime = date.getTime();
+
   if (myPath() !== "Community Service") {
     checkReadyToAscend();
     if (canInteract() && userConfirm(`Ready to Ascend into Community Service?`)) {
@@ -149,27 +152,46 @@ export function main() {
       abort();
     }
   }
-  if (myClass() !== $class`Sauceror`) {
-    throw `Don't yet know how to run this as a ${myClass()}`;
-  }
 
-  const date = new Date();
-  const startTime = date.getTime();
-  print("Save the Kingdom, save the world. Community Service time!", "green");
+  if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as ${myClass()}`;
   if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventycs_side_clan not set`;
+
+  print("Save the Kingdom, save the world. Community Service time!", "green");
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
-  // Initialize choice adventure defaults
-  for (const [key, value] of choiceAdventures) {
-    setPropertyInt(`choiceAdventure${key}`, value);
+
+  const prevCCS = get("customCombatScript");
+  const seventyCCS = "seventy_hccs";
+
+  const prevChoiceSettings = new Map<number, number>();
+  for (const [key] of choiceAdventures) {
+    prevChoiceSettings.set(key, get(`choiceAdventure${key}`));
   }
+  const setChoices = (choices: Map<number, number>) => {
+    for (const [key, value] of choices) {
+      set(`choiceAdventure${key}`, value);
+    }
+  };
+
+  try {
+    setChoices(choiceAdventures);
+    setProperty("customCombatScript", seventyCCS);
+    doQuests();
+  } finally {
+    setChoices(prevChoiceSettings);
+    setProperty("customCombatScript", prevCCS);
+  }
+
+  const endTime = date.getTime();
+  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`);
+}
+
+function doQuests() {
   // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
   for (const [key, value] of mummingConstumes) {
     useFamiliar(key);
     cliExecute(`mummery ${value}`);
   }
-
-  setProperty("ccs", "seventy_hccs");
 
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
@@ -371,9 +393,6 @@ export function main() {
   }
 
   prepAndDoQuest(Quest.Donate);
-
-  const endTime = date.getTime();
-  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`);
 }
 
 function openQuestZones() {

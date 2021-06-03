@@ -11,9 +11,9 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } from "libram";
+import { $class, $effect, $item, $skill, $stat, get, have, Macro, set, Witchess } from "libram";
 import { BRICKOS_PER_FIGHT } from "./config";
-import { setPropertyInt, tryRunChoice } from "./lib";
+import { tryRunChoice } from "./lib";
 
 export function castBestLibram() {
   if (
@@ -90,7 +90,7 @@ export function scavengeDaycare() {
     tryRunChoice(2, 1336, "scavenge for gym equipment.");
     if (get("_daycareGymScavenges") < 1) {
       print("Incrementing daycare scavenges count", "red");
-      setPropertyInt("_daycareGymScavenges", 1);
+      set("_daycareGymScavenges", 1);
     }
   }
 }

@@ -35,18 +35,12 @@ import {
   get,
   have,
   Macro,
+  set,
 } from "libram";
 import { adventure, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
-import {
-  acquireEffect,
-  checkAvailable,
-  checkEffect,
-  setPropertyInt,
-  voterMonsterNow,
-  whitelist,
-} from "./lib";
+import { acquireEffect, checkAvailable, checkEffect, voterMonsterNow, whitelist } from "./lib";
 import { equipOutfit, equipRetroCapeMystStats, Quest } from "./quests";
 
 export enum FamiliarFlag {
@@ -381,7 +375,7 @@ export const events: Record<string, eventData> = {
     current: () => get("_godLobsterFights"),
     run: () => {
       if (events.godLobster.current() === events.godLobster.max - 1) {
-        setPropertyInt(`choiceAdventure1310`, 2); // Receive a boon instead of equipment
+        set(`choiceAdventure1310`, 2); // Receive a boon instead of equipment
       }
       useFamiliar($familiar`God Lobster`);
       MacroList.FreeFight.setAutoAttack();
