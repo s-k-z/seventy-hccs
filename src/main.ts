@@ -176,7 +176,7 @@ export function main() {
   try {
     setChoices(choiceAdventures);
     setProperty("customCombatScript", seventyCCS);
-    doQuests();
+    levelAndDoQuests();
   } finally {
     setChoices(prevChoiceSettings);
     setProperty("customCombatScript", prevCCS);
@@ -186,7 +186,7 @@ export function main() {
   print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`);
 }
 
-function doQuests() {
+function levelAndDoQuests() {
   // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
   for (const [key, value] of mummingConstumes) {
     useFamiliar(key);

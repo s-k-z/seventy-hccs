@@ -35830,7 +35830,7 @@ function main() {
   try {
     setChoices(choiceAdventures);
     (0,external_kolmafia_.setProperty)("customCombatScript", seventyCCS);
-    doQuests();
+    levelAndDoQuests();
   } finally {
     setChoices(prevChoiceSettings);
     (0,external_kolmafia_.setProperty)("customCombatScript", prevCCS);
@@ -35840,7 +35840,7 @@ function main() {
   (0,external_kolmafia_.print)("Community Service completed in ".concat((endTime - startTime) / 1000, " seconds"));
 }
 
-function doQuests() {
+function levelAndDoQuests() {
   // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
   var _iterator3 = main_createForOfIteratorHelper(mummingConstumes),
       _step3;
