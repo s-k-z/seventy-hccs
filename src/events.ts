@@ -12,7 +12,6 @@ import {
   myHash,
   myHp,
   myLevel,
-  print,
   runChoice,
   toEffect,
   toInt,
