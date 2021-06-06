@@ -139,7 +139,7 @@ const mummingConstumes = new Map([
 // Community Service Starts!
 //
 export function main() {
-  sinceKolmafiaRevision(20738);
+  sinceKolmafiaRevision(20752);
 
   const date = new Date();
   const startTime = date.getTime();

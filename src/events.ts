@@ -78,7 +78,7 @@ export const events: Record<string, eventData> = {
   protonicGhost: {
     max: 1,
     current() {
-      return get("ghostLocation") === null || get("feelNostalgicMonster") !== $monster`pterodactyl`
+      return get("ghostLocation") === null || get("lastCopyableMonster") !== $monster`pterodactyl`
         ? this.max
         : 0;
     },

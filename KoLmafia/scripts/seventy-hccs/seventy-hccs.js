@@ -34749,7 +34749,7 @@ var events = {
   protonicGhost: {
     max: 1,
     current: function current() {
-      return (0,dist.get)("ghostLocation") === null || (0,dist.get)("feelNostalgicMonster") !== (0,dist.$monster)(events_templateObject16 || (events_templateObject16 = events_taggedTemplateLiteral(["pterodactyl"]))) ? this.max : 0;
+      return (0,dist.get)("ghostLocation") === null || (0,dist.get)("lastCopyableMonster") !== (0,dist.$monster)(events_templateObject16 || (events_templateObject16 = events_taggedTemplateLiteral(["pterodactyl"]))) ? this.max : 0;
     },
     run: function run() {
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject17 || (events_templateObject17 = events_taggedTemplateLiteral(["back"]))), (0,dist.$item)(events_templateObject18 || (events_templateObject18 = events_taggedTemplateLiteral(["protonic accelerator pack"]))));
@@ -35769,7 +35769,7 @@ var mummingConstumes = new Map([[(0,dist.$familiar)(main_templateObject || (main
 //
 
 function main() {
-  (0,dist.sinceKolmafiaRevision)(20738);
+  (0,dist.sinceKolmafiaRevision)(20752);
   var date = new Date();
   var startTime = date.getTime();
 
