@@ -10,6 +10,7 @@ import {
   eat,
   effectModifier,
   equip,
+  equippedItem,
   getCampground,
   getProperty,
   haveEquipped,
@@ -221,12 +222,16 @@ function levelAndDoQuests() {
         useSkill($skill`That's Not a Knife`);
       }
 
-      while (
-        myLevel() >= CHATEAU_REST_LEVEL &&
-        //myMaxmp() - myMp() > 150 &&
-        get("timesRested") < totalFreeRests()
-      ) {
-        visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+      const chateauNapReady = (): boolean => {
+        return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
+      };
+      if (chateauNapReady()) {
+        const prevOffhand = equippedItem($slot`off-hand`);
+        equip($slot`off-hand`, $item`familiar scrapbook`);
+        while (chateauNapReady()) {
+          visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+        }
+        equip($slot`off-hand`, prevOffhand);
       }
 
       if (!have($effect`Soulerskates`)) {
