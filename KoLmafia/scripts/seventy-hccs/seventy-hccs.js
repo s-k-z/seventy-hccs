@@ -34035,7 +34035,8 @@ function shrugEffect(effect) {
 }
 function tryRunChoice(pageIndex, choiceID, goal) {
   if (!(0,external_kolmafia_.runChoice)(pageIndex).includes("whichchoice=".concat(choiceID))) {
-    throw "Error: failed to ".concat(goal.charAt(0).toLowerCase()).concat(goal.slice(1));
+    var trim = goal.trim();
+    throw "Error: failed to ".concat(trim.charAt(0).toLowerCase()).concat(trim.slice(1));
   }
 }
 function tryUse(n, i) {

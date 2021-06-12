@@ -83,7 +83,8 @@ export function shrugEffect(effect: Effect) {
 
 export function tryRunChoice(pageIndex: number, choiceID: number, goal: string) {
   if (!runChoice(pageIndex).includes(`whichchoice=${choiceID}`)) {
-    throw `Error: failed to ${goal.charAt(0).toLowerCase()}${goal.slice(1)}`;
+    const trim = goal.trim();
+    throw `Error: failed to ${trim.charAt(0).toLowerCase()}${trim.slice(1)}`;
   }
 }
 
