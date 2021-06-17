@@ -33974,6 +33974,20 @@ var MP_SAFE_LIMIT = 500;
 ;// CONCATENATED MODULE: ./src/lib.ts
 var lib_templateObject, _templateObject2, _templateObject3, _templateObject4;
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function lib_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 
@@ -34064,22 +34078,67 @@ function wishEffect(e) {
     (0,external_kolmafia_.cliExecute)("genie effect ".concat(e));
   }
 }
+function withContext(func, context) {
+  var previous = new Map();
+
+  var setPrefsTo = function setPrefsTo(c) {
+    var _iterator = _createForOfIteratorHelper(c),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var _step$value = _slicedToArray(_step.value, 2),
+            prop = _step$value[0],
+            value = _step$value[1];
+
+        (0,dist.set)(prop, value);
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  };
+
+  var _iterator2 = _createForOfIteratorHelper(context),
+      _step2;
+
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var _step2$value = _slicedToArray(_step2.value, 1),
+          prop = _step2$value[0];
+
+      previous.set(prop, (0,dist.get)(prop));
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+
+  try {
+    setPrefsTo(context);
+    func();
+  } finally {
+    setPrefsTo(previous);
+  }
+}
 ;// CONCATENATED MODULE: ./src/diet.ts
 var diet_templateObject, diet_templateObject2, diet_templateObject3, diet_templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51;
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || diet_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return diet_arrayLikeToArray(arr); }
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function diet_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = diet_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function diet_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return diet_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return diet_arrayLikeToArray(o, minLen); }
 
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function diet_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function diet_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -34172,7 +34231,7 @@ var diabolicPizzas = {
 for (var _i = 0, _Object$values = Object.values(diabolicPizzas); _i < _Object$values.length; _i++) {
   var pizza = _Object$values[_i];
 
-  var _iterator = _createForOfIteratorHelper(pizza.ingredients),
+  var _iterator = diet_createForOfIteratorHelper(pizza.ingredients),
       _step;
 
   try {
@@ -34197,7 +34256,7 @@ function eatPizzas() {
     var _pizza = _Object$values2[_i2];
 
     if (!(0,dist.have)(_pizza.effect)) {
-      var _iterator2 = _createForOfIteratorHelper(_pizza.ingredients),
+      var _iterator2 = diet_createForOfIteratorHelper(_pizza.ingredients),
           _step2;
 
       try {
@@ -34321,13 +34380,13 @@ function mapMonster(location, monster, macro) {
 ;// CONCATENATED MODULE: ./src/iotms.ts
 var iotms_templateObject, iotms_templateObject2, iotms_templateObject3, iotms_templateObject4, iotms_templateObject5, iotms_templateObject6, iotms_templateObject7, iotms_templateObject8, iotms_templateObject9, iotms_templateObject10, iotms_templateObject11, iotms_templateObject12, iotms_templateObject13, iotms_templateObject14, iotms_templateObject15, iotms_templateObject16, iotms_templateObject17, iotms_templateObject18, iotms_templateObject19, iotms_templateObject20, iotms_templateObject21, iotms_templateObject22, iotms_templateObject23, iotms_templateObject24, iotms_templateObject25, iotms_templateObject26, iotms_templateObject27, iotms_templateObject28, iotms_templateObject29, iotms_templateObject30, iotms_templateObject31, iotms_templateObject32, iotms_templateObject33, iotms_templateObject34, iotms_templateObject35, iotms_templateObject36, iotms_templateObject37, iotms_templateObject38;
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || iotms_unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function iotms_slicedToArray(arr, i) { return iotms_arrayWithHoles(arr) || iotms_iterableToArrayLimit(arr, i) || iotms_unsupportedIterableToArray(arr, i) || iotms_nonIterableRest(); }
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function iotms_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function iotms_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function iotms_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function iotms_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = iotms_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -34444,7 +34503,7 @@ function useLibramsDrops() {
 
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _step$value = _slicedToArray(_step.value, 2),
+      var _step$value = iotms_slicedToArray(_step.value, 2),
           item = _step$value[0],
           duration = _step$value[1];
 
@@ -35789,19 +35848,19 @@ function main() {
   if (FAX_AND_SLIME_CLAN.length < 1) throw "seventycs_side_clan not set";
   (0,external_kolmafia_.print)("Save the Kingdom, save the world. Community Service time!", "green");
   (0,external_kolmafia_.print)("Using main clan ".concat(MAIN_CLAN, " and fax/slime clan ").concat(FAX_AND_SLIME_CLAN));
-  var prevCCS = (0,dist.get)("customCombatScript");
-  var seventyCCS = "seventy_hccs";
-  var prevChoiceSettings = new Map();
+  var settings = new Map();
+  settings.set("customCombatScript", "seventy_hccs");
 
   var _iterator = main_createForOfIteratorHelper(choiceAdventures),
       _step;
 
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _step$value = main_slicedToArray(_step.value, 1),
-          key = _step$value[0];
+      var _step$value = main_slicedToArray(_step.value, 2),
+          prop = _step$value[0],
+          val = _step$value[1];
 
-      prevChoiceSettings.set(key, (0,dist.get)("choiceAdventure".concat(key)));
+      settings.set("choiceAdventure".concat(prop), val);
     }
   } catch (err) {
     _iterator.e(err);
@@ -35809,56 +35868,29 @@ function main() {
     _iterator.f();
   }
 
-  var setChoices = function setChoices(choices) {
-    var _iterator2 = main_createForOfIteratorHelper(choices),
-        _step2;
-
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var _step2$value = main_slicedToArray(_step2.value, 2),
-            key = _step2$value[0],
-            value = _step2$value[1];
-
-        (0,dist.set)("choiceAdventure".concat(key), value);
-      }
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
-    }
-  };
-
-  try {
-    setChoices(choiceAdventures);
-    (0,external_kolmafia_.setProperty)("customCombatScript", seventyCCS);
-    levelAndDoQuests();
-  } finally {
-    setChoices(prevChoiceSettings);
-    (0,external_kolmafia_.setProperty)("customCombatScript", prevCCS);
-  }
-
+  withContext(levelAndDoQuests, settings);
   var endTime = date.getTime();
   (0,external_kolmafia_.print)("Community Service completed in ".concat((endTime - startTime) / 1000, " seconds"));
 }
 
 function levelAndDoQuests() {
   // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
-  var _iterator3 = main_createForOfIteratorHelper(mummingConstumes),
-      _step3;
+  var _iterator2 = main_createForOfIteratorHelper(mummingConstumes),
+      _step2;
 
   try {
-    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-      var _step3$value = main_slicedToArray(_step3.value, 2),
-          key = _step3$value[0],
-          value = _step3$value[1];
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var _step2$value = main_slicedToArray(_step2.value, 2),
+          key = _step2$value[0],
+          value = _step2$value[1];
 
       (0,external_kolmafia_.useFamiliar)(key);
       (0,external_kolmafia_.cliExecute)("mummery ".concat(value));
     }
   } catch (err) {
-    _iterator3.e(err);
+    _iterator2.e(err);
   } finally {
-    _iterator3.f();
+    _iterator2.f();
   }
 
   if (haveQuest(Quest.CoilWire)) {

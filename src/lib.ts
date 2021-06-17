@@ -14,7 +14,7 @@ import {
   use,
   visitUrl,
 } from "kolmafia";
-import { $item, have } from "libram";
+import { $item, get, have, set } from "libram";
 
 export function acquireEffect(e: Effect) {
   if (!have(e)) {
@@ -111,5 +111,19 @@ export function whitelist(clan: string) {
 export function wishEffect(e: Effect) {
   if (!have(e)) {
     cliExecute(`genie effect ${e}`);
+  }
+}
+
+export function withContext(func: Function, context: Map<string, number | string>) {
+  const previous = new Map();
+  const setPrefsTo = (c: Map<string, number | string>) => {
+    for (const [prop, value] of c) set(prop, value);
+  };
+  for (const [prop] of context) previous.set(prop, get(prop));
+  try {
+    setPrefsTo(context);
+    func();
+  } finally {
+    setPrefsTo(previous);
   }
 }

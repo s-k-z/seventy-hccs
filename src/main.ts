@@ -32,7 +32,6 @@ import {
   print,
   retrieveItem,
   runChoice,
-  setProperty,
   soulsauceCost,
   totalFreeRests,
   use,
@@ -52,7 +51,6 @@ import {
   $stat,
   get,
   have,
-  set,
   sinceKolmafiaRevision,
   SourceTerminal,
 } from "libram";
@@ -92,6 +90,7 @@ import {
   tuple,
   whitelist,
   wishEffect,
+  withContext,
 } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import {
@@ -160,27 +159,12 @@ export function main() {
   print("Save the Kingdom, save the world. Community Service time!", "green");
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
 
-  const prevCCS = get("customCombatScript");
-  const seventyCCS = "seventy_hccs";
-
-  const prevChoiceSettings = new Map<number, number>();
-  for (const [key] of choiceAdventures) {
-    prevChoiceSettings.set(key, get(`choiceAdventure${key}`));
+  const settings: Map<string, number | string> = new Map();
+  settings.set("customCombatScript", "seventy_hccs");
+  for (const [prop, val] of choiceAdventures) {
+    settings.set(`choiceAdventure${prop}`, val);
   }
-  const setChoices = (choices: Map<number, number>) => {
-    for (const [key, value] of choices) {
-      set(`choiceAdventure${key}`, value);
-    }
-  };
-
-  try {
-    setChoices(choiceAdventures);
-    setProperty("customCombatScript", seventyCCS);
-    levelAndDoQuests();
-  } finally {
-    setChoices(prevChoiceSettings);
-    setProperty("customCombatScript", prevCCS);
-  }
+  withContext(levelAndDoQuests, settings);
 
   const endTime = date.getTime();
   print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`);
