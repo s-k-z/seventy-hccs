@@ -35850,10 +35850,13 @@ function main() {
   if (FAX_AND_SLIME_CLAN.length < 1) throw "seventycs_side_clan not set";
   (0,external_kolmafia_.print)("Save the Kingdom, save the world. Community Service time!", "green");
   (0,external_kolmafia_.print)("Using main clan ".concat(MAIN_CLAN, " and fax/slime clan ").concat(FAX_AND_SLIME_CLAN));
-  var settings = new Map();
-  settings.set("breakableHandling", 4);
-  settings.set("breakableHandling".concat((0,external_kolmafia_.toInt)((0,dist.$item)(main_templateObject7 || (main_templateObject7 = main_taggedTemplateLiteral(["makeshift garbage shirt"]))))), 2);
-  settings.set("customCombatScript", "seventy_hccs");
+  var settings = new Map([// breakableHandling values:
+  // 1: abort
+  // 2: equip previous
+  // 3: re-equip from inventory, or abort
+  // 4: re-equip from inventory, or previous
+  // 5: acquire & re-equip
+  ["breakableHandling".concat((0,external_kolmafia_.toInt)((0,dist.$item)(main_templateObject7 || (main_templateObject7 = main_taggedTemplateLiteral(["makeshift garbage shirt"]))))), 2], ["customCombatScript", "seventy_hccs"]]);
 
   var _iterator = main_createForOfIteratorHelper(choiceAdventures),
       _step;

@@ -160,9 +160,16 @@ export function main() {
   print("Save the Kingdom, save the world. Community Service time!", "green");
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
 
-  const settings: Map<string, number | string> = new Map();
-  settings.set(`breakableHandling${toInt($item`makeshift garbage shirt`)}`, 2);
-  settings.set("customCombatScript", "seventy_hccs");
+  const settings = new Map<string, number | string>([
+    // breakableHandling values:
+    // 1: abort
+    // 2: equip previous
+    // 3: re-equip from inventory, or abort
+    // 4: re-equip from inventory, or previous
+    // 5: acquire & re-equip
+    [`breakableHandling${toInt($item`makeshift garbage shirt`)}`, 2],
+    ["customCombatScript", "seventy_hccs"],
+  ]);
   for (const [prop, val] of choiceAdventures) {
     settings.set(`choiceAdventure${prop}`, val);
   }
