@@ -127,11 +127,11 @@ const choiceAdventures = new Map([
 ]);
 
 const mummingConstumes = new Map([
-  [$familiar`Garbage Fire`, "item"],
   [$familiar`Green Pixie`, "mp"],
   [$familiar`Machine Elf`, "meat"],
   [$familiar`Melodramedary`, "myst"],
   [$familiar`Pocket Professor`, "hp"],
+  [$familiar`Shorter-Order Cook`, "item"],
 ]);
 
 //

@@ -185,7 +185,7 @@ export const events: Record<string, eventData> = {
     current: () => get("_sourceTerminalDigitizeMonsterCount"),
     run: () => {
       equipRetroCapeMystStats();
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
@@ -288,7 +288,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       acquireEffect($effect`Ur-Kel's Aria of Annoyance`);
       equipOutfit(Quest.Leveling);
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess($monster`Witchess Rook`, MacroList.FreeFight);
       checkAvailable($item`Greek fire`);
       use($item`Greek fire`);
@@ -304,7 +304,7 @@ export const events: Record<string, eventData> = {
         // (1) muscle (2) mysticality (3) moxie (4) tournament (6) leave
         runChoice(1); // Don't want snojo to gain -50% myst debuffing bodyparts
       }
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(snojo, MacroList.FreeFight);
     },
   },
@@ -315,7 +315,7 @@ export const events: Record<string, eventData> = {
       return !have(BRICKO_TARGET_ITEM) ? this.max : get("_brickoFights");
     },
     run: () => {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       MacroList.FreeFight.setAutoAttack();
       use(BRICKO_TARGET_ITEM);
     },
@@ -325,7 +325,7 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => availableAmount($item`battle broom`) - 1,
     run: () => {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess($monster`Witchess Witch`, MacroList.WitchessWitch);
       equip($slot`acc1`, $item`battle broom`);
     },
@@ -337,7 +337,7 @@ export const events: Record<string, eventData> = {
       return get("_eldritchHorrorEvoked") ? this.max : 0;
     },
     run: () => {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       MacroList.FreeFight.setAutoAttack();
       useSkill($skill`Evoke Eldritch Horror`);
       if (myHp() < 30) {
@@ -365,7 +365,7 @@ export const events: Record<string, eventData> = {
     },
     run: () => {
       equip($slot`acc3`, $item`"I Voted!" sticker`);
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
@@ -399,7 +399,7 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => availableAmount($item`dented scepter`) - 1,
     run: () => {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess($monster`Witchess King`, MacroList.FreeFight);
     },
   },
@@ -408,7 +408,7 @@ export const events: Record<string, eventData> = {
     max: 5,
     current: () => get("_witchessFights"),
     run: () => {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess($monster`Witchess Queen`, MacroList.WitchessQueen);
     },
   },
@@ -458,7 +458,7 @@ export const events: Record<string, eventData> = {
     current: () => get("_backUpUses"),
     run: () => {
       equip($slot`acc3`, $item`backup camera`);
-      selectBestFamiliar(FamiliarFlag.ToxicTeacups);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
@@ -469,7 +469,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`Beach Comb`);
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(neverendingParty, MacroList.FreeFight);
     },
   },
@@ -690,17 +690,17 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
   },
 };
 
-function selectBestFamiliar(flag: FamiliarFlag) {
+function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
   if (!have($effect`Spit Upon`)) {
     useFamiliar($familiar`Melodramedary`);
   } else if (
-    flag !== FamiliarFlag.NoAttack &&
+    flag === FamiliarFlag.Default &&
     !have($item`short stack of pancakes`) &&
     !have($effect`Shortly Stacked`)
   ) {
     useFamiliar($familiar`Shorter-Order Cook`);
   } else if (
-    flag !== FamiliarFlag.NoAttack &&
+    flag === FamiliarFlag.Default &&
     !have($item`tiny bottle of absinthe`) &&
     !have($effect`absinthe minded`)
   ) {

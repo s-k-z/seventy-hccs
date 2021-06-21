@@ -34921,7 +34921,7 @@ var events = {
     },
     run: function run() {
       equipRetroCapeMystStats();
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     }
   },
@@ -35033,7 +35033,7 @@ var events = {
     run: function run() {
       acquireEffect((0,dist.$effect)(events_templateObject86 || (events_templateObject86 = events_taggedTemplateLiteral(["Ur-Kel's Aria of Annoyance"]))));
       equipOutfit(Quest.Leveling);
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess((0,dist.$monster)(events_templateObject87 || (events_templateObject87 = events_taggedTemplateLiteral(["Witchess Rook"]))), MacroList.FreeFight);
       checkAvailable((0,dist.$item)(events_templateObject88 || (events_templateObject88 = events_taggedTemplateLiteral(["Greek fire"]))));
       (0,external_kolmafia_.use)((0,dist.$item)(events_templateObject89 || (events_templateObject89 = events_taggedTemplateLiteral(["Greek fire"]))));
@@ -35051,7 +35051,7 @@ var events = {
         (0,external_kolmafia_.runChoice)(1); // Don't want snojo to gain -50% myst debuffing bodyparts
       }
 
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(snojo, MacroList.FreeFight);
     }
   },
@@ -35061,7 +35061,7 @@ var events = {
       return !(0,dist.have)(BRICKO_TARGET_ITEM) ? this.max : (0,dist.get)("_brickoFights");
     },
     run: function run() {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       MacroList.FreeFight.setAutoAttack();
       (0,external_kolmafia_.use)(BRICKO_TARGET_ITEM);
     }
@@ -35072,7 +35072,7 @@ var events = {
       return (0,external_kolmafia_.availableAmount)((0,dist.$item)(events_templateObject91 || (events_templateObject91 = events_taggedTemplateLiteral(["battle broom"])))) - 1;
     },
     run: function run() {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess((0,dist.$monster)(events_templateObject92 || (events_templateObject92 = events_taggedTemplateLiteral(["Witchess Witch"]))), MacroList.WitchessWitch);
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject93 || (events_templateObject93 = events_taggedTemplateLiteral(["acc1"]))), (0,dist.$item)(events_templateObject94 || (events_templateObject94 = events_taggedTemplateLiteral(["battle broom"]))));
     }
@@ -35083,7 +35083,7 @@ var events = {
       return (0,dist.get)("_eldritchHorrorEvoked") ? this.max : 0;
     },
     run: function run() {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       MacroList.FreeFight.setAutoAttack();
       (0,external_kolmafia_.useSkill)((0,dist.$skill)(events_templateObject95 || (events_templateObject95 = events_taggedTemplateLiteral(["Evoke Eldritch Horror"]))));
 
@@ -35110,7 +35110,7 @@ var events = {
     },
     run: function run() {
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject97 || (events_templateObject97 = events_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(events_templateObject98 || (events_templateObject98 = events_taggedTemplateLiteral(["\"I Voted!\" sticker"]))));
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     }
   },
@@ -35149,7 +35149,7 @@ var events = {
       return (0,external_kolmafia_.availableAmount)((0,dist.$item)(events_templateObject108 || (events_templateObject108 = events_taggedTemplateLiteral(["dented scepter"])))) - 1;
     },
     run: function run() {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess((0,dist.$monster)(events_templateObject109 || (events_templateObject109 = events_taggedTemplateLiteral(["Witchess King"]))), MacroList.FreeFight);
     }
   },
@@ -35159,7 +35159,7 @@ var events = {
       return (0,dist.get)("_witchessFights");
     },
     run: function run() {
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       fightWitchess((0,dist.$monster)(events_templateObject110 || (events_templateObject110 = events_taggedTemplateLiteral(["Witchess Queen"]))), MacroList.WitchessQueen);
     }
   },
@@ -35214,7 +35214,7 @@ var events = {
     },
     run: function run() {
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject123 || (events_templateObject123 = events_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(events_templateObject124 || (events_templateObject124 = events_taggedTemplateLiteral(["backup camera"]))));
-      selectBestFamiliar(FamiliarFlag.ToxicTeacups);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     }
   },
@@ -35226,7 +35226,7 @@ var events = {
     run: function run() {
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject125 || (events_templateObject125 = events_taggedTemplateLiteral(["off-hand"]))), (0,dist.$item)(events_templateObject126 || (events_templateObject126 = events_taggedTemplateLiteral(["Kramco Sausage-o-Matic\u2122"]))));
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject127 || (events_templateObject127 = events_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(events_templateObject128 || (events_templateObject128 = events_taggedTemplateLiteral(["Beach Comb"]))));
-      selectBestFamiliar(FamiliarFlag.Default);
+      selectBestFamiliar();
       adventure(neverendingParty, MacroList.FreeFight);
     }
   },
@@ -35427,12 +35427,14 @@ var oneOffEvents = {
   }
 };
 
-function selectBestFamiliar(flag) {
+function selectBestFamiliar() {
+  var flag = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : FamiliarFlag.Default;
+
   if (!(0,dist.have)((0,dist.$effect)(events_templateObject203 || (events_templateObject203 = events_taggedTemplateLiteral(["Spit Upon"]))))) {
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject204 || (events_templateObject204 = events_taggedTemplateLiteral(["Melodramedary"]))));
-  } else if (flag !== FamiliarFlag.NoAttack && !(0,dist.have)((0,dist.$item)(events_templateObject205 || (events_templateObject205 = events_taggedTemplateLiteral(["short stack of pancakes"])))) && !(0,dist.have)((0,dist.$effect)(events_templateObject206 || (events_templateObject206 = events_taggedTemplateLiteral(["Shortly Stacked"]))))) {
+  } else if (flag === FamiliarFlag.Default && !(0,dist.have)((0,dist.$item)(events_templateObject205 || (events_templateObject205 = events_taggedTemplateLiteral(["short stack of pancakes"])))) && !(0,dist.have)((0,dist.$effect)(events_templateObject206 || (events_templateObject206 = events_taggedTemplateLiteral(["Shortly Stacked"]))))) {
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject207 || (events_templateObject207 = events_taggedTemplateLiteral(["Shorter-Order Cook"]))));
-  } else if (flag !== FamiliarFlag.NoAttack && !(0,dist.have)((0,dist.$item)(events_templateObject208 || (events_templateObject208 = events_taggedTemplateLiteral(["tiny bottle of absinthe"])))) && !(0,dist.have)((0,dist.$effect)(events_templateObject209 || (events_templateObject209 = events_taggedTemplateLiteral(["absinthe minded"]))))) {
+  } else if (flag === FamiliarFlag.Default && !(0,dist.have)((0,dist.$item)(events_templateObject208 || (events_templateObject208 = events_taggedTemplateLiteral(["tiny bottle of absinthe"])))) && !(0,dist.have)((0,dist.$effect)(events_templateObject209 || (events_templateObject209 = events_taggedTemplateLiteral(["absinthe minded"]))))) {
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject210 || (events_templateObject210 = events_taggedTemplateLiteral(["Green Pixie"]))));
   } else if (!(0,dist.have)((0,dist.$item)(events_templateObject211 || (events_templateObject211 = events_taggedTemplateLiteral(["rope"])))) && !(0,dist.have)((0,dist.$item)(events_templateObject212 || (events_templateObject212 = events_taggedTemplateLiteral(["burning newspaper"])))) && !(0,dist.have)((0,dist.$item)(events_templateObject213 || (events_templateObject213 = events_taggedTemplateLiteral(["burning paper crane"])))) && (0,dist.get)("garbageFireProgress") + getRemainingFreeFights() >= 30) {
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject214 || (events_templateObject214 = events_taggedTemplateLiteral(["Garbage Fire"]))));
@@ -35824,7 +35826,7 @@ var choiceAdventures = new Map([[297, 3], // Gravy Fairy Ring: (1) gaffle some m
 [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
 [1387, 3] // Using the Force: (1) banish (2) find friends (3) force item drops
 ]);
-var mummingConstumes = new Map([[(0,dist.$familiar)(main_templateObject || (main_templateObject = main_taggedTemplateLiteral(["Garbage Fire"]))), "item"], [(0,dist.$familiar)(main_templateObject2 || (main_templateObject2 = main_taggedTemplateLiteral(["Green Pixie"]))), "mp"], [(0,dist.$familiar)(main_templateObject3 || (main_templateObject3 = main_taggedTemplateLiteral(["Machine Elf"]))), "meat"], [(0,dist.$familiar)(main_templateObject4 || (main_templateObject4 = main_taggedTemplateLiteral(["Melodramedary"]))), "myst"], [(0,dist.$familiar)(main_templateObject5 || (main_templateObject5 = main_taggedTemplateLiteral(["Pocket Professor"]))), "hp"]]); //
+var mummingConstumes = new Map([[(0,dist.$familiar)(main_templateObject || (main_templateObject = main_taggedTemplateLiteral(["Green Pixie"]))), "mp"], [(0,dist.$familiar)(main_templateObject2 || (main_templateObject2 = main_taggedTemplateLiteral(["Machine Elf"]))), "meat"], [(0,dist.$familiar)(main_templateObject3 || (main_templateObject3 = main_taggedTemplateLiteral(["Melodramedary"]))), "myst"], [(0,dist.$familiar)(main_templateObject4 || (main_templateObject4 = main_taggedTemplateLiteral(["Pocket Professor"]))), "hp"], [(0,dist.$familiar)(main_templateObject5 || (main_templateObject5 = main_taggedTemplateLiteral(["Shorter-Order Cook"]))), "item"]]); //
 // Community Service Starts!
 //
 
