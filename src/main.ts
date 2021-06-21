@@ -33,6 +33,7 @@ import {
   retrieveItem,
   runChoice,
   soulsauceCost,
+  toInt,
   totalFreeRests,
   use,
   useFamiliar,
@@ -160,6 +161,7 @@ export function main() {
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
 
   const settings: Map<string, number | string> = new Map();
+  settings.set(`breakableHandling${toInt($item`makeshift garbage shirt`)}`, 2);
   settings.set("customCombatScript", "seventy_hccs");
   for (const [prop, val] of choiceAdventures) {
     settings.set(`choiceAdventure${prop}`, val);
