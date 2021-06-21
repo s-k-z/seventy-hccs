@@ -16,7 +16,7 @@ export function ascend() {
       Math.random()
     )}&whichclass=${toInt(
       $class`Sauceror`
-    )}&whichpath=25&asctype=2&nopetok=1&noskillsok=1&pwd=${myHash()}`,
+    )}&whichpath=25&asctype=3&nopetok=1&noskillsok=1&pwd=${myHash()}`,
     true
   );
 }
