@@ -34037,9 +34037,29 @@ function checkFax(monster) {
   }
 }
 function cookPizza(a, b, c, d) {
+  var counts = new Map();
   Array.prototype.slice.call(arguments).forEach(function (f) {
-    checkAvailable(f);
+    var prev = counts.get(f) || 0;
+    counts.set(f, 1 + prev);
   });
+
+  var _iterator = _createForOfIteratorHelper(counts),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var _step$value = _slicedToArray(_step.value, 2),
+          item = _step$value[0],
+          count = _step$value[1];
+
+      checkAvailable(item, count);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
   (0,external_kolmafia_.visitUrl)("campground.php?action=makepizza&pizza=".concat((0,external_kolmafia_.toInt)(a), ",").concat((0,external_kolmafia_.toInt)(b), ",").concat((0,external_kolmafia_.toInt)(c), ",").concat((0,external_kolmafia_.toInt)(d)));
 }
 function shrugEffect(effect) {
@@ -34082,38 +34102,38 @@ function withContext(func, context) {
   var previous = new Map();
 
   var setPrefsTo = function setPrefsTo(c) {
-    var _iterator = _createForOfIteratorHelper(c),
-        _step;
+    var _iterator2 = _createForOfIteratorHelper(c),
+        _step2;
 
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var _step$value = _slicedToArray(_step.value, 2),
-            prop = _step$value[0],
-            value = _step$value[1];
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var _step2$value = _slicedToArray(_step2.value, 2),
+            prop = _step2$value[0],
+            value = _step2$value[1];
 
         (0,dist.set)(prop, value);
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator2.e(err);
     } finally {
-      _iterator.f();
+      _iterator2.f();
     }
   };
 
-  var _iterator2 = _createForOfIteratorHelper(context),
-      _step2;
+  var _iterator3 = _createForOfIteratorHelper(context),
+      _step3;
 
   try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var _step2$value = _slicedToArray(_step2.value, 1),
-          prop = _step2$value[0];
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var _step3$value = _slicedToArray(_step3.value, 1),
+          prop = _step3$value[0];
 
       previous.set(prop, (0,dist.get)(prop));
     }
   } catch (err) {
-    _iterator2.e(err);
+    _iterator3.e(err);
   } finally {
-    _iterator2.f();
+    _iterator3.f();
   }
 
   try {
