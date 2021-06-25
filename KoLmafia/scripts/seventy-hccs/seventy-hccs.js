@@ -34039,8 +34039,7 @@ function checkFax(monster) {
 function cookPizza(a, b, c, d) {
   var counts = new Map();
   Array.prototype.slice.call(arguments).forEach(function (f) {
-    var prev = counts.get(f) || 0;
-    counts.set(f, 1 + prev);
+    return counts.set(f, 1 + (counts.get(f) || 0));
   });
 
   var _iterator = _createForOfIteratorHelper(counts),
