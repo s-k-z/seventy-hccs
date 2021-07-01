@@ -126,8 +126,6 @@ const diabolicPizzas = {
   },
 };
 
-// Conveniently going to eat all the pizzas in one sitting,
-// otherwise could split some out into another object for later
 export function eatPizzas() {
   for (const pizza of Object.values(diabolicPizzas)) {
     if (!have(pizza.effect)) {

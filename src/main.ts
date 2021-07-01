@@ -199,7 +199,7 @@ function levelAndDoQuests() {
 
     leveling: while (true) {
       // Spend excess MP on librams
-      // Use free rests on stats at level 8
+      // Use free rests on stats at configured level
       // Swap equipment as needed between combats
       // Get Inner Elf at level 13
       // Free run for some items
