@@ -34143,7 +34143,7 @@ function withContext(func, context) {
   }
 }
 ;// CONCATENATED MODULE: ./src/diet.ts
-var diet_templateObject, diet_templateObject2, diet_templateObject3, diet_templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51;
+var diet_templateObject, diet_templateObject2, diet_templateObject3, diet_templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51, _templateObject52, _templateObject53, _templateObject54, _templateObject55, _templateObject56;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || diet_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -34164,86 +34164,59 @@ function diet_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.sl
 
 
 
-var recipes = {
-  "bugged balaclava": function buggedBalaclava() {
-    (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(diet_templateObject || (diet_templateObject = diet_taggedTemplateLiteral(["Baby Bugged Bugbear"]))));
-    (0,external_kolmafia_.visitUrl)("arena.php");
-    (0,external_kolmafia_.cliExecute)("fold ".concat((0,dist.$item)(diet_templateObject2 || (diet_templateObject2 = diet_taggedTemplateLiteral(["bugged balaclava"])))));
-  },
-  "blood-faced volleyball": function bloodFacedVolleyball() {
-    acquireGumOrHermitItem((0,dist.$item)(diet_templateObject3 || (diet_templateObject3 = diet_taggedTemplateLiteral(["seal tooth"]))));
-    acquireGumOrHermitItem((0,dist.$item)(diet_templateObject4 || (diet_templateObject4 = diet_taggedTemplateLiteral(["volleyball"]))));
-    acquireEffect((0,dist.$effect)(_templateObject5 || (_templateObject5 = diet_taggedTemplateLiteral(["Bloody Hand"]))));
-    (0,external_kolmafia_.use)((0,dist.$item)(_templateObject6 || (_templateObject6 = diet_taggedTemplateLiteral(["volleyball"]))));
-  },
-  "chiptune guitar": function chiptuneGuitar() {
-    throw "Unable to acquire ".concat((0,dist.$item)(_templateObject7 || (_templateObject7 = diet_taggedTemplateLiteral(["chiptune guitar"]))), " for pizza");
-  },
-  "cog and sprocket assembly": function cogAndSprocketAssembly() {
-    (0,external_kolmafia_.cliExecute)("make ".concat((0,dist.$item)(_templateObject8 || (_templateObject8 = diet_taggedTemplateLiteral(["cog and sprocket assembly"])))));
-  },
-  "dripping meat crossbow": function drippingMeatCrossbow() {
-    acquireGumOrHermitItem((0,dist.$item)(_templateObject9 || (_templateObject9 = diet_taggedTemplateLiteral(["catsup"]))));
-    (0,external_kolmafia_.cliExecute)("make ".concat((0,dist.$item)(_templateObject10 || (_templateObject10 = diet_taggedTemplateLiteral(["dripping meat crossbow"])))));
-  },
-  "eyedrops of the ermine": function eyedropsOfTheErmine() {
-    throw "Unable to acquire ".concat((0,dist.$item)(_templateObject11 || (_templateObject11 = diet_taggedTemplateLiteral(["eyedrops of the ermine"]))), " for pizza");
-  },
-  "hot buttered roll": function hotButteredRoll() {
-    acquireGumOrHermitItem((0,dist.$item)(_templateObject12 || (_templateObject12 = diet_taggedTemplateLiteral(["hot buttered roll"]))));
-  },
-  "oil of expertise": function oilOfExpertise() {
-    throw "Unable to acquire ".concat((0,dist.$item)(_templateObject13 || (_templateObject13 = diet_taggedTemplateLiteral(["oil of expertise"]))), " for pizza");
-  },
-  "ointment of the occult": function ointmentOfTheOccult() {
-    throw "Unable to acquire ".concat((0,dist.$item)(_templateObject14 || (_templateObject14 = diet_taggedTemplateLiteral(["ointment of the occult"]))), " for pizza");
-  },
-  "perfect dark and stormy": function perfectDarkAndStormy() {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(_templateObject15 || (_templateObject15 = diet_taggedTemplateLiteral(["Perfect Freeze"]))));
-    (0,external_kolmafia_.create)((0,dist.$item)(_templateObject16 || (_templateObject16 = diet_taggedTemplateLiteral(["perfect dark and stormy"]))));
-  },
-  "ravioli hat": function ravioliHat() {
-    acquireGumOrHermitItem((0,dist.$item)(_templateObject17 || (_templateObject17 = diet_taggedTemplateLiteral(["ravioli hat"]))));
-  },
-  "useless powder": function uselessPowder() {
-    buyUpTo(1, (0,dist.$item)(_templateObject18 || (_templateObject18 = diet_taggedTemplateLiteral(["tenderizing hammer"]))));
-    buyUpTo(1, (0,dist.$item)(_templateObject19 || (_templateObject19 = diet_taggedTemplateLiteral(["cool whip"]))));
-    (0,external_kolmafia_.cliExecute)("pulverize 1 ".concat((0,dist.$item)(_templateObject20 || (_templateObject20 = diet_taggedTemplateLiteral(["cool whip"])))));
-  },
-  "wooden figurine": function woodenFigurine() {
-    acquireGumOrHermitItem((0,dist.$item)(_templateObject21 || (_templateObject21 = diet_taggedTemplateLiteral(["wooden figurine"]))));
-  }
-};
-Object.keys(recipes).forEach(function (itemName) {
-  if (Item.get(itemName).name !== itemName) {
-    throw "Bad item name in pizza recipes: ".concat(itemName);
-  }
-});
+var recipes = new Map([[(0,dist.$item)(diet_templateObject || (diet_templateObject = diet_taggedTemplateLiteral(["bugged balaclava"]))), function () {
+  (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(diet_templateObject2 || (diet_templateObject2 = diet_taggedTemplateLiteral(["Baby Bugged Bugbear"]))));
+  (0,external_kolmafia_.visitUrl)("arena.php");
+  (0,external_kolmafia_.cliExecute)("fold ".concat((0,dist.$item)(diet_templateObject3 || (diet_templateObject3 = diet_taggedTemplateLiteral(["bugged balaclava"])))));
+}], [(0,dist.$item)(diet_templateObject4 || (diet_templateObject4 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))), function () {
+  acquireGumOrHermitItem((0,dist.$item)(_templateObject5 || (_templateObject5 = diet_taggedTemplateLiteral(["seal tooth"]))));
+  acquireGumOrHermitItem((0,dist.$item)(_templateObject6 || (_templateObject6 = diet_taggedTemplateLiteral(["volleyball"]))));
+  acquireEffect((0,dist.$effect)(_templateObject7 || (_templateObject7 = diet_taggedTemplateLiteral(["Bloody Hand"]))));
+  (0,external_kolmafia_.use)((0,dist.$item)(_templateObject8 || (_templateObject8 = diet_taggedTemplateLiteral(["volleyball"]))));
+}], [(0,dist.$item)(_templateObject9 || (_templateObject9 = diet_taggedTemplateLiteral(["cog and sprocket assembly"]))), function () {
+  (0,external_kolmafia_.cliExecute)("make ".concat((0,dist.$item)(_templateObject10 || (_templateObject10 = diet_taggedTemplateLiteral(["cog and sprocket assembly"])))));
+}], [(0,dist.$item)(_templateObject11 || (_templateObject11 = diet_taggedTemplateLiteral(["dripping meat crossbow"]))), function () {
+  acquireGumOrHermitItem((0,dist.$item)(_templateObject12 || (_templateObject12 = diet_taggedTemplateLiteral(["catsup"]))));
+  (0,external_kolmafia_.cliExecute)("make ".concat((0,dist.$item)(_templateObject13 || (_templateObject13 = diet_taggedTemplateLiteral(["dripping meat crossbow"])))));
+}], [(0,dist.$item)(_templateObject14 || (_templateObject14 = diet_taggedTemplateLiteral(["hot buttered roll"]))), function () {
+  acquireGumOrHermitItem((0,dist.$item)(_templateObject15 || (_templateObject15 = diet_taggedTemplateLiteral(["hot buttered roll"]))));
+}], [(0,dist.$item)(_templateObject16 || (_templateObject16 = diet_taggedTemplateLiteral(["perfect dark and stormy"]))), function () {
+  (0,external_kolmafia_.useSkill)((0,dist.$skill)(_templateObject17 || (_templateObject17 = diet_taggedTemplateLiteral(["Perfect Freeze"]))));
+  (0,external_kolmafia_.create)((0,dist.$item)(_templateObject18 || (_templateObject18 = diet_taggedTemplateLiteral(["perfect dark and stormy"]))));
+}], [(0,dist.$item)(_templateObject19 || (_templateObject19 = diet_taggedTemplateLiteral(["ravioli hat"]))), function () {
+  acquireGumOrHermitItem((0,dist.$item)(_templateObject20 || (_templateObject20 = diet_taggedTemplateLiteral(["ravioli hat"]))));
+}], [(0,dist.$item)(_templateObject21 || (_templateObject21 = diet_taggedTemplateLiteral(["useless powder"]))), function () {
+  buyUpTo(1, (0,dist.$item)(_templateObject22 || (_templateObject22 = diet_taggedTemplateLiteral(["tenderizing hammer"]))));
+  buyUpTo(1, (0,dist.$item)(_templateObject23 || (_templateObject23 = diet_taggedTemplateLiteral(["cool whip"]))));
+  (0,external_kolmafia_.cliExecute)("pulverize 1 ".concat((0,dist.$item)(_templateObject24 || (_templateObject24 = diet_taggedTemplateLiteral(["cool whip"])))));
+}], [(0,dist.$item)(_templateObject25 || (_templateObject25 = diet_taggedTemplateLiteral(["wooden figurine"]))), function () {
+  acquireGumOrHermitItem((0,dist.$item)(_templateObject26 || (_templateObject26 = diet_taggedTemplateLiteral(["wooden figurine"]))));
+}]]);
 var diabolicPizzas = {
   bureaucratized: {
-    effect: (0,dist.$effect)(_templateObject22 || (_templateObject22 = diet_taggedTemplateLiteral(["Bureaucratized"]))),
-    equip: (0,dist.$item)(_templateObject23 || (_templateObject23 = diet_taggedTemplateLiteral(["none"]))),
+    effect: (0,dist.$effect)(_templateObject27 || (_templateObject27 = diet_taggedTemplateLiteral(["Bureaucratized"]))),
+    equip: (0,dist.$item)(_templateObject28 || (_templateObject28 = diet_taggedTemplateLiteral(["none"]))),
     // Don't equip the licorice boa
-    familiar: (0,dist.$familiar)(_templateObject24 || (_templateObject24 = diet_taggedTemplateLiteral(["Peppermint Rhino"]))),
-    ingredients: tuple((0,dist.$item)(_templateObject25 || (_templateObject25 = diet_taggedTemplateLiteral(["bugged balaclava"]))), (0,dist.$item)(_templateObject26 || (_templateObject26 = diet_taggedTemplateLiteral(["useless powder"]))), (0,dist.$item)(_templateObject27 || (_templateObject27 = diet_taggedTemplateLiteral(["ravioli hat"]))), (0,dist.$item)(_templateObject28 || (_templateObject28 = diet_taggedTemplateLiteral(["eyedrops of the ermine"]))))
+    familiar: (0,dist.$familiar)(_templateObject29 || (_templateObject29 = diet_taggedTemplateLiteral(["Peppermint Rhino"]))),
+    ingredients: tuple((0,dist.$item)(_templateObject30 || (_templateObject30 = diet_taggedTemplateLiteral(["bugged balaclava"]))), (0,dist.$item)(_templateObject31 || (_templateObject31 = diet_taggedTemplateLiteral(["useless powder"]))), (0,dist.$item)(_templateObject32 || (_templateObject32 = diet_taggedTemplateLiteral(["ravioli hat"]))), (0,dist.$item)(_templateObject33 || (_templateObject33 = diet_taggedTemplateLiteral(["eyedrops of the ermine"]))))
   },
   chorale: {
-    effect: (0,dist.$effect)(_templateObject29 || (_templateObject29 = diet_taggedTemplateLiteral(["Chorale of Companionship"]))),
-    equip: (0,dist.$item)(_templateObject30 || (_templateObject30 = diet_taggedTemplateLiteral(["dromedary drinking helmet"]))),
-    familiar: (0,dist.$familiar)(_templateObject31 || (_templateObject31 = diet_taggedTemplateLiteral(["Melodramedary"]))),
-    ingredients: tuple((0,dist.$item)(_templateObject32 || (_templateObject32 = diet_taggedTemplateLiteral(["chiptune guitar"]))), (0,dist.$item)(_templateObject33 || (_templateObject33 = diet_taggedTemplateLiteral(["hot buttered roll"]))), (0,dist.$item)(_templateObject34 || (_templateObject34 = diet_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(_templateObject35 || (_templateObject35 = diet_taggedTemplateLiteral(["ravioli hat"]))))
+    effect: (0,dist.$effect)(_templateObject34 || (_templateObject34 = diet_taggedTemplateLiteral(["Chorale of Companionship"]))),
+    equip: (0,dist.$item)(_templateObject35 || (_templateObject35 = diet_taggedTemplateLiteral(["dromedary drinking helmet"]))),
+    familiar: (0,dist.$familiar)(_templateObject36 || (_templateObject36 = diet_taggedTemplateLiteral(["Melodramedary"]))),
+    ingredients: tuple((0,dist.$item)(_templateObject37 || (_templateObject37 = diet_taggedTemplateLiteral(["chiptune guitar"]))), (0,dist.$item)(_templateObject38 || (_templateObject38 = diet_taggedTemplateLiteral(["hot buttered roll"]))), (0,dist.$item)(_templateObject39 || (_templateObject39 = diet_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(_templateObject40 || (_templateObject40 = diet_taggedTemplateLiteral(["ravioli hat"]))))
   },
   downWithChow: {
-    effect: (0,dist.$effect)(_templateObject36 || (_templateObject36 = diet_taggedTemplateLiteral(["Down With Chow"]))),
-    equip: (0,dist.$item)(_templateObject37 || (_templateObject37 = diet_taggedTemplateLiteral(["Pocket Professor memory chip"]))),
-    familiar: (0,dist.$familiar)(_templateObject38 || (_templateObject38 = diet_taggedTemplateLiteral(["Pocket Professor"]))),
-    ingredients: tuple((0,dist.$item)(_templateObject39 || (_templateObject39 = diet_taggedTemplateLiteral(["dripping meat crossbow"]))), (0,dist.$item)(_templateObject40 || (_templateObject40 = diet_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(_templateObject41 || (_templateObject41 = diet_taggedTemplateLiteral(["wooden figurine"]))), (0,dist.$item)(_templateObject42 || (_templateObject42 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))))
+    effect: (0,dist.$effect)(_templateObject41 || (_templateObject41 = diet_taggedTemplateLiteral(["Down With Chow"]))),
+    equip: (0,dist.$item)(_templateObject42 || (_templateObject42 = diet_taggedTemplateLiteral(["Pocket Professor memory chip"]))),
+    familiar: (0,dist.$familiar)(_templateObject43 || (_templateObject43 = diet_taggedTemplateLiteral(["Pocket Professor"]))),
+    ingredients: tuple((0,dist.$item)(_templateObject44 || (_templateObject44 = diet_taggedTemplateLiteral(["dripping meat crossbow"]))), (0,dist.$item)(_templateObject45 || (_templateObject45 = diet_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(_templateObject46 || (_templateObject46 = diet_taggedTemplateLiteral(["wooden figurine"]))), (0,dist.$item)(_templateObject47 || (_templateObject47 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))))
   },
   optimistPrimal: {
-    effect: (0,dist.$effect)(_templateObject43 || (_templateObject43 = diet_taggedTemplateLiteral(["Optimist Primal"]))),
-    equip: (0,dist.$item)(_templateObject44 || (_templateObject44 = diet_taggedTemplateLiteral(["cracker"]))),
-    familiar: (0,dist.$familiar)(_templateObject45 || (_templateObject45 = diet_taggedTemplateLiteral(["Exotic Parrot"]))),
-    ingredients: tuple((0,dist.$item)(_templateObject46 || (_templateObject46 = diet_taggedTemplateLiteral(["oil of expertise"]))), (0,dist.$item)(_templateObject47 || (_templateObject47 = diet_taggedTemplateLiteral(["perfect dark and stormy"]))), (0,dist.$item)(_templateObject48 || (_templateObject48 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))), (0,dist.$item)(_templateObject49 || (_templateObject49 = diet_taggedTemplateLiteral(["cog and sprocket assembly"]))))
+    effect: (0,dist.$effect)(_templateObject48 || (_templateObject48 = diet_taggedTemplateLiteral(["Optimist Primal"]))),
+    equip: (0,dist.$item)(_templateObject49 || (_templateObject49 = diet_taggedTemplateLiteral(["cracker"]))),
+    familiar: (0,dist.$familiar)(_templateObject50 || (_templateObject50 = diet_taggedTemplateLiteral(["Exotic Parrot"]))),
+    ingredients: tuple((0,dist.$item)(_templateObject51 || (_templateObject51 = diet_taggedTemplateLiteral(["oil of expertise"]))), (0,dist.$item)(_templateObject52 || (_templateObject52 = diet_taggedTemplateLiteral(["perfect dark and stormy"]))), (0,dist.$item)(_templateObject53 || (_templateObject53 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))), (0,dist.$item)(_templateObject54 || (_templateObject54 = diet_taggedTemplateLiteral(["cog and sprocket assembly"]))))
   }
 };
 
@@ -34283,7 +34256,9 @@ function eatPizzas() {
           var _ingredient = _step2.value;
 
           if (!(0,dist.have)(_ingredient)) {
-            recipes["".concat(_ingredient)]();
+            var recipe = recipes.get(_ingredient);
+            if (!recipe) throw "Missing recipe for ".concat(_ingredient);
+            recipe();
           }
         }
       } catch (err) {
@@ -34294,13 +34269,13 @@ function eatPizzas() {
 
       (0,external_kolmafia_.useFamiliar)(_pizza.familiar);
       cookPizza.apply(void 0, _toConsumableArray(_pizza.ingredients));
-      (0,external_kolmafia_.eat)((0,dist.$item)(_templateObject50 || (_templateObject50 = diet_taggedTemplateLiteral(["Diabolic pizza"]))));
-      (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject51 || (_templateObject51 = diet_taggedTemplateLiteral(["familiar"]))), _pizza.equip);
+      (0,external_kolmafia_.eat)((0,dist.$item)(_templateObject55 || (_templateObject55 = diet_taggedTemplateLiteral(["Diabolic pizza"]))));
+      (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject56 || (_templateObject56 = diet_taggedTemplateLiteral(["familiar"]))), _pizza.equip);
     }
   }
 }
 ;// CONCATENATED MODULE: ./src/combat.ts
-var combat_templateObject, combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5, combat_templateObject6, combat_templateObject7, combat_templateObject8, combat_templateObject9, combat_templateObject10, combat_templateObject11, combat_templateObject12, combat_templateObject13, combat_templateObject14, combat_templateObject15, combat_templateObject16, combat_templateObject17, combat_templateObject18, combat_templateObject19, combat_templateObject20, combat_templateObject21, combat_templateObject22, combat_templateObject23, combat_templateObject24, combat_templateObject25, combat_templateObject26, combat_templateObject27, combat_templateObject28, combat_templateObject29, combat_templateObject30, combat_templateObject31, combat_templateObject32, combat_templateObject33, combat_templateObject34, combat_templateObject35, combat_templateObject36, combat_templateObject37, combat_templateObject38, combat_templateObject39, combat_templateObject40, combat_templateObject41, combat_templateObject42, combat_templateObject43, combat_templateObject44, combat_templateObject45, combat_templateObject46, combat_templateObject47, combat_templateObject48, combat_templateObject49, combat_templateObject50, combat_templateObject51, _templateObject52, _templateObject53, _templateObject54, _templateObject55, _templateObject56, _templateObject57, _templateObject58, _templateObject59, _templateObject60, _templateObject61, _templateObject62, _templateObject63, _templateObject64, _templateObject65, _templateObject66, _templateObject67, _templateObject68;
+var combat_templateObject, combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5, combat_templateObject6, combat_templateObject7, combat_templateObject8, combat_templateObject9, combat_templateObject10, combat_templateObject11, combat_templateObject12, combat_templateObject13, combat_templateObject14, combat_templateObject15, combat_templateObject16, combat_templateObject17, combat_templateObject18, combat_templateObject19, combat_templateObject20, combat_templateObject21, combat_templateObject22, combat_templateObject23, combat_templateObject24, combat_templateObject25, combat_templateObject26, combat_templateObject27, combat_templateObject28, combat_templateObject29, combat_templateObject30, combat_templateObject31, combat_templateObject32, combat_templateObject33, combat_templateObject34, combat_templateObject35, combat_templateObject36, combat_templateObject37, combat_templateObject38, combat_templateObject39, combat_templateObject40, combat_templateObject41, combat_templateObject42, combat_templateObject43, combat_templateObject44, combat_templateObject45, combat_templateObject46, combat_templateObject47, combat_templateObject48, combat_templateObject49, combat_templateObject50, combat_templateObject51, combat_templateObject52, combat_templateObject53, combat_templateObject54, combat_templateObject55, combat_templateObject56, _templateObject57, _templateObject58, _templateObject59, _templateObject60, _templateObject61, _templateObject62, _templateObject63, _templateObject64, _templateObject65, _templateObject66, _templateObject67, _templateObject68;
 
 function combat_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -34336,9 +34311,9 @@ var MacroList = {
   FreeFight: DefaultMacro,
   PickpocketFreeRun: new dist.Macro().if_("monsterid ".concat(ungulith), "pickpocket").step("runaway"),
   Banish: TryBanish,
-  Nanobrainy: new dist.Macro().skill((0,dist.$skill)(combat_templateObject51 || (combat_templateObject51 = combat_taggedTemplateLiteral(["Entangling Noodles"])))).trySkill((0,dist.$skill)(_templateObject52 || (_templateObject52 = combat_taggedTemplateLiteral(["Giant Growth"])))).trySkill((0,dist.$skill)(_templateObject53 || (_templateObject53 = combat_taggedTemplateLiteral(["Become a Wolf"])))).step(TryBanish),
-  Sprinkles: new dist.Macro().if_("monsterid ".concat(gentrifier), Replace).skill((0,dist.$skill)(_templateObject54 || (_templateObject54 = combat_taggedTemplateLiteral(["Meteor Shower"])))).step(FreeInstaKill),
-  TropicalSkeleton: new dist.Macro().trySkill((0,dist.$skill)(_templateObject55 || (_templateObject55 = combat_taggedTemplateLiteral(["Open a Big Red Present"])))).skill((0,dist.$skill)(_templateObject56 || (_templateObject56 = combat_taggedTemplateLiteral(["Use the Force"])))),
+  Nanobrainy: new dist.Macro().skill((0,dist.$skill)(combat_templateObject51 || (combat_templateObject51 = combat_taggedTemplateLiteral(["Entangling Noodles"])))).trySkill((0,dist.$skill)(combat_templateObject52 || (combat_templateObject52 = combat_taggedTemplateLiteral(["Giant Growth"])))).trySkill((0,dist.$skill)(combat_templateObject53 || (combat_templateObject53 = combat_taggedTemplateLiteral(["Become a Wolf"])))).step(TryBanish),
+  Sprinkles: new dist.Macro().if_("monsterid ".concat(gentrifier), Replace).skill((0,dist.$skill)(combat_templateObject54 || (combat_templateObject54 = combat_taggedTemplateLiteral(["Meteor Shower"])))).step(FreeInstaKill),
+  TropicalSkeleton: new dist.Macro().trySkill((0,dist.$skill)(combat_templateObject55 || (combat_templateObject55 = combat_taggedTemplateLiteral(["Open a Big Red Present"])))).skill((0,dist.$skill)(combat_templateObject56 || (combat_templateObject56 = combat_taggedTemplateLiteral(["Use the Force"])))),
   TunnelOfLOV: new dist.Macro().if_("monsterid ".concat(LOVEnforcer), dist.Macro.attack().repeat()).if_("monsterid ".concat(LOVEngineer), dist.Macro.skill((0,dist.$skill)(_templateObject57 || (_templateObject57 = combat_taggedTemplateLiteral(["Candyblast"])))).repeat()).step(DefaultMacro),
   WitchessQueen: new dist.Macro().item((0,dist.$item)(_templateObject58 || (_templateObject58 = combat_taggedTemplateLiteral(["Time-Spinner"])))).attack().repeat(),
   WitchessWitch: new dist.Macro().skill((0,dist.$skill)(_templateObject59 || (_templateObject59 = combat_taggedTemplateLiteral(["Curse of Weaksauce"])))).skill((0,dist.$skill)(_templateObject60 || (_templateObject60 = combat_taggedTemplateLiteral(["Sing Along"])))).attack().repeat(),

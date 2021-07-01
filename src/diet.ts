@@ -2,73 +2,79 @@ import { cliExecute, create, eat, equip, use, useFamiliar, useSkill, visitUrl } 
 import { $effect, $familiar, $item, $skill, $slot, have } from "libram";
 import { acquireEffect, acquireGumOrHermitItem, buyUpTo, cookPizza, tuple } from "./lib";
 
-const recipes: Record<string, () => void> = {
-  "bugged balaclava": () => {
-    useFamiliar($familiar`Baby Bugged Bugbear`);
-    visitUrl("arena.php");
-    cliExecute(`fold ${$item`bugged balaclava`}`);
-  },
+const recipes = new Map<Item, Function>([
+  [
+    $item`bugged balaclava`,
+    () => {
+      useFamiliar($familiar`Baby Bugged Bugbear`);
+      visitUrl("arena.php");
+      cliExecute(`fold ${$item`bugged balaclava`}`);
+    },
+  ],
 
-  "blood-faced volleyball": () => {
-    acquireGumOrHermitItem($item`seal tooth`);
-    acquireGumOrHermitItem($item`volleyball`);
-    acquireEffect($effect`Bloody Hand`);
-    use($item`volleyball`);
-  },
+  [
+    $item`blood-faced volleyball`,
+    () => {
+      acquireGumOrHermitItem($item`seal tooth`);
+      acquireGumOrHermitItem($item`volleyball`);
+      acquireEffect($effect`Bloody Hand`);
+      use($item`volleyball`);
+    },
+  ],
 
-  "chiptune guitar": () => {
-    throw `Unable to acquire ${$item`chiptune guitar`} for pizza`;
-  },
+  [
+    $item`cog and sprocket assembly`,
+    () => {
+      cliExecute(`make ${$item`cog and sprocket assembly`}`);
+    },
+  ],
 
-  "cog and sprocket assembly": () => {
-    cliExecute(`make ${$item`cog and sprocket assembly`}`);
-  },
+  [
+    $item`dripping meat crossbow`,
+    () => {
+      acquireGumOrHermitItem($item`catsup`);
+      cliExecute(`make ${$item`dripping meat crossbow`}`);
+    },
+  ],
 
-  "dripping meat crossbow": () => {
-    acquireGumOrHermitItem($item`catsup`);
-    cliExecute(`make ${$item`dripping meat crossbow`}`);
-  },
+  [
+    $item`hot buttered roll`,
+    () => {
+      acquireGumOrHermitItem($item`hot buttered roll`);
+    },
+  ],
 
-  "eyedrops of the ermine": () => {
-    throw `Unable to acquire ${$item`eyedrops of the ermine`} for pizza`;
-  },
+  [
+    $item`perfect dark and stormy`,
+    () => {
+      useSkill($skill`Perfect Freeze`);
+      create($item`perfect dark and stormy`);
+    },
+  ],
 
-  "hot buttered roll": () => {
-    acquireGumOrHermitItem($item`hot buttered roll`);
-  },
+  [
+    $item`ravioli hat`,
+    () => {
+      acquireGumOrHermitItem($item`ravioli hat`);
+    },
+  ],
 
-  "oil of expertise": () => {
-    throw `Unable to acquire ${$item`oil of expertise`} for pizza`;
-  },
+  [
+    $item`useless powder`,
+    () => {
+      buyUpTo(1, $item`tenderizing hammer`);
+      buyUpTo(1, $item`cool whip`);
+      cliExecute(`pulverize 1 ${$item`cool whip`}`);
+    },
+  ],
 
-  "ointment of the occult": () => {
-    throw `Unable to acquire ${$item`ointment of the occult`} for pizza`;
-  },
-
-  "perfect dark and stormy": () => {
-    useSkill($skill`Perfect Freeze`);
-    create($item`perfect dark and stormy`);
-  },
-
-  "ravioli hat": () => {
-    acquireGumOrHermitItem($item`ravioli hat`);
-  },
-
-  "useless powder": () => {
-    buyUpTo(1, $item`tenderizing hammer`);
-    buyUpTo(1, $item`cool whip`);
-    cliExecute(`pulverize 1 ${$item`cool whip`}`);
-  },
-
-  "wooden figurine": () => {
-    acquireGumOrHermitItem($item`wooden figurine`);
-  },
-};
-Object.keys(recipes).forEach((itemName) => {
-  if (Item.get(itemName).name !== itemName) {
-    throw `Bad item name in pizza recipes: ${itemName}`;
-  }
-});
+  [
+    $item`wooden figurine`,
+    () => {
+      acquireGumOrHermitItem($item`wooden figurine`);
+    },
+  ],
+]);
 
 const diabolicPizzas = {
   bureaucratized: {
@@ -134,7 +140,9 @@ export function eatPizzas() {
     if (!have(pizza.effect)) {
       for (const ingredient of pizza.ingredients) {
         if (!have(ingredient)) {
-          recipes[`${ingredient}` as keyof typeof recipes]();
+          const recipe = recipes.get(ingredient);
+          if (!recipe) throw `Missing recipe for ${ingredient}`;
+          recipe();
         }
       }
       useFamiliar(pizza.familiar);
