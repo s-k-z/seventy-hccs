@@ -181,9 +181,9 @@ export function main() {
 
 function levelAndDoQuests() {
   // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
-  for (const [key, value] of mummingConstumes) {
-    useFamiliar(key);
-    cliExecute(`mummery ${value}`);
+  for (const [familiar, costume] of mummingConstumes) {
+    useFamiliar(familiar);
+    cliExecute(`mummery ${costume}`);
   }
 
   if (haveQuest(Quest.CoilWire)) {

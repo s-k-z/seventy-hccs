@@ -35860,11 +35860,11 @@ function levelAndDoQuests() {
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var _step2$value = main_slicedToArray(_step2.value, 2),
-          key = _step2$value[0],
-          value = _step2$value[1];
+          familiar = _step2$value[0],
+          costume = _step2$value[1];
 
-      (0,external_kolmafia_.useFamiliar)(key);
-      (0,external_kolmafia_.cliExecute)("mummery ".concat(value));
+      (0,external_kolmafia_.useFamiliar)(familiar);
+      (0,external_kolmafia_.cliExecute)("mummery ".concat(costume));
     }
   } catch (err) {
     _iterator2.e(err);
