@@ -174,7 +174,7 @@ function search(
   const countB = setB[indexB].count - (used.get(B) || 0);
   // Test a solution if we have the candies available
   // If A and B are the same then we need to ensure we have 2 or more candies
-  const enoughIfSame = A !== B || countA + countB > 2;
+  const enoughIfSame = A !== B || countA >= 2;
   if (countA > 0 && countB > 0 && enoughIfSame && sweetSynthesisResult(A, B) === target) {
     return { found: true, a: A, b: B, fromA: fromA, fromB: fromB };
   }
