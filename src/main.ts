@@ -429,8 +429,8 @@ function preCoilWire() {
   if (myLevel() + mySpleenUse() === 1) {
     while (get("_universeCalculated") < get("skillLevel144")) {
       cliExecute("numberology 14");
-      autosell(14, $item`moxie weed`);
     }
+    autosell(14 * get("_universeCalculated"), $item`moxie weed`);
   }
   if (!get("_chateauDeskHarvested")) {
     visitUrl("place.php?whichplace=chateau&action=chateau_desk1");

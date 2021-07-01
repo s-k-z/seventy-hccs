@@ -36121,8 +36121,9 @@ function preCoilWire() {
   if ((0,external_kolmafia_.myLevel)() + (0,external_kolmafia_.mySpleenUse)() === 1) {
     while ((0,dist.get)("_universeCalculated") < (0,dist.get)("skillLevel144")) {
       (0,external_kolmafia_.cliExecute)("numberology 14");
-      (0,external_kolmafia_.autosell)(14, (0,dist.$item)(main_templateObject60 || (main_templateObject60 = main_taggedTemplateLiteral(["moxie weed"]))));
     }
+
+    (0,external_kolmafia_.autosell)(14 * (0,dist.get)("_universeCalculated"), (0,dist.$item)(main_templateObject60 || (main_templateObject60 = main_taggedTemplateLiteral(["moxie weed"]))));
   }
 
   if (!(0,dist.get)("_chateauDeskHarvested")) {
