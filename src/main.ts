@@ -620,10 +620,14 @@ function postCoilWire() {
   [$skill`Chubby and Plump`, $skill`Summon Crimbo Candy`].forEach((s) => useSkill(s));
   synthesize();
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
-  if (get("tomeSummons") < 3 && !have($effect`Purity of Spirit`)) {
-    if (!have($item`cold-filtered water`)) {
-      create(1, $item`cold-filtered water`);
-    }
+  if (
+    get("tomeSummons") < 3 &&
+    !have($item`cold-filtered water`) &&
+    !have($effect`Purity of Spirit`)
+  ) {
+    create(1, $item`cold-filtered water`);
+  }
+  if (have($item`cold-filtered water`)) {
     use($item`cold-filtered water`);
   }
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
