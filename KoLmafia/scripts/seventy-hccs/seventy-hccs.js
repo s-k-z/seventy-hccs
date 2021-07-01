@@ -34218,59 +34218,37 @@ var diabolicPizzas = {
     familiar: (0,dist.$familiar)(_templateObject50 || (_templateObject50 = diet_taggedTemplateLiteral(["Exotic Parrot"]))),
     ingredients: tuple((0,dist.$item)(_templateObject51 || (_templateObject51 = diet_taggedTemplateLiteral(["oil of expertise"]))), (0,dist.$item)(_templateObject52 || (_templateObject52 = diet_taggedTemplateLiteral(["perfect dark and stormy"]))), (0,dist.$item)(_templateObject53 || (_templateObject53 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))), (0,dist.$item)(_templateObject54 || (_templateObject54 = diet_taggedTemplateLiteral(["cog and sprocket assembly"]))))
   }
-};
-
-for (var _i = 0, _Object$values = Object.values(diabolicPizzas); _i < _Object$values.length; _i++) {
-  var pizza = _Object$values[_i];
-
-  var _iterator = diet_createForOfIteratorHelper(pizza.ingredients),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var ingredient = _step.value;
-
-      if (!Object.keys(recipes).includes(ingredient.name)) {
-        throw "Missing recipe for ".concat(ingredient);
-      }
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-} // Conveniently going to eat all the pizzas in one sitting,
+}; // Conveniently going to eat all the pizzas in one sitting,
 // otherwise could split some out into another object for later
 
-
 function eatPizzas() {
-  for (var _i2 = 0, _Object$values2 = Object.values(diabolicPizzas); _i2 < _Object$values2.length; _i2++) {
-    var _pizza = _Object$values2[_i2];
+  for (var _i = 0, _Object$values = Object.values(diabolicPizzas); _i < _Object$values.length; _i++) {
+    var pizza = _Object$values[_i];
 
-    if (!(0,dist.have)(_pizza.effect)) {
-      var _iterator2 = diet_createForOfIteratorHelper(_pizza.ingredients),
-          _step2;
+    if (!(0,dist.have)(pizza.effect)) {
+      var _iterator = diet_createForOfIteratorHelper(pizza.ingredients),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var _ingredient = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var ingredient = _step.value;
 
-          if (!(0,dist.have)(_ingredient)) {
-            var recipe = recipes.get(_ingredient);
-            if (!recipe) throw "Missing recipe for ".concat(_ingredient);
+          if (!(0,dist.have)(ingredient)) {
+            var recipe = recipes.get(ingredient);
+            if (!recipe) throw "Missing recipe for ".concat(ingredient);
             recipe();
           }
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
 
-      (0,external_kolmafia_.useFamiliar)(_pizza.familiar);
-      cookPizza.apply(void 0, _toConsumableArray(_pizza.ingredients));
+      (0,external_kolmafia_.useFamiliar)(pizza.familiar);
+      cookPizza.apply(void 0, _toConsumableArray(pizza.ingredients));
       (0,external_kolmafia_.eat)((0,dist.$item)(_templateObject55 || (_templateObject55 = diet_taggedTemplateLiteral(["Diabolic pizza"]))));
-      (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject56 || (_templateObject56 = diet_taggedTemplateLiteral(["familiar"]))), _pizza.equip);
+      (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject56 || (_templateObject56 = diet_taggedTemplateLiteral(["familiar"]))), pizza.equip);
     }
   }
 }

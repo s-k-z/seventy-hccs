@@ -125,13 +125,6 @@ const diabolicPizzas = {
     ),
   },
 };
-for (const pizza of Object.values(diabolicPizzas)) {
-  for (const ingredient of pizza.ingredients) {
-    if (!Object.keys(recipes).includes(ingredient.name)) {
-      throw `Missing recipe for ${ingredient}`;
-    }
-  }
-}
 
 // Conveniently going to eat all the pizzas in one sitting,
 // otherwise could split some out into another object for later
