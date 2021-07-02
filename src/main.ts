@@ -512,13 +512,14 @@ function preCoilWire() {
   buyUpTo(1, $item`detuned radio`); // 8600 - 285 = 8315 meat
   changeMcd(10);
 
+  buyUpTo(1, $item`blue rocket`); // 8315 - 237 = 8078 meat
   // Fight Protonic Ghost
   oneOffEvents.mimic.run();
 
   // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton.run();
-  // 8315 + 2000 = 10315 meat
+  // 8078 + 2000 = 10078 meat
 
   if (!have($item`occult jelly donut`)) {
     create(1, $item`occult jelly donut`);
@@ -572,7 +573,7 @@ function postCoilWire() {
     buyUpTo(1, $item`Dramatic™ range`);
     use($item`Dramatic™ range`);
   }
-  // 10315 - 950 = 9365 meat
+  // 10078 - 950 = 9128 meat
   [
     // Need all three of these to craft with
     $skill`Advanced Saucecrafting`,
@@ -606,12 +607,12 @@ function postCoilWire() {
 
   buyUpTo(1, $item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
-  // 9365 - 142 - 95 - 950 - 28 = 8150 meat
+  // 9128 - 142 - 95 - 950 - 28 = 7913 meat
   whitelist(MAIN_CLAN);
   acquireEffect($effect`[1701]Hip to the Jive`); // drink Hot Socks (3 drunk, 5000 meat)
-  // 8150 - 5000 = 3150 meat
+  // 7913 - 5000 = 2913 meat
   acquireEffect($effect`In a Lather`); // drink Sockdollager (2 drunk, 500 meat)
-  // 3150 - 500 = 2650 meat
+  // 2913 - 500 = 2413 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas();

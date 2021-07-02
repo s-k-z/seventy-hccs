@@ -562,7 +562,8 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
       if (!get("_bagOfCandy")) {
         useFamiliar($familiar`Stocking Mimic`);
         const ghostLoc1 = get("ghostLocation");
-        adventure(ghostLoc1!, MacroList.FreeFight);
+        if (!ghostLoc1) throw `Failed to get protonic ghost notice`;
+        adventure(ghostLoc1, MacroList.FreeFight);
         equip($slot`familiar`, $item`none`);
         checkAvailable($item`bag of many confections`);
       }

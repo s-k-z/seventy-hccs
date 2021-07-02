@@ -75,15 +75,15 @@ const questOutfits: Record<Quest, () => Map<Item, Slot>> = {
     ]);
   },
 
-  // TODO: Maximize MP regen, Myst, MP computationally?
+  // Maximize Myst and MP, blue rocket will do all the regen for us
   [Quest.CoilWire]: () => {
+    equipRetroCapeMystStats();
     return new Map([
       [$item`Iunion Crown`, $slot`hat`],
-      [$item`protonic accelerator pack`, $slot`back`],
       [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
       [$item`weeping willow wand`, $slot`off-hand`],
       [$item`Cargo Cultist Shorts`, $slot`pants`],
-      [$item`Eight Days a Week Pill Keeper`, $slot`acc1`],
+      [$item`hewn moon-rune spoon`, $slot`acc1`],
       [$item`Retrospecs`, $slot`acc2`],
       [$item`Kremlin's Greatest Briefcase`, $slot`acc3`],
     ]);

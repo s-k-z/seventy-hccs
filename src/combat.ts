@@ -86,6 +86,7 @@ const DefaultMacro = new Macro()
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
   .skill($skill`Sing Along`)
+  .tryItem($item`blue rocket`)
   .skill($skill`Candyblast`)
   .repeat();
 
