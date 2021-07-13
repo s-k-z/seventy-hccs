@@ -29614,27 +29614,27 @@ function checkReadyToAscend() {
 ;// CONCATENATED MODULE: ./src/sweetsynthesis2.ts
 var sweetsynthesis2_templateObject, sweetsynthesis2_templateObject2, sweetsynthesis2_templateObject3, sweetsynthesis2_templateObject4, sweetsynthesis2_templateObject5, sweetsynthesis2_templateObject6, sweetsynthesis2_templateObject7, sweetsynthesis2_templateObject8, sweetsynthesis2_templateObject9, sweetsynthesis2_templateObject10, sweetsynthesis2_templateObject11, sweetsynthesis2_templateObject12, sweetsynthesis2_templateObject13, sweetsynthesis2_templateObject14, sweetsynthesis2_templateObject15, sweetsynthesis2_templateObject16, sweetsynthesis2_templateObject17, sweetsynthesis2_templateObject18, sweetsynthesis2_templateObject19, sweetsynthesis2_templateObject20, sweetsynthesis2_templateObject21, sweetsynthesis2_templateObject22, sweetsynthesis2_templateObject23, sweetsynthesis2_templateObject24, sweetsynthesis2_templateObject25, sweetsynthesis2_templateObject26, sweetsynthesis2_templateObject27, sweetsynthesis2_templateObject28, sweetsynthesis2_templateObject29, sweetsynthesis2_templateObject30, sweetsynthesis2_templateObject31, sweetsynthesis2_templateObject32, sweetsynthesis2_templateObject33, sweetsynthesis2_templateObject34, sweetsynthesis2_templateObject35;
 
-function sweetsynthesis2_slicedToArray(arr, i) { return sweetsynthesis2_arrayWithHoles(arr) || sweetsynthesis2_iterableToArrayLimit(arr, i) || sweetsynthesis2_unsupportedIterableToArray(arr, i) || sweetsynthesis2_nonIterableRest(); }
-
-function sweetsynthesis2_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function sweetsynthesis2_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function sweetsynthesis2_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function sweetsynthesis2_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis2_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function sweetsynthesis2_toConsumableArray(arr) { return sweetsynthesis2_arrayWithoutHoles(arr) || sweetsynthesis2_iterableToArray(arr) || sweetsynthesis2_unsupportedIterableToArray(arr) || sweetsynthesis2_nonIterableSpread(); }
 
 function sweetsynthesis2_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function sweetsynthesis2_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return sweetsynthesis2_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return sweetsynthesis2_arrayLikeToArray(o, minLen); }
-
 function sweetsynthesis2_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function sweetsynthesis2_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return sweetsynthesis2_arrayLikeToArray(arr); }
 
+function sweetsynthesis2_slicedToArray(arr, i) { return sweetsynthesis2_arrayWithHoles(arr) || sweetsynthesis2_iterableToArrayLimit(arr, i) || sweetsynthesis2_unsupportedIterableToArray(arr, i) || sweetsynthesis2_nonIterableRest(); }
+
+function sweetsynthesis2_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function sweetsynthesis2_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return sweetsynthesis2_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return sweetsynthesis2_arrayLikeToArray(o, minLen); }
+
 function sweetsynthesis2_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function sweetsynthesis2_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function sweetsynthesis2_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function sweetsynthesis2_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -29718,9 +29718,12 @@ function synthesize() {
   var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
   // TODO: change this to Object.entries and skip inv[name] lookup for count when Rhino supports Object.entries
 
-  Object.keys(inv).forEach(function (name) {
+  Object.entries(inv).forEach(function (_ref) {
+    var _ref2 = sweetsynthesis2_slicedToArray(_ref, 2),
+        name = _ref2[0],
+        count = _ref2[1];
+
     var item = Item.get(name);
-    var count = inv[name];
     if (item.candyType === candyType.complex) candies.complex.push({
       candy: item,
       count: count
