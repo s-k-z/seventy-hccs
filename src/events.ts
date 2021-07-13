@@ -299,7 +299,7 @@ export const events: Record<string, eventData> = {
     max: 10,
     current: () => get("_snojoFreeFights"),
     run: () => {
-      if (get("snojoSetting").toLowerCase() !== `${$stat`Muscle`}`.toLowerCase()) {
+      if (get("snojoSetting") !== $stat`Muscle`) {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
         // (1) muscle (2) mysticality (3) moxie (4) tournament (6) leave
         runChoice(1); // Don't want snojo to gain -50% myst debuffing bodyparts

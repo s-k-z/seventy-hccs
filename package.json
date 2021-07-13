@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "kolmafia": "^1.1.1",
-    "libram": "^0.0.8",
+    "libram": "^0.1.0",
     "yarn": "^1.22.10"
   },
   "author": "Skaazi",

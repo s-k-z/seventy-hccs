@@ -55,7 +55,7 @@ import {
   sinceKolmafiaRevision,
   SourceTerminal,
 } from "libram";
-import { educate } from "libram/dist/resources/SourceTerminal";
+import { educate } from "libram/dist/resources/2016/SourceTerminal";
 import {
   BRICKOS_PER_FIGHT,
   BRICKO_TARGET_ITEM,
