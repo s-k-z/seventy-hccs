@@ -103,7 +103,7 @@ import {
   prepAndDoQuest,
   Quest,
 } from "./quests";
-import { synthesize } from "./sweetsynthesis2";
+import { synthesize } from "./sweetsynthesis";
 import { ascend } from "./valhalla";
 
 const choiceAdventures = new Map([

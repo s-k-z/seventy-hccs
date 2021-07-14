@@ -29074,7 +29074,7 @@ if (lodash_default_symIterator) {
 
 /***/ }),
 
-/***/ 9462:
+/***/ 1149:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29144,9 +29144,7 @@ function lib_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.sli
 
 
 function acquireEffect(e) {
-  if (!(0,dist.have)(e)) {
-    (0,external_kolmafia_.cliExecute)(e["default"]);
-  }
+  if (!(0,dist.have)(e)) (0,external_kolmafia_.cliExecute)(e["default"]);
 }
 function acquireGumOrHermitItem(i) {
   var gum = (0,dist.$item)(lib_templateObject || (lib_templateObject = lib_taggedTemplateLiteral(["chewing gum on a string"])));
@@ -29166,9 +29164,7 @@ function acquireGumOrHermitItem(i) {
   } else throw "".concat(i, " is not a gum or hermit item");
 }
 function buyUpTo(n, i) {
-  if (!(0,dist.have)(i, n)) {
-    (0,external_kolmafia_.buy)(i, n - (0,external_kolmafia_.availableAmount)(i));
-  }
+  if (!(0,dist.have)(i, n)) (0,external_kolmafia_.buy)(i, n - (0,external_kolmafia_.availableAmount)(i));
 }
 function checkAvailable(i) {
   var n = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -29178,9 +29174,7 @@ function checkAvailable(i) {
   }
 }
 function checkEffect(e) {
-  if (!(0,dist.have)(e)) {
-    throw "Missing effect ".concat(e);
-  }
+  if (!(0,dist.have)(e)) throw "Missing effect ".concat(e);
 }
 function checkFax(monster) {
   if (!containsText(visitUrl("desc_item.php?whichitem=".concat($item(_templateObject4 || (_templateObject4 = lib_taggedTemplateLiteral(["photocopied monster"]))).descid)), "".concat(monster))) {
@@ -29213,9 +29207,7 @@ function cookPizza(a, b, c, d) {
   (0,external_kolmafia_.visitUrl)("campground.php?action=makepizza&pizza=".concat((0,external_kolmafia_.toInt)(a), ",").concat((0,external_kolmafia_.toInt)(b), ",").concat((0,external_kolmafia_.toInt)(c), ",").concat((0,external_kolmafia_.toInt)(d)));
 }
 function shrugEffect(effect) {
-  if ((0,dist.have)(effect)) {
-    (0,external_kolmafia_.cliExecute)("shrug ".concat(effect));
-  }
+  if ((0,dist.have)(effect)) (0,external_kolmafia_.cliExecute)("shrug ".concat(effect));
 }
 function tryRunChoice(pageIndex, choiceID, goal) {
   if (!(0,external_kolmafia_.runChoice)(pageIndex).includes("whichchoice=".concat(choiceID))) {
@@ -29224,9 +29216,7 @@ function tryRunChoice(pageIndex, choiceID, goal) {
   }
 }
 function tryUse(n, i) {
-  if ((0,external_kolmafia_.itemAmount)(i) >= n) {
-    (0,external_kolmafia_.use)(n, i);
-  }
+  if ((0,external_kolmafia_.itemAmount)(i) >= n) (0,external_kolmafia_.use)(n, i);
 }
 function tuple() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -29239,14 +29229,10 @@ function voterMonsterNow() {
   return (0,external_kolmafia_.totalTurnsPlayed)() % 11 === 1;
 }
 function whitelist(clan) {
-  if ((0,external_kolmafia_.getClanName)() !== clan) {
-    (0,external_kolmafia_.cliExecute)("/whitelist ".concat(clan));
-  }
+  if ((0,external_kolmafia_.getClanName)() !== clan) (0,external_kolmafia_.cliExecute)("/whitelist ".concat(clan));
 }
 function wishEffect(e) {
-  if (!(0,dist.have)(e)) {
-    (0,external_kolmafia_.cliExecute)("genie effect ".concat(e));
-  }
+  if (!(0,dist.have)(e)) (0,external_kolmafia_.cliExecute)("genie effect ".concat(e));
 }
 function withContext(func, context) {
   var previous = new Map();
@@ -29580,10 +29566,7 @@ function harvestBatteries() {
 }
 function scavengeDaycare() {
   (0,external_kolmafia_.visitUrl)("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-
-  if (!(0,dist.get)("_daycareNap")) {
-    tryRunChoice(1, 1334, "have a boxing daydream.");
-  }
+  if (!(0,dist.get)("_daycareNap")) tryRunChoice(1, 1334, "have a boxing daydream.");
 
   if ((0,dist.get)("_daycareGymScavenges") < 1) {
     tryRunChoice(3, 1334, "enter the gym.");
@@ -29875,19 +29858,14 @@ function haveQuest(id) {
   return (0,external_kolmafia_.containsText)((0,external_kolmafia_.visitUrl)("council.php"), "<input type=hidden name=option value=".concat(id, ">"));
 }
 function prepAndDoQuest(id) {
-  if (id > Quest.Donate) {
-    throw "Invalid Quest ".concat(id, " (these are just for outfits)!!");
-  }
+  if (id > Quest.Donate) throw "Invalid Quest ".concat(id, " (these are just for outfits)!!");
 
   if (haveQuest(id)) {
     // Convenient but also non-obvious here, maybe a bad design?
     acquireQuestEffects(id);
     equipOutfit(id);
     (0,external_kolmafia_.visitUrl)("choice.php?whichchoice=1089&option=".concat(id));
-
-    if (haveQuest(id)) {
-      throw "Couldn't complete quest ".concat(id, "?");
-    }
+    if (haveQuest(id)) throw "Couldn't complete quest ".concat(id, "?");
   }
 }
 ;// CONCATENATED MODULE: ./src/events.ts
@@ -30068,11 +30046,7 @@ var events = {
       spendAllMpOnLibrams();
       selectBestFamiliar(FamiliarFlag.NoAttack);
       adventure(loveTunnel, MacroList.TunnelOfLOV);
-
-      if ((0,external_kolmafia_.handlingChoice)()) {
-        throw "Stuck in LOV?";
-      }
-
+      if ((0,external_kolmafia_.handlingChoice)()) throw "Stuck in LOV?";
       checkEffect((0,dist.$effect)(events_templateObject56 || (events_templateObject56 = events_taggedTemplateLiteral(["Open Heart Surgery"]))));
       checkAvailable((0,dist.$item)(events_templateObject57 || (events_templateObject57 = events_taggedTemplateLiteral(["LOV Elixir #3"]))));
       (0,external_kolmafia_.use)((0,dist.$item)(events_templateObject58 || (events_templateObject58 = events_taggedTemplateLiteral(["LOV Elixir #3"]))));
@@ -30249,10 +30223,7 @@ var events = {
       (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject99 || (events_templateObject99 = events_taggedTemplateLiteral(["God Lobster"]))));
       MacroList.FreeFight.setAutoAttack();
       (0,external_kolmafia_.visitUrl)("main.php?fightgodlobster=1");
-
-      if ((0,external_kolmafia_.choiceFollowsFight)()) {
-        (0,external_kolmafia_.runChoice)(-1);
-      }
+      if ((0,external_kolmafia_.choiceFollowsFight)()) (0,external_kolmafia_.runChoice)(-1);
 
       if (!(0,dist.have)((0,dist.$effect)(events_templateObject100 || (events_templateObject100 = events_taggedTemplateLiteral(["Silence of the God Lobster"]))))) {
         if (events.godLobster.current() === events.godLobster.max) {
@@ -30472,9 +30443,7 @@ var oneOffEvents = {
   },
   nanobrainy: {
     run: function run() {
-      if (!(0,dist.get)("_gingerbreadClockAdvanced")) {
-        adventure(civicCenter, dist.Macro.abort());
-      }
+      if (!(0,dist.get)("_gingerbreadClockAdvanced")) adventure(civicCenter, dist.Macro.abort());
 
       if (!(0,dist.have)((0,dist.$effect)(events_templateObject159 || (events_templateObject159 = events_taggedTemplateLiteral(["Nanobrainy"]))))) {
         (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject160 || (events_templateObject160 = events_taggedTemplateLiteral(["back"]))), (0,dist.$item)(events_templateObject161 || (events_templateObject161 = events_taggedTemplateLiteral(["vampyric cloake"]))));
@@ -30574,7 +30543,7 @@ function selectBestFamiliar() {
   }
 }
 ;// CONCATENATED MODULE: ./src/prep.ts
-var prep_templateObject, prep_templateObject2, prep_templateObject3, prep_templateObject4;
+var prep_templateObject, prep_templateObject2;
 
 function prep_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -30586,11 +30555,7 @@ function checkReadyToAscend() {
   var intersect = badDays.filter(function (day) {
     return holidays.includes(day);
   });
-
-  if (intersect.length > 0) {
-    throw "Don't want to ascend during ".concat((0,external_kolmafia_.holiday)());
-  }
-
+  if (intersect.length > 0) throw "Don't want to ascend during ".concat((0,external_kolmafia_.holiday)());
   var targetPaintingMon = (0,dist.$monster)(prep_templateObject || (prep_templateObject = prep_taggedTemplateLiteral(["Pterodactyl"])));
 
   if (dist.ChateauMantegna.paintingMonster() !== targetPaintingMon) {
@@ -30602,49 +30567,43 @@ function checkReadyToAscend() {
   }
 
   if (!(0,external_kolmafia_.myGardenType)().toLowerCase().includes("peppermint")) {
-    if ((0,dist.have)((0,dist.$item)(prep_templateObject2 || (prep_templateObject2 = prep_taggedTemplateLiteral(["peppermint pip packet"]))))) {//use(1, $item`peppermint pip packet`);
-    }
-
     throw "Need a peppermint garden installed";
   }
 
-  if ((0,external_kolmafia_.getWorkshed)() !== (0,dist.$item)(prep_templateObject3 || (prep_templateObject3 = prep_taggedTemplateLiteral(["diabolic pizza cube"])))) {
-    if ((0,dist.have)((0,dist.$item)(prep_templateObject4 || (prep_templateObject4 = prep_taggedTemplateLiteral(["diabolic pizza cube"]))))) {//use(1, $item`diabolic pizza cube`);
-    }
-
+  if ((0,external_kolmafia_.getWorkshed)() !== (0,dist.$item)(prep_templateObject2 || (prep_templateObject2 = prep_taggedTemplateLiteral(["diabolic pizza cube"])))) {
     throw "Need a diabolic pizza cube installed";
   }
 
   return true;
 }
-;// CONCATENATED MODULE: ./src/sweetsynthesis2.ts
-var sweetsynthesis2_templateObject, sweetsynthesis2_templateObject2, sweetsynthesis2_templateObject3, sweetsynthesis2_templateObject4, sweetsynthesis2_templateObject5, sweetsynthesis2_templateObject6, sweetsynthesis2_templateObject7, sweetsynthesis2_templateObject8, sweetsynthesis2_templateObject9, sweetsynthesis2_templateObject10, sweetsynthesis2_templateObject11, sweetsynthesis2_templateObject12, sweetsynthesis2_templateObject13, sweetsynthesis2_templateObject14, sweetsynthesis2_templateObject15, sweetsynthesis2_templateObject16, sweetsynthesis2_templateObject17, sweetsynthesis2_templateObject18, sweetsynthesis2_templateObject19, sweetsynthesis2_templateObject20, sweetsynthesis2_templateObject21, sweetsynthesis2_templateObject22, sweetsynthesis2_templateObject23, sweetsynthesis2_templateObject24, sweetsynthesis2_templateObject25, sweetsynthesis2_templateObject26, sweetsynthesis2_templateObject27, sweetsynthesis2_templateObject28, sweetsynthesis2_templateObject29, sweetsynthesis2_templateObject30, sweetsynthesis2_templateObject31, sweetsynthesis2_templateObject32, sweetsynthesis2_templateObject33, sweetsynthesis2_templateObject34, sweetsynthesis2_templateObject35;
+;// CONCATENATED MODULE: ./src/sweetsynthesis.ts
+var sweetsynthesis_templateObject, sweetsynthesis_templateObject2, sweetsynthesis_templateObject3, sweetsynthesis_templateObject4, sweetsynthesis_templateObject5, sweetsynthesis_templateObject6, sweetsynthesis_templateObject7, sweetsynthesis_templateObject8, sweetsynthesis_templateObject9, sweetsynthesis_templateObject10, sweetsynthesis_templateObject11, sweetsynthesis_templateObject12, sweetsynthesis_templateObject13, sweetsynthesis_templateObject14, sweetsynthesis_templateObject15, sweetsynthesis_templateObject16, sweetsynthesis_templateObject17, sweetsynthesis_templateObject18, sweetsynthesis_templateObject19, sweetsynthesis_templateObject20, sweetsynthesis_templateObject21, sweetsynthesis_templateObject22, sweetsynthesis_templateObject23, sweetsynthesis_templateObject24, sweetsynthesis_templateObject25, sweetsynthesis_templateObject26, sweetsynthesis_templateObject27, sweetsynthesis_templateObject28, sweetsynthesis_templateObject29, sweetsynthesis_templateObject30, sweetsynthesis_templateObject31, sweetsynthesis_templateObject32, sweetsynthesis_templateObject33, sweetsynthesis_templateObject34, sweetsynthesis_templateObject35;
 
-function sweetsynthesis2_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis2_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function sweetsynthesis_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
-function sweetsynthesis2_toConsumableArray(arr) { return sweetsynthesis2_arrayWithoutHoles(arr) || sweetsynthesis2_iterableToArray(arr) || sweetsynthesis2_unsupportedIterableToArray(arr) || sweetsynthesis2_nonIterableSpread(); }
+function sweetsynthesis_toConsumableArray(arr) { return sweetsynthesis_arrayWithoutHoles(arr) || sweetsynthesis_iterableToArray(arr) || sweetsynthesis_unsupportedIterableToArray(arr) || sweetsynthesis_nonIterableSpread(); }
 
-function sweetsynthesis2_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function sweetsynthesis_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function sweetsynthesis2_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function sweetsynthesis_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
-function sweetsynthesis2_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return sweetsynthesis2_arrayLikeToArray(arr); }
+function sweetsynthesis_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return sweetsynthesis_arrayLikeToArray(arr); }
 
-function sweetsynthesis2_slicedToArray(arr, i) { return sweetsynthesis2_arrayWithHoles(arr) || sweetsynthesis2_iterableToArrayLimit(arr, i) || sweetsynthesis2_unsupportedIterableToArray(arr, i) || sweetsynthesis2_nonIterableRest(); }
+function sweetsynthesis_slicedToArray(arr, i) { return sweetsynthesis_arrayWithHoles(arr) || sweetsynthesis_iterableToArrayLimit(arr, i) || sweetsynthesis_unsupportedIterableToArray(arr, i) || sweetsynthesis_nonIterableRest(); }
 
-function sweetsynthesis2_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function sweetsynthesis_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function sweetsynthesis2_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return sweetsynthesis2_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return sweetsynthesis2_arrayLikeToArray(o, minLen); }
+function sweetsynthesis_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return sweetsynthesis_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return sweetsynthesis_arrayLikeToArray(o, minLen); }
 
-function sweetsynthesis2_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function sweetsynthesis_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function sweetsynthesis2_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function sweetsynthesis_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function sweetsynthesis2_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function sweetsynthesis_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function sweetsynthesis2_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function sweetsynthesis_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function sweetsynthesis2_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+function sweetsynthesis_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 
 
@@ -30657,31 +30616,31 @@ var candyType;
 
 function tier(effect) {
   switch (effect) {
-    case (0,dist.$effect)(sweetsynthesis2_templateObject || (sweetsynthesis2_templateObject = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Hot"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject2 || (sweetsynthesis2_templateObject2 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Cold"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject3 || (sweetsynthesis2_templateObject3 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Pungent"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject4 || (sweetsynthesis2_templateObject4 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Scary"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject5 || (sweetsynthesis2_templateObject5 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Greasy"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject || (sweetsynthesis_templateObject = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Hot"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject2 || (sweetsynthesis_templateObject2 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Cold"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject3 || (sweetsynthesis_templateObject3 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Pungent"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject4 || (sweetsynthesis_templateObject4 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Scary"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject5 || (sweetsynthesis_templateObject5 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Greasy"]))):
       return {
         a: candyType.simple,
         b: candyType.simple
       };
 
-    case (0,dist.$effect)(sweetsynthesis2_templateObject6 || (sweetsynthesis2_templateObject6 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Strong"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject7 || (sweetsynthesis2_templateObject7 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Smart"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject8 || (sweetsynthesis2_templateObject8 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Cool"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject9 || (sweetsynthesis2_templateObject9 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Hardy"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject10 || (sweetsynthesis2_templateObject10 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Energy"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject6 || (sweetsynthesis_templateObject6 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Strong"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject7 || (sweetsynthesis_templateObject7 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Smart"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject8 || (sweetsynthesis_templateObject8 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Cool"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject9 || (sweetsynthesis_templateObject9 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Hardy"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject10 || (sweetsynthesis_templateObject10 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Energy"]))):
       return {
         a: candyType.complex,
         b: candyType.simple
       };
 
-    case (0,dist.$effect)(sweetsynthesis2_templateObject11 || (sweetsynthesis2_templateObject11 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Greed"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject12 || (sweetsynthesis2_templateObject12 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Collection"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject13 || (sweetsynthesis2_templateObject13 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Movement"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject14 || (sweetsynthesis2_templateObject14 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Learning"]))):
-    case (0,dist.$effect)(sweetsynthesis2_templateObject15 || (sweetsynthesis2_templateObject15 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Style"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject11 || (sweetsynthesis_templateObject11 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Greed"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject12 || (sweetsynthesis_templateObject12 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Collection"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject13 || (sweetsynthesis_templateObject13 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Movement"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject14 || (sweetsynthesis_templateObject14 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Learning"]))):
+    case (0,dist.$effect)(sweetsynthesis_templateObject15 || (sweetsynthesis_templateObject15 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Style"]))):
       return {
         a: candyType.complex,
         b: candyType.complex
@@ -30691,7 +30650,7 @@ function tier(effect) {
   throw "Not a type of synthesis effect: ".concat(effect);
 }
 
-var sugarGroup = [(0,dist.$item)(sweetsynthesis2_templateObject16 || (sweetsynthesis2_templateObject16 = sweetsynthesis2_taggedTemplateLiteral(["sugar shotgun"]))), (0,dist.$item)(sweetsynthesis2_templateObject17 || (sweetsynthesis2_templateObject17 = sweetsynthesis2_taggedTemplateLiteral(["sugar shillelagh"]))), (0,dist.$item)(sweetsynthesis2_templateObject18 || (sweetsynthesis2_templateObject18 = sweetsynthesis2_taggedTemplateLiteral(["sugar shank"]))), (0,dist.$item)(sweetsynthesis2_templateObject19 || (sweetsynthesis2_templateObject19 = sweetsynthesis2_taggedTemplateLiteral(["sugar chapeau"]))), (0,dist.$item)(sweetsynthesis2_templateObject20 || (sweetsynthesis2_templateObject20 = sweetsynthesis2_taggedTemplateLiteral(["sugar shorts"]))), (0,dist.$item)(sweetsynthesis2_templateObject21 || (sweetsynthesis2_templateObject21 = sweetsynthesis2_taggedTemplateLiteral(["sugar shield"]))), (0,dist.$item)(sweetsynthesis2_templateObject22 || (sweetsynthesis2_templateObject22 = sweetsynthesis2_taggedTemplateLiteral(["sugar shirt"])))].map(function (i) {
+var sugarGroup = [(0,dist.$item)(sweetsynthesis_templateObject16 || (sweetsynthesis_templateObject16 = sweetsynthesis_taggedTemplateLiteral(["sugar shotgun"]))), (0,dist.$item)(sweetsynthesis_templateObject17 || (sweetsynthesis_templateObject17 = sweetsynthesis_taggedTemplateLiteral(["sugar shillelagh"]))), (0,dist.$item)(sweetsynthesis_templateObject18 || (sweetsynthesis_templateObject18 = sweetsynthesis_taggedTemplateLiteral(["sugar shank"]))), (0,dist.$item)(sweetsynthesis_templateObject19 || (sweetsynthesis_templateObject19 = sweetsynthesis_taggedTemplateLiteral(["sugar chapeau"]))), (0,dist.$item)(sweetsynthesis_templateObject20 || (sweetsynthesis_templateObject20 = sweetsynthesis_taggedTemplateLiteral(["sugar shorts"]))), (0,dist.$item)(sweetsynthesis_templateObject21 || (sweetsynthesis_templateObject21 = sweetsynthesis_taggedTemplateLiteral(["sugar shield"]))), (0,dist.$item)(sweetsynthesis_templateObject22 || (sweetsynthesis_templateObject22 = sweetsynthesis_taggedTemplateLiteral(["sugar shirt"])))].map(function (i) {
   return {
     candy: i,
     count: 1
@@ -30700,10 +30659,10 @@ var sugarGroup = [(0,dist.$item)(sweetsynthesis2_templateObject16 || (sweetsynth
 // Need to alter search function to weight cost of candy transforms
 
 var peppermintGroup = [{
-  candy: (0,dist.$item)(sweetsynthesis2_templateObject23 || (sweetsynthesis2_templateObject23 = sweetsynthesis2_taggedTemplateLiteral(["peppermint twist"]))),
+  candy: (0,dist.$item)(sweetsynthesis_templateObject23 || (sweetsynthesis_templateObject23 = sweetsynthesis_taggedTemplateLiteral(["peppermint twist"]))),
   count: 1
 }];
-var transforms = new Map([[(0,dist.$item)(sweetsynthesis2_templateObject24 || (sweetsynthesis2_templateObject24 = sweetsynthesis2_taggedTemplateLiteral(["sugar sheet"]))), sugarGroup], [(0,dist.$item)(sweetsynthesis2_templateObject25 || (sweetsynthesis2_templateObject25 = sweetsynthesis2_taggedTemplateLiteral(["peppermint sprout"]))), peppermintGroup]]); // Cyclical references will break searching, no keys allowed in the candySets!
+var transforms = new Map([[(0,dist.$item)(sweetsynthesis_templateObject24 || (sweetsynthesis_templateObject24 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), sugarGroup], [(0,dist.$item)(sweetsynthesis_templateObject25 || (sweetsynthesis_templateObject25 = sweetsynthesis_taggedTemplateLiteral(["peppermint sprout"]))), peppermintGroup]]); // Cyclical references will break searching, no keys allowed in the candySets!
 
 /**
  * Search for a set candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.
@@ -30718,13 +30677,13 @@ function synthesize() {
   var _candies;
 
   var allowTomeUse = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  var targetEffects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,dist.$effects)(sweetsynthesis2_templateObject26 || (sweetsynthesis2_templateObject26 = sweetsynthesis2_taggedTemplateLiteral(["Synthesis: Smart, Synthesis: Collection, Synthesis: Learning"])));
-  var reserveCandies = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [[(0,dist.$item)(sweetsynthesis2_templateObject27 || (sweetsynthesis2_templateObject27 = sweetsynthesis2_taggedTemplateLiteral(["Chubby and Plump bar"]))), 1], [(0,dist.$item)(sweetsynthesis2_templateObject28 || (sweetsynthesis2_templateObject28 = sweetsynthesis2_taggedTemplateLiteral(["sugar sheet"]))), 1], [(0,dist.$item)(sweetsynthesis2_templateObject29 || (sweetsynthesis2_templateObject29 = sweetsynthesis2_taggedTemplateLiteral(["sugar sheet"]))), 1], [(0,dist.$item)(sweetsynthesis2_templateObject30 || (sweetsynthesis2_templateObject30 = sweetsynthesis2_taggedTemplateLiteral(["sugar sheet"]))), 1]];
-  var candies = (_candies = {}, sweetsynthesis2_defineProperty(_candies, candyType.complex, []), sweetsynthesis2_defineProperty(_candies, candyType.simple, []), _candies);
+  var targetEffects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,dist.$effects)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Smart, Synthesis: Collection, Synthesis: Learning"])));
+  var reserveCandies = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [[(0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["Chubby and Plump bar"]))), 1], [(0,dist.$item)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), 1], [(0,dist.$item)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), 1], [(0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), 1]];
+  var candies = (_candies = {}, sweetsynthesis_defineProperty(_candies, candyType.complex, []), sweetsynthesis_defineProperty(_candies, candyType.simple, []), _candies);
   var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
 
   Object.entries(inv).forEach(function (_ref) {
-    var _ref2 = sweetsynthesis2_slicedToArray(_ref, 2),
+    var _ref2 = sweetsynthesis_slicedToArray(_ref, 2),
         name = _ref2[0],
         count = _ref2[1];
 
@@ -30739,7 +30698,7 @@ function synthesize() {
     });
   }); // Pretend summon sugar sheets if tome summons available
 
-  var sheet = (0,dist.$item)(sweetsynthesis2_templateObject31 || (sweetsynthesis2_templateObject31 = sweetsynthesis2_taggedTemplateLiteral(["sugar sheet"])));
+  var sheet = (0,dist.$item)(sweetsynthesis_templateObject31 || (sweetsynthesis_templateObject31 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])));
 
   if (allowTomeUse) {
     candies.complex.push({
@@ -30755,19 +30714,19 @@ function synthesize() {
   };
 
   for (var i = 0; i < reserveCandies.length; i++) {
-    var used = new Map(sweetsynthesis2_toConsumableArray(reserveCandies.slice(i)));
+    var used = new Map(sweetsynthesis_toConsumableArray(reserveCandies.slice(i)));
     sim = simulate(targetEffects, candies, used);
     if (sim.result) break;
   }
 
   if (!sim.result) throw "Unable to find a combination for all synthesis targets"; // Found a solution, now transform candies and synthesize
 
-  var _iterator = sweetsynthesis2_createForOfIteratorHelper(sim.pairs),
+  var _iterator = sweetsynthesis_createForOfIteratorHelper(sim.pairs),
       _step;
 
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _step$value = sweetsynthesis2_slicedToArray(_step.value, 2),
+      var _step$value = sweetsynthesis_slicedToArray(_step.value, 2),
           a = _step$value[0],
           b = _step$value[1];
 
@@ -30777,7 +30736,7 @@ function synthesize() {
 
         if (!(0,dist.have)(creatable) && transforms.has(source)) {
           // only cast summon sugar sheets if needed
-          if (allowTomeUse && source === (0,dist.$item)(sweetsynthesis2_templateObject32 || (sweetsynthesis2_templateObject32 = sweetsynthesis2_taggedTemplateLiteral(["sugar sheet"])))) (0,external_kolmafia_.useSkill)((0,dist.$skill)(sweetsynthesis2_templateObject33 || (sweetsynthesis2_templateObject33 = sweetsynthesis2_taggedTemplateLiteral(["Summon Sugar Sheets"]))));
+          if (allowTomeUse && source === (0,dist.$item)(sweetsynthesis_templateObject32 || (sweetsynthesis_templateObject32 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))) (0,external_kolmafia_.useSkill)((0,dist.$skill)(sweetsynthesis_templateObject33 || (sweetsynthesis_templateObject33 = sweetsynthesis_taggedTemplateLiteral(["Summon Sugar Sheets"]))));
           (0,external_kolmafia_.cliExecute)("make ".concat(creatable));
         }
       });
@@ -30797,7 +30756,7 @@ function simulate(synthTargets, candies, reserveCandies) {
     pairs: []
   };
 
-  var _iterator2 = sweetsynthesis2_createForOfIteratorHelper(synthTargets),
+  var _iterator2 = sweetsynthesis_createForOfIteratorHelper(synthTargets),
       _step2;
 
   try {
@@ -30874,8 +30833,8 @@ function search(setA, setB, used, target) {
 
   return {
     found: false,
-    a: (0,dist.$item)(sweetsynthesis2_templateObject34 || (sweetsynthesis2_templateObject34 = sweetsynthesis2_taggedTemplateLiteral(["none"]))),
-    b: (0,dist.$item)(sweetsynthesis2_templateObject35 || (sweetsynthesis2_templateObject35 = sweetsynthesis2_taggedTemplateLiteral(["none"]))),
+    a: (0,dist.$item)(sweetsynthesis_templateObject34 || (sweetsynthesis_templateObject34 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
+    b: (0,dist.$item)(sweetsynthesis_templateObject35 || (sweetsynthesis_templateObject35 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
     fromA: fromA,
     fromB: fromB
   };
@@ -30892,10 +30851,7 @@ function ascend() {
     (0,external_kolmafia_.visitUrl)("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
 
-  if (!(0,external_kolmafia_.visitUrl)("charpane.php").includes("Astral Spirit")) {
-    throw "Error trying to ascend";
-  }
-
+  if (!(0,external_kolmafia_.visitUrl)("charpane.php").includes("Astral Spirit")) throw "Error trying to ascend";
   (0,external_kolmafia_.visitUrl)("afterlife.php?action=pearlygates");
   (0,external_kolmafia_.visitUrl)("afterlife.php?action=buydeli&whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(valhalla_templateObject || (valhalla_templateObject = valhalla_taggedTemplateLiteral(["Astral six-pack"]))))));
   (0,external_kolmafia_.visitUrl)("afterlife.php?action=buyarmory&whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(valhalla_templateObject2 || (valhalla_templateObject2 = valhalla_taggedTemplateLiteral(["Astral Statuette"]))))));
@@ -31527,7 +31483,7 @@ module.exports = require("kolmafia");;
 /******/ 	// module cache are used so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 9462);
+/******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 1149);
 /******/ 	var __webpack_export_target__ = exports;
 /******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
 /******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
