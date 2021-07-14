@@ -206,14 +206,6 @@ function levelAndDoQuests() {
       // Do all the leveling combats
       // Then gulp latte for more libram summons
 
-      if (
-        myBasestat($stat`Muscle`) >= 40 &&
-        myBasestat($stat`Muscle`) <= 59 &&
-        !get("_discoKnife")
-      ) {
-        useSkill($skill`That's Not a Knife`);
-      }
-
       while (
         myLevel() >= CHATEAU_REST_LEVEL &&
         //myMaxmp() - myMp() > 150 &&
