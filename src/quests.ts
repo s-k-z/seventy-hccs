@@ -312,9 +312,11 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
   [Quest.Leveling]: new Map([
     [$effect`Blood Bubble`, Context.leveling],
     [$effect`Carol of the Thrills`, Context.leveling],
+    [$effect`Ghostly Shell`, Context.leveling],
     [$effect`Inscrutable Gaze`, Context.leveling],
     //[$effect`Purity of Spirit`, EffectContext.leveling],
     [$effect`Ruthlessly Efficient`, Context.leveling],
+    [$effect`Shield of the Pastalord`, Context.leveling],
     [$effect`Springy Fusilli`, Context.leveling],
 
     // Beach comb
@@ -350,6 +352,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Blessing of the Bird`, Context.leveling],
     [$effect`Pomp & Circumsands`, Context.leveling],
 
+    [$effect`Disco Fever`, Context.test],
     [$effect`Expert Oiliness`, Context.test],
     // Wish
     [$effect`Sparkly!`, Context.special],
@@ -397,6 +400,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Rage of the Reindeer`, Context.test],
     [$effect`Scowl of the Auk`, Context.test],
     [$effect`Song of the North`, Context.test],
+    [$effect`Tenacity of the Snapper`, Context.test],
     [$effect`The Power of LOV`, Context.test],
   ]),
 

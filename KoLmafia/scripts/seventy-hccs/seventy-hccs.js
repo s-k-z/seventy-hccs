@@ -12,6 +12,19 @@ module.exports = path.Object.entries;
 
 /***/ }),
 
+/***/ 3952:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+__webpack_require__(5677);
+
+__webpack_require__(5809);
+
+var path = __webpack_require__(1287);
+
+module.exports = path.Object.fromEntries;
+
+/***/ }),
+
 /***/ 2365:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -32,12 +45,76 @@ module.exports = parent;
 
 /***/ }),
 
+/***/ 6353:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var parent = __webpack_require__(3952);
+
+module.exports = parent;
+
+/***/ }),
+
 /***/ 8629:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parent = __webpack_require__(2365);
 
 module.exports = parent;
+
+/***/ }),
+
+/***/ 6163:
+/***/ ((module) => {
+
+module.exports = function (it) {
+  if (typeof it != 'function') {
+    throw TypeError(String(it) + ' is not a function');
+  }
+
+  return it;
+};
+
+/***/ }),
+
+/***/ 9882:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isObject = __webpack_require__(794);
+
+module.exports = function (it) {
+  if (!isObject(it) && it !== null) {
+    throw TypeError("Can't set " + String(it) + ' as a prototype');
+  }
+
+  return it;
+};
+
+/***/ }),
+
+/***/ 6288:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var create = __webpack_require__(3590);
+
+var definePropertyModule = __webpack_require__(4615);
+
+var UNSCOPABLES = wellKnownSymbol('unscopables');
+var ArrayPrototype = Array.prototype; // Array.prototype[@@unscopables]
+// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
+
+if (ArrayPrototype[UNSCOPABLES] == undefined) {
+  definePropertyModule.f(ArrayPrototype, UNSCOPABLES, {
+    configurable: true,
+    value: create(null)
+  });
+} // add a key to Array.prototype[@@unscopables]
+
+
+module.exports = function (key) {
+  ArrayPrototype[UNSCOPABLES][key] = true;
+};
 
 /***/ }),
 
@@ -107,6 +184,40 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ 3058:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var TO_STRING_TAG_SUPPORT = __webpack_require__(8191);
+
+var classofRaw = __webpack_require__(9624);
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var TO_STRING_TAG = wellKnownSymbol('toStringTag'); // ES3 wrong here
+
+var CORRECT_ARGUMENTS = classofRaw(function () {
+  return arguments;
+}()) == 'Arguments'; // fallback for IE11 Script Access Denied error
+
+var tryGet = function tryGet(it, key) {
+  try {
+    return it[key];
+  } catch (error) {
+    /* empty */
+  }
+}; // getting tag from ES6+ `Object.prototype.toString`
+
+
+module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
+  var O, tag, result;
+  return it === undefined ? 'Undefined' : it === null ? 'Null' // @@toStringTag case
+  : typeof (tag = tryGet(O = Object(it), TO_STRING_TAG)) == 'string' ? tag // builtinTag case
+  : CORRECT_ARGUMENTS ? classofRaw(O) // ES3 arguments fallback
+  : (result = classofRaw(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : result;
+};
+
+/***/ }),
+
 /***/ 3478:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -127,6 +238,55 @@ module.exports = function (target, source) {
     var key = keys[i];
     if (!has(target, key)) defineProperty(target, key, getOwnPropertyDescriptor(source, key));
   }
+};
+
+/***/ }),
+
+/***/ 926:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var fails = __webpack_require__(6544);
+
+module.exports = !fails(function () {
+  function F() {
+    /* empty */
+  }
+
+  F.prototype.constructor = null; // eslint-disable-next-line es/no-object-getprototypeof -- required for testing
+
+  return Object.getPrototypeOf(new F()) !== F.prototype;
+});
+
+/***/ }),
+
+/***/ 4683:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var IteratorPrototype = __webpack_require__(6792).IteratorPrototype;
+
+var create = __webpack_require__(3590);
+
+var createPropertyDescriptor = __webpack_require__(4677);
+
+var setToStringTag = __webpack_require__(8821);
+
+var Iterators = __webpack_require__(339);
+
+var returnThis = function returnThis() {
+  return this;
+};
+
+module.exports = function (IteratorConstructor, NAME, next) {
+  var TO_STRING_TAG = NAME + ' Iterator';
+  IteratorConstructor.prototype = create(IteratorPrototype, {
+    next: createPropertyDescriptor(1, next)
+  });
+  setToStringTag(IteratorConstructor, TO_STRING_TAG, false, true);
+  Iterators[TO_STRING_TAG] = returnThis;
+  return IteratorConstructor;
 };
 
 /***/ }),
@@ -163,6 +323,157 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
+/***/ 5999:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var toPrimitive = __webpack_require__(2670);
+
+var definePropertyModule = __webpack_require__(4615);
+
+var createPropertyDescriptor = __webpack_require__(4677);
+
+module.exports = function (object, key, value) {
+  var propertyKey = toPrimitive(key);
+  if (propertyKey in object) definePropertyModule.f(object, propertyKey, createPropertyDescriptor(0, value));else object[propertyKey] = value;
+};
+
+/***/ }),
+
+/***/ 9012:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var $ = __webpack_require__(7263);
+
+var createIteratorConstructor = __webpack_require__(4683);
+
+var getPrototypeOf = __webpack_require__(729);
+
+var setPrototypeOf = __webpack_require__(7496);
+
+var setToStringTag = __webpack_require__(8821);
+
+var createNonEnumerableProperty = __webpack_require__(57);
+
+var redefine = __webpack_require__(1270);
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var IS_PURE = __webpack_require__(6268);
+
+var Iterators = __webpack_require__(339);
+
+var IteratorsCore = __webpack_require__(6792);
+
+var IteratorPrototype = IteratorsCore.IteratorPrototype;
+var BUGGY_SAFARI_ITERATORS = IteratorsCore.BUGGY_SAFARI_ITERATORS;
+var ITERATOR = wellKnownSymbol('iterator');
+var KEYS = 'keys';
+var VALUES = 'values';
+var ENTRIES = 'entries';
+
+var returnThis = function returnThis() {
+  return this;
+};
+
+module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, IS_SET, FORCED) {
+  createIteratorConstructor(IteratorConstructor, NAME, next);
+
+  var getIterationMethod = function getIterationMethod(KIND) {
+    if (KIND === DEFAULT && defaultIterator) return defaultIterator;
+    if (!BUGGY_SAFARI_ITERATORS && KIND in IterablePrototype) return IterablePrototype[KIND];
+
+    switch (KIND) {
+      case KEYS:
+        return function keys() {
+          return new IteratorConstructor(this, KIND);
+        };
+
+      case VALUES:
+        return function values() {
+          return new IteratorConstructor(this, KIND);
+        };
+
+      case ENTRIES:
+        return function entries() {
+          return new IteratorConstructor(this, KIND);
+        };
+    }
+
+    return function () {
+      return new IteratorConstructor(this);
+    };
+  };
+
+  var TO_STRING_TAG = NAME + ' Iterator';
+  var INCORRECT_VALUES_NAME = false;
+  var IterablePrototype = Iterable.prototype;
+  var nativeIterator = IterablePrototype[ITERATOR] || IterablePrototype['@@iterator'] || DEFAULT && IterablePrototype[DEFAULT];
+  var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
+  var anyNativeIterator = NAME == 'Array' ? IterablePrototype.entries || nativeIterator : nativeIterator;
+  var CurrentIteratorPrototype, methods, KEY; // fix native
+
+  if (anyNativeIterator) {
+    CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
+
+    if (IteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
+      if (!IS_PURE && getPrototypeOf(CurrentIteratorPrototype) !== IteratorPrototype) {
+        if (setPrototypeOf) {
+          setPrototypeOf(CurrentIteratorPrototype, IteratorPrototype);
+        } else if (typeof CurrentIteratorPrototype[ITERATOR] != 'function') {
+          createNonEnumerableProperty(CurrentIteratorPrototype, ITERATOR, returnThis);
+        }
+      } // Set @@toStringTag to native iterators
+
+
+      setToStringTag(CurrentIteratorPrototype, TO_STRING_TAG, true, true);
+      if (IS_PURE) Iterators[TO_STRING_TAG] = returnThis;
+    }
+  } // fix Array.prototype.{ values, @@iterator }.name in V8 / FF
+
+
+  if (DEFAULT == VALUES && nativeIterator && nativeIterator.name !== VALUES) {
+    INCORRECT_VALUES_NAME = true;
+
+    defaultIterator = function values() {
+      return nativeIterator.call(this);
+    };
+  } // define iterator
+
+
+  if ((!IS_PURE || FORCED) && IterablePrototype[ITERATOR] !== defaultIterator) {
+    createNonEnumerableProperty(IterablePrototype, ITERATOR, defaultIterator);
+  }
+
+  Iterators[NAME] = defaultIterator; // export additional methods
+
+  if (DEFAULT) {
+    methods = {
+      values: getIterationMethod(VALUES),
+      keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
+      entries: getIterationMethod(ENTRIES)
+    };
+    if (FORCED) for (KEY in methods) {
+      if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
+        redefine(IterablePrototype, KEY, methods[KEY]);
+      }
+    } else $({
+      target: NAME,
+      proto: true,
+      forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME
+    }, methods);
+  }
+
+  return methods;
+};
+
+/***/ }),
+
 /***/ 8494:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -194,6 +505,43 @@ var EXISTS = isObject(document) && isObject(document.createElement);
 module.exports = function (it) {
   return EXISTS ? document.createElement(it) : {};
 };
+
+/***/ }),
+
+/***/ 6918:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var getBuiltIn = __webpack_require__(5897);
+
+module.exports = getBuiltIn('navigator', 'userAgent') || '';
+
+/***/ }),
+
+/***/ 4061:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var global = __webpack_require__(7583);
+
+var userAgent = __webpack_require__(6918);
+
+var process = global.process;
+var versions = process && process.versions;
+var v8 = versions && versions.v8;
+var match, version;
+
+if (v8) {
+  match = v8.split('.');
+  version = match[0] < 4 ? 1 : match[0] + match[1];
+} else if (userAgent) {
+  match = userAgent.match(/Edge\/(\d+)/);
+
+  if (!match || match[1] >= 74) {
+    match = userAgent.match(/Chrome\/(\d+)/);
+    if (match) version = match[1];
+  }
+}
+
+module.exports = version && +version;
 
 /***/ }),
 
@@ -293,6 +641,47 @@ module.exports = function (exec) {
 
 /***/ }),
 
+/***/ 2938:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var aFunction = __webpack_require__(6163); // optional / simple context binding
+
+
+module.exports = function (fn, that, length) {
+  aFunction(fn);
+  if (that === undefined) return fn;
+
+  switch (length) {
+    case 0:
+      return function () {
+        return fn.call(that);
+      };
+
+    case 1:
+      return function (a) {
+        return fn.call(that, a);
+      };
+
+    case 2:
+      return function (a, b) {
+        return fn.call(that, a, b);
+      };
+
+    case 3:
+      return function (a, b, c) {
+        return fn.call(that, a, b, c);
+      };
+  }
+
+  return function ()
+  /* ...args */
+  {
+    return fn.apply(that, arguments);
+  };
+};
+
+/***/ }),
+
 /***/ 5897:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -306,6 +695,23 @@ var aFunction = function aFunction(variable) {
 
 module.exports = function (namespace, method) {
   return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global[namespace]) : path[namespace] && path[namespace][method] || global[namespace] && global[namespace][method];
+};
+
+/***/ }),
+
+/***/ 8272:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var classof = __webpack_require__(3058);
+
+var Iterators = __webpack_require__(339);
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var ITERATOR = wellKnownSymbol('iterator');
+
+module.exports = function (it) {
+  if (it != undefined) return it[ITERATOR] || it['@@iterator'] || Iterators[classof(it)];
 };
 
 /***/ }),
@@ -346,6 +752,15 @@ module.exports = Object.hasOwn || function hasOwn(it, key) {
 /***/ ((module) => {
 
 module.exports = {};
+
+/***/ }),
+
+/***/ 482:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var getBuiltIn = __webpack_require__(5897);
+
+module.exports = getBuiltIn('document', 'documentElement');
 
 /***/ }),
 
@@ -495,6 +910,22 @@ module.exports = {
 
 /***/ }),
 
+/***/ 114:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var Iterators = __webpack_require__(339);
+
+var ITERATOR = wellKnownSymbol('iterator');
+var ArrayPrototype = Array.prototype; // check on default Array iterator
+
+module.exports = function (it) {
+  return it !== undefined && (Iterators.Array === it || ArrayPrototype[ITERATOR] === it);
+};
+
+/***/ }),
+
 /***/ 4451:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -536,6 +967,185 @@ module.exports = false;
 
 /***/ }),
 
+/***/ 4026:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var anObject = __webpack_require__(2569);
+
+var isArrayIteratorMethod = __webpack_require__(114);
+
+var toLength = __webpack_require__(97);
+
+var bind = __webpack_require__(2938);
+
+var getIteratorMethod = __webpack_require__(8272);
+
+var iteratorClose = __webpack_require__(7093);
+
+var Result = function Result(stopped, result) {
+  this.stopped = stopped;
+  this.result = result;
+};
+
+module.exports = function (iterable, unboundFunction, options) {
+  var that = options && options.that;
+  var AS_ENTRIES = !!(options && options.AS_ENTRIES);
+  var IS_ITERATOR = !!(options && options.IS_ITERATOR);
+  var INTERRUPTED = !!(options && options.INTERRUPTED);
+  var fn = bind(unboundFunction, that, 1 + AS_ENTRIES + INTERRUPTED);
+  var iterator, iterFn, index, length, result, next, step;
+
+  var stop = function stop(condition) {
+    if (iterator) iteratorClose(iterator);
+    return new Result(true, condition);
+  };
+
+  var callFn = function callFn(value) {
+    if (AS_ENTRIES) {
+      anObject(value);
+      return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
+    }
+
+    return INTERRUPTED ? fn(value, stop) : fn(value);
+  };
+
+  if (IS_ITERATOR) {
+    iterator = iterable;
+  } else {
+    iterFn = getIteratorMethod(iterable);
+    if (typeof iterFn != 'function') throw TypeError('Target is not iterable'); // optimisation for array iterators
+
+    if (isArrayIteratorMethod(iterFn)) {
+      for (index = 0, length = toLength(iterable.length); length > index; index++) {
+        result = callFn(iterable[index]);
+        if (result && result instanceof Result) return result;
+      }
+
+      return new Result(false);
+    }
+
+    iterator = iterFn.call(iterable);
+  }
+
+  next = iterator.next;
+
+  while (!(step = next.call(iterator)).done) {
+    try {
+      result = callFn(step.value);
+    } catch (error) {
+      iteratorClose(iterator);
+      throw error;
+    }
+
+    if (_typeof(result) == 'object' && result && result instanceof Result) return result;
+  }
+
+  return new Result(false);
+};
+
+/***/ }),
+
+/***/ 7093:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var anObject = __webpack_require__(2569);
+
+module.exports = function (iterator) {
+  var returnMethod = iterator['return'];
+
+  if (returnMethod !== undefined) {
+    return anObject(returnMethod.call(iterator)).value;
+  }
+};
+
+/***/ }),
+
+/***/ 6792:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var fails = __webpack_require__(6544);
+
+var getPrototypeOf = __webpack_require__(729);
+
+var createNonEnumerableProperty = __webpack_require__(57);
+
+var has = __webpack_require__(4402);
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var IS_PURE = __webpack_require__(6268);
+
+var ITERATOR = wellKnownSymbol('iterator');
+var BUGGY_SAFARI_ITERATORS = false;
+
+var returnThis = function returnThis() {
+  return this;
+}; // `%IteratorPrototype%` object
+// https://tc39.es/ecma262/#sec-%iteratorprototype%-object
+
+
+var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
+/* eslint-disable es/no-array-prototype-keys -- safe */
+
+if ([].keys) {
+  arrayIterator = [].keys(); // Safari 8 has buggy iterators w/o `next`
+
+  if (!('next' in arrayIterator)) BUGGY_SAFARI_ITERATORS = true;else {
+    PrototypeOfArrayIteratorPrototype = getPrototypeOf(getPrototypeOf(arrayIterator));
+    if (PrototypeOfArrayIteratorPrototype !== Object.prototype) IteratorPrototype = PrototypeOfArrayIteratorPrototype;
+  }
+}
+
+var NEW_ITERATOR_PROTOTYPE = IteratorPrototype == undefined || fails(function () {
+  var test = {}; // FF44- legacy iterators case
+
+  return IteratorPrototype[ITERATOR].call(test) !== test;
+});
+if (NEW_ITERATOR_PROTOTYPE) IteratorPrototype = {}; // `%IteratorPrototype%[@@iterator]()` method
+// https://tc39.es/ecma262/#sec-%iteratorprototype%-@@iterator
+
+if ((!IS_PURE || NEW_ITERATOR_PROTOTYPE) && !has(IteratorPrototype, ITERATOR)) {
+  createNonEnumerableProperty(IteratorPrototype, ITERATOR, returnThis);
+}
+
+module.exports = {
+  IteratorPrototype: IteratorPrototype,
+  BUGGY_SAFARI_ITERATORS: BUGGY_SAFARI_ITERATORS
+};
+
+/***/ }),
+
+/***/ 339:
+/***/ ((module) => {
+
+module.exports = {};
+
+/***/ }),
+
+/***/ 8640:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/* eslint-disable es/no-symbol -- required for testing */
+var V8_VERSION = __webpack_require__(4061);
+
+var fails = __webpack_require__(6544); // eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
+
+
+module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
+  var symbol = Symbol(); // Chrome 38 Symbol has incorrect toString conversion
+  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
+
+  return !String(symbol) || !(Object(symbol) instanceof Symbol) || // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
+  !Symbol.sham && V8_VERSION && V8_VERSION < 41;
+});
+
+/***/ }),
+
 /***/ 9491:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -545,6 +1155,138 @@ var inspectSource = __webpack_require__(9734);
 
 var WeakMap = global.WeakMap;
 module.exports = typeof WeakMap === 'function' && /native code/.test(inspectSource(WeakMap));
+
+/***/ }),
+
+/***/ 3590:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var anObject = __webpack_require__(2569);
+
+var defineProperties = __webpack_require__(8728);
+
+var enumBugKeys = __webpack_require__(5690);
+
+var hiddenKeys = __webpack_require__(4639);
+
+var html = __webpack_require__(482);
+
+var documentCreateElement = __webpack_require__(6668);
+
+var sharedKey = __webpack_require__(9137);
+
+var GT = '>';
+var LT = '<';
+var PROTOTYPE = 'prototype';
+var SCRIPT = 'script';
+var IE_PROTO = sharedKey('IE_PROTO');
+
+var EmptyConstructor = function EmptyConstructor() {
+  /* empty */
+};
+
+var scriptTag = function scriptTag(content) {
+  return LT + SCRIPT + GT + content + LT + '/' + SCRIPT + GT;
+}; // Create object with fake `null` prototype: use ActiveX Object with cleared prototype
+
+
+var NullProtoObjectViaActiveX = function NullProtoObjectViaActiveX(activeXDocument) {
+  activeXDocument.write(scriptTag(''));
+  activeXDocument.close();
+  var temp = activeXDocument.parentWindow.Object;
+  activeXDocument = null; // avoid memory leak
+
+  return temp;
+}; // Create object with fake `null` prototype: use iframe Object with cleared prototype
+
+
+var NullProtoObjectViaIFrame = function NullProtoObjectViaIFrame() {
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = documentCreateElement('iframe');
+  var JS = 'java' + SCRIPT + ':';
+  var iframeDocument;
+  iframe.style.display = 'none';
+  html.appendChild(iframe); // https://github.com/zloirock/core-js/issues/475
+
+  iframe.src = String(JS);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write(scriptTag('document.F=Object'));
+  iframeDocument.close();
+  return iframeDocument.F;
+}; // Check for document.domain and active x support
+// No need to use active x approach when document.domain is not set
+// see https://github.com/es-shims/es5-shim/issues/150
+// variation of https://github.com/kitcambridge/es5-shim/commit/4f738ac066346
+// avoid IE GC bug
+
+
+var activeXDocument;
+
+var _NullProtoObject = function NullProtoObject() {
+  try {
+    /* global ActiveXObject -- old IE */
+    activeXDocument = document.domain && new ActiveXObject('htmlfile');
+  } catch (error) {
+    /* ignore */
+  }
+
+  _NullProtoObject = activeXDocument ? NullProtoObjectViaActiveX(activeXDocument) : NullProtoObjectViaIFrame();
+  var length = enumBugKeys.length;
+
+  while (length--) {
+    delete _NullProtoObject[PROTOTYPE][enumBugKeys[length]];
+  }
+
+  return _NullProtoObject();
+};
+
+hiddenKeys[IE_PROTO] = true; // `Object.create` method
+// https://tc39.es/ecma262/#sec-object.create
+
+module.exports = Object.create || function create(O, Properties) {
+  var result;
+
+  if (O !== null) {
+    EmptyConstructor[PROTOTYPE] = anObject(O);
+    result = new EmptyConstructor();
+    EmptyConstructor[PROTOTYPE] = null; // add "__proto__" for Object.getPrototypeOf polyfill
+
+    result[IE_PROTO] = O;
+  } else result = _NullProtoObject();
+
+  return Properties === undefined ? result : defineProperties(result, Properties);
+};
+
+/***/ }),
+
+/***/ 8728:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var DESCRIPTORS = __webpack_require__(8494);
+
+var definePropertyModule = __webpack_require__(4615);
+
+var anObject = __webpack_require__(2569);
+
+var objectKeys = __webpack_require__(5432); // `Object.defineProperties` method
+// https://tc39.es/ecma262/#sec-object.defineproperties
+// eslint-disable-next-line es/no-object-defineproperties -- safe
+
+
+module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperties(O, Properties) {
+  anObject(O);
+  var keys = objectKeys(Properties);
+  var length = keys.length;
+  var index = 0;
+  var key;
+
+  while (length > index) {
+    definePropertyModule.f(O, key = keys[index++], Properties[key]);
+  }
+
+  return O;
+};
 
 /***/ }),
 
@@ -638,6 +1380,35 @@ exports.f = Object.getOwnPropertySymbols;
 
 /***/ }),
 
+/***/ 729:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var has = __webpack_require__(4402);
+
+var toObject = __webpack_require__(1324);
+
+var sharedKey = __webpack_require__(9137);
+
+var CORRECT_PROTOTYPE_GETTER = __webpack_require__(926);
+
+var IE_PROTO = sharedKey('IE_PROTO');
+var ObjectPrototype = Object.prototype; // `Object.getPrototypeOf` method
+// https://tc39.es/ecma262/#sec-object.getprototypeof
+// eslint-disable-next-line es/no-object-getprototypeof -- safe
+
+module.exports = CORRECT_PROTOTYPE_GETTER ? Object.getPrototypeOf : function (O) {
+  O = toObject(O);
+  if (has(O, IE_PROTO)) return O[IE_PROTO];
+
+  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
+    return O.constructor.prototype;
+  }
+
+  return O instanceof Object ? ObjectPrototype : null;
+};
+
+/***/ }),
+
 /***/ 8356:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -706,6 +1477,42 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
   var descriptor = getOwnPropertyDescriptor(this, V);
   return !!descriptor && descriptor.enumerable;
 } : $propertyIsEnumerable;
+
+/***/ }),
+
+/***/ 7496:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/* eslint-disable no-proto -- safe */
+var anObject = __webpack_require__(2569);
+
+var aPossiblePrototype = __webpack_require__(9882); // `Object.setPrototypeOf` method
+// https://tc39.es/ecma262/#sec-object.setprototypeof
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+// eslint-disable-next-line es/no-object-setprototypeof -- safe
+
+
+module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
+  var CORRECT_SETTER = false;
+  var test = {};
+  var setter;
+
+  try {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    setter = Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set;
+    setter.call(test, []);
+    CORRECT_SETTER = test instanceof Array;
+  } catch (error) {
+    /* empty */
+  }
+
+  return function setPrototypeOf(O, proto) {
+    anObject(O);
+    aPossiblePrototype(proto);
+    if (CORRECT_SETTER) setter.call(O, proto);else O.__proto__ = proto;
+    return O;
+  };
+}() : undefined);
 
 /***/ }),
 
@@ -865,6 +1672,28 @@ module.exports = function (key, value) {
 
 /***/ }),
 
+/***/ 8821:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var defineProperty = __webpack_require__(4615).f;
+
+var has = __webpack_require__(4402);
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var TO_STRING_TAG = wellKnownSymbol('toStringTag');
+
+module.exports = function (it, TAG, STATIC) {
+  if (it && !has(it = STATIC ? it : it.prototype, TO_STRING_TAG)) {
+    defineProperty(it, TO_STRING_TAG, {
+      configurable: true,
+      value: TAG
+    });
+  }
+};
+
+/***/ }),
+
 /***/ 9137:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1001,6 +1830,18 @@ module.exports = function (input, PREFERRED_STRING) {
 
 /***/ }),
 
+/***/ 8191:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var wellKnownSymbol = __webpack_require__(3649);
+
+var TO_STRING_TAG = wellKnownSymbol('toStringTag');
+var test = {};
+test[TO_STRING_TAG] = 'z';
+module.exports = String(test) === '[object z]';
+
+/***/ }),
+
 /***/ 8284:
 /***/ ((module) => {
 
@@ -1010,6 +1851,129 @@ var postfix = Math.random();
 module.exports = function (key) {
   return 'Symbol(' + String(key === undefined ? '' : key) + ')_' + (++id + postfix).toString(36);
 };
+
+/***/ }),
+
+/***/ 7786:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/* eslint-disable es/no-symbol -- required for testing */
+var NATIVE_SYMBOL = __webpack_require__(8640);
+
+module.exports = NATIVE_SYMBOL && !Symbol.sham && _typeof(Symbol.iterator) == 'symbol';
+
+/***/ }),
+
+/***/ 3649:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var global = __webpack_require__(7583);
+
+var shared = __webpack_require__(7836);
+
+var has = __webpack_require__(4402);
+
+var uid = __webpack_require__(8284);
+
+var NATIVE_SYMBOL = __webpack_require__(8640);
+
+var USE_SYMBOL_AS_UID = __webpack_require__(7786);
+
+var WellKnownSymbolsStore = shared('wks');
+var _Symbol = global.Symbol;
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? _Symbol : _Symbol && _Symbol.withoutSetter || uid;
+
+module.exports = function (name) {
+  if (!has(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
+    if (NATIVE_SYMBOL && has(_Symbol, name)) {
+      WellKnownSymbolsStore[name] = _Symbol[name];
+    } else {
+      WellKnownSymbolsStore[name] = createWellKnownSymbol('Symbol.' + name);
+    }
+  }
+
+  return WellKnownSymbolsStore[name];
+};
+
+/***/ }),
+
+/***/ 5677:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var toIndexedObject = __webpack_require__(2977);
+
+var addToUnscopables = __webpack_require__(6288);
+
+var Iterators = __webpack_require__(339);
+
+var InternalStateModule = __webpack_require__(2743);
+
+var defineIterator = __webpack_require__(9012);
+
+var ARRAY_ITERATOR = 'Array Iterator';
+var setInternalState = InternalStateModule.set;
+var getInternalState = InternalStateModule.getterFor(ARRAY_ITERATOR); // `Array.prototype.entries` method
+// https://tc39.es/ecma262/#sec-array.prototype.entries
+// `Array.prototype.keys` method
+// https://tc39.es/ecma262/#sec-array.prototype.keys
+// `Array.prototype.values` method
+// https://tc39.es/ecma262/#sec-array.prototype.values
+// `Array.prototype[@@iterator]` method
+// https://tc39.es/ecma262/#sec-array.prototype-@@iterator
+// `CreateArrayIterator` internal method
+// https://tc39.es/ecma262/#sec-createarrayiterator
+
+module.exports = defineIterator(Array, 'Array', function (iterated, kind) {
+  setInternalState(this, {
+    type: ARRAY_ITERATOR,
+    target: toIndexedObject(iterated),
+    // target
+    index: 0,
+    // next index
+    kind: kind // kind
+
+  }); // `%ArrayIteratorPrototype%.next` method
+  // https://tc39.es/ecma262/#sec-%arrayiteratorprototype%.next
+}, function () {
+  var state = getInternalState(this);
+  var target = state.target;
+  var kind = state.kind;
+  var index = state.index++;
+
+  if (!target || index >= target.length) {
+    state.target = undefined;
+    return {
+      value: undefined,
+      done: true
+    };
+  }
+
+  if (kind == 'keys') return {
+    value: index,
+    done: false
+  };
+  if (kind == 'values') return {
+    value: target[index],
+    done: false
+  };
+  return {
+    value: [index, target[index]],
+    done: false
+  };
+}, 'values'); // argumentsList[@@iterator] is %ArrayProto_values%
+// https://tc39.es/ecma262/#sec-createunmappedargumentsobject
+// https://tc39.es/ecma262/#sec-createmappedargumentsobject
+
+Iterators.Arguments = Iterators.Array; // https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
+
+addToUnscopables('keys');
+addToUnscopables('values');
+addToUnscopables('entries');
 
 /***/ }),
 
@@ -1028,6 +1992,34 @@ $({
 }, {
   entries: function entries(O) {
     return $entries(O);
+  }
+});
+
+/***/ }),
+
+/***/ 5809:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+var $ = __webpack_require__(7263);
+
+var iterate = __webpack_require__(4026);
+
+var createProperty = __webpack_require__(5999); // `Object.fromEntries` method
+// https://github.com/tc39/proposal-object-from-entries
+
+
+$({
+  target: 'Object',
+  stat: true
+}, {
+  fromEntries: function fromEntries(iterable) {
+    var obj = {};
+    iterate(iterable, function (k, v) {
+      createProperty(obj, k, v);
+    }, {
+      AS_ENTRIES: true
+    });
+    return obj;
   }
 });
 
@@ -1921,7 +2913,19 @@ function adventureMacroAuto(loc, autoMacro, nextMacro) {
 
   nextMacro = nextMacro !== null && nextMacro !== void 0 ? nextMacro : Macro.abort();
   autoMacro.setAutoAttack();
-  adventureMacro(loc, nextMacro);
+  nextMacro.save();
+
+  try {
+    kolmafia_1.adv1(loc, 0, "");
+
+    while (kolmafia_1.inMultiFight()) {
+      kolmafia_1.runCombat();
+    }
+
+    if (kolmafia_1.choiceFollowsFight()) kolmafia_1.visitUrl("choice.php");
+  } finally {
+    Macro.clearSaved();
+  }
 }
 
 exports.adventureMacroAuto = adventureMacroAuto;
@@ -3280,6 +4284,8 @@ Object.defineProperty(exports, "__esModule", ({
 exports.withChoice = exports.withChoices = exports.withProperty = exports.withProperties = exports.setProperties = exports.set = exports.get = exports.getThrall = exports.getStat = exports.getSlot = exports.getSkill = exports.getServant = exports.getPhylum = exports.getMonster = exports.getLocation = exports.getItem = exports.getFamiliar = exports.getElement = exports.getEffect = exports.getCoinmaster = exports.getClass = exports.getBounty = exports.getNumber = exports.getBoolean = exports.getCommaSeparated = exports.getString = void 0;
 
 __webpack_require__(1889);
+
+__webpack_require__(6353);
 
 var kolmafia_1 = __webpack_require__(1664);
 
@@ -4882,7 +5888,7 @@ exports.getBooze = getBooze;
  * List of the platinum cocktails
  */
 
-exports.Cocktails = template_string_1.$items(templateObject_2 || (templateObject_2 = __makeTemplateObject(["buttery boy, steamboat, ghiaccio golada, nog-on-the-cob, sourfinger"], ["buttery boy, steamboat, ghiaccio golada, nog-on-the-cob, sourfinger"])));
+exports.Cocktails = template_string_1.$items(templateObject_2 || (templateObject_2 = __makeTemplateObject(["buttery boy, steamboat, ghiaccio colada, nog-on-the-cob, sourfinger"], ["buttery boy, steamboat, ghiaccio colada, nog-on-the-cob, sourfinger"])));
 /**
  * Returns true if the user has a platinum cocktail in their inventory
  */
@@ -28639,7 +29645,7 @@ function vote() {
   if (!(0,dist.have)((0,dist.$item)(iotms_templateObject38 || (iotms_templateObject38 = iotms_taggedTemplateLiteral(["\"I Voted!\" sticker"]))))) throw "Voting failed";
 }
 ;// CONCATENATED MODULE: ./src/quests.ts
-var quests_templateObject, quests_templateObject2, quests_templateObject3, quests_templateObject4, quests_templateObject5, quests_templateObject6, quests_templateObject7, quests_templateObject8, quests_templateObject9, quests_templateObject10, quests_templateObject11, quests_templateObject12, quests_templateObject13, quests_templateObject14, quests_templateObject15, quests_templateObject16, quests_templateObject17, quests_templateObject18, quests_templateObject19, quests_templateObject20, quests_templateObject21, quests_templateObject22, quests_templateObject23, quests_templateObject24, quests_templateObject25, quests_templateObject26, quests_templateObject27, quests_templateObject28, quests_templateObject29, quests_templateObject30, quests_templateObject31, quests_templateObject32, quests_templateObject33, quests_templateObject34, quests_templateObject35, quests_templateObject36, quests_templateObject37, quests_templateObject38, quests_templateObject39, quests_templateObject40, quests_templateObject41, quests_templateObject42, quests_templateObject43, quests_templateObject44, quests_templateObject45, quests_templateObject46, quests_templateObject47, quests_templateObject48, quests_templateObject49, quests_templateObject50, quests_templateObject51, quests_templateObject52, quests_templateObject53, quests_templateObject54, quests_templateObject55, quests_templateObject56, quests_templateObject57, quests_templateObject58, quests_templateObject59, quests_templateObject60, quests_templateObject61, quests_templateObject62, quests_templateObject63, quests_templateObject64, quests_templateObject65, quests_templateObject66, quests_templateObject67, quests_templateObject68, quests_templateObject69, quests_templateObject70, quests_templateObject71, quests_templateObject72, _templateObject73, _templateObject74, _templateObject75, _templateObject76, _templateObject77, _templateObject78, _templateObject79, _templateObject80, _templateObject81, _templateObject82, _templateObject83, _templateObject84, _templateObject85, _templateObject86, _templateObject87, _templateObject88, _templateObject89, _templateObject90, _templateObject91, _templateObject92, _templateObject93, _templateObject94, _templateObject95, _templateObject96, _templateObject97, _templateObject98, _templateObject99, _templateObject100, _templateObject101, _templateObject102, _templateObject103, _templateObject104, _templateObject105, _templateObject106, _templateObject107, _templateObject108, _templateObject109, _templateObject110, _templateObject111, _templateObject112, _templateObject113, _templateObject114, _templateObject115, _templateObject116, _templateObject117, _templateObject118, _templateObject119, _templateObject120, _templateObject121, _templateObject122, _templateObject123, _templateObject124, _templateObject125, _templateObject126, _templateObject127, _templateObject128, _templateObject129, _templateObject130, _templateObject131, _templateObject132, _templateObject133, _templateObject134, _templateObject135, _templateObject136, _templateObject137, _templateObject138, _templateObject139, _templateObject140, _templateObject141, _templateObject142, _templateObject143, _templateObject144, _templateObject145, _templateObject146, _templateObject147, _templateObject148, _templateObject149, _templateObject150, _templateObject151, _templateObject152, _templateObject153, _templateObject154, _templateObject155, _templateObject156, _templateObject157, _templateObject158, _templateObject159, _templateObject160, _templateObject161, _templateObject162, _templateObject163, _templateObject164, _templateObject165, _templateObject166, _templateObject167, _templateObject168, _templateObject169, _templateObject170, _templateObject171, _templateObject172, _templateObject173, _templateObject174, _templateObject175, _templateObject176, _templateObject177, _templateObject178, _templateObject179, _templateObject180, _templateObject181, _templateObject182, _templateObject183, _templateObject184, _templateObject185, _questOutfits, _templateObject186, _templateObject187, _templateObject188, _templateObject189, _templateObject190, _templateObject191, _templateObject192, _templateObject193, _templateObject194, _templateObject195, _templateObject196, _templateObject197, _templateObject198, _templateObject199, _templateObject200, _templateObject201, _templateObject202, _templateObject203, _templateObject204, _templateObject205, _templateObject206, _templateObject207, _templateObject208, _templateObject209, _templateObject210, _templateObject211, _templateObject212, _templateObject213, _templateObject214, _templateObject215, _templateObject216, _templateObject217, _templateObject218, _templateObject219, _templateObject220, _templateObject221, _templateObject222, _templateObject223, _templateObject224, _templateObject225, _templateObject226, _templateObject227, _templateObject228, _templateObject229, _templateObject230, _templateObject231, _templateObject232, _templateObject233, _templateObject234, _templateObject235, _templateObject236, _templateObject237, _templateObject238, _templateObject239, _templateObject240, _templateObject241, _templateObject242, _templateObject243, _templateObject244, _templateObject245, _templateObject246, _templateObject247, _templateObject248, _templateObject249, _templateObject250, _templateObject251, _templateObject252, _templateObject253, _templateObject254, _templateObject255, _templateObject256, _templateObject257, _templateObject258, _templateObject259, _templateObject260, _templateObject261, _templateObject262, _templateObject263, _templateObject264, _templateObject265, _templateObject266, _templateObject267, _templateObject268, _templateObject269, _templateObject270, _templateObject271, _templateObject272, _templateObject273, _templateObject274, _templateObject275, _templateObject276, _templateObject277, _templateObject278, _templateObject279, _templateObject280, _templateObject281, _templateObject282, _templateObject283, _templateObject284, _templateObject285, _templateObject286, _templateObject287, _templateObject288, _templateObject289, _templateObject290, _templateObject291, _templateObject292, _templateObject293, _templateObject294, _templateObject295, _templateObject296, _templateObject297, _templateObject298, _templateObject299, _templateObject300, _templateObject301, _templateObject302, _templateObject303, _templateObject304, _templateObject305, _templateObject306, _templateObject307, _templateObject308, _templateObject309, _templateObject310, _templateObject311, _templateObject312, _templateObject313, _templateObject314, _templateObject315, _templateObject316, _templateObject317, _questEffects;
+var quests_templateObject, quests_templateObject2, quests_templateObject3, quests_templateObject4, quests_templateObject5, quests_templateObject6, quests_templateObject7, quests_templateObject8, quests_templateObject9, quests_templateObject10, quests_templateObject11, quests_templateObject12, quests_templateObject13, quests_templateObject14, quests_templateObject15, quests_templateObject16, quests_templateObject17, quests_templateObject18, quests_templateObject19, quests_templateObject20, quests_templateObject21, quests_templateObject22, quests_templateObject23, quests_templateObject24, quests_templateObject25, quests_templateObject26, quests_templateObject27, quests_templateObject28, quests_templateObject29, quests_templateObject30, quests_templateObject31, quests_templateObject32, quests_templateObject33, quests_templateObject34, quests_templateObject35, quests_templateObject36, quests_templateObject37, quests_templateObject38, quests_templateObject39, quests_templateObject40, quests_templateObject41, quests_templateObject42, quests_templateObject43, quests_templateObject44, quests_templateObject45, quests_templateObject46, quests_templateObject47, quests_templateObject48, quests_templateObject49, quests_templateObject50, quests_templateObject51, quests_templateObject52, quests_templateObject53, quests_templateObject54, quests_templateObject55, quests_templateObject56, quests_templateObject57, quests_templateObject58, quests_templateObject59, quests_templateObject60, quests_templateObject61, quests_templateObject62, quests_templateObject63, quests_templateObject64, quests_templateObject65, quests_templateObject66, quests_templateObject67, quests_templateObject68, quests_templateObject69, quests_templateObject70, quests_templateObject71, quests_templateObject72, _templateObject73, _templateObject74, _templateObject75, _templateObject76, _templateObject77, _templateObject78, _templateObject79, _templateObject80, _templateObject81, _templateObject82, _templateObject83, _templateObject84, _templateObject85, _templateObject86, _templateObject87, _templateObject88, _templateObject89, _templateObject90, _templateObject91, _templateObject92, _templateObject93, _templateObject94, _templateObject95, _templateObject96, _templateObject97, _templateObject98, _templateObject99, _templateObject100, _templateObject101, _templateObject102, _templateObject103, _templateObject104, _templateObject105, _templateObject106, _templateObject107, _templateObject108, _templateObject109, _templateObject110, _templateObject111, _templateObject112, _templateObject113, _templateObject114, _templateObject115, _templateObject116, _templateObject117, _templateObject118, _templateObject119, _templateObject120, _templateObject121, _templateObject122, _templateObject123, _templateObject124, _templateObject125, _templateObject126, _templateObject127, _templateObject128, _templateObject129, _templateObject130, _templateObject131, _templateObject132, _templateObject133, _templateObject134, _templateObject135, _templateObject136, _templateObject137, _templateObject138, _templateObject139, _templateObject140, _templateObject141, _templateObject142, _templateObject143, _templateObject144, _templateObject145, _templateObject146, _templateObject147, _templateObject148, _templateObject149, _templateObject150, _templateObject151, _templateObject152, _templateObject153, _templateObject154, _templateObject155, _templateObject156, _templateObject157, _templateObject158, _templateObject159, _templateObject160, _templateObject161, _templateObject162, _templateObject163, _templateObject164, _templateObject165, _templateObject166, _templateObject167, _templateObject168, _templateObject169, _templateObject170, _templateObject171, _templateObject172, _templateObject173, _templateObject174, _templateObject175, _templateObject176, _templateObject177, _templateObject178, _templateObject179, _templateObject180, _templateObject181, _templateObject182, _templateObject183, _templateObject184, _templateObject185, _questOutfits, _templateObject186, _templateObject187, _templateObject188, _templateObject189, _templateObject190, _templateObject191, _templateObject192, _templateObject193, _templateObject194, _templateObject195, _templateObject196, _templateObject197, _templateObject198, _templateObject199, _templateObject200, _templateObject201, _templateObject202, _templateObject203, _templateObject204, _templateObject205, _templateObject206, _templateObject207, _templateObject208, _templateObject209, _templateObject210, _templateObject211, _templateObject212, _templateObject213, _templateObject214, _templateObject215, _templateObject216, _templateObject217, _templateObject218, _templateObject219, _templateObject220, _templateObject221, _templateObject222, _templateObject223, _templateObject224, _templateObject225, _templateObject226, _templateObject227, _templateObject228, _templateObject229, _templateObject230, _templateObject231, _templateObject232, _templateObject233, _templateObject234, _templateObject235, _templateObject236, _templateObject237, _templateObject238, _templateObject239, _templateObject240, _templateObject241, _templateObject242, _templateObject243, _templateObject244, _templateObject245, _templateObject246, _templateObject247, _templateObject248, _templateObject249, _templateObject250, _templateObject251, _templateObject252, _templateObject253, _templateObject254, _templateObject255, _templateObject256, _templateObject257, _templateObject258, _templateObject259, _templateObject260, _templateObject261, _templateObject262, _templateObject263, _templateObject264, _templateObject265, _templateObject266, _templateObject267, _templateObject268, _templateObject269, _templateObject270, _templateObject271, _templateObject272, _templateObject273, _templateObject274, _templateObject275, _templateObject276, _templateObject277, _templateObject278, _templateObject279, _templateObject280, _templateObject281, _templateObject282, _templateObject283, _templateObject284, _templateObject285, _templateObject286, _templateObject287, _templateObject288, _templateObject289, _templateObject290, _templateObject291, _templateObject292, _templateObject293, _templateObject294, _templateObject295, _templateObject296, _templateObject297, _templateObject298, _templateObject299, _templateObject300, _templateObject301, _templateObject302, _templateObject303, _templateObject304, _templateObject305, _templateObject306, _templateObject307, _templateObject308, _templateObject309, _templateObject310, _templateObject311, _templateObject312, _templateObject313, _templateObject314, _templateObject315, _templateObject316, _templateObject317, _templateObject318, _templateObject319, _templateObject320, _templateObject321, _questEffects;
 
 function quests_slicedToArray(arr, i) { return quests_arrayWithHoles(arr) || quests_iterableToArrayLimit(arr, i) || quests_unsupportedIterableToArray(arr, i) || quests_nonIterableRest(); }
 
@@ -28807,21 +29813,21 @@ var sharedStats = new Map([[(0,dist.$effect)(_templateObject186 || (_templateObj
 var sharedSpellWeaponDamage = new Map([[(0,dist.$effect)(_templateObject193 || (_templateObject193 = quests_taggedTemplateLiteral(["Grumpy and Ornery"]))), Context.leveling], [(0,dist.$effect)(_templateObject194 || (_templateObject194 = quests_taggedTemplateLiteral(["Cowrruption"]))), Context.test], [(0,dist.$effect)(_templateObject195 || (_templateObject195 = quests_taggedTemplateLiteral(["Jackasses' Symphony of Destruction"]))), Context.test], // Food/Booze/Spleen
 [(0,dist.$effect)(_templateObject196 || (_templateObject196 = quests_taggedTemplateLiteral(["In a Lather"]))), Context.special], // Other
 [(0,dist.$effect)(_templateObject197 || (_templateObject197 = quests_taggedTemplateLiteral(["Do You Crush What I Crush?"]))), Context.special], [(0,dist.$effect)(_templateObject198 || (_templateObject198 = quests_taggedTemplateLiteral(["Inner Elf"]))), Context.special], [(0,dist.$effect)(_templateObject199 || (_templateObject199 = quests_taggedTemplateLiteral(["Meteor Showered"]))), Context.special], [(0,dist.$effect)(_templateObject200 || (_templateObject200 = quests_taggedTemplateLiteral(["Spit Upon"]))), Context.special]]);
-var questEffects = (_questEffects = {}, _defineProperty(_questEffects, Quest.Beginning, new Map([[(0,dist.$effect)(_templateObject201 || (_templateObject201 = quests_taggedTemplateLiteral(["Inscrutable Gaze"]))), Context.beginning], [(0,dist.$effect)(_templateObject202 || (_templateObject202 = quests_taggedTemplateLiteral(["Spirit of Peppermint"]))), Context.beginning], [(0,dist.$effect)(_templateObject203 || (_templateObject203 = quests_taggedTemplateLiteral(["meat.enh"]))), Context.beginning], [(0,dist.$effect)(_templateObject204 || (_templateObject204 = quests_taggedTemplateLiteral(["init.enh"]))), Context.beginning]])), _defineProperty(_questEffects, Quest.CoilWire, new Map()), _defineProperty(_questEffects, Quest.Leveling, new Map([[(0,dist.$effect)(_templateObject205 || (_templateObject205 = quests_taggedTemplateLiteral(["Blood Bubble"]))), Context.leveling], [(0,dist.$effect)(_templateObject206 || (_templateObject206 = quests_taggedTemplateLiteral(["Carol of the Thrills"]))), Context.leveling], [(0,dist.$effect)(_templateObject207 || (_templateObject207 = quests_taggedTemplateLiteral(["Inscrutable Gaze"]))), Context.leveling], //[$effect`Purity of Spirit`, EffectContext.leveling],
-[(0,dist.$effect)(_templateObject208 || (_templateObject208 = quests_taggedTemplateLiteral(["Ruthlessly Efficient"]))), Context.leveling], [(0,dist.$effect)(_templateObject209 || (_templateObject209 = quests_taggedTemplateLiteral(["Springy Fusilli"]))), Context.leveling], // Beach comb
-[(0,dist.$effect)(_templateObject210 || (_templateObject210 = quests_taggedTemplateLiteral(["Cold as Nice"]))), Context.leveling], [(0,dist.$effect)(_templateObject211 || (_templateObject211 = quests_taggedTemplateLiteral(["A Brush with Grossness"]))), Context.leveling], [(0,dist.$effect)(_templateObject212 || (_templateObject212 = quests_taggedTemplateLiteral(["Does It Have a Skull in There??"]))), Context.leveling], [(0,dist.$effect)(_templateObject213 || (_templateObject213 = quests_taggedTemplateLiteral(["Oiled, Slick"]))), Context.leveling], [(0,dist.$effect)(_templateObject214 || (_templateObject214 = quests_taggedTemplateLiteral(["Resting Beach Face"]))), Context.leveling], [(0,dist.$effect)(_templateObject215 || (_templateObject215 = quests_taggedTemplateLiteral(["You Learned Something Maybe!"]))), Context.leveling], // Class buffs
-[(0,dist.$effect)(_templateObject216 || (_templateObject216 = quests_taggedTemplateLiteral(["Polka of Plenty"]))), Context.leveling], [(0,dist.$effect)(_templateObject217 || (_templateObject217 = quests_taggedTemplateLiteral(["Ode to Booze"]))), Context.leveling], [(0,dist.$effect)(_templateObject218 || (_templateObject218 = quests_taggedTemplateLiteral(["Astral Shell"]))), Context.leveling], [(0,dist.$effect)(_templateObject219 || (_templateObject219 = quests_taggedTemplateLiteral(["Elemental Saucesphere"]))), Context.leveling] //[$effect`Scarysauce`, EffectContext.leveling],
-])), _defineProperty(_questEffects, Quest.Sprinkles, new Map()), _defineProperty(_questEffects, Quest.Muscle, new Map([].concat(quests_toConsumableArray(sharedStats), [[(0,dist.$effect)(_templateObject220 || (_templateObject220 = quests_taggedTemplateLiteral(["Lack of Body-Building"]))), Context.leveling], [(0,dist.$effect)(_templateObject221 || (_templateObject221 = quests_taggedTemplateLiteral(["Expert Oiliness"]))), Context.test], [(0,dist.$effect)(_templateObject222 || (_templateObject222 = quests_taggedTemplateLiteral(["Phorcefullness"]))), Context.test], [(0,dist.$effect)(_templateObject223 || (_templateObject223 = quests_taggedTemplateLiteral(["Rage of the Reindeer"]))), Context.test], [(0,dist.$effect)(_templateObject224 || (_templateObject224 = quests_taggedTemplateLiteral(["Giant Growth"]))), Context.special]]))), _defineProperty(_questEffects, Quest.Moxie, new Map([].concat(quests_toConsumableArray(sharedStats), [[(0,dist.$effect)(_templateObject225 || (_templateObject225 = quests_taggedTemplateLiteral(["Blessing of the Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject226 || (_templateObject226 = quests_taggedTemplateLiteral(["Pomp & Circumsands"]))), Context.leveling], [(0,dist.$effect)(_templateObject227 || (_templateObject227 = quests_taggedTemplateLiteral(["Expert Oiliness"]))), Context.test], // Wish
-[(0,dist.$effect)(_templateObject228 || (_templateObject228 = quests_taggedTemplateLiteral(["Sparkly!"]))), Context.special]]))), _defineProperty(_questEffects, Quest.HP, new Map([[(0,dist.$effect)(_templateObject229 || (_templateObject229 = quests_taggedTemplateLiteral(["Song of Starch"]))), Context.test]])), _defineProperty(_questEffects, Quest.DeepDark, new Map()), _defineProperty(_questEffects, Quest.SpellDamage, new Map([].concat(quests_toConsumableArray(sharedSpellWeaponDamage), [[(0,dist.$effect)(_templateObject230 || (_templateObject230 = quests_taggedTemplateLiteral(["Spirit of Peppermint"]))), Context.beginning], [(0,dist.$effect)(_templateObject231 || (_templateObject231 = quests_taggedTemplateLiteral(["AAA-Charged"]))), Context.leveling], [(0,dist.$effect)(_templateObject232 || (_templateObject232 = quests_taggedTemplateLiteral(["Carol of the Hells"]))), Context.leveling], [(0,dist.$effect)(_templateObject233 || (_templateObject233 = quests_taggedTemplateLiteral(["Full Bottle in front of Me"]))), Context.leveling], [(0,dist.$effect)(_templateObject234 || (_templateObject234 = quests_taggedTemplateLiteral(["Mental A-cue-ity"]))), Context.leveling], [(0,dist.$effect)(_templateObject235 || (_templateObject235 = quests_taggedTemplateLiteral(["Pisces in the Skyces"]))), Context.leveling], [(0,dist.$effect)(_templateObject236 || (_templateObject236 = quests_taggedTemplateLiteral(["Sigils of Yeg"]))), Context.leveling], [(0,dist.$effect)(_templateObject237 || (_templateObject237 = quests_taggedTemplateLiteral(["Warlock, Warstock, and Warbarrel"]))), Context.leveling], [(0,dist.$effect)(_templateObject238 || (_templateObject238 = quests_taggedTemplateLiteral(["We're All Made of Starfish"]))), Context.leveling], [(0,dist.$effect)(_templateObject239 || (_templateObject239 = quests_taggedTemplateLiteral(["Arched Eyebrow of the Archmage"]))), Context.test], [(0,dist.$effect)(_templateObject240 || (_templateObject240 = quests_taggedTemplateLiteral(["Song of Sauce"]))), Context.test], [(0,dist.$effect)(_templateObject241 || (_templateObject241 = quests_taggedTemplateLiteral(["The Magic of LOV"]))), Context.test], // Food/Booze/Spleen
-[(0,dist.$effect)(_templateObject242 || (_templateObject242 = quests_taggedTemplateLiteral(["Filled with Magic"]))), Context.special], [(0,dist.$effect)(_templateObject243 || (_templateObject243 = quests_taggedTemplateLiteral(["Drunk With Power"]))), Context.special], // Wish
-[(0,dist.$effect)(_templateObject244 || (_templateObject244 = quests_taggedTemplateLiteral(["Sparkly!"]))), Context.special], // Other
-[(0,dist.$effect)(_templateObject245 || (_templateObject245 = quests_taggedTemplateLiteral(["Visions of the Deep Dark Deeps"]))), Context.special], [(0,dist.$effect)(_templateObject246 || (_templateObject246 = quests_taggedTemplateLiteral(["Nanobrainy"]))), Context.special], [(0,dist.$effect)(_templateObject247 || (_templateObject247 = quests_taggedTemplateLiteral(["Toxic Vengeance"]))), Context.special]]))), _defineProperty(_questEffects, Quest.WeaponDamage, new Map([].concat(quests_toConsumableArray(sharedSpellWeaponDamage), [[(0,dist.$effect)(_templateObject248 || (_templateObject248 = quests_taggedTemplateLiteral(["Billiards Belligerence"]))), Context.leveling], [(0,dist.$effect)(_templateObject249 || (_templateObject249 = quests_taggedTemplateLiteral(["Blessing of your favorite Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject250 || (_templateObject250 = quests_taggedTemplateLiteral(["Carol of the Bulls"]))), Context.leveling], [(0,dist.$effect)(_templateObject251 || (_templateObject251 = quests_taggedTemplateLiteral(["Frenzied, Bloody"]))), Context.leveling], [(0,dist.$effect)(_templateObject252 || (_templateObject252 = quests_taggedTemplateLiteral(["Lack of Body-Building"]))), Context.leveling], [(0,dist.$effect)(_templateObject253 || (_templateObject253 = quests_taggedTemplateLiteral(["Bow-Legged Swagger"]))), Context.test], [(0,dist.$effect)(_templateObject254 || (_templateObject254 = quests_taggedTemplateLiteral(["Rage of the Reindeer"]))), Context.test], [(0,dist.$effect)(_templateObject255 || (_templateObject255 = quests_taggedTemplateLiteral(["Scowl of the Auk"]))), Context.test], [(0,dist.$effect)(_templateObject256 || (_templateObject256 = quests_taggedTemplateLiteral(["Song of the North"]))), Context.test], [(0,dist.$effect)(_templateObject257 || (_templateObject257 = quests_taggedTemplateLiteral(["The Power of LOV"]))), Context.test]]))), _defineProperty(_questEffects, Quest.Mysticality, new Map([].concat(quests_toConsumableArray(sharedStats), [[(0,dist.$effect)(_templateObject258 || (_templateObject258 = quests_taggedTemplateLiteral(["Uncucumbered"]))), Context.beginning], [(0,dist.$effect)(_templateObject259 || (_templateObject259 = quests_taggedTemplateLiteral(["Blessing of your favorite Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject260 || (_templateObject260 = quests_taggedTemplateLiteral(["Mystically Oiled"]))), Context.leveling], [(0,dist.$effect)(_templateObject261 || (_templateObject261 = quests_taggedTemplateLiteral(["We're All Made of Starfish"]))), Context.leveling], // Wish
-[(0,dist.$effect)(_templateObject262 || (_templateObject262 = quests_taggedTemplateLiteral(["Witch Breaded"]))), Context.special], // Other
-[(0,dist.$effect)(_templateObject263 || (_templateObject263 = quests_taggedTemplateLiteral(["Nanobrainy"]))), Context.special]]))), _defineProperty(_questEffects, Quest.CombatFrequency, new Map([[(0,dist.$effect)(_templateObject264 || (_templateObject264 = quests_taggedTemplateLiteral(["Become Superficially interested"]))), Context.test], [(0,dist.$effect)(_templateObject265 || (_templateObject265 = quests_taggedTemplateLiteral(["Feeling Lonely"]))), Context.test], [(0,dist.$effect)(_templateObject266 || (_templateObject266 = quests_taggedTemplateLiteral(["Gummed Shoes"]))), Context.test], [(0,dist.$effect)(_templateObject267 || (_templateObject267 = quests_taggedTemplateLiteral(["Invisible Avatar"]))), Context.test], [(0,dist.$effect)(_templateObject268 || (_templateObject268 = quests_taggedTemplateLiteral(["Silent Running"]))), Context.test], [(0,dist.$effect)(_templateObject269 || (_templateObject269 = quests_taggedTemplateLiteral(["Smooth Movements"]))), Context.test], [(0,dist.$effect)(_templateObject270 || (_templateObject270 = quests_taggedTemplateLiteral(["The Sonata of Sneakiness"]))), Context.test], [(0,dist.$effect)(_templateObject271 || (_templateObject271 = quests_taggedTemplateLiteral(["Throwing Some Shade"]))), Context.test], [(0,dist.$effect)(_templateObject272 || (_templateObject272 = quests_taggedTemplateLiteral(["Silence of the God Lobster"]))), Context.special]])), _defineProperty(_questEffects, Quest.HotResist, new Map([[(0,dist.$effect)(_templateObject273 || (_templateObject273 = quests_taggedTemplateLiteral(["Feeling Peaceful"]))), Context.beginning], [(0,dist.$effect)(_templateObject274 || (_templateObject274 = quests_taggedTemplateLiteral(["Astral Shell"]))), Context.leveling], [(0,dist.$effect)(_templateObject275 || (_templateObject275 = quests_taggedTemplateLiteral(["Elemental Saucesphere"]))), Context.leveling], [(0,dist.$effect)(_templateObject276 || (_templateObject276 = quests_taggedTemplateLiteral(["Hot-Headed"]))), Context.leveling], [(0,dist.$effect)(_templateObject277 || (_templateObject277 = quests_taggedTemplateLiteral(["Rainbow Vaccine"]))), Context.leveling], [(0,dist.$effect)(_templateObject278 || (_templateObject278 = quests_taggedTemplateLiteral(["Amazing"]))), Context.test], [(0,dist.$effect)(_templateObject279 || (_templateObject279 = quests_taggedTemplateLiteral(["Misty Form"]))), Context.special]])), _defineProperty(_questEffects, Quest.FamiliarWeight, new Map([[(0,dist.$effect)(_templateObject280 || (_templateObject280 = quests_taggedTemplateLiteral(["Loyal Tea"]))), Context.leveling], [(0,dist.$effect)(_templateObject281 || (_templateObject281 = quests_taggedTemplateLiteral(["A Girl Named Sue"]))), Context.leveling], [(0,dist.$effect)(_templateObject282 || (_templateObject282 = quests_taggedTemplateLiteral(["Billiards Belligerence"]))), Context.leveling], [(0,dist.$effect)(_templateObject283 || (_templateObject283 = quests_taggedTemplateLiteral(["Blood Bond"]))), Context.leveling], [(0,dist.$effect)(_templateObject284 || (_templateObject284 = quests_taggedTemplateLiteral(["Do I Know You From Somewhere?"]))), Context.leveling], [(0,dist.$effect)(_templateObject285 || (_templateObject285 = quests_taggedTemplateLiteral(["Empathy"]))), Context.leveling], [(0,dist.$effect)(_templateObject286 || (_templateObject286 = quests_taggedTemplateLiteral(["Fidoxene"]))), Context.leveling], [(0,dist.$effect)(_templateObject287 || (_templateObject287 = quests_taggedTemplateLiteral(["Leash of Linguini"]))), Context.leveling], [(0,dist.$effect)(_templateObject288 || (_templateObject288 = quests_taggedTemplateLiteral(["Puzzle Champ"]))), Context.leveling], [(0,dist.$effect)(_templateObject289 || (_templateObject289 = quests_taggedTemplateLiteral(["Man's Worst Enemy"]))), Context.test], [(0,dist.$effect)(_templateObject290 || (_templateObject290 = quests_taggedTemplateLiteral(["Over-Familiar With Dactyls"]))), Context.test], [(0,dist.$effect)(_templateObject291 || (_templateObject291 = quests_taggedTemplateLiteral(["Robot Friends"]))), Context.test], [(0,dist.$effect)(_templateObject292 || (_templateObject292 = quests_taggedTemplateLiteral(["Whole Latte Love"]))), Context.test], // Food/Booze/Spleen
-[(0,dist.$effect)(_templateObject293 || (_templateObject293 = quests_taggedTemplateLiteral(["[1701]Hip to the Jive"]))), Context.special], [(0,dist.$effect)(_templateObject294 || (_templateObject294 = quests_taggedTemplateLiteral(["Joy"]))), Context.special], [(0,dist.$effect)(_templateObject295 || (_templateObject295 = quests_taggedTemplateLiteral(["Smart Drunk"]))), Context.special], // Librams
-[(0,dist.$effect)(_templateObject296 || (_templateObject296 = quests_taggedTemplateLiteral(["Cold Hearted"]))), Context.special], [(0,dist.$effect)(_templateObject297 || (_templateObject297 = quests_taggedTemplateLiteral(["Heart of Green"]))), Context.special], // Wishes
-[(0,dist.$effect)(_templateObject298 || (_templateObject298 = quests_taggedTemplateLiteral(["All Is Forgiven"]))), Context.special], [(0,dist.$effect)(_templateObject299 || (_templateObject299 = quests_taggedTemplateLiteral(["Bureaucratized"]))), Context.special], [(0,dist.$effect)(_templateObject300 || (_templateObject300 = quests_taggedTemplateLiteral(["Chorale of Companionship"]))), Context.special], [(0,dist.$effect)(_templateObject301 || (_templateObject301 = quests_taggedTemplateLiteral(["Down With Chow"]))), Context.special], // Other
-[(0,dist.$effect)(_templateObject302 || (_templateObject302 = quests_taggedTemplateLiteral(["Meteor Showered"]))), Context.special], [(0,dist.$effect)(_templateObject303 || (_templateObject303 = quests_taggedTemplateLiteral(["Open Heart Surgery"]))), Context.special]])), _defineProperty(_questEffects, Quest.ItemDrop, new Map([[(0,dist.$effect)(_templateObject304 || (_templateObject304 = quests_taggedTemplateLiteral(["items.enh"]))), Context.beginning], [(0,dist.$effect)(_templateObject305 || (_templateObject305 = quests_taggedTemplateLiteral(["Uncucumbered"]))), Context.beginning], [(0,dist.$effect)(_templateObject306 || (_templateObject306 = quests_taggedTemplateLiteral(["Blessing of the Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject307 || (_templateObject307 = quests_taggedTemplateLiteral(["Blessing of your favorite Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject308 || (_templateObject308 = quests_taggedTemplateLiteral(["Ermine Eyes"]))), Context.leveling], [(0,dist.$effect)(_templateObject309 || (_templateObject309 = quests_taggedTemplateLiteral(["Hustlin'"]))), Context.leveling], [(0,dist.$effect)(_templateObject310 || (_templateObject310 = quests_taggedTemplateLiteral(["Leon's Phat Loot Lyric"]))), Context.leveling], [(0,dist.$effect)(_templateObject311 || (_templateObject311 = quests_taggedTemplateLiteral(["Singer's Faithful Ocelot"]))), Context.leveling], [(0,dist.$effect)(_templateObject312 || (_templateObject312 = quests_taggedTemplateLiteral(["Feeling Lost"]))), Context.test], [(0,dist.$effect)(_templateObject313 || (_templateObject313 = quests_taggedTemplateLiteral(["Nearly All-Natural"]))), Context.test], [(0,dist.$effect)(_templateObject314 || (_templateObject314 = quests_taggedTemplateLiteral(["Steely-Eyed Squint"]))), Context.test], [(0,dist.$effect)(_templateObject315 || (_templateObject315 = quests_taggedTemplateLiteral(["The Spirit of Taking"]))), Context.test], [(0,dist.$effect)(_templateObject316 || (_templateObject316 = quests_taggedTemplateLiteral(["Bat-Adjacent Form"]))), Context.special], [(0,dist.$effect)(_templateObject317 || (_templateObject317 = quests_taggedTemplateLiteral(["Synthesis: Collection"]))), Context.special]])), _defineProperty(_questEffects, Quest.Donate, new Map()), _questEffects);
+var questEffects = (_questEffects = {}, _defineProperty(_questEffects, Quest.Beginning, new Map([[(0,dist.$effect)(_templateObject201 || (_templateObject201 = quests_taggedTemplateLiteral(["Inscrutable Gaze"]))), Context.beginning], [(0,dist.$effect)(_templateObject202 || (_templateObject202 = quests_taggedTemplateLiteral(["Spirit of Peppermint"]))), Context.beginning], [(0,dist.$effect)(_templateObject203 || (_templateObject203 = quests_taggedTemplateLiteral(["meat.enh"]))), Context.beginning], [(0,dist.$effect)(_templateObject204 || (_templateObject204 = quests_taggedTemplateLiteral(["init.enh"]))), Context.beginning]])), _defineProperty(_questEffects, Quest.CoilWire, new Map()), _defineProperty(_questEffects, Quest.Leveling, new Map([[(0,dist.$effect)(_templateObject205 || (_templateObject205 = quests_taggedTemplateLiteral(["Blood Bubble"]))), Context.leveling], [(0,dist.$effect)(_templateObject206 || (_templateObject206 = quests_taggedTemplateLiteral(["Carol of the Thrills"]))), Context.leveling], [(0,dist.$effect)(_templateObject207 || (_templateObject207 = quests_taggedTemplateLiteral(["Ghostly Shell"]))), Context.leveling], [(0,dist.$effect)(_templateObject208 || (_templateObject208 = quests_taggedTemplateLiteral(["Inscrutable Gaze"]))), Context.leveling], //[$effect`Purity of Spirit`, EffectContext.leveling],
+[(0,dist.$effect)(_templateObject209 || (_templateObject209 = quests_taggedTemplateLiteral(["Ruthlessly Efficient"]))), Context.leveling], [(0,dist.$effect)(_templateObject210 || (_templateObject210 = quests_taggedTemplateLiteral(["Shield of the Pastalord"]))), Context.leveling], [(0,dist.$effect)(_templateObject211 || (_templateObject211 = quests_taggedTemplateLiteral(["Springy Fusilli"]))), Context.leveling], // Beach comb
+[(0,dist.$effect)(_templateObject212 || (_templateObject212 = quests_taggedTemplateLiteral(["Cold as Nice"]))), Context.leveling], [(0,dist.$effect)(_templateObject213 || (_templateObject213 = quests_taggedTemplateLiteral(["A Brush with Grossness"]))), Context.leveling], [(0,dist.$effect)(_templateObject214 || (_templateObject214 = quests_taggedTemplateLiteral(["Does It Have a Skull in There??"]))), Context.leveling], [(0,dist.$effect)(_templateObject215 || (_templateObject215 = quests_taggedTemplateLiteral(["Oiled, Slick"]))), Context.leveling], [(0,dist.$effect)(_templateObject216 || (_templateObject216 = quests_taggedTemplateLiteral(["Resting Beach Face"]))), Context.leveling], [(0,dist.$effect)(_templateObject217 || (_templateObject217 = quests_taggedTemplateLiteral(["You Learned Something Maybe!"]))), Context.leveling], // Class buffs
+[(0,dist.$effect)(_templateObject218 || (_templateObject218 = quests_taggedTemplateLiteral(["Polka of Plenty"]))), Context.leveling], [(0,dist.$effect)(_templateObject219 || (_templateObject219 = quests_taggedTemplateLiteral(["Ode to Booze"]))), Context.leveling], [(0,dist.$effect)(_templateObject220 || (_templateObject220 = quests_taggedTemplateLiteral(["Astral Shell"]))), Context.leveling], [(0,dist.$effect)(_templateObject221 || (_templateObject221 = quests_taggedTemplateLiteral(["Elemental Saucesphere"]))), Context.leveling] //[$effect`Scarysauce`, EffectContext.leveling],
+])), _defineProperty(_questEffects, Quest.Sprinkles, new Map()), _defineProperty(_questEffects, Quest.Muscle, new Map([].concat(quests_toConsumableArray(sharedStats), [[(0,dist.$effect)(_templateObject222 || (_templateObject222 = quests_taggedTemplateLiteral(["Lack of Body-Building"]))), Context.leveling], [(0,dist.$effect)(_templateObject223 || (_templateObject223 = quests_taggedTemplateLiteral(["Expert Oiliness"]))), Context.test], [(0,dist.$effect)(_templateObject224 || (_templateObject224 = quests_taggedTemplateLiteral(["Phorcefullness"]))), Context.test], [(0,dist.$effect)(_templateObject225 || (_templateObject225 = quests_taggedTemplateLiteral(["Rage of the Reindeer"]))), Context.test], [(0,dist.$effect)(_templateObject226 || (_templateObject226 = quests_taggedTemplateLiteral(["Giant Growth"]))), Context.special]]))), _defineProperty(_questEffects, Quest.Moxie, new Map([].concat(quests_toConsumableArray(sharedStats), [[(0,dist.$effect)(_templateObject227 || (_templateObject227 = quests_taggedTemplateLiteral(["Blessing of the Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject228 || (_templateObject228 = quests_taggedTemplateLiteral(["Pomp & Circumsands"]))), Context.leveling], [(0,dist.$effect)(_templateObject229 || (_templateObject229 = quests_taggedTemplateLiteral(["Disco Fever"]))), Context.test], [(0,dist.$effect)(_templateObject230 || (_templateObject230 = quests_taggedTemplateLiteral(["Expert Oiliness"]))), Context.test], // Wish
+[(0,dist.$effect)(_templateObject231 || (_templateObject231 = quests_taggedTemplateLiteral(["Sparkly!"]))), Context.special]]))), _defineProperty(_questEffects, Quest.HP, new Map([[(0,dist.$effect)(_templateObject232 || (_templateObject232 = quests_taggedTemplateLiteral(["Song of Starch"]))), Context.test]])), _defineProperty(_questEffects, Quest.DeepDark, new Map()), _defineProperty(_questEffects, Quest.SpellDamage, new Map([].concat(quests_toConsumableArray(sharedSpellWeaponDamage), [[(0,dist.$effect)(_templateObject233 || (_templateObject233 = quests_taggedTemplateLiteral(["Spirit of Peppermint"]))), Context.beginning], [(0,dist.$effect)(_templateObject234 || (_templateObject234 = quests_taggedTemplateLiteral(["AAA-Charged"]))), Context.leveling], [(0,dist.$effect)(_templateObject235 || (_templateObject235 = quests_taggedTemplateLiteral(["Carol of the Hells"]))), Context.leveling], [(0,dist.$effect)(_templateObject236 || (_templateObject236 = quests_taggedTemplateLiteral(["Full Bottle in front of Me"]))), Context.leveling], [(0,dist.$effect)(_templateObject237 || (_templateObject237 = quests_taggedTemplateLiteral(["Mental A-cue-ity"]))), Context.leveling], [(0,dist.$effect)(_templateObject238 || (_templateObject238 = quests_taggedTemplateLiteral(["Pisces in the Skyces"]))), Context.leveling], [(0,dist.$effect)(_templateObject239 || (_templateObject239 = quests_taggedTemplateLiteral(["Sigils of Yeg"]))), Context.leveling], [(0,dist.$effect)(_templateObject240 || (_templateObject240 = quests_taggedTemplateLiteral(["Warlock, Warstock, and Warbarrel"]))), Context.leveling], [(0,dist.$effect)(_templateObject241 || (_templateObject241 = quests_taggedTemplateLiteral(["We're All Made of Starfish"]))), Context.leveling], [(0,dist.$effect)(_templateObject242 || (_templateObject242 = quests_taggedTemplateLiteral(["Arched Eyebrow of the Archmage"]))), Context.test], [(0,dist.$effect)(_templateObject243 || (_templateObject243 = quests_taggedTemplateLiteral(["Song of Sauce"]))), Context.test], [(0,dist.$effect)(_templateObject244 || (_templateObject244 = quests_taggedTemplateLiteral(["The Magic of LOV"]))), Context.test], // Food/Booze/Spleen
+[(0,dist.$effect)(_templateObject245 || (_templateObject245 = quests_taggedTemplateLiteral(["Filled with Magic"]))), Context.special], [(0,dist.$effect)(_templateObject246 || (_templateObject246 = quests_taggedTemplateLiteral(["Drunk With Power"]))), Context.special], // Wish
+[(0,dist.$effect)(_templateObject247 || (_templateObject247 = quests_taggedTemplateLiteral(["Sparkly!"]))), Context.special], // Other
+[(0,dist.$effect)(_templateObject248 || (_templateObject248 = quests_taggedTemplateLiteral(["Visions of the Deep Dark Deeps"]))), Context.special], [(0,dist.$effect)(_templateObject249 || (_templateObject249 = quests_taggedTemplateLiteral(["Nanobrainy"]))), Context.special], [(0,dist.$effect)(_templateObject250 || (_templateObject250 = quests_taggedTemplateLiteral(["Toxic Vengeance"]))), Context.special]]))), _defineProperty(_questEffects, Quest.WeaponDamage, new Map([].concat(quests_toConsumableArray(sharedSpellWeaponDamage), [[(0,dist.$effect)(_templateObject251 || (_templateObject251 = quests_taggedTemplateLiteral(["Billiards Belligerence"]))), Context.leveling], [(0,dist.$effect)(_templateObject252 || (_templateObject252 = quests_taggedTemplateLiteral(["Blessing of your favorite Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject253 || (_templateObject253 = quests_taggedTemplateLiteral(["Carol of the Bulls"]))), Context.leveling], [(0,dist.$effect)(_templateObject254 || (_templateObject254 = quests_taggedTemplateLiteral(["Frenzied, Bloody"]))), Context.leveling], [(0,dist.$effect)(_templateObject255 || (_templateObject255 = quests_taggedTemplateLiteral(["Lack of Body-Building"]))), Context.leveling], [(0,dist.$effect)(_templateObject256 || (_templateObject256 = quests_taggedTemplateLiteral(["Bow-Legged Swagger"]))), Context.test], [(0,dist.$effect)(_templateObject257 || (_templateObject257 = quests_taggedTemplateLiteral(["Rage of the Reindeer"]))), Context.test], [(0,dist.$effect)(_templateObject258 || (_templateObject258 = quests_taggedTemplateLiteral(["Scowl of the Auk"]))), Context.test], [(0,dist.$effect)(_templateObject259 || (_templateObject259 = quests_taggedTemplateLiteral(["Song of the North"]))), Context.test], [(0,dist.$effect)(_templateObject260 || (_templateObject260 = quests_taggedTemplateLiteral(["Tenacity of the Snapper"]))), Context.test], [(0,dist.$effect)(_templateObject261 || (_templateObject261 = quests_taggedTemplateLiteral(["The Power of LOV"]))), Context.test]]))), _defineProperty(_questEffects, Quest.Mysticality, new Map([].concat(quests_toConsumableArray(sharedStats), [[(0,dist.$effect)(_templateObject262 || (_templateObject262 = quests_taggedTemplateLiteral(["Uncucumbered"]))), Context.beginning], [(0,dist.$effect)(_templateObject263 || (_templateObject263 = quests_taggedTemplateLiteral(["Blessing of your favorite Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject264 || (_templateObject264 = quests_taggedTemplateLiteral(["Mystically Oiled"]))), Context.leveling], [(0,dist.$effect)(_templateObject265 || (_templateObject265 = quests_taggedTemplateLiteral(["We're All Made of Starfish"]))), Context.leveling], // Wish
+[(0,dist.$effect)(_templateObject266 || (_templateObject266 = quests_taggedTemplateLiteral(["Witch Breaded"]))), Context.special], // Other
+[(0,dist.$effect)(_templateObject267 || (_templateObject267 = quests_taggedTemplateLiteral(["Nanobrainy"]))), Context.special]]))), _defineProperty(_questEffects, Quest.CombatFrequency, new Map([[(0,dist.$effect)(_templateObject268 || (_templateObject268 = quests_taggedTemplateLiteral(["Become Superficially interested"]))), Context.test], [(0,dist.$effect)(_templateObject269 || (_templateObject269 = quests_taggedTemplateLiteral(["Feeling Lonely"]))), Context.test], [(0,dist.$effect)(_templateObject270 || (_templateObject270 = quests_taggedTemplateLiteral(["Gummed Shoes"]))), Context.test], [(0,dist.$effect)(_templateObject271 || (_templateObject271 = quests_taggedTemplateLiteral(["Invisible Avatar"]))), Context.test], [(0,dist.$effect)(_templateObject272 || (_templateObject272 = quests_taggedTemplateLiteral(["Silent Running"]))), Context.test], [(0,dist.$effect)(_templateObject273 || (_templateObject273 = quests_taggedTemplateLiteral(["Smooth Movements"]))), Context.test], [(0,dist.$effect)(_templateObject274 || (_templateObject274 = quests_taggedTemplateLiteral(["The Sonata of Sneakiness"]))), Context.test], [(0,dist.$effect)(_templateObject275 || (_templateObject275 = quests_taggedTemplateLiteral(["Throwing Some Shade"]))), Context.test], [(0,dist.$effect)(_templateObject276 || (_templateObject276 = quests_taggedTemplateLiteral(["Silence of the God Lobster"]))), Context.special]])), _defineProperty(_questEffects, Quest.HotResist, new Map([[(0,dist.$effect)(_templateObject277 || (_templateObject277 = quests_taggedTemplateLiteral(["Feeling Peaceful"]))), Context.beginning], [(0,dist.$effect)(_templateObject278 || (_templateObject278 = quests_taggedTemplateLiteral(["Astral Shell"]))), Context.leveling], [(0,dist.$effect)(_templateObject279 || (_templateObject279 = quests_taggedTemplateLiteral(["Elemental Saucesphere"]))), Context.leveling], [(0,dist.$effect)(_templateObject280 || (_templateObject280 = quests_taggedTemplateLiteral(["Hot-Headed"]))), Context.leveling], [(0,dist.$effect)(_templateObject281 || (_templateObject281 = quests_taggedTemplateLiteral(["Rainbow Vaccine"]))), Context.leveling], [(0,dist.$effect)(_templateObject282 || (_templateObject282 = quests_taggedTemplateLiteral(["Amazing"]))), Context.test], [(0,dist.$effect)(_templateObject283 || (_templateObject283 = quests_taggedTemplateLiteral(["Misty Form"]))), Context.special]])), _defineProperty(_questEffects, Quest.FamiliarWeight, new Map([[(0,dist.$effect)(_templateObject284 || (_templateObject284 = quests_taggedTemplateLiteral(["Loyal Tea"]))), Context.leveling], [(0,dist.$effect)(_templateObject285 || (_templateObject285 = quests_taggedTemplateLiteral(["A Girl Named Sue"]))), Context.leveling], [(0,dist.$effect)(_templateObject286 || (_templateObject286 = quests_taggedTemplateLiteral(["Billiards Belligerence"]))), Context.leveling], [(0,dist.$effect)(_templateObject287 || (_templateObject287 = quests_taggedTemplateLiteral(["Blood Bond"]))), Context.leveling], [(0,dist.$effect)(_templateObject288 || (_templateObject288 = quests_taggedTemplateLiteral(["Do I Know You From Somewhere?"]))), Context.leveling], [(0,dist.$effect)(_templateObject289 || (_templateObject289 = quests_taggedTemplateLiteral(["Empathy"]))), Context.leveling], [(0,dist.$effect)(_templateObject290 || (_templateObject290 = quests_taggedTemplateLiteral(["Fidoxene"]))), Context.leveling], [(0,dist.$effect)(_templateObject291 || (_templateObject291 = quests_taggedTemplateLiteral(["Leash of Linguini"]))), Context.leveling], [(0,dist.$effect)(_templateObject292 || (_templateObject292 = quests_taggedTemplateLiteral(["Puzzle Champ"]))), Context.leveling], [(0,dist.$effect)(_templateObject293 || (_templateObject293 = quests_taggedTemplateLiteral(["Man's Worst Enemy"]))), Context.test], [(0,dist.$effect)(_templateObject294 || (_templateObject294 = quests_taggedTemplateLiteral(["Over-Familiar With Dactyls"]))), Context.test], [(0,dist.$effect)(_templateObject295 || (_templateObject295 = quests_taggedTemplateLiteral(["Robot Friends"]))), Context.test], [(0,dist.$effect)(_templateObject296 || (_templateObject296 = quests_taggedTemplateLiteral(["Whole Latte Love"]))), Context.test], // Food/Booze/Spleen
+[(0,dist.$effect)(_templateObject297 || (_templateObject297 = quests_taggedTemplateLiteral(["[1701]Hip to the Jive"]))), Context.special], [(0,dist.$effect)(_templateObject298 || (_templateObject298 = quests_taggedTemplateLiteral(["Joy"]))), Context.special], [(0,dist.$effect)(_templateObject299 || (_templateObject299 = quests_taggedTemplateLiteral(["Smart Drunk"]))), Context.special], // Librams
+[(0,dist.$effect)(_templateObject300 || (_templateObject300 = quests_taggedTemplateLiteral(["Cold Hearted"]))), Context.special], [(0,dist.$effect)(_templateObject301 || (_templateObject301 = quests_taggedTemplateLiteral(["Heart of Green"]))), Context.special], // Wishes
+[(0,dist.$effect)(_templateObject302 || (_templateObject302 = quests_taggedTemplateLiteral(["All Is Forgiven"]))), Context.special], [(0,dist.$effect)(_templateObject303 || (_templateObject303 = quests_taggedTemplateLiteral(["Bureaucratized"]))), Context.special], [(0,dist.$effect)(_templateObject304 || (_templateObject304 = quests_taggedTemplateLiteral(["Chorale of Companionship"]))), Context.special], [(0,dist.$effect)(_templateObject305 || (_templateObject305 = quests_taggedTemplateLiteral(["Down With Chow"]))), Context.special], // Other
+[(0,dist.$effect)(_templateObject306 || (_templateObject306 = quests_taggedTemplateLiteral(["Meteor Showered"]))), Context.special], [(0,dist.$effect)(_templateObject307 || (_templateObject307 = quests_taggedTemplateLiteral(["Open Heart Surgery"]))), Context.special]])), _defineProperty(_questEffects, Quest.ItemDrop, new Map([[(0,dist.$effect)(_templateObject308 || (_templateObject308 = quests_taggedTemplateLiteral(["items.enh"]))), Context.beginning], [(0,dist.$effect)(_templateObject309 || (_templateObject309 = quests_taggedTemplateLiteral(["Uncucumbered"]))), Context.beginning], [(0,dist.$effect)(_templateObject310 || (_templateObject310 = quests_taggedTemplateLiteral(["Blessing of the Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject311 || (_templateObject311 = quests_taggedTemplateLiteral(["Blessing of your favorite Bird"]))), Context.leveling], [(0,dist.$effect)(_templateObject312 || (_templateObject312 = quests_taggedTemplateLiteral(["Ermine Eyes"]))), Context.leveling], [(0,dist.$effect)(_templateObject313 || (_templateObject313 = quests_taggedTemplateLiteral(["Hustlin'"]))), Context.leveling], [(0,dist.$effect)(_templateObject314 || (_templateObject314 = quests_taggedTemplateLiteral(["Leon's Phat Loot Lyric"]))), Context.leveling], [(0,dist.$effect)(_templateObject315 || (_templateObject315 = quests_taggedTemplateLiteral(["Singer's Faithful Ocelot"]))), Context.leveling], [(0,dist.$effect)(_templateObject316 || (_templateObject316 = quests_taggedTemplateLiteral(["Feeling Lost"]))), Context.test], [(0,dist.$effect)(_templateObject317 || (_templateObject317 = quests_taggedTemplateLiteral(["Nearly All-Natural"]))), Context.test], [(0,dist.$effect)(_templateObject318 || (_templateObject318 = quests_taggedTemplateLiteral(["Steely-Eyed Squint"]))), Context.test], [(0,dist.$effect)(_templateObject319 || (_templateObject319 = quests_taggedTemplateLiteral(["The Spirit of Taking"]))), Context.test], [(0,dist.$effect)(_templateObject320 || (_templateObject320 = quests_taggedTemplateLiteral(["Bat-Adjacent Form"]))), Context.special], [(0,dist.$effect)(_templateObject321 || (_templateObject321 = quests_taggedTemplateLiteral(["Synthesis: Collection"]))), Context.special]])), _defineProperty(_questEffects, Quest.Donate, new Map()), _questEffects);
 
 function acquireQuestEffects(id) {
   questEffects[id].forEach(function (source, effect) {
