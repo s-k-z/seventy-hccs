@@ -30912,7 +30912,7 @@ var mummingConstumes = new Map([[(0,dist.$familiar)(main_templateObject || (main
 //
 
 function main() {
-  (0,dist.sinceKolmafiaRevision)(20752);
+  (0,dist.sinceKolmafiaRevision)(20795);
   var date = new Date();
   var startTime = date.getTime();
 
