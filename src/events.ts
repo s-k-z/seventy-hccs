@@ -8,7 +8,6 @@ import {
   handlingChoice,
   haveEffect,
   haveEquipped,
-  itemAmount,
   myHash,
   myHp,
   myLevel,
@@ -102,9 +101,7 @@ export const events: Record<string, eventData> = {
       useFamiliar($familiar`Machine Elf`);
       adventure(slimeTube, MacroList.MotherSlime);
       whitelist(MAIN_CLAN);
-      if (!have($effect`Inner Elf`)) {
-        throw "Error: somehow failed to obtain Inner Elf?";
-      }
+      if (!have($effect`Inner Elf`)) throw "Error: somehow failed to obtain Inner Elf?";
     },
   },
 
@@ -382,9 +379,9 @@ export const events: Record<string, eventData> = {
       if (!have($effect`Silence of the God Lobster`)) {
         if (events.godLobster.current() === events.godLobster.max) {
           throw `Failed to get ${$effect`Silence of the God Lobster`}`;
-        } else if (itemAmount($item`God Lobster's Ring`) > 0) {
+        } else if (availableAmount($item`God Lobster's Ring`) > 0) {
           equip($slot`familiar`, $item`God Lobster's Ring`);
-        } else if (itemAmount($item`God Lobster's Scepter`) > 0) {
+        } else if (availableAmount($item`God Lobster's Scepter`) > 0) {
           equip($slot`familiar`, $item`God Lobster's Scepter`);
         }
       }

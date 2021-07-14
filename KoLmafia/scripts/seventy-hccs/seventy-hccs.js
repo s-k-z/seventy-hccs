@@ -29457,10 +29457,7 @@ function mapMonster(location, monster, macro) {
   if ((0,dist.get)("_monstersMapped") < 3) {
     if (!(0,dist.get)("mappingMonsters")) {
       (0,external_kolmafia_.useSkill)((0,dist.$skill)(_templateObject72 || (_templateObject72 = combat_taggedTemplateLiteral(["Map the Monsters"]))));
-
-      if (!(0,dist.get)("mappingMonsters")) {
-        throw "Failed to cast map the monsters?";
-      }
+      if (!(0,dist.get)("mappingMonsters")) throw "Failed to cast map the monsters?";
     }
 
     var expectedTurnCount = (0,external_kolmafia_.myTurncount)();
@@ -29476,10 +29473,7 @@ function mapMonster(location, monster, macro) {
 
     (0,external_kolmafia_.visitUrl)("choice.php?pwd=".concat((0,external_kolmafia_.myHash)(), "&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=").concat(monster.id));
     (0,external_kolmafia_.runCombat)(macro.toString());
-
-    if ((0,external_kolmafia_.choiceFollowsFight)()) {
-      (0,external_kolmafia_.runChoice)(-1);
-    }
+    if ((0,external_kolmafia_.choiceFollowsFight)()) (0,external_kolmafia_.runChoice)(-1);
   } else {
     throw "Trying to map too many monsters in one day";
   }
@@ -29930,10 +29924,7 @@ var events = {
       (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(events_templateObject22 || (events_templateObject22 = events_taggedTemplateLiteral(["Machine Elf"]))));
       adventure(slimeTube, MacroList.MotherSlime);
       whitelist(MAIN_CLAN);
-
-      if (!(0,dist.have)((0,dist.$effect)(events_templateObject23 || (events_templateObject23 = events_taggedTemplateLiteral(["Inner Elf"]))))) {
-        throw "Error: somehow failed to obtain Inner Elf?";
-      }
+      if (!(0,dist.have)((0,dist.$effect)(events_templateObject23 || (events_templateObject23 = events_taggedTemplateLiteral(["Inner Elf"]))))) throw "Error: somehow failed to obtain Inner Elf?";
     }
   },
   ungulith: {
@@ -30228,9 +30219,9 @@ var events = {
       if (!(0,dist.have)((0,dist.$effect)(events_templateObject100 || (events_templateObject100 = events_taggedTemplateLiteral(["Silence of the God Lobster"]))))) {
         if (events.godLobster.current() === events.godLobster.max) {
           throw "Failed to get ".concat((0,dist.$effect)(events_templateObject101 || (events_templateObject101 = events_taggedTemplateLiteral(["Silence of the God Lobster"]))));
-        } else if ((0,external_kolmafia_.itemAmount)((0,dist.$item)(events_templateObject102 || (events_templateObject102 = events_taggedTemplateLiteral(["God Lobster's Ring"])))) > 0) {
+        } else if ((0,external_kolmafia_.availableAmount)((0,dist.$item)(events_templateObject102 || (events_templateObject102 = events_taggedTemplateLiteral(["God Lobster's Ring"])))) > 0) {
           (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject103 || (events_templateObject103 = events_taggedTemplateLiteral(["familiar"]))), (0,dist.$item)(events_templateObject104 || (events_templateObject104 = events_taggedTemplateLiteral(["God Lobster's Ring"]))));
-        } else if ((0,external_kolmafia_.itemAmount)((0,dist.$item)(events_templateObject105 || (events_templateObject105 = events_taggedTemplateLiteral(["God Lobster's Scepter"])))) > 0) {
+        } else if ((0,external_kolmafia_.availableAmount)((0,dist.$item)(events_templateObject105 || (events_templateObject105 = events_taggedTemplateLiteral(["God Lobster's Scepter"])))) > 0) {
           (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject106 || (events_templateObject106 = events_taggedTemplateLiteral(["familiar"]))), (0,dist.$item)(events_templateObject107 || (events_templateObject107 = events_taggedTemplateLiteral(["God Lobster's Scepter"]))));
         }
       }

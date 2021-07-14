@@ -174,9 +174,7 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro) {
   if (get("_monstersMapped") < 3) {
     if (!get("mappingMonsters")) {
       useSkill($skill`Map the Monsters`);
-      if (!get("mappingMonsters")) {
-        throw "Failed to cast map the monsters?";
-      }
+      if (!get("mappingMonsters")) throw "Failed to cast map the monsters?";
     }
     const expectedTurnCount = myTurncount();
     let mapPage = visitUrl(toUrl(location));
@@ -190,9 +188,7 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro) {
       `choice.php?pwd=${myHash()}&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`
     );
     runCombat(macro.toString());
-    if (choiceFollowsFight()) {
-      runChoice(-1);
-    }
+    if (choiceFollowsFight()) runChoice(-1);
   } else {
     throw "Trying to map too many monsters in one day";
   }
