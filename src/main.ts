@@ -411,13 +411,12 @@ function preCoilWire() {
   visitUrl("tutorial.php?action=toot");
   tryUse(1, $item`letter from King Ralph XI`);
   tryUse(1, $item`pork elf goodies sack`);
+  // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     whitelist(MAIN_CLAN);
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
-  if (!have($item`battery (AAA)`)) {
-    harvestBatteries();
-  }
+  if (!have($item`battery (AAA)`)) harvestBatteries();
   getPantogramPants();
   equipOutfit(Quest.Beginning);
 
@@ -435,12 +434,8 @@ function preCoilWire() {
   if (!get("_chateauDeskHarvested")) {
     visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   }
-  if (get("boomBoxSong").toLowerCase() !== "total eclipse of your meat") {
-    cliExecute("boombox meat");
-  }
-  if (get("_horsery") === "") {
-    cliExecute("horsery dark");
-  }
+  if (get("boomBoxSong").toLowerCase() !== "total eclipse of your meat") cliExecute("boombox meat");
+  if (get("_horsery") === "") cliExecute("horsery dark");
   // 8600 meat
 
   // Get Community Service quests
@@ -459,9 +454,7 @@ function preCoilWire() {
 
   // Get free stats
   scavengeDaycare();
-  if (!have($item`Brutal brogues`)) {
-    cliExecute("bastille bbq brutalist gesture");
-  }
+  if (!have($item`Brutal brogues`)) cliExecute("bastille bbq brutalist gesture");
 
   ["forest", "rope", "wrench"].forEach((card) => {
     if (!get("_deckCardsSeen").toLowerCase().includes(card)) {
@@ -483,9 +476,7 @@ function preCoilWire() {
     use($item`borrowed time`);
   }
 
-  if (myHp() < myMaxhp()) {
-    cliExecute("hottub");
-  }
+  if (myHp() < myMaxhp()) cliExecute("hottub");
 
   // Fight Kramco
   oneOffEvents.hipster.run();
@@ -494,9 +485,7 @@ function preCoilWire() {
     educate(SourceTerminal.Skills.Compress);
     educate(SourceTerminal.Skills.Extract);
   }
-  if (have($skill`Digitize`)) {
-    throw `Error: need to unlearn ${$skill`Digitize`}`;
-  }
+  if (have($skill`Digitize`)) throw `Error: need to unlearn ${$skill`Digitize`}`;
 
   const wand = $item`weeping willow wand`;
   if (!haveEquipped(wand)) {
@@ -521,9 +510,7 @@ function preCoilWire() {
   oneOffEvents.tropicalSkeleton.run();
   // 8078 + 2000 = 10078 meat
 
-  if (!have($item`occult jelly donut`)) {
-    create(1, $item`occult jelly donut`);
-  }
+  if (!have($item`occult jelly donut`)) create(1, $item`occult jelly donut`);
   acquireEffect($effect`Blood Sugar Sauce Magic`);
 
   spendAllMpOnLibrams();
@@ -531,16 +518,9 @@ function preCoilWire() {
 
 function postCoilWire() {
   gazeAtTheStars();
-  if (have($item`occult jelly donut`)) {
-    eat($item`occult jelly donut`);
-  }
-
-  if (!have($skill`Seek out a Bird`)) {
-    use(1, $item`bird-a-day calendar`);
-  }
-  if (!have($item`Yeg's Motel hand soap`)) {
-    cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
-  }
+  if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
+  if (!have($skill`Seek out a Bird`)) use(1, $item`bird-a-day calendar`);
+  if (!have($item`Yeg's Motel hand soap`)) cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
   cliExecute("Briefcase e spell hot -combat");
   let click = true;
   for (let i = 0; i < 22 && click; ++i) {
@@ -557,22 +537,18 @@ function postCoilWire() {
     visitUrl("main.php?action=may4");
     runChoice(4); // familiar weight option
   }
-  if (!get("_pottedTeaTreeUsed")) {
-    cliExecute("teatree loyal");
-  }
+  if (!get("_pottedTeaTreeUsed")) cliExecute("teatree loyal");
   wishEffect($effect`All is Forgiven`);
   wishEffect($effect`Witch Breaded`);
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
-  // Consult with Zatara?
+  const range = $item`Dramatic™ range`;
   const camp = getCampground();
-  const hasRange = Object.keys(camp).some((k: string) => {
+  const installedRange = Object.keys(camp).some((k: string) => {
     return k.includes("Dramatic");
   });
-  if (!hasRange) {
-    buyUpTo(1, $item`Dramatic™ range`);
-    use($item`Dramatic™ range`);
-  }
+  if (!installedRange) buyUpTo(1, range);
+  if (have(range)) use(range);
   // 10078 - 950 = 9128 meat
   [
     // Need all three of these to craft with
@@ -601,9 +577,7 @@ function postCoilWire() {
       checkAvailable(saucePotion, 3);
     }
   });
-  if (!have($item`tiny black hole`)) {
-    cliExecute(`make ${$item`tiny black hole`}`);
-  }
+  if (!have($item`tiny black hole`)) cliExecute(`make ${$item`tiny black hole`}`);
 
   buyUpTo(1, $item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
@@ -628,13 +602,9 @@ function postCoilWire() {
   ) {
     create(1, $item`cold-filtered water`);
   }
-  if (have($item`cold-filtered water`)) {
-    use($item`cold-filtered water`);
-  }
+  if (have($item`cold-filtered water`)) use($item`cold-filtered water`);
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
-  if (have($item`Chubby and Plump bar`)) {
-    use($item`Chubby and Plump bar`);
-  }
+  if (have($item`Chubby and Plump bar`)) use($item`Chubby and Plump bar`);
 
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);

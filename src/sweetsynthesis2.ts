@@ -84,7 +84,6 @@ export function synthesize(
   };
   const inv = getInventory();
   // Initialize candies with ones in inventory
-  // TODO: change this to Object.entries and skip inv[name] lookup for count when Rhino supports Object.entries
   Object.entries(inv).forEach(([name, count]) => {
     const item = Item.get(name);
     if (item.candyType === candyType.complex) candies.complex.push({ candy: item, count: count });
