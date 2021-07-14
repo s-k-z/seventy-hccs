@@ -210,9 +210,7 @@ export const events: Record<string, eventData> = {
       spendAllMpOnLibrams();
       selectBestFamiliar(FamiliarFlag.NoAttack);
       adventure(loveTunnel, MacroList.TunnelOfLOV);
-      if (handlingChoice()) {
-        throw "Stuck in LOV?";
-      }
+      if (handlingChoice()) throw "Stuck in LOV?";
       checkEffect($effect`Open Heart Surgery`);
       checkAvailable($item`LOV Elixir #3`);
       use($item`LOV Elixir #3`);
@@ -380,9 +378,7 @@ export const events: Record<string, eventData> = {
       useFamiliar($familiar`God Lobster`);
       MacroList.FreeFight.setAutoAttack();
       visitUrl("main.php?fightgodlobster=1");
-      if (choiceFollowsFight()) {
-        runChoice(-1);
-      }
+      if (choiceFollowsFight()) runChoice(-1);
       if (!have($effect`Silence of the God Lobster`)) {
         if (events.godLobster.current() === events.godLobster.max) {
           throw `Failed to get ${$effect`Silence of the God Lobster`}`;
@@ -596,9 +592,7 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
 
   nanobrainy: {
     run: () => {
-      if (!get("_gingerbreadClockAdvanced")) {
-        adventure(civicCenter, Macro.abort());
-      }
+      if (!get("_gingerbreadClockAdvanced")) adventure(civicCenter, Macro.abort());
       if (!have($effect`Nanobrainy`)) {
         equip($slot`back`, $item`vampyric cloake`);
         equip($slot`off-hand`, $item`latte lovers member's mug`);

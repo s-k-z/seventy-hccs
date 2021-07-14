@@ -82,9 +82,7 @@ export function harvestBatteries() {
 
 export function scavengeDaycare() {
   visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-  if (!get("_daycareNap")) {
-    tryRunChoice(1, 1334, "have a boxing daydream.");
-  }
+  if (!get("_daycareNap")) tryRunChoice(1, 1334, "have a boxing daydream.");
   if (get("_daycareGymScavenges") < 1) {
     tryRunChoice(3, 1334, "enter the gym.");
     tryRunChoice(2, 1336, "scavenge for gym equipment.");

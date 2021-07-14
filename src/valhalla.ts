@@ -5,9 +5,7 @@ export function ascend() {
   if (!visitUrl("charpane.php").includes("Astral Spirit")) {
     visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
-  if (!visitUrl("charpane.php").includes("Astral Spirit")) {
-    throw "Error trying to ascend";
-  }
+  if (!visitUrl("charpane.php").includes("Astral Spirit")) throw "Error trying to ascend";
   visitUrl("afterlife.php?action=pearlygates");
   visitUrl(`afterlife.php?action=buydeli&whichitem=${toInt($item`Astral six-pack`)}`);
   visitUrl(`afterlife.php?action=buyarmory&whichitem=${toInt($item`Astral Statuette`)}`);

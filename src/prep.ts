@@ -1,5 +1,5 @@
 import { totalTurnsPlayed, holiday, myGardenType, getWorkshed } from "kolmafia";
-import { $item, $monster, ChateauMantegna, have } from "libram";
+import { $item, $monster, ChateauMantegna } from "libram";
 
 export function checkReadyToAscend() {
   const badDays = [
@@ -10,9 +10,7 @@ export function checkReadyToAscend() {
   ];
   const holidays = holiday().split("/");
   const intersect = badDays.filter((day) => holidays.includes(day));
-  if (intersect.length > 0) {
-    throw `Don't want to ascend during ${holiday()}`;
-  }
+  if (intersect.length > 0) throw `Don't want to ascend during ${holiday()}`;
   const targetPaintingMon = $monster`Pterodactyl`;
   if (ChateauMantegna.paintingMonster() !== targetPaintingMon) {
     throw `Missing ${targetPaintingMon} in Chateau painting`;
@@ -23,15 +21,9 @@ export function checkReadyToAscend() {
   }
 
   if (!myGardenType().toLowerCase().includes("peppermint")) {
-    if (have($item`peppermint pip packet`)) {
-      //use(1, $item`peppermint pip packet`);
-    }
     throw `Need a peppermint garden installed`;
   }
   if (getWorkshed() !== $item`diabolic pizza cube`) {
-    if (have($item`diabolic pizza cube`)) {
-      //use(1, $item`diabolic pizza cube`);
-    }
     throw `Need a diabolic pizza cube installed`;
   }
   return true;

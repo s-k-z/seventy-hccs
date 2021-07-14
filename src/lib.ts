@@ -17,9 +17,7 @@ import {
 import { $item, get, have, set } from "libram";
 
 export function acquireEffect(e: Effect) {
-  if (!have(e)) {
-    cliExecute(e.default);
-  }
+  if (!have(e)) cliExecute(e.default);
 }
 
 export function acquireGumOrHermitItem(i: Item) {
@@ -40,9 +38,7 @@ export function acquireGumOrHermitItem(i: Item) {
 }
 
 export function buyUpTo(n: number, i: Item) {
-  if (!have(i, n)) {
-    buy(i, n - availableAmount(i));
-  }
+  if (!have(i, n)) buy(i, n - availableAmount(i));
 }
 
 export function checkAvailable(i: Item, n: number = 1) {
@@ -52,9 +48,7 @@ export function checkAvailable(i: Item, n: number = 1) {
 }
 
 export function checkEffect(e: Effect) {
-  if (!have(e)) {
-    throw `Missing effect ${e}`;
-  }
+  if (!have(e)) throw `Missing effect ${e}`;
 }
 
 export function checkFax(monster: Monster) {
@@ -76,9 +70,7 @@ export function cookPizza(a: Item, b: Item, c: Item, d: Item) {
 }
 
 export function shrugEffect(effect: Effect) {
-  if (have(effect)) {
-    cliExecute(`shrug ${effect}`);
-  }
+  if (have(effect)) cliExecute(`shrug ${effect}`);
 }
 
 export function tryRunChoice(pageIndex: number, choiceID: number, goal: string) {
@@ -89,9 +81,7 @@ export function tryRunChoice(pageIndex: number, choiceID: number, goal: string) 
 }
 
 export function tryUse(n: number, i: Item) {
-  if (itemAmount(i) >= n) {
-    use(n, i);
-  }
+  if (itemAmount(i) >= n) use(n, i);
 }
 
 export function tuple<T extends any[]>(...args: T): T {
@@ -103,15 +93,11 @@ export function voterMonsterNow(): boolean {
 }
 
 export function whitelist(clan: string) {
-  if (getClanName() !== clan) {
-    cliExecute(`/whitelist ${clan}`);
-  }
+  if (getClanName() !== clan) cliExecute(`/whitelist ${clan}`);
 }
 
 export function wishEffect(e: Effect) {
-  if (!have(e)) {
-    cliExecute(`genie effect ${e}`);
-  }
+  if (!have(e)) cliExecute(`genie effect ${e}`);
 }
 
 export function withContext(func: Function, context: Map<string, number | string>) {

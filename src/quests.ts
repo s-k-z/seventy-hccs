@@ -532,16 +532,12 @@ export function haveQuest(id: number) {
 }
 
 export function prepAndDoQuest(id: Quest) {
-  if (id > Quest.Donate) {
-    throw `Invalid Quest ${id} (these are just for outfits)!!`;
-  }
+  if (id > Quest.Donate) throw `Invalid Quest ${id} (these are just for outfits)!!`;
   if (haveQuest(id)) {
     // Convenient but also non-obvious here, maybe a bad design?
     acquireQuestEffects(id);
     equipOutfit(id);
     visitUrl(`choice.php?whichchoice=1089&option=${id}`);
-    if (haveQuest(id)) {
-      throw `Couldn't complete quest ${id}?`;
-    }
+    if (haveQuest(id)) throw `Couldn't complete quest ${id}?`;
   }
 }
