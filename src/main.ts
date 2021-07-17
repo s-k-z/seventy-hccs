@@ -49,7 +49,6 @@ import {
   $items,
   $skill,
   $slot,
-  $stat,
   get,
   have,
   sinceKolmafiaRevision,
