@@ -342,6 +342,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
 
     [$effect`Expert Oiliness`, Context.test],
     [$effect`Phorcefullness`, Context.test],
+    [$effect`Quiet Determination`, Context.test],
     [$effect`Rage of the Reindeer`, Context.test],
 
     [$effect`Giant Growth`, Context.special],
@@ -354,6 +355,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
 
     [$effect`Disco Fever`, Context.test],
     [$effect`Expert Oiliness`, Context.test],
+    [$effect`Quiet Desperation`, Context.test],
     // Wish
     [$effect`Sparkly!`, Context.special],
   ]),
@@ -411,6 +413,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Blessing of your favorite Bird`, Context.leveling],
     [$effect`Mystically Oiled`, Context.leveling],
     [$effect`We're All Made of Starfish`, Context.leveling],
+
+    [$effect`Quiet Judgement`, Context.test],
     // Wish
     [$effect`Witch Breaded`, Context.special],
     // Other
@@ -440,6 +444,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
 
     [$effect`Amazing`, Context.test],
 
+    // in case we want Robin's egg
+    //[$effect`Egged On`, Context.special],
     [$effect`Misty Form`, Context.special],
   ]),
 
