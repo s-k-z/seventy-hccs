@@ -159,7 +159,7 @@ export const MacroList = {
 
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 
-  ToothlessMastiff: MeteorShowerForce,
+  MeteorShowerForce: MeteorShowerForce,
 };
 
 // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11

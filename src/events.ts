@@ -648,24 +648,27 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
     },
   },
 
-  wormwood: {
+  meteorShower: {
     run: () => {
-      if (!have($effect`Man's Worst Enemy`)) {
-        if (!have($item`disintegrating spiky collar`)) {
-          if (have($effect`absinthe minded`) || have($item`tiny bottle of absinthe`)) {
-            equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-            acquireEffect($effect`absinthe minded`);
-            mapMonster(
-              statelyPleasureDome,
-              $monster`toothless mastiff bitch`,
-              MacroList.ToothlessMastiff
-            );
-            checkAvailable($item`disintegrating spiky collar`);
-          } else {
-            throw "Get 5 lbs without the wormwood";
-          }
-        }
-        use($item`disintegrating spiky collar`);
+      if (have($item`tiny bottle of absinthe`)) use($item`tiny bottle of absinthe`);
+      if (
+        have($effect`absinthe minded`) &&
+        !have($effect`Meteor Showered`) &&
+        !have($item`disintegrating spiky collar`)
+      ) {
+        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+        mapMonster(
+          statelyPleasureDome,
+          $monster`toothless mastiff bitch`,
+          MacroList.MeteorShowerForce
+        );
+        checkAvailable($item`disintegrating spiky collar`);
+        if (!have($effect`Meteor Showered`)) throw `Failed to get Meteor howered?`;
+      }
+      if (have($item`disintegrating spiky collar`)) use($item`disintegrating spiky collar`);
+      if (!have($effect`Meteor Showered`)) {
+        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+        adventure(direWarren, MacroList.MeteorShowerForce);
       }
     },
   },

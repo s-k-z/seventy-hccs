@@ -460,7 +460,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Leash of Linguini`, Context.leveling],
     [$effect`Puzzle Champ`, Context.leveling],
 
-    [$effect`Man's Worst Enemy`, Context.test],
+    //[$effect`Man's Worst Enemy`, Context.test],
     [$effect`Over-Familiar With Dactyls`, Context.test],
     [$effect`Robot Friends`, Context.test],
     [$effect`Whole Latte Love`, Context.test],

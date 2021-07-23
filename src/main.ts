@@ -352,7 +352,7 @@ function levelAndDoQuests() {
   shrugEffect($effect`The Sonata of Sneakiness`);
 
   if (haveQuest(Quest.FamiliarWeight)) {
-    oneOffEvents.wormwood.run();
+    oneOffEvents.meteorShower.run();
     useFamiliar($familiar`Exotic Parrot`);
     if (!haveEquipped($item`cracker`)) {
       throw "Wrong familiar equipment?";
