@@ -62,13 +62,6 @@ export function checkFax(monster: Monster) {
   }
 }
 
-export function cookPizza(a: Item, b: Item, c: Item, d: Item) {
-  const counts = new Map<Item, number>();
-  [...arguments].forEach((f) => counts.set(f, 1 + (counts.get(f) || 0)));
-  for (const [item, count] of counts) checkAvailable(item, count);
-  visitUrl(`campground.php?action=makepizza&pizza=${toInt(a)},${toInt(b)},${toInt(c)},${toInt(d)}`);
-}
-
 export function shrugEffect(effect: Effect) {
   if (have(effect)) cliExecute(`shrug ${effect}`);
 }
