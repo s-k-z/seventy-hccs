@@ -30455,7 +30455,7 @@ var oneOffEvents = {
         (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject170 || (events_templateObject170 = events_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(events_templateObject171 || (events_templateObject171 = events_taggedTemplateLiteral(["Kremlin's Greatest Briefcase"]))));
         selectBestFamiliar(FamiliarFlag.NoAttack);
         var banished = (0,dist.get)("banishedMonsters");
-        var macro = banished.includes("".concat((0,dist.$monster)(events_templateObject172 || (events_templateObject172 = events_taggedTemplateLiteral(["factory overseer (male)"]))))) || banished.includes("".concat((0,dist.$monster)(events_templateObject173 || (events_templateObject173 = events_taggedTemplateLiteral(["factory worker (male)"]))))) || banished.includes("".concat((0,dist.$monster)(events_templateObject174 || (events_templateObject174 = events_taggedTemplateLiteral(["lava golem"]))))) ? MacroList.LavaCoFactory2 : MacroList.LavaCoFactory1;
+        var macro = banished.includes((0,dist.$monster)(events_templateObject172 || (events_templateObject172 = events_taggedTemplateLiteral(["factory overseer (male)"]))).name) || banished.includes((0,dist.$monster)(events_templateObject173 || (events_templateObject173 = events_taggedTemplateLiteral(["factory worker (male)"]))).name) || banished.includes((0,dist.$monster)(events_templateObject174 || (events_templateObject174 = events_taggedTemplateLiteral(["lava golem"]))).name) ? MacroList.LavaCoFactory2 : MacroList.LavaCoFactory1;
         adventure(lavaCo, macro);
       }
     }
@@ -30468,7 +30468,7 @@ var oneOffEvents = {
         (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject180 || (events_templateObject180 = events_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(events_templateObject181 || (events_templateObject181 = events_taggedTemplateLiteral(["Kremlin's Greatest Briefcase"]))));
         selectBestFamiliar(FamiliarFlag.NoAttack);
         var banished = (0,dist.get)("banishedMonsters");
-        var macro = banished.includes("".concat((0,dist.$monster)(events_templateObject182 || (events_templateObject182 = events_taggedTemplateLiteral(["healing crystal golem"]))))) || banished.includes("".concat((0,dist.$monster)(events_templateObject183 || (events_templateObject183 = events_taggedTemplateLiteral(["mine overseer (male)"]))))) || banished.includes("".concat((0,dist.$monster)(events_templateObject184 || (events_templateObject184 = events_taggedTemplateLiteral(["mine worker (male)"]))))) ? MacroList.VelvetGoldMine2 : MacroList.VelvetGoldMine1;
+        var macro = banished.includes((0,dist.$monster)(events_templateObject182 || (events_templateObject182 = events_taggedTemplateLiteral(["healing crystal golem"]))).name) || banished.includes((0,dist.$monster)(events_templateObject183 || (events_templateObject183 = events_taggedTemplateLiteral(["mine overseer (male)"]))).name) || banished.includes((0,dist.$monster)(events_templateObject184 || (events_templateObject184 = events_taggedTemplateLiteral(["mine worker (male)"]))).name) ? MacroList.VelvetGoldMine2 : MacroList.VelvetGoldMine1;
         adventure(velvetGoldMine, macro);
       }
     }

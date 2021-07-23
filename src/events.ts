@@ -608,9 +608,9 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
         selectBestFamiliar(FamiliarFlag.NoAttack);
         const banished = get("banishedMonsters");
         const macro =
-          banished.includes(`${$monster`factory overseer (male)`}`) ||
-          banished.includes(`${$monster`factory worker (male)`}`) ||
-          banished.includes(`${$monster`lava golem`}`)
+          banished.includes($monster`factory overseer (male)`.name) ||
+          banished.includes($monster`factory worker (male)`.name) ||
+          banished.includes($monster`lava golem`.name)
             ? MacroList.LavaCoFactory2
             : MacroList.LavaCoFactory1;
         adventure(lavaCo, macro);
@@ -627,9 +627,9 @@ export const oneOffEvents: Record<string, oneOffEventData> = {
         selectBestFamiliar(FamiliarFlag.NoAttack);
         const banished = get("banishedMonsters");
         const macro =
-          banished.includes(`${$monster`healing crystal golem`}`) ||
-          banished.includes(`${$monster`mine overseer (male)`}`) ||
-          banished.includes(`${$monster`mine worker (male)`}`)
+          banished.includes($monster`healing crystal golem`.name) ||
+          banished.includes($monster`mine overseer (male)`.name) ||
+          banished.includes($monster`mine worker (male)`.name)
             ? MacroList.VelvetGoldMine2
             : MacroList.VelvetGoldMine1;
         adventure(velvetGoldMine, macro);
