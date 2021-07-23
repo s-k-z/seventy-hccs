@@ -212,7 +212,6 @@ const questOutfits: Record<Quest, () => Map<Item, Slot>> = {
     cliExecute("retrocape vampire hold");
     return new Map([
       [$item`high-temperature mining mask`, $slot`hat`],
-      [$item`protonic accelerator pack`, $slot`back`],
       [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
       [$item`meteorite guard`, $slot`off-hand`],
       [$item`lava-proof pants`, $slot`pants`],
