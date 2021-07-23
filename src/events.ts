@@ -40,7 +40,7 @@ import { adventure, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
 import { acquireEffect, checkAvailable, checkEffect, voterMonsterNow, whitelist } from "./lib";
-import { equipOutfit, equipRetroCapeMystStats, Quest } from "./quests";
+import { equipOutfit, Quest } from "./quests";
 
 export enum FamiliarFlag {
   Default,
@@ -181,7 +181,7 @@ export const events: Record<string, eventData> = {
     max: 1,
     current: () => get("_sourceTerminalDigitizeMonsterCount"),
     run: () => {
-      equipRetroCapeMystStats();
+      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
       selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },

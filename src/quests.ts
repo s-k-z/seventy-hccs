@@ -29,8 +29,12 @@ export enum Quest {
   DeepDark = 903,
 }
 
-export function equipRetroCapeMystStats() {
+function equipRetroCapeMystStats() {
   cliExecute("retrocape heck thrill");
+}
+
+function equipRetroCapeResists() {
+  cliExecute("retrocape vampire hold");
 }
 
 function handleCreateEquip(equip: Item) {
@@ -60,18 +64,18 @@ export function equipWadOfUsedTape() {
   equip($slot`hat`, wadOfUsedTape);
 }
 
-const questOutfits: Record<Quest, () => Map<Item, Slot>> = {
+const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   [Quest.Beginning]: () => {
     return new Map([
-      [$item`Iunion Crown`, $slot`hat`],
-      [$item`protonic accelerator pack`, $slot`back`],
-      //[$item`fresh coat of paint`, $slot`shirt`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`Kramco Sausage-o-Matic™`, $slot`off-hand`],
-      [$item`pantogram pants`, $slot`pants`],
-      [$item`hewn moon-rune spoon`, $slot`acc1`],
-      [$item`Powerful Glove`, $slot`acc2`],
-      [$item`Kremlin's Greatest Briefcase`, $slot`acc3`],
+      [$slot`hat`, $item`Iunion Crown`],
+      [$slot`back`, $item`protonic accelerator pack`],
+      [$slot`shirt`, $item`fresh coat of paint`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
+      [$slot`pants`, $item`pantogram pants`],
+      [$slot`acc1`, $item`hewn moon-rune spoon`],
+      [$slot`acc2`, $item`Powerful Glove`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
   },
 
@@ -79,171 +83,163 @@ const questOutfits: Record<Quest, () => Map<Item, Slot>> = {
   [Quest.CoilWire]: () => {
     equipRetroCapeMystStats();
     return new Map([
-      [$item`Iunion Crown`, $slot`hat`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`weeping willow wand`, $slot`off-hand`],
-      [$item`Cargo Cultist Shorts`, $slot`pants`],
-      [$item`hewn moon-rune spoon`, $slot`acc1`],
-      [$item`Retrospecs`, $slot`acc2`],
-      [$item`Kremlin's Greatest Briefcase`, $slot`acc3`],
+      [$slot`hat`, $item`Iunion Crown`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`weeping willow wand`],
+      [$slot`pants`, $item`Cargo Cultist Shorts`],
+      [$slot`acc1`, $item`hewn moon-rune spoon`],
+      [$slot`acc2`, $item`Retrospecs`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
   },
 
   [Quest.Leveling]: () => {
+    const mpSavings = numericModifier($item`pantogram pants`, "mana cost") !== 0;
+    const outfit = new Map([
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`weeping willow wand`],
+      [$slot`pants`, mpSavings ? $item`pantogram pants` : $item`Cargo Cultist Shorts`],
+      [$slot`acc1`, $item`hewn moon-rune spoon`],
+      [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
+      [$slot`acc3`, $item`Beach Comb`],
+    ]);
     if (have($item`LOV Epaulettes`)) {
-      equip($slot`back`, $item`LOV Epaulettes`);
+      outfit.set($slot`back`, $item`LOV Epaulettes`);
     } else {
       equipRetroCapeMystStats();
     }
-    equip(
-      $slot`pants`,
-      numericModifier($item`pantogram pants`, "mana cost") !== 0
-        ? $item`pantogram pants`
-        : $item`Cargo Cultist Shorts`
-    );
-    equip(
-      $slot`acc1`,
-      have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`
-    );
-    return new Map([
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`weeping willow wand`, $slot`off-hand`],
-      [$item`hewn moon-rune spoon`, $slot`acc2`],
-      [$item`Beach Comb`, $slot`acc3`],
-    ]);
+    return outfit;
   },
 
   [Quest.Sprinkles]: () => {
+    const outfit = new Map([
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`weeping willow wand`],
+      [$slot`pants`, $item`pantogram pants`],
+      [$slot`acc1`, $item`Lil' Doctor™ bag`],
+      [$slot`acc2`, $item`Brutal brogues`],
+      [$slot`acc3`, $item`Beach Comb`],
+    ]);
     if (have($item`LOV Epaulettes`)) {
-      equip($slot`back`, $item`LOV Epaulettes`);
+      outfit.set($slot`back`, $item`LOV Epaulettes`);
     } else {
       equipRetroCapeMystStats();
     }
-    equip($slot`off-hand`, have($item`rope`) ? $item`rope` : $item`weeping willow wand`);
-    return new Map([
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`pantogram pants`, $slot`pants`],
-      [$item`Lil' Doctor™ bag`, $slot`acc1`],
-      [$item`Brutal brogues`, $slot`acc2`],
-      [$item`Beach Comb`, $slot`acc3`],
-    ]);
+    return outfit;
   },
 
   [Quest.Muscle]: () => {
     cliExecute(`retrocape ${$stat`Muscle`}`);
     return new Map([
-      [$item`wad of used tape`, $slot`hat`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`dented scepter`, $slot`off-hand`],
-      [$item`Brutal brogues`, $slot`acc1`],
-      [$item`"I Voted!" sticker`, $slot`acc3`],
+      [$slot`hat`, $item`wad of used tape`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`dented scepter`],
+      [$slot`acc1`, $item`Brutal brogues`],
+      [$slot`acc3`, $item`"I Voted!" sticker`],
     ]);
   },
 
   [Quest.Moxie]: () => {
     cliExecute(`retrocape ${$stat`Moxie`}`);
     return new Map([
-      [$item`very pointy crown`, $slot`hat`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`your cowboy boots`, $slot`acc1`],
-      [$item`Beach Comb`, $slot`acc2`],
-      [$item`"I Voted!" sticker`, $slot`acc3`],
+      [$slot`hat`, $item`very pointy crown`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`acc1`, $item`your cowboy boots`],
+      [$slot`acc2`, $item`Beach Comb`],
+      [$slot`acc3`, $item`"I Voted!" sticker`],
     ]);
   },
 
   [Quest.HP]: () => {
     return new Map([
-      [$item`wad of used tape`, $slot`hat`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`Cargo Cultist Shorts`, $slot`pants`],
-      [$item`"I Voted!" sticker`, $slot`acc3`],
+      [$slot`hat`, $item`wad of used tape`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`pants`, $item`Cargo Cultist Shorts`],
+      [$slot`acc3`, $item`"I Voted!" sticker`],
     ]);
   },
 
   [Quest.DeepDark]: () => {
-    cliExecute("retrocape vampire hold");
+    equipRetroCapeResists();
+    const crane = $item`burning paper crane`;
     return new Map([
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`burning paper crane`, $slot`off-hand`],
-      [$item`pantogram pants`, $slot`pants`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, have(crane) ? crane : $item`rope`],
+      [$slot`pants`, $item`pantogram pants`],
     ]);
   },
 
   [Quest.SpellDamage]: () => {
     return new Map([
-      [$item`wrench`, $slot`weapon`],
-      [$item`weeping willow wand`, $slot`off-hand`],
-      [$item`pantogram pants`, $slot`pants`],
-      [$item`battle broom`, $slot`acc1`],
-      [$item`Powerful Glove`, $slot`acc2`],
-      [$item`Kremlin's Greatest Briefcase`, $slot`acc3`],
+      [$slot`weapon`, $item`wrench`],
+      [$slot`off-hand`, $item`weeping willow wand`],
+      [$slot`pants`, $item`pantogram pants`],
+      [$slot`acc1`, $item`battle broom`],
+      [$slot`acc2`, $item`Powerful Glove`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
   },
 
   [Quest.WeaponDamage]: () => {
     return new Map([
-      [$item`broken champagne bottle`, $slot`weapon`],
-      [$item`dented scepter`, $slot`off-hand`],
-      [$item`Brutal brogues`, $slot`acc1`],
-      [$item`Powerful Glove`, $slot`acc2`],
+      [$slot`weapon`, $item`broken champagne bottle`],
+      [$slot`off-hand`, $item`dented scepter`],
+      [$slot`acc1`, $item`Brutal brogues`],
+      [$slot`acc2`, $item`Powerful Glove`],
     ]);
   },
 
   [Quest.Mysticality]: () => {
     cliExecute(`retrocape ${$stat`Mysticality`}`);
     return new Map([
-      [$item`wad of used tape`, $slot`hat`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`battle broom`, $slot`acc1`],
-      [$item`"I Voted!" sticker`, $slot`acc3`],
+      [$slot`hat`, $item`wad of used tape`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`acc1`, $item`battle broom`],
+      [$slot`acc3`, $item`"I Voted!" sticker`],
     ]);
   },
 
   [Quest.CombatFrequency]: () => {
     return new Map([
-      [$item`very pointy crown`, $slot`hat`],
-      [$item`protonic accelerator pack`, $slot`back`],
-      [$item`pantogram pants`, $slot`pants`],
-      [$item`Kremlin's Greatest Briefcase`, $slot`acc3`],
+      [$slot`hat`, $item`very pointy crown`],
+      [$slot`back`, $item`protonic accelerator pack`],
+      [$slot`pants`, $item`pantogram pants`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
   },
 
   [Quest.HotResist]: () => {
-    cliExecute("retrocape vampire hold");
+    equipRetroCapeResists();
     return new Map([
-      [$item`high-temperature mining mask`, $slot`hat`],
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`meteorite guard`, $slot`off-hand`],
-      [$item`lava-proof pants`, $slot`pants`],
-      [$item`Brutal brogues`, $slot`acc1`],
-      [$item`heat-resistant gloves`, $slot`acc2`],
-      [$item`Kremlin's Greatest Briefcase`, $slot`acc3`],
+      [$slot`hat`, $item`high-temperature mining mask`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`meteorite guard`],
+      [$slot`pants`, $item`lava-proof pants`],
+      [$slot`acc1`, $item`Brutal brogues`],
+      [$slot`acc2`, $item`heat-resistant gloves`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
   },
 
   [Quest.FamiliarWeight]: () => {
     return new Map([
-      [$item`Fourth of May Cosplay Saber`, $slot`weapon`],
-      [$item`rope`, $slot`off-hand`],
-      [$item`Brutal brogues`, $slot`acc1`],
-      [$item`hewn moon-rune spoon`, $slot`acc2`],
-      [$item`Beach Comb`, $slot`acc3`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`rope`],
+      [$slot`acc1`, $item`Brutal brogues`],
+      [$slot`acc2`, $item`hewn moon-rune spoon`],
+      [$slot`acc3`, $item`Beach Comb`],
     ]);
   },
 
   [Quest.ItemDrop]: () => {
-    equip(
-      $slot`off-hand`,
-      numericModifier($item`latte lovers member's mug`, "item drop") > 0
-        ? $item`latte lovers member's mug`
-        : $item`Kramco Sausage-o-Matic™`
-    );
+    const carrot = numericModifier($item`latte lovers member's mug`, "item drop") > 0;
     return new Map([
-      [$item`wad of used tape`, $slot`hat`],
-      [$item`vampyric cloake`, $slot`back`],
-      [$item`Guzzlr tablet`, $slot`acc1`],
-      [$item`gold detective badge`, $slot`acc2`],
-      [$item`your cowboy boots`, $slot`acc3`],
+      [$slot`hat`, $item`wad of used tape`],
+      [$slot`back`, $item`vampyric cloake`],
+      [$slot`off-hand`, carrot ? $item`latte lovers member's mug` : $item`Kramco Sausage-o-Matic™`],
+      [$slot`acc1`, $item`Guzzlr tablet`],
+      [$slot`acc2`, $item`gold detective badge`],
+      [$slot`acc3`, $item`your cowboy boots`],
     ]);
   },
 
@@ -254,10 +250,10 @@ const questOutfits: Record<Quest, () => Map<Item, Slot>> = {
 
 // Who needs the maximizer? It's slow!
 export function equipOutfit(outfit: Quest) {
-  questOutfits[outfit]().forEach((s, i) => {
-    handleCreateEquip(i);
-    if (have(i)) {
-      equip(s, i);
+  questOutfits[outfit]().forEach((item, slot) => {
+    handleCreateEquip(item);
+    if (have(item)) {
+      equip(slot, item);
     }
   });
 }
@@ -468,8 +464,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Joy`, Context.special],
     [$effect`Smart Drunk`, Context.special],
     // Librams
-    [$effect`Cold Hearted`, Context.special],
-    [$effect`Heart of Green`, Context.special],
+    //[$effect`Cold Hearted`, Context.special],
+    //[$effect`Heart of Green`, Context.special],
     // Wishes
     [$effect`All Is Forgiven`, Context.special],
     [$effect`Bureaucratized`, Context.special],
