@@ -24,17 +24,9 @@ export enum Quest {
   Donate = 30,
 
   Beginning = 900,
-  Sprinkles = 901,
-  Leveling = 902,
+  Leveling = 901,
+  Sprinkles = 902,
   DeepDark = 903,
-}
-
-function equipRetroCapeMystStats() {
-  cliExecute("retrocape heck thrill");
-}
-
-function equipRetroCapeResists() {
-  cliExecute("retrocape vampire hold");
 }
 
 function handleCreateEquip(equip: Item) {
@@ -59,9 +51,8 @@ function handleCreateEquip(equip: Item) {
 }
 
 export function equipWadOfUsedTape() {
-  const wadOfUsedTape = $item`wad of used tape`;
-  handleCreateEquip(wadOfUsedTape);
-  equip($slot`hat`, wadOfUsedTape);
+  handleCreateEquip($item`wad of used tape`);
+  equip($slot`hat`, $item`wad of used tape`);
 }
 
 const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
@@ -81,7 +72,6 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 
   // Maximize Myst and MP, blue rocket will do all the regen for us
   [Quest.CoilWire]: () => {
-    equipRetroCapeMystStats();
     return new Map([
       [$slot`hat`, $item`Iunion Crown`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -103,33 +93,23 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
-    if (have($item`LOV Epaulettes`)) {
-      outfit.set($slot`back`, $item`LOV Epaulettes`);
-    } else {
-      equipRetroCapeMystStats();
-    }
+    if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
     return outfit;
   },
 
   [Quest.Sprinkles]: () => {
     const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`weeping willow wand`],
-      [$slot`pants`, $item`pantogram pants`],
       [$slot`acc1`, $item`Lil' Doctor™ bag`],
       [$slot`acc2`, $item`Brutal brogues`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
-    if (have($item`LOV Epaulettes`)) {
-      outfit.set($slot`back`, $item`LOV Epaulettes`);
-    } else {
-      equipRetroCapeMystStats();
-    }
+    if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
+    if (have($item`rope`)) outfit.set($slot`off-hand`, $item`rope`);
     return outfit;
   },
 
   [Quest.Muscle]: () => {
-    cliExecute(`retrocape ${$stat`Muscle`}`);
     return new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -140,7 +120,6 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.Moxie]: () => {
-    cliExecute(`retrocape ${$stat`Moxie`}`);
     return new Map([
       [$slot`hat`, $item`very pointy crown`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -160,13 +139,12 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.DeepDark]: () => {
-    equipRetroCapeResists();
-    const crane = $item`burning paper crane`;
-    return new Map([
+    const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, have(crane) ? crane : $item`rope`],
       [$slot`pants`, $item`pantogram pants`],
     ]);
+    if (have($item`burning paper crane`)) outfit.set($slot`off-hand`, $item`burning paper crane`);
+    return outfit;
   },
 
   [Quest.SpellDamage]: () => {
@@ -190,7 +168,6 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.Mysticality]: () => {
-    cliExecute(`retrocape ${$stat`Mysticality`}`);
     return new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -209,7 +186,6 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.HotResist]: () => {
-    equipRetroCapeResists();
     return new Map([
       [$slot`hat`, $item`high-temperature mining mask`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -250,12 +226,36 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 
 // Who needs the maximizer? It's slow!
 export function equipOutfit(outfit: Quest) {
-  questOutfits[outfit]().forEach((item, slot) => {
+  const equipment = questOutfits[outfit]();
+  if (!equipment.get($slot`back`)) retrocape(outfit);
+  equipment.forEach((item, slot) => {
     handleCreateEquip(item);
     if (have(item)) {
       equip(slot, item);
     }
   });
+}
+
+function retrocape(quest: Quest) {
+  switch (quest) {
+    case Quest.Muscle:
+      cliExecute(`retrocape ${$stat`Muscle`}`);
+      return;
+    case Quest.Mysticality:
+      cliExecute(`retrocape ${$stat`Mysticality`}`);
+      return;
+    case Quest.Moxie:
+      cliExecute(`retrocape ${$stat`Moxie`}`);
+      return;
+    case Quest.HP:
+    case Quest.HotResist:
+    case Quest.DeepDark:
+      cliExecute("retrocape vampire hold");
+      return;
+    default:
+      cliExecute("retrocape heck thrill");
+      return;
+  }
 }
 
 enum Context {
