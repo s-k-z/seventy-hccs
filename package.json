@@ -26,8 +26,8 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
-    "kolmafia": "^1.1.1",
-    "libram": "^0.1.2",
+    "kolmafia": "^1.1.2",
+    "libram": "^0.2.2",
     "yarn": "^1.22.10"
   },
   "author": "Skaazi",
