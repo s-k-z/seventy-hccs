@@ -301,7 +301,7 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.SpellDamage)) {
     events.innerElf.run();
-    oneOffEvents.lavaCo.run();
+    oneOffEvents.lavaCo();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
       print(`Current HP before Deep Dark Visions: ${myHp()}`);
       equipOutfit(Quest.DeepDark);
@@ -323,7 +323,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     events.innerElf.run();
-    oneOffEvents.velvetGoldMine.run();
+    oneOffEvents.velvetGoldMine();
     prepAndDoQuest(Quest.WeaponDamage);
   }
 
@@ -338,7 +338,7 @@ function levelAndDoQuests() {
   }
 
   if (haveQuest(Quest.HotResist)) {
-    oneOffEvents.mistform.run();
+    oneOffEvents.mistform();
     useFamiliar($familiar`Exotic Parrot`);
     if (!haveEquipped($item`cracker`)) {
       throw "Wrong familiar equipment?";
@@ -352,7 +352,7 @@ function levelAndDoQuests() {
   shrugEffect($effect`The Sonata of Sneakiness`);
 
   if (haveQuest(Quest.FamiliarWeight)) {
-    oneOffEvents.meteorShower.run();
+    oneOffEvents.meteorShower();
     useFamiliar($familiar`Exotic Parrot`);
     if (!haveEquipped($item`cracker`)) {
       throw "Wrong familiar equipment?";
@@ -370,7 +370,7 @@ function levelAndDoQuests() {
   }
 
   if (haveQuest(Quest.ItemDrop)) {
-    oneOffEvents.batform.run();
+    oneOffEvents.batform();
     useFamiliar($familiar`Trick-or-Treating Tot`);
     equip($slot`familiar`, $item`li'l ninja costume`);
     prepAndDoQuest(Quest.ItemDrop);
@@ -470,7 +470,7 @@ function preCoilWire() {
   if (myHp() < myMaxhp()) cliExecute("hottub");
 
   // Fight Kramco
-  oneOffEvents.hipster.run();
+  oneOffEvents.hipster();
 
   if (get("_sourceTerminalDigitizeUses") > 0) {
     educate(SourceTerminal.Skills.Compress);
@@ -494,11 +494,11 @@ function preCoilWire() {
 
   buyUpTo(1, $item`blue rocket`); // 8315 - 237 = 8078 meat
   // Fight Protonic Ghost
-  oneOffEvents.mimic.run();
+  oneOffEvents.mimic();
 
   // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
-  oneOffEvents.tropicalSkeleton.run();
+  oneOffEvents.tropicalSkeleton();
   // 8078 + 2000 = 10078 meat
 
   if (!have($item`occult jelly donut`)) create(1, $item`occult jelly donut`);
@@ -522,7 +522,7 @@ function postCoilWire() {
   }
   // Visit Gingerbread Civic Center & fast forward clock
   // Then use nanorhino for nanobrainy and increment the gingerbread city counter
-  oneOffEvents.nanobrainy.run();
+  oneOffEvents.nanobrainy();
   // Upgrade Cosplay Saber and start buffing familiar weight now that we're done with Nanorhino
   if (get("_saberMod") === 0) {
     visitUrl("main.php?action=may4");

@@ -533,155 +533,133 @@ export function getRemainingFreeFights(): number {
 }
 
 // Not all of the combats are going to occur while leveling, the rest can go here
-interface oneOffEventData {
-  run(): void;
-}
-
-export const oneOffEvents: Record<string, oneOffEventData> = {
-  hipster: {
-    run: () => {
-      if (!get("_ironicMoustache")) {
-        useFamiliar($familiar`Mini-Hipster`);
-        adventure(noobCave, MacroList.FreeFight);
-        equip($slot`familiar`, $item`none`);
-        checkAvailable($item`ironic moustache`);
-        cliExecute(`fold ${$item`chiptune guitar`}`);
-      }
-    },
+export const oneOffEvents = {
+  hipster: () => {
+    if (!get("_ironicMoustache")) {
+      useFamiliar($familiar`Mini-Hipster`);
+      adventure(noobCave, MacroList.FreeFight);
+      equip($slot`familiar`, $item`none`);
+      checkAvailable($item`ironic moustache`);
+      cliExecute(`fold ${$item`chiptune guitar`}`);
+    }
   },
 
-  mimic: {
-    run: () => {
-      if (!get("_bagOfCandy")) {
-        useFamiliar($familiar`Stocking Mimic`);
-        const ghostLoc1 = get("ghostLocation");
-        if (!ghostLoc1) throw `Failed to get protonic ghost notice`;
-        adventure(ghostLoc1, MacroList.FreeFight);
-        equip($slot`familiar`, $item`none`);
-        checkAvailable($item`bag of many confections`);
-      }
-    },
+  mimic: () => {
+    if (!get("_bagOfCandy")) {
+      useFamiliar($familiar`Stocking Mimic`);
+      const ghostLoc1 = get("ghostLocation");
+      if (!ghostLoc1) throw `Failed to get protonic ghost notice`;
+      adventure(ghostLoc1, MacroList.FreeFight);
+      equip($slot`familiar`, $item`none`);
+      checkAvailable($item`bag of many confections`);
+    }
   },
 
-  tropicalSkeleton: {
-    run: () => {
-      if (!have($effect`Everything Looks Red`)) {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        useFamiliar($familiar`Crimbo Shrub`);
-        if (!get("_shrubDecorated")) {
-          visitUrl(
-            `inv_use.php?pwd=${myHash()}&which=99&whichitem=${toInt(
-              $item`box of old Crimbo decorations`
-            )}`
-          );
-          visitUrl(
-            `choice.php?whichchoice=999&pwd=${myHash()}&option=1&topper=2&lights=5&garland=3&gift=2`
-          );
-        }
-        mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
-        if (!have($effect`Everything Looks Red`)) {
-          throw `Failed to cast ${$skill`Open a Big Red Present`}?`;
-        }
-        $items`cherry,grapefruit,lemon,strawberry`.forEach((fruit) => checkAvailable(fruit));
-      }
-    },
-  },
-
-  nanobrainy: {
-    run: () => {
-      if (!get("_gingerbreadClockAdvanced")) adventure(civicCenter, Macro.abort());
-      if (!have($effect`Nanobrainy`)) {
-        equip($slot`back`, $item`vampyric cloake`);
-        equip($slot`off-hand`, $item`latte lovers member's mug`);
-        useFamiliar($familiar`Nanorhino`);
-        adventure(upscaleDistrict, MacroList.Nanobrainy);
-      }
-    },
-  },
-
-  lavaCo: {
-    run: () => {
-      while (!have($effect`Meteor Showered`)) {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
-        equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
-        selectBestFamiliar(FamiliarFlag.NoAttack);
-        const banished = get("banishedMonsters");
-        const macro =
-          banished.includes($monster`factory overseer (male)`.name) ||
-          banished.includes($monster`factory worker (male)`.name) ||
-          banished.includes($monster`lava golem`.name)
-            ? MacroList.LavaCoFactory2
-            : MacroList.LavaCoFactory1;
-        adventure(lavaCo, macro);
-      }
-    },
-  },
-
-  velvetGoldMine: {
-    run: () => {
-      while (!have($effect`Meteor Showered`)) {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
-        equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
-        selectBestFamiliar(FamiliarFlag.NoAttack);
-        const banished = get("banishedMonsters");
-        const macro =
-          banished.includes($monster`healing crystal golem`.name) ||
-          banished.includes($monster`mine overseer (male)`.name) ||
-          banished.includes($monster`mine worker (male)`.name)
-            ? MacroList.VelvetGoldMine2
-            : MacroList.VelvetGoldMine1;
-        adventure(velvetGoldMine, macro);
-      }
-    },
-  },
-
-  mistform: {
-    run: () => {
-      if (!have($effect`Misty Form`)) {
-        equip($item`vampyric cloake`);
-        useSkill($skill`The Ode to Booze`);
-        useFamiliar($familiar`Frumious Bandersnatch`);
-        adventure(direWarren, MacroList.MistForm);
-      }
-    },
-  },
-
-  meteorShower: {
-    run: () => {
-      if (have($item`tiny bottle of absinthe`)) use($item`tiny bottle of absinthe`);
-      if (
-        have($effect`absinthe minded`) &&
-        !have($effect`Meteor Showered`) &&
-        !have($item`disintegrating spiky collar`)
-      ) {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        mapMonster(
-          statelyPleasureDome,
-          $monster`toothless mastiff bitch`,
-          MacroList.MeteorShowerForce
+  tropicalSkeleton: () => {
+    if (!have($effect`Everything Looks Red`)) {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      useFamiliar($familiar`Crimbo Shrub`);
+      if (!get("_shrubDecorated")) {
+        visitUrl(
+          `inv_use.php?pwd=${myHash()}&which=99&whichitem=${toInt(
+            $item`box of old Crimbo decorations`
+          )}`
         );
-        checkAvailable($item`disintegrating spiky collar`);
-        if (!have($effect`Meteor Showered`)) throw `Failed to get Meteor howered?`;
+        visitUrl(
+          `choice.php?whichchoice=999&pwd=${myHash()}&option=1&topper=2&lights=5&garland=3&gift=2`
+        );
       }
-      if (have($item`disintegrating spiky collar`)) use($item`disintegrating spiky collar`);
-      if (!have($effect`Meteor Showered`)) {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        adventure(direWarren, MacroList.MeteorShowerForce);
+      mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
+      if (!have($effect`Everything Looks Red`)) {
+        throw `Failed to cast ${$skill`Open a Big Red Present`}?`;
       }
-    },
+      $items`cherry,grapefruit,lemon,strawberry`.forEach((fruit) => checkAvailable(fruit));
+    }
   },
 
-  batform: {
-    run: () => {
-      if (!have($effect`Bat-Adjacent Form`)) {
-        equip($item`vampyric cloake`);
-        useSkill($skill`The Ode to Booze`);
-        useFamiliar($familiar`Frumious Bandersnatch`);
-        adventure(direWarren, MacroList.BatForm);
-      }
-    },
+  nanobrainy: () => {
+    if (!get("_gingerbreadClockAdvanced")) adventure(civicCenter, Macro.abort());
+    if (!have($effect`Nanobrainy`)) {
+      equip($slot`back`, $item`vampyric cloake`);
+      equip($slot`off-hand`, $item`latte lovers member's mug`);
+      useFamiliar($familiar`Nanorhino`);
+      adventure(upscaleDistrict, MacroList.Nanobrainy);
+    }
+  },
+
+  lavaCo: () => {
+    while (!have($effect`Meteor Showered`)) {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+      equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      const banished = get("banishedMonsters");
+      const macro =
+        banished.includes($monster`factory overseer (male)`.name) ||
+        banished.includes($monster`factory worker (male)`.name) ||
+        banished.includes($monster`lava golem`.name)
+          ? MacroList.LavaCoFactory2
+          : MacroList.LavaCoFactory1;
+      adventure(lavaCo, macro);
+    }
+  },
+
+  velvetGoldMine: () => {
+    while (!have($effect`Meteor Showered`)) {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+      equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      const banished = get("banishedMonsters");
+      const macro =
+        banished.includes($monster`healing crystal golem`.name) ||
+        banished.includes($monster`mine overseer (male)`.name) ||
+        banished.includes($monster`mine worker (male)`.name)
+          ? MacroList.VelvetGoldMine2
+          : MacroList.VelvetGoldMine1;
+      adventure(velvetGoldMine, macro);
+    }
+  },
+
+  mistform: () => {
+    if (!have($effect`Misty Form`)) {
+      equip($item`vampyric cloake`);
+      useSkill($skill`The Ode to Booze`);
+      useFamiliar($familiar`Frumious Bandersnatch`);
+      adventure(direWarren, MacroList.MistForm);
+    }
+  },
+
+  meteorShower: () => {
+    if (have($item`tiny bottle of absinthe`)) use($item`tiny bottle of absinthe`);
+    if (
+      have($effect`absinthe minded`) &&
+      !have($effect`Meteor Showered`) &&
+      !have($item`disintegrating spiky collar`)
+    ) {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      mapMonster(
+        statelyPleasureDome,
+        $monster`toothless mastiff bitch`,
+        MacroList.MeteorShowerForce
+      );
+      checkAvailable($item`disintegrating spiky collar`);
+      if (!have($effect`Meteor Showered`)) throw `Failed to get Meteor howered?`;
+    }
+    if (have($item`disintegrating spiky collar`)) use($item`disintegrating spiky collar`);
+    if (!have($effect`Meteor Showered`)) {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      adventure(direWarren, MacroList.MeteorShowerForce);
+    }
+  },
+
+  batform: () => {
+    if (!have($effect`Bat-Adjacent Form`)) {
+      equip($item`vampyric cloake`);
+      useSkill($skill`The Ode to Booze`);
+      useFamiliar($familiar`Frumious Bandersnatch`);
+      adventure(direWarren, MacroList.BatForm);
+    }
   },
 };
 
