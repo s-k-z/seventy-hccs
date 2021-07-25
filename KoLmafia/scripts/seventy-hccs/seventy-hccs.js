@@ -10360,7 +10360,7 @@ var dist = __webpack_require__(9803);
 // EXTERNAL MODULE: ./node_modules/libram/dist/resources/2016/SourceTerminal.js
 var SourceTerminal = __webpack_require__(1577);
 ;// CONCATENATED MODULE: ./src/config.ts
-var _templateObject;
+var _templateObject, _Map$get, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8;
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -10372,17 +10372,8 @@ var MAIN_CLAN = (0,external_kolmafia_.getProperty)("seventyhccs_main_clan");
 var FAX_AND_SLIME_CLAN = (0,external_kolmafia_.getProperty)("seventyhccs_side_clan");
 var FORTUNE_TELLER_FRIEND = (0,external_kolmafia_.getProperty)("seventyhccs_fortune_friend"); // Define which BRICKO fight to use by changing BRICKO_TARGET_ITEM
 
-var brickoOptions = {
-  "BRICKO ooze": 2,
-  "BRICKO bat": 5,
-  "BRICKO oyster": 8,
-  "BRICKO turtle": 11,
-  "BRICKO elephant": 23,
-  "BRICKO octopus": 37,
-  "BRICKO python": 69
-};
 var BRICKO_TARGET_ITEM = (0,dist.$item)(_templateObject || (_templateObject = _taggedTemplateLiteral(["BRICKO bat"])));
-var BRICKOS_PER_FIGHT = brickoOptions["".concat(BRICKO_TARGET_ITEM)]; // Perhaps optimal to level at Chateau sooner rather than later
+var BRICKOS_PER_FIGHT = (_Map$get = new Map([[(0,dist.$item)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["BRICKO ooze"]))), 2], [(0,dist.$item)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["BRICKO bat"]))), 5], [(0,dist.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["BRICKO oyster"]))), 8], [(0,dist.$item)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["BRICKO turtle"]))), 11], [(0,dist.$item)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["BRICKO elephant"]))), 23], [(0,dist.$item)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["BRICKO octopus"]))), 37], [(0,dist.$item)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["BRICKO python"]))), 69]]).get(BRICKO_TARGET_ITEM)) !== null && _Map$get !== void 0 ? _Map$get : 0; // Perhaps optimal to level at Chateau sooner rather than later
 
 var CHATEAU_REST_LEVEL = 8; // Don't spend meat on sausages below this value
 
@@ -10390,7 +10381,7 @@ var MEAT_SAFE_LIMIT = 2000; // Don't spend MP on librams below this value unless
 
 var MP_SAFE_LIMIT = 500;
 ;// CONCATENATED MODULE: ./src/lib.ts
-var lib_templateObject, _templateObject2, _templateObject3, _templateObject4;
+var lib_templateObject, lib_templateObject2, lib_templateObject3, lib_templateObject4;
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -10424,10 +10415,10 @@ function acquireGumOrHermitItem(i) {
       if (!(0,dist.have)(gum)) (0,external_kolmafia_.buy)(gum, 1);
       (0,external_kolmafia_.use)(gum);
     }
-  } else if (source[0] === (0,dist.$item)(_templateObject2 || (_templateObject2 = lib_taggedTemplateLiteral(["worthless item"]))).name) {
+  } else if (source[0] === (0,dist.$item)(lib_templateObject2 || (lib_templateObject2 = lib_taggedTemplateLiteral(["worthless item"]))).name) {
     if ((0,dist.have)(i)) return;
     if ((0,external_kolmafia_.myMeat)() < 50) throw "Out of meat for chewing gums!!!";
-    buyUpTo(1, (0,dist.$item)(_templateObject3 || (_templateObject3 = lib_taggedTemplateLiteral(["hermit permit"]))));
+    buyUpTo(1, (0,dist.$item)(lib_templateObject3 || (lib_templateObject3 = lib_taggedTemplateLiteral(["hermit permit"]))));
     if (!(0,external_kolmafia_.hermit)(i, 1)) throw "Failed to purchase ".concat(i, " from Hermit");
   } else throw "".concat(i, " is not a gum or hermit item");
 }
@@ -10445,7 +10436,7 @@ function checkEffect(e) {
   if (!(0,dist.have)(e)) throw "Missing effect ".concat(e);
 }
 function checkFax(monster) {
-  var id = $item(_templateObject4 || (_templateObject4 = lib_taggedTemplateLiteral(["photocopied monster"]))).descid;
+  var id = $item(lib_templateObject4 || (lib_templateObject4 = lib_taggedTemplateLiteral(["photocopied monster"]))).descid;
 
   if (!containsText(visitUrl("desc_item.php?whichitem=".concat(id)), "".concat(monster))) {
     throw "Error: grabbed wrong fax?";
@@ -10523,7 +10514,7 @@ function withContext(func, context) {
   }
 }
 ;// CONCATENATED MODULE: ./src/diet.ts
-var diet_templateObject, diet_templateObject2, diet_templateObject3, diet_templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51, _templateObject52, _templateObject53, _templateObject54, _templateObject55;
+var diet_templateObject, diet_templateObject2, diet_templateObject3, diet_templateObject4, diet_templateObject5, diet_templateObject6, diet_templateObject7, diet_templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20, _templateObject21, _templateObject22, _templateObject23, _templateObject24, _templateObject25, _templateObject26, _templateObject27, _templateObject28, _templateObject29, _templateObject30, _templateObject31, _templateObject32, _templateObject33, _templateObject34, _templateObject35, _templateObject36, _templateObject37, _templateObject38, _templateObject39, _templateObject40, _templateObject41, _templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47, _templateObject48, _templateObject49, _templateObject50, _templateObject51, _templateObject52, _templateObject53, _templateObject54, _templateObject55;
 
 function diet_slicedToArray(arr, i) { return diet_arrayWithHoles(arr) || diet_iterableToArrayLimit(arr, i) || diet_unsupportedIterableToArray(arr, i) || diet_nonIterableRest(); }
 
@@ -10557,10 +10548,10 @@ var recipes = new Map([[(0,dist.$item)(diet_templateObject || (diet_templateObje
   (0,external_kolmafia_.visitUrl)("arena.php");
   (0,external_kolmafia_.cliExecute)("fold ".concat((0,dist.$item)(diet_templateObject3 || (diet_templateObject3 = diet_taggedTemplateLiteral(["bugged balaclava"])))));
 }], [(0,dist.$item)(diet_templateObject4 || (diet_templateObject4 = diet_taggedTemplateLiteral(["blood-faced volleyball"]))), function () {
-  acquireGumOrHermitItem((0,dist.$item)(_templateObject5 || (_templateObject5 = diet_taggedTemplateLiteral(["seal tooth"]))));
-  acquireGumOrHermitItem((0,dist.$item)(_templateObject6 || (_templateObject6 = diet_taggedTemplateLiteral(["volleyball"]))));
-  acquireEffect((0,dist.$effect)(_templateObject7 || (_templateObject7 = diet_taggedTemplateLiteral(["Bloody Hand"]))));
-  (0,external_kolmafia_.use)((0,dist.$item)(_templateObject8 || (_templateObject8 = diet_taggedTemplateLiteral(["volleyball"]))));
+  acquireGumOrHermitItem((0,dist.$item)(diet_templateObject5 || (diet_templateObject5 = diet_taggedTemplateLiteral(["seal tooth"]))));
+  acquireGumOrHermitItem((0,dist.$item)(diet_templateObject6 || (diet_templateObject6 = diet_taggedTemplateLiteral(["volleyball"]))));
+  acquireEffect((0,dist.$effect)(diet_templateObject7 || (diet_templateObject7 = diet_taggedTemplateLiteral(["Bloody Hand"]))));
+  (0,external_kolmafia_.use)((0,dist.$item)(diet_templateObject8 || (diet_templateObject8 = diet_taggedTemplateLiteral(["volleyball"]))));
 }], [(0,dist.$item)(_templateObject9 || (_templateObject9 = diet_taggedTemplateLiteral(["cog and sprocket assembly"]))), function () {
   return (0,external_kolmafia_.cliExecute)("make ".concat((0,dist.$item)(_templateObject10 || (_templateObject10 = diet_taggedTemplateLiteral(["cog and sprocket assembly"])))));
 }], [(0,dist.$item)(_templateObject11 || (_templateObject11 = diet_taggedTemplateLiteral(["dripping meat crossbow"]))), function () {
@@ -12441,7 +12432,7 @@ function preCoilWire() {
 
   if (!(0,dist.get)("_chateauDeskHarvested")) (0,external_kolmafia_.visitUrl)("place.php?whichplace=chateau&action=chateau_desk1");
   if ((0,dist.get)("boomBoxSong").toLowerCase() !== "total eclipse of your meat") (0,external_kolmafia_.cliExecute)("boombox meat");
-  if ((0,dist.get)("_horsery") === "") (0,external_kolmafia_.cliExecute)("horsery dark"); // 8600 meat
+  if (!(0,dist.get)("_horsery")) (0,external_kolmafia_.cliExecute)("horsery dark"); // 8600 meat
   // Get Community Service quests
 
   (0,external_kolmafia_.visitUrl)("guild.php?place=challenge");

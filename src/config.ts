@@ -7,18 +7,17 @@ export const MAIN_CLAN = getProperty("seventyhccs_main_clan");
 export const FAX_AND_SLIME_CLAN = getProperty("seventyhccs_side_clan");
 export const FORTUNE_TELLER_FRIEND = getProperty("seventyhccs_fortune_friend");
 // Define which BRICKO fight to use by changing BRICKO_TARGET_ITEM
-const brickoOptions = {
-  "BRICKO ooze": 2,
-  "BRICKO bat": 5,
-  "BRICKO oyster": 8,
-  "BRICKO turtle": 11,
-  "BRICKO elephant": 23,
-  "BRICKO octopus": 37,
-  "BRICKO python": 69,
-};
 export const BRICKO_TARGET_ITEM = $item`BRICKO bat`;
 export const BRICKOS_PER_FIGHT =
-  brickoOptions[`${BRICKO_TARGET_ITEM}` as keyof typeof brickoOptions];
+  new Map([
+    [$item`BRICKO ooze`, 2],
+    [$item`BRICKO bat`, 5],
+    [$item`BRICKO oyster`, 8],
+    [$item`BRICKO turtle`, 11],
+    [$item`BRICKO elephant`, 23],
+    [$item`BRICKO octopus`, 37],
+    [$item`BRICKO python`, 69],
+  ]).get(BRICKO_TARGET_ITEM) ?? 0;
 // Perhaps optimal to level at Chateau sooner rather than later
 export const CHATEAU_REST_LEVEL = 8;
 // Don't spend meat on sausages below this value

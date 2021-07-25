@@ -402,7 +402,7 @@ function preCoilWire() {
   }
   if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   if (get("boomBoxSong").toLowerCase() !== "total eclipse of your meat") cliExecute("boombox meat");
-  if (get("_horsery") === "") cliExecute("horsery dark");
+  if (!get("_horsery")) cliExecute("horsery dark");
   // 8600 meat
 
   // Get Community Service quests
