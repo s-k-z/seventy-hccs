@@ -6,7 +6,7 @@ import {
   numericModifier,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $slot, $stat, have } from "libram";
+import { $effect, $item, $slot, have } from "libram";
 import { acquireEffect } from "./lib";
 
 export enum Quest {
@@ -226,32 +226,27 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 // Who needs the maximizer? It's slow!
 export function equipOutfit(outfit: Quest) {
   const equipment = questOutfits[outfit]();
-  if (!equipment.get($slot`back`)) retrocape(outfit);
+  if (!equipment.get($slot`back`)) cliExecute(`retrocape ${capeMode(outfit)}`);
   equipment.forEach((item, slot) => {
     handleCreateEquip(item);
     if (have(item)) equip(slot, item);
   });
 }
 
-function retrocape(quest: Quest) {
+function capeMode(quest: Quest): string {
   switch (quest) {
     case Quest.Muscle:
-      cliExecute(`retrocape ${$stat`Muscle`}`);
-      return;
+      return "muscle";
     case Quest.Mysticality:
-      cliExecute(`retrocape ${$stat`Mysticality`}`);
-      return;
+      return "mysticality";
     case Quest.Moxie:
-      cliExecute(`retrocape ${$stat`Moxie`}`);
-      return;
+      return "moxie";
     case Quest.HP:
     case Quest.HotResist:
     case Quest.DeepDark:
-      cliExecute("retrocape vampire hold");
-      return;
+      return "vampire hold";
     default:
-      cliExecute("retrocape heck thrill");
-      return;
+      return "heck thrill";
   }
 }
 

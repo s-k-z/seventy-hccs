@@ -165,9 +165,7 @@ export function main() {
     [`breakableHandling${toInt($item`makeshift garbage shirt`)}`, 2],
     ["customCombatScript", "seventy_hccs"],
   ]);
-  for (const [prop, val] of choiceAdventures) {
-    settings.set(`choiceAdventure${prop}`, val);
-  }
+  for (const [prop, val] of choiceAdventures) settings.set(`choiceAdventure${prop}`, val);
   withContext(levelAndDoQuests, settings);
 
   const endTime = date.getTime();
@@ -297,17 +295,13 @@ function levelAndDoQuests() {
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
       print(`Current HP before Deep Dark Visions: ${myHp()}`);
       equipOutfit(Quest.DeepDark);
-      if (myHp() < myMaxhp() * 0.9) {
-        cliExecute("hottub");
-      }
+      if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
       useSkill($skill`Deep Dark Visions`);
       print(`Current HP after Deep Dark Visions: ${myHp()}`);
     }
     if (!have($effect`Cowrruption`)) {
       use($item`corrupted marrow`);
-      if (myHp() < myMaxhp() * 0.5) {
-        cliExecute("hottub");
-      }
+      if (myHp() < myMaxhp() * 0.5) cliExecute("hottub");
     }
     prepAndDoQuest(Quest.SpellDamage);
   }
@@ -332,12 +326,8 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.HotResist)) {
     oneOffEvents.mistform();
     useFamiliar($familiar`Exotic Parrot`);
-    if (!haveEquipped($item`cracker`)) {
-      throw "Wrong familiar equipment?";
-    }
-    if (!get("_horsery").startsWith("pale")) {
-      cliExecute("horsery pale");
-    }
+    if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
+    if (!get("_horsery").startsWith("pale")) cliExecute("horsery pale");
     prepAndDoQuest(Quest.HotResist);
   }
 
@@ -346,9 +336,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorShower();
     useFamiliar($familiar`Exotic Parrot`);
-    if (!haveEquipped($item`cracker`)) {
-      throw "Wrong familiar equipment?";
-    }
+    if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
     if (!have($effect`Smart Drunk`)) {
       useSkill(2, $skill`The Ode to Booze`);
       drink($item`vintage smart drink`);
@@ -382,9 +370,7 @@ function openQuestZones() {
       //visitUrl("shop.php?whichshop=${b}");
       visitUrl(`shop.php?whichshop=${name}&action=talk`);
       tryRunChoice(1, id, `start ${name} quest`);
-      if (getProperty(prop).toLowerCase() === "unstarted") {
-        throw `Failed to start ${name} quest`;
-      }
+      if (getProperty(prop).toLowerCase() === "unstarted") throw `Failed to start ${name} quest`;
     }
   });
 }
@@ -414,9 +400,7 @@ function preCoilWire() {
     }
     autosell(14 * get("_universeCalculated"), $item`moxie weed`);
   }
-  if (!get("_chateauDeskHarvested")) {
-    visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
-  }
+  if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   if (get("boomBoxSong").toLowerCase() !== "total eclipse of your meat") cliExecute("boombox meat");
   if (get("_horsery") === "") cliExecute("horsery dark");
   // 8600 meat
@@ -438,24 +422,19 @@ function preCoilWire() {
   // Get free stats
   scavengeDaycare();
   if (!have($item`Brutal brogues`)) cliExecute("bastille bbq brutalist gesture");
+  checkAvailable($item`Brutal brogues`);
 
   ["forest", "rope", "wrench"].forEach((card) => {
-    if (!get("_deckCardsSeen").toLowerCase().includes(card)) {
-      cliExecute(`cheat ${card}`);
-    }
+    if (!get("_deckCardsSeen").toLowerCase().includes(card)) cliExecute(`cheat ${card}`);
   });
 
   if (!have($skill`Digitize`) && get("_sourceTerminalDigitizeUses") < 1) {
     educate(SourceTerminal.Skills.Digitize);
-    if (!have($skill`Digitize`)) {
-      throw `Error: need to learn ${$skill`Digitize`}`;
-    }
+    if (!have($skill`Digitize`)) throw `Error: need to learn ${$skill`Digitize`}`;
   }
 
   if (myAdventures() < 60) {
-    if (!have($item`borrowed time`)) {
-      create(1, $item`borrowed time`);
-    }
+    if (!have($item`borrowed time`)) create(1, $item`borrowed time`);
     use($item`borrowed time`);
   }
 
@@ -523,13 +502,12 @@ function postCoilWire() {
   wishEffect($effect`Witch Breaded`);
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
-  const range = $item`Dramatic™ range`;
   const camp = getCampground();
   const installedRange = Object.keys(camp).some((k: string) => {
     return k.includes("Dramatic");
   });
-  if (!installedRange) buyUpTo(1, range);
-  tryUse(range);
+  if (!installedRange) buyUpTo(1, $item`Dramatic™ range`);
+  tryUse($item`Dramatic™ range`);
   // 10078 - 950 = 9128 meat
   [
     // Need all three of these to craft with
