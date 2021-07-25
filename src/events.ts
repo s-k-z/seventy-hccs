@@ -457,6 +457,9 @@ export const events: Record<string, eventData> = {
     max: 11,
     current: () => get("_backUpUses"),
     run: () => {
+      if (get("lastCopyableMonster") !== $monster`sausage goblin`) {
+        throw `Backing up into ${get("lastCopyableMonster")}?`;
+      }
       equip($slot`acc3`, $item`backup camera`);
       selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
