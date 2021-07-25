@@ -251,10 +251,8 @@ function levelAndDoQuests() {
         cliExecute(`make ${BRICKO_TARGET_ITEM}`);
       }
 
-      const paperCrane = $item`burning paper crane`;
-      if (!have(paperCrane) && have($item`burning newspaper`)) {
-        cliExecute(`make ${paperCrane}`);
-      }
+      if (have($item`burning newspaper`)) cliExecute(`make ${$item`burning paper crane`}`);
+      if (have($item`robin's egg`)) use($item`robin's egg`);
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough

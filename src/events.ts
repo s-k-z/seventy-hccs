@@ -364,9 +364,11 @@ export const events: Record<string, eventData> = {
       return voterMonsterNow() ? get("_voteFreeFights") : this.max;
     },
     run: () => {
+      const prev = equippedItem($slot`acc3`);
       equip($slot`acc3`, $item`"I Voted!" sticker`);
       selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
+      equip($slot`acc3`, prev);
     },
   },
 
