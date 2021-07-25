@@ -101,11 +101,10 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
     const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
-      [$slot`acc1`, $item`Lil' Doctor™ bag`],
+      [$slot`acc1`, $item`hewn moon-rune spoon`],
       [$slot`acc2`, $item`Brutal brogues`],
-      [$slot`acc3`, $item`Beach Comb`],
+      [$slot`acc3`, $item`Lil' Doctor™ bag`],
     ]);
-    if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
     return outfit;
   },
 

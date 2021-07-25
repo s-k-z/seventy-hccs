@@ -254,7 +254,6 @@ function levelAndDoQuests() {
       const paperCrane = $item`burning paper crane`;
       if (!have(paperCrane) && have($item`burning newspaper`)) {
         cliExecute(`make ${paperCrane}`);
-        checkAvailable(paperCrane);
       }
 
       // Save the Garbage shirt for the last 37 fights

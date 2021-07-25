@@ -164,6 +164,7 @@ export const events: Record<string, eventData> = {
       if (!get("_chateauMonsterFought")) {
         throw "Error: Chateau painted not properly marked as fought.";
       }
+      if (get("ghostLocation") === null) throw `Failed to get protonic ghost message?`;
     },
   },
 
