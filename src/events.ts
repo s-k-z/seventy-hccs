@@ -327,7 +327,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       selectBestFamiliar();
       fightWitchess($monster`Witchess Witch`, MacroList.WitchessWitch);
-      equip($slot`acc1`, $item`battle broom`);
+      equip($slot`acc2`, $item`battle broom`);
     },
   },
 
