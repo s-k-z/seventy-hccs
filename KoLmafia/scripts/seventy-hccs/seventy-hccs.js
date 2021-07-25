@@ -12185,6 +12185,8 @@ var mummingConstumes = new Map([[(0,dist.$familiar)(main_templateObject || (main
 
 function main() {
   (0,dist.sinceKolmafiaRevision)(20795);
+  if (MAIN_CLAN.length < 1) throw "seventycs_main_clan property not set";
+  if (FAX_AND_SLIME_CLAN.length < 1) throw "seventycs_side_clan not set";
   var date = new Date();
   var startTime = date.getTime();
 
@@ -12199,8 +12201,6 @@ function main() {
   }
 
   if ((0,external_kolmafia_.myClass)() !== (0,dist.$class)(main_templateObject6 || (main_templateObject6 = main_taggedTemplateLiteral(["Sauceror"])))) throw "Don't yet know how to run this as ".concat((0,external_kolmafia_.myClass)());
-  if (MAIN_CLAN.length < 1) throw "seventycs_main_clan property not set";
-  if (FAX_AND_SLIME_CLAN.length < 1) throw "seventycs_side_clan not set";
   (0,external_kolmafia_.print)("Save the Kingdom, save the world. Community Service time!", "green");
   (0,external_kolmafia_.print)("Using main clan ".concat(MAIN_CLAN, " and fax/slime clan ").concat(FAX_AND_SLIME_CLAN));
   var settings = new Map([// breakableHandling values:
@@ -12230,7 +12230,7 @@ function main() {
 
   withContext(levelAndDoQuests, settings);
   var endTime = date.getTime();
-  (0,external_kolmafia_.print)("Community Service completed in ".concat((endTime - startTime) / 1000, " seconds"));
+  (0,external_kolmafia_.print)("Community Service completed in ".concat((endTime - startTime) / 1000, " seconds"), "green");
 }
 
 function levelAndDoQuests() {

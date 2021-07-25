@@ -141,6 +141,9 @@ const mummingConstumes = new Map([
 export function main() {
   sinceKolmafiaRevision(20795);
 
+  if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
+  if (FAX_AND_SLIME_CLAN.length < 1) throw `seventycs_side_clan not set`;
+
   const date = new Date();
   const startTime = date.getTime();
 
@@ -154,8 +157,6 @@ export function main() {
   }
 
   if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as ${myClass()}`;
-  if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
-  if (FAX_AND_SLIME_CLAN.length < 1) throw `seventycs_side_clan not set`;
 
   print("Save the Kingdom, save the world. Community Service time!", "green");
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
@@ -176,7 +177,7 @@ export function main() {
   withContext(levelAndDoQuests, settings);
 
   const endTime = date.getTime();
-  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`);
+  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
 }
 
 function levelAndDoQuests() {
@@ -209,6 +210,7 @@ function levelAndDoQuests() {
       // Free run for some items
       // Do all the leveling combats
       // Then gulp latte for more libram summons
+
       if (chateauNapReady()) {
         const prevOffhand = equippedItem($slot`off-hand`);
         equip($slot`off-hand`, $item`familiar scrapbook`);
