@@ -7,7 +7,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $effect, $item, $slot, have } from "libram";
-import { acquireEffect } from "./lib";
+import { acquireEffect, checkEffect } from "./lib";
 
 export enum Quest {
   HP = 1,
@@ -483,11 +483,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
 
 function acquireQuestEffects(id: Quest) {
   questEffects[id].forEach((source, effect) => {
-    if (source !== Context.special) {
-      acquireEffect(effect);
-    } else if (!have(effect)) {
-      throw `Failed to obtain effect ${effect}`;
-    }
+    if (source !== Context.special) acquireEffect(effect);
+    checkEffect(effect);
   });
 }
 

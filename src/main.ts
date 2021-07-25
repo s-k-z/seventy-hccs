@@ -339,7 +339,7 @@ function levelAndDoQuests() {
     if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
     if (!have($effect`Smart Drunk`)) {
       useSkill(2, $skill`The Ode to Booze`);
-      drink($item`vintage smart drink`);
+      drink($item`vintage smart drink`); // 10 drunk
     }
     const icyRevenge = $item`love song of icy revenge`;
     if (!have($effect`Cold Hearted`) && have(icyRevenge)) {
@@ -543,9 +543,9 @@ function postCoilWire() {
   acquireEffect($effect`Ode to Booze`);
   // 9128 - 142 - 95 - 950 - 28 = 7913 meat
   Clan.join(MAIN_CLAN);
-  acquireEffect($effect`[1701]Hip to the Jive`); // drink Hot Socks (3 drunk, 5000 meat)
+  drink($item`Hot Socks`); // 3 drunk, 5000 meat
   // 7913 - 5000 = 2913 meat
-  acquireEffect($effect`In a Lather`); // drink Sockdollager (2 drunk, 500 meat)
+  drink($item`Sockdollager`); // 2 drunk, 500 meat
   // 2913 - 500 = 2413 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza

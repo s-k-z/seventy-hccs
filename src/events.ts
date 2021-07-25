@@ -102,7 +102,7 @@ export const events: Record<string, eventData> = {
       familiar($familiar`Machine Elf`);
       adventure(slimeTube, MacroList.MotherSlime);
       Clan.join(MAIN_CLAN);
-      if (!have($effect`Inner Elf`)) throw "Error: somehow failed to obtain Inner Elf?";
+      checkEffect($effect`Inner Elf`);
     },
   },
 
@@ -578,9 +578,7 @@ export const oneOffEvents = {
         );
       }
       mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
-      if (!have($effect`Everything Looks Red`)) {
-        throw `Failed to cast ${$skill`Open a Big Red Present`}?`;
-      }
+      checkEffect($effect`Everything Looks Red`);
       $items`cherry,grapefruit,lemon,strawberry`.forEach((fruit) => checkAvailable(fruit));
     }
   },
@@ -592,6 +590,7 @@ export const oneOffEvents = {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       familiar($familiar`Nanorhino`);
       adventure(upscaleDistrict, MacroList.Nanobrainy);
+      checkEffect($effect`Nanobrainy`);
     }
   },
 
@@ -635,6 +634,7 @@ export const oneOffEvents = {
       useSkill($skill`The Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.MistForm);
+      checkEffect($effect`Misty Form`);
     }
   },
 
@@ -652,12 +652,13 @@ export const oneOffEvents = {
         MacroList.MeteorShowerForce
       );
       checkAvailable($item`disintegrating spiky collar`);
-      if (!have($effect`Meteor Showered`)) throw `Failed to get Meteor howered?`;
+      checkEffect($effect`Meteor Showered`);
     }
     tryUse($item`disintegrating spiky collar`);
     if (!have($effect`Meteor Showered`)) {
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       adventure(direWarren, MacroList.MeteorShowerForce);
+      checkEffect($effect`Meteor Showered`);
     }
   },
 
@@ -667,6 +668,7 @@ export const oneOffEvents = {
       useSkill($skill`The Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.BatForm);
+      checkEffect($effect`Bat-Adjacent Form`);
     }
   },
 };

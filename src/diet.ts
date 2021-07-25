@@ -49,7 +49,7 @@ const recipes = new Map<Item, Function>([
 ]);
 
 const diabolicPizzas = {
-  bureaucratized: {
+  1: {
     effect: $effect`Bureaucratized`,
     equip: $item`none`, // Don't equip the licorice boa
     familiar: $familiar`Peppermint Rhino`,
@@ -61,7 +61,7 @@ const diabolicPizzas = {
     ),
   },
 
-  chorale: {
+  2: {
     effect: $effect`Chorale of Companionship`,
     equip: $item`dromedary drinking helmet`,
     familiar: $familiar`Melodramedary`,
@@ -73,7 +73,7 @@ const diabolicPizzas = {
     ),
   },
 
-  downWithChow: {
+  3: {
     effect: $effect`Down With Chow`,
     equip: $item`Pocket Professor memory chip`,
     familiar: $familiar`Pocket Professor`,
@@ -85,7 +85,7 @@ const diabolicPizzas = {
     ),
   },
 
-  optimistPrimal: {
+  4: {
     effect: $effect`Optimist Primal`,
     equip: $item`cracker`,
     familiar: $familiar`Exotic Parrot`,
