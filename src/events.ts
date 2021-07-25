@@ -106,6 +106,20 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  backupCamera: {
+    max: 11,
+    current() {
+      return get("lastCopyableMonster") !== $monster`sausage goblin`
+        ? this.max
+        : get("_backUpUses");
+    },
+    run: () => {
+      equip($slot`acc3`, $item`backup camera`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
   ungulith: {
     max: 0,
     current: () => availableAmount($item`corrupted marrow`) - 1,
@@ -449,19 +463,6 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       useFamiliar($familiar`Pocket Professor`);
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  backupCamera: {
-    max: 11,
-    current: () => get("_backUpUses"),
-    run: () => {
-      if (get("lastCopyableMonster") !== $monster`sausage goblin`) {
-        throw `Backing up into ${get("lastCopyableMonster")}?`;
-      }
-      equip($slot`acc3`, $item`backup camera`);
-      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
