@@ -225,7 +225,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 
 // Who needs the maximizer? It's slow!
 export function equipOutfit(quest: Quest) {
-  const mode = new Map<Quest, string>([
+  const mode = new Map([
     [Quest.Muscle, "muscle"],
     [Quest.Mysticality, "mysticality"],
     [Quest.Moxie, "moxie"],
@@ -284,7 +284,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`init.enh`, Context.beginning],
   ]),
 
-  [Quest.CoilWire]: new Map<Effect, Context>(),
+  [Quest.CoilWire]: new Map(),
 
   // For effects that aren't covered by the stat tests below this key
   [Quest.Leveling]: new Map([
@@ -312,7 +312,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     //[$effect`Scarysauce`, EffectContext.leveling],
   ]),
 
-  [Quest.Sprinkles]: new Map<Effect, Context>(),
+  [Quest.Sprinkles]: new Map(),
 
   [Quest.Muscle]: new Map([
     ...sharedStats,
@@ -339,7 +339,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
   ]),
 
   [Quest.HP]: new Map([[$effect`Song of Starch`, Context.test]]),
-  [Quest.DeepDark]: new Map<Effect, Context>(),
+  [Quest.DeepDark]: new Map(),
 
   [Quest.SpellDamage]: new Map([
     ...sharedSpellWeaponDamage,
@@ -478,7 +478,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Synthesis: Collection`, Context.special],
   ]),
 
-  [Quest.Donate]: new Map<Effect, Context>(),
+  [Quest.Donate]: new Map(),
 };
 
 function acquireQuestEffects(id: Quest) {

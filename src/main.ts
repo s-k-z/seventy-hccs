@@ -510,9 +510,10 @@ function postCoilWire() {
   tryUse($item`Dramatic™ range`);
   // 10078 - 950 = 9128 meat
   [
-    // Need all three of these to craft with
+    // Need all of these to craft with
     $skill`Advanced Saucecrafting`,
     $skill`Advanced Cocktailcrafting`,
+    $skill`Perfect Freeze`,
     $skill`Prevent Scurvy and Sobriety`,
 
     // Only need Alice's Army for now

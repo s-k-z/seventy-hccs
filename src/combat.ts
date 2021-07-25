@@ -163,7 +163,7 @@ export const MacroList = {
 };
 
 // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
-export function adventure(loc: Location, macro: Macro): void {
+export function adventure(loc: Location, macro: Macro) {
   setAutoAttack(0);
   adv1(loc, 0, macro.toString());
   while (inMultiFight()) runCombat(macro.toString());

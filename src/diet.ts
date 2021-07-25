@@ -1,5 +1,5 @@
-import { cliExecute, eat, equip, use, useFamiliar, useSkill, toInt, visitUrl } from "kolmafia";
-import { $effect, $familiar, $item, $skill, $slot, have } from "libram";
+import { cliExecute, eat, equip, use, useFamiliar, toInt, visitUrl } from "kolmafia";
+import { $effect, $familiar, $item, $slot, have } from "libram";
 import { acquireEffect, acquireGumOrHermitItem, buyUpTo, checkAvailable, tuple } from "./lib";
 
 const recipes = new Map<Item, Function>([
@@ -22,12 +22,7 @@ const recipes = new Map<Item, Function>([
     },
   ],
 
-  [
-    $item`cog and sprocket assembly`,
-    () => {
-      cliExecute(`make ${$item`cog and sprocket assembly`}`);
-    },
-  ],
+  [$item`cog and sprocket assembly`, () => cliExecute(`make ${$item`cog and sprocket assembly`}`)],
 
   [
     $item`dripping meat crossbow`,
@@ -37,27 +32,9 @@ const recipes = new Map<Item, Function>([
     },
   ],
 
-  [
-    $item`hot buttered roll`,
-    () => {
-      acquireGumOrHermitItem($item`hot buttered roll`);
-    },
-  ],
-
-  [
-    $item`perfect dark and stormy`,
-    () => {
-      useSkill($skill`Perfect Freeze`);
-      cliExecute(`make ${$item`perfect dark and stormy`}`);
-    },
-  ],
-
-  [
-    $item`ravioli hat`,
-    () => {
-      acquireGumOrHermitItem($item`ravioli hat`);
-    },
-  ],
+  [$item`hot buttered roll`, () => acquireGumOrHermitItem($item`hot buttered roll`)],
+  [$item`perfect dark and stormy`, () => cliExecute(`make ${$item`perfect dark and stormy`}`)],
+  [$item`ravioli hat`, () => acquireGumOrHermitItem($item`ravioli hat`)],
 
   [
     $item`useless powder`,
@@ -68,12 +45,7 @@ const recipes = new Map<Item, Function>([
     },
   ],
 
-  [
-    $item`wooden figurine`,
-    () => {
-      acquireGumOrHermitItem($item`wooden figurine`);
-    },
-  ],
+  [$item`wooden figurine`, () => acquireGumOrHermitItem($item`wooden figurine`)],
 ]);
 
 const diabolicPizzas = {
