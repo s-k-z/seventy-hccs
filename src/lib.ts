@@ -81,10 +81,6 @@ export function voterMonsterNow(): boolean {
   return totalTurnsPlayed() % 11 === 1;
 }
 
-export function whitelist(clan: string) {
-  if (getClanName() !== clan) cliExecute(`/whitelist ${clan}`);
-}
-
 export function wishEffect(e: Effect) {
   if (!have(e)) cliExecute(`genie effect ${e}`);
 }

@@ -50,6 +50,7 @@ import {
   $items,
   $skill,
   $slot,
+  Clan,
   get,
   have,
   sinceKolmafiaRevision,
@@ -89,7 +90,6 @@ import {
   tryRunChoice,
   tryUse,
   tuple,
-  whitelist,
   wishEffect,
   withContext,
 } from "./lib";
@@ -382,7 +382,7 @@ function preCoilWire() {
   tryUse($item`pork elf goodies sack`);
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
-    whitelist(MAIN_CLAN);
+    Clan.join(MAIN_CLAN);
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
   if (!have($item`battery (AAA)`)) harvestBatteries();
@@ -541,7 +541,7 @@ function postCoilWire() {
   buyUpTo(1, $item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
   // 9128 - 142 - 95 - 950 - 28 = 7913 meat
-  whitelist(MAIN_CLAN);
+  Clan.join(MAIN_CLAN);
   acquireEffect($effect`[1701]Hip to the Jive`); // drink Hot Socks (3 drunk, 5000 meat)
   // 7913 - 5000 = 2913 meat
   acquireEffect($effect`In a Lather`); // drink Sockdollager (2 drunk, 500 meat)

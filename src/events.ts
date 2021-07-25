@@ -31,6 +31,7 @@ import {
   $skill,
   $slot,
   ChateauMantegna,
+  Clan,
   get,
   have,
   Macro,
@@ -39,14 +40,7 @@ import {
 import { adventure, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
-import {
-  acquireEffect,
-  checkAvailable,
-  checkEffect,
-  tryUse,
-  voterMonsterNow,
-  whitelist,
-} from "./lib";
+import { acquireEffect, checkAvailable, checkEffect, tryUse, voterMonsterNow } from "./lib";
 import { equipOutfit, Quest } from "./quests";
 
 export enum FamiliarFlag {
@@ -104,10 +98,10 @@ export const events: Record<string, eventData> = {
       return myLevel() < 13 || have($effect`Inner Elf`) ? this.max : -1;
     },
     run: () => {
-      whitelist(FAX_AND_SLIME_CLAN);
+      Clan.join(FAX_AND_SLIME_CLAN);
       familiar($familiar`Machine Elf`);
       adventure(slimeTube, MacroList.MotherSlime);
-      whitelist(MAIN_CLAN);
+      Clan.join(MAIN_CLAN);
       if (!have($effect`Inner Elf`)) throw "Error: somehow failed to obtain Inner Elf?";
     },
   },
@@ -131,9 +125,9 @@ export const events: Record<string, eventData> = {
     current: () => availableAmount($item`corrupted marrow`) - 1,
     run: () => {
       if (!have($item`photocopied monster`)) {
-        whitelist(FAX_AND_SLIME_CLAN);
+        Clan.join(FAX_AND_SLIME_CLAN);
         cliExecute("fax receive");
-        whitelist(MAIN_CLAN);
+        Clan.join(MAIN_CLAN);
       }
       const copyID = $item`photocopied monster`.descid;
       const faxMon = $monster`Ungulith`;

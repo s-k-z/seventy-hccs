@@ -10474,9 +10474,6 @@ function tuple() {
 function voterMonsterNow() {
   return (0,external_kolmafia_.totalTurnsPlayed)() % 11 === 1;
 }
-function whitelist(clan) {
-  if ((0,external_kolmafia_.getClanName)() !== clan) (0,external_kolmafia_.cliExecute)("/whitelist ".concat(clan));
-}
 function wishEffect(e) {
   if (!(0,dist.have)(e)) (0,external_kolmafia_.cliExecute)("genie effect ".concat(e));
 }
@@ -11207,10 +11204,10 @@ var events = {
       return (0,external_kolmafia_.myLevel)() < 13 || (0,dist.have)((0,dist.$effect)(events_templateObject21 || (events_templateObject21 = events_taggedTemplateLiteral(["Inner Elf"])))) ? this.max : -1;
     },
     run: function run() {
-      whitelist(FAX_AND_SLIME_CLAN);
+      dist.Clan.join(FAX_AND_SLIME_CLAN);
       familiar((0,dist.$familiar)(events_templateObject22 || (events_templateObject22 = events_taggedTemplateLiteral(["Machine Elf"]))));
       adventure(slimeTube, MacroList.MotherSlime);
-      whitelist(MAIN_CLAN);
+      dist.Clan.join(MAIN_CLAN);
       if (!(0,dist.have)((0,dist.$effect)(events_templateObject23 || (events_templateObject23 = events_taggedTemplateLiteral(["Inner Elf"]))))) throw "Error: somehow failed to obtain Inner Elf?";
     }
   },
@@ -11232,9 +11229,9 @@ var events = {
     },
     run: function run() {
       if (!(0,dist.have)((0,dist.$item)(events_templateObject28 || (events_templateObject28 = events_taggedTemplateLiteral(["photocopied monster"]))))) {
-        whitelist(FAX_AND_SLIME_CLAN);
+        dist.Clan.join(FAX_AND_SLIME_CLAN);
         (0,external_kolmafia_.cliExecute)("fax receive");
-        whitelist(MAIN_CLAN);
+        dist.Clan.join(MAIN_CLAN);
       }
 
       var copyID = (0,dist.$item)(events_templateObject29 || (events_templateObject29 = events_taggedTemplateLiteral(["photocopied monster"]))).descid;
@@ -12444,7 +12441,7 @@ function preCoilWire() {
   tryUse((0,dist.$item)(main_templateObject53 || (main_templateObject53 = main_taggedTemplateLiteral(["pork elf goodies sack"])))); // Only need one consult for a candy
 
   if ((0,dist.get)("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
-    whitelist(MAIN_CLAN);
+    dist.Clan.join(MAIN_CLAN);
     (0,external_kolmafia_.cliExecute)("fortune ".concat(FORTUNE_TELLER_FRIEND, " garbage garbage thick"));
   }
 
@@ -12589,7 +12586,7 @@ function postCoilWire() {
   buyUpTo(1, (0,dist.$item)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["toy accordion"]))));
   acquireEffect((0,dist.$effect)(main_templateObject104 || (main_templateObject104 = main_taggedTemplateLiteral(["Ode to Booze"])))); // 9128 - 142 - 95 - 950 - 28 = 7913 meat
 
-  whitelist(MAIN_CLAN);
+  dist.Clan.join(MAIN_CLAN);
   acquireEffect((0,dist.$effect)(main_templateObject105 || (main_templateObject105 = main_taggedTemplateLiteral(["[1701]Hip to the Jive"])))); // drink Hot Socks (3 drunk, 5000 meat)
   // 7913 - 5000 = 2913 meat
 
