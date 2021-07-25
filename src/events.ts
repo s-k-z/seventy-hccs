@@ -673,17 +673,15 @@ export const oneOffEvents = {
 
 function familiar(fam: Familiar) {
   useFamiliar(fam);
-  const costume = mummingConstumes.get(fam);
+  const costume = new Map([
+    [$familiar`Green Pixie`, "mp"],
+    [$familiar`Machine Elf`, "meat"],
+    [$familiar`Melodramedary`, "myst"],
+    [$familiar`Pocket Professor`, "hp"],
+    [$familiar`Shorter-Order Cook`, "item"],
+  ]).get(fam);
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);
 }
-
-const mummingConstumes = new Map([
-  [$familiar`Green Pixie`, "mp"],
-  [$familiar`Machine Elf`, "meat"],
-  [$familiar`Melodramedary`, "myst"],
-  [$familiar`Pocket Professor`, "hp"],
-  [$familiar`Shorter-Order Cook`, "item"],
-]);
 
 function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
   if (!have($effect`Spit Upon`)) {
