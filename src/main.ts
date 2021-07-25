@@ -10,6 +10,7 @@ import {
   eat,
   effectModifier,
   equip,
+  equippedItem,
   getCampground,
   getProperty,
   haveEquipped,
@@ -196,6 +197,10 @@ function levelAndDoQuests() {
   if (getRemainingFreeFights() > 0) {
     postCoilWire();
 
+    const chateauNapReady = (): boolean => {
+      return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
+    };
+
     leveling: while (true) {
       // Spend excess MP on librams
       // Use free rests on stats at configured level
@@ -204,13 +209,13 @@ function levelAndDoQuests() {
       // Free run for some items
       // Do all the leveling combats
       // Then gulp latte for more libram summons
-
-      while (
-        myLevel() >= CHATEAU_REST_LEVEL &&
-        //myMaxmp() - myMp() > 150 &&
-        get("timesRested") < totalFreeRests()
-      ) {
-        visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+      if (chateauNapReady()) {
+        const prevOffhand = equippedItem($slot`off-hand`);
+        equip($slot`off-hand`, $item`familiar scrapbook`);
+        while (chateauNapReady()) {
+          visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+        }
+        equip($slot`off-hand`, prevOffhand);
       }
 
       if (!have($effect`Soulerskates`)) {

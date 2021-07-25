@@ -5,6 +5,7 @@ import {
   cliExecute,
   containsText,
   equip,
+  equippedItem,
   handlingChoice,
   haveEffect,
   haveEquipped,
@@ -228,7 +229,10 @@ export const events: Record<string, eventData> = {
       if (!haveEquipped($item`LOV Epaulettes`)) {
         throw `Error: ${$item`LOV Epaulettes`} not equipped`;
       }
+      const prevOffhand = equippedItem($slot`off-hand`);
+      equip($slot`off-hand`, $item`familiar scrapbook`);
       use($item`a ten-percent bonus`);
+      equip($slot`off-hand`, prevOffhand);
     },
   },
 
