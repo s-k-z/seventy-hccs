@@ -100,12 +100,12 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   [Quest.Sprinkles]: () => {
     const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
       [$slot`acc1`, $item`Lil' Doctor™ bag`],
       [$slot`acc2`, $item`Brutal brogues`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
     if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
-    if (have($item`rope`)) outfit.set($slot`off-hand`, $item`rope`);
     return outfit;
   },
 
@@ -200,7 +200,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   [Quest.FamiliarWeight]: () => {
     return new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`rope`],
+      [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
       [$slot`acc1`, $item`Brutal brogues`],
       [$slot`acc2`, $item`hewn moon-rune spoon`],
       [$slot`acc3`, $item`Beach Comb`],
