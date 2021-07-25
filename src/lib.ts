@@ -17,6 +17,7 @@ import {
 import { $item, get, have, set } from "libram";
 
 export function acquireEffect(e: Effect) {
+  if (e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
   if (!have(e)) cliExecute(e.default);
 }
 
