@@ -13,6 +13,7 @@ import {
   equippedItem,
   getCampground,
   getProperty,
+  handlingChoice,
   haveEquipped,
   mpCost,
   myAdventures,
@@ -32,7 +33,6 @@ import {
   mySpleenUse,
   print,
   retrieveItem,
-  runChoice,
   soulsauceCost,
   toInt,
   totalFreeRests,
@@ -109,6 +109,7 @@ import { ascend } from "./valhalla";
 const choiceAdventures = new Map([
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
   [326, 1], // Showdown: (1) fight mother slime (2) leave
+  [1118, 1], // X-32-F Combat Training Snowman Control Console: (1) muscle (2) mysticality (3) moxie (4) tournament (6) leave
   [1203, 4], // Midnight in the Civic Center: (1) 500 myst stats (2) counterfeit city for 300 sprinkles (3) N/A (4) 5 gingerbread cigarettes for 5 sprinkles (5) N/A
   [1204, 1], // Noon at the Train Station: (1) get a bunch of candy (2) increase size of sewer gators (3) 250 myst stats
   [1208, 3], // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
@@ -124,6 +125,7 @@ const choiceAdventures = new Map([
   [1322, 2], // The Beginning of the Neverend: (1) accept quest (2) decline quest (3) leave
   [1324, 5], // It Hasn't Ended, It's Just Paused: (1) upstairs (2) kitchen (3) backyard (4) basement (5) fight
   [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
+  [1386, 4], // Upgrade Your May the Fourth Cosplay Saber: (1) 15-20 MP regen (2) +20 ML (3) +3 resists (4) +10 familiar weight
   [1387, 3], // Using the Force: (1) banish (2) find friends (3) force item drops
 ]);
 
@@ -528,10 +530,8 @@ function postCoilWire() {
   // Then use nanorhino for nanobrainy and increment the gingerbread city counter
   oneOffEvents.nanobrainy();
   // Upgrade Cosplay Saber and start buffing familiar weight now that we're done with Nanorhino
-  if (get("_saberMod") === 0) {
-    visitUrl("main.php?action=may4");
-    runChoice(4); // familiar weight option
-  }
+  if (get("_saberMod") < 1) visitUrl("main.php?action=may4");
+  if (handlingChoice()) throw `Stuck picking saber mod?`;
   if (!get("_pottedTeaTreeUsed")) cliExecute("teatree loyal");
   wishEffect($effect`All is Forgiven`);
   wishEffect($effect`Witch Breaded`);
@@ -559,7 +559,7 @@ function postCoilWire() {
 
     // Buffs that can't fit elsewhere
     $skill`Incredible Self-Esteem`,
-  ].forEach((s) => useSkill(s));
+  ].forEach((summon) => useSkill(summon));
 
   [
     $item`oil of expertise`,

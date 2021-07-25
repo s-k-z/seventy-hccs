@@ -438,7 +438,6 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
 
     [$effect`Amazing`, Context.test],
 
-    // in case we want Robin's egg
     //[$effect`Egged On`, Context.special],
     [$effect`Misty Form`, Context.special],
   ]),
@@ -534,7 +533,6 @@ export function haveQuest(id: number) {
 export function prepAndDoQuest(id: Quest) {
   if (id > Quest.Donate) throw `Invalid Quest ${id} (these are just for outfits)!!`;
   if (haveQuest(id)) {
-    // Convenient but also non-obvious here, maybe a bad design?
     acquireQuestEffects(id);
     equipOutfit(id);
     visitUrl(`choice.php?whichchoice=1089&option=${id}`);
