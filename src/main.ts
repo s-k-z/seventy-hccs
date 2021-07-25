@@ -129,14 +129,6 @@ const choiceAdventures = new Map([
   [1387, 3], // Using the Force: (1) banish (2) find friends (3) force item drops
 ]);
 
-const mummingConstumes = new Map([
-  [$familiar`Green Pixie`, "mp"],
-  [$familiar`Machine Elf`, "meat"],
-  [$familiar`Melodramedary`, "myst"],
-  [$familiar`Pocket Professor`, "hp"],
-  [$familiar`Shorter-Order Cook`, "item"],
-]);
-
 //
 // Community Service Starts!
 //
@@ -183,12 +175,6 @@ export function main() {
 }
 
 function levelAndDoQuests() {
-  // Mafia saves a list of #'s corresponding to costumes used, maybe can check those?
-  for (const [familiar, costume] of mummingConstumes) {
-    useFamiliar(familiar);
-    cliExecute(`mummery ${costume}`);
-  }
-
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
     // 60 turns down the drain 😢
@@ -585,7 +571,6 @@ function postCoilWire() {
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas();
-  // TODO: maybe spend down MP on librams if we can generate some sausages?
   if (myGardenType().toLowerCase().includes("peppermint")) cliExecute("garden pick");
   [$skill`Chubby and Plump`, $skill`Summon Crimbo Candy`].forEach((s) => useSkill(s));
   synthesize();
