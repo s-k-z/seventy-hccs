@@ -224,30 +224,21 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 };
 
 // Who needs the maximizer? It's slow!
-export function equipOutfit(outfit: Quest) {
-  const equipment = questOutfits[outfit]();
-  if (!equipment.get($slot`back`)) cliExecute(`retrocape ${capeMode(outfit)}`);
-  equipment.forEach((item, slot) => {
+export function equipOutfit(quest: Quest) {
+  const mode = new Map<Quest, string>([
+    [Quest.Muscle, "muscle"],
+    [Quest.Mysticality, "mysticality"],
+    [Quest.Moxie, "moxie"],
+    [Quest.HP, "vampire hold"],
+    [Quest.HotResist, "vampire hold"],
+    [Quest.DeepDark, "vampire hold"],
+  ]);
+  const outfit = questOutfits[quest]();
+  if (!outfit.get($slot`back`)) cliExecute(`retrocape ${mode.get(quest) ?? "heck thrill"}`);
+  outfit.forEach((item, slot) => {
     handleCreateEquip(item);
     if (have(item)) equip(slot, item);
   });
-}
-
-function capeMode(quest: Quest): string {
-  switch (quest) {
-    case Quest.Muscle:
-      return "muscle";
-    case Quest.Mysticality:
-      return "mysticality";
-    case Quest.Moxie:
-      return "moxie";
-    case Quest.HP:
-    case Quest.HotResist:
-    case Quest.DeepDark:
-      return "vampire hold";
-    default:
-      return "heck thrill";
-  }
 }
 
 enum Context {

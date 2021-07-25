@@ -11024,36 +11024,17 @@ var questOutfits = (_questOutfits = {}, _defineProperty(_questOutfits, Quest.Beg
   return new Map();
 }), _questOutfits); // Who needs the maximizer? It's slow!
 
-function equipOutfit(outfit) {
-  var equipment = questOutfits[outfit]();
-  if (!equipment.get((0,dist.$slot)(_templateObject182 || (_templateObject182 = quests_taggedTemplateLiteral(["back"]))))) (0,external_kolmafia_.cliExecute)("retrocape ".concat(capeMode(outfit)));
-  equipment.forEach(function (item, slot) {
+function equipOutfit(quest) {
+  var _mode$get;
+
+  var mode = new Map([[Quest.Muscle, "muscle"], [Quest.Mysticality, "mysticality"], [Quest.Moxie, "moxie"], [Quest.HP, "vampire hold"], [Quest.HotResist, "vampire hold"], [Quest.DeepDark, "vampire hold"]]);
+  var outfit = questOutfits[quest]();
+  if (!outfit.get((0,dist.$slot)(_templateObject182 || (_templateObject182 = quests_taggedTemplateLiteral(["back"]))))) (0,external_kolmafia_.cliExecute)("retrocape ".concat((_mode$get = mode.get(quest)) !== null && _mode$get !== void 0 ? _mode$get : "heck thrill"));
+  outfit.forEach(function (item, slot) {
     handleCreateEquip(item);
     if ((0,dist.have)(item)) (0,external_kolmafia_.equip)(slot, item);
   });
 }
-
-function capeMode(quest) {
-  switch (quest) {
-    case Quest.Muscle:
-      return "muscle";
-
-    case Quest.Mysticality:
-      return "mysticality";
-
-    case Quest.Moxie:
-      return "moxie";
-
-    case Quest.HP:
-    case Quest.HotResist:
-    case Quest.DeepDark:
-      return "vampire hold";
-
-    default:
-      return "heck thrill";
-  }
-}
-
 var Context;
 
 (function (Context) {
