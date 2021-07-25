@@ -39,7 +39,14 @@ import {
 import { adventure, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
-import { acquireEffect, checkAvailable, checkEffect, voterMonsterNow, whitelist } from "./lib";
+import {
+  acquireEffect,
+  checkAvailable,
+  checkEffect,
+  tryUse,
+  voterMonsterNow,
+  whitelist,
+} from "./lib";
 import { equipOutfit, Quest } from "./quests";
 
 export enum FamiliarFlag {
@@ -638,7 +645,7 @@ export const oneOffEvents = {
   },
 
   meteorShower: () => {
-    if (have($item`tiny bottle of absinthe`)) use($item`tiny bottle of absinthe`);
+    tryUse($item`tiny bottle of absinthe`);
     if (
       have($effect`absinthe minded`) &&
       !have($effect`Meteor Showered`) &&
@@ -653,7 +660,7 @@ export const oneOffEvents = {
       checkAvailable($item`disintegrating spiky collar`);
       if (!have($effect`Meteor Showered`)) throw `Failed to get Meteor howered?`;
     }
-    if (have($item`disintegrating spiky collar`)) use($item`disintegrating spiky collar`);
+    tryUse($item`disintegrating spiky collar`);
     if (!have($effect`Meteor Showered`)) {
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       adventure(direWarren, MacroList.MeteorShowerForce);

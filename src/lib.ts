@@ -6,7 +6,6 @@ import {
   getClanName,
   getIngredients,
   hermit,
-  itemAmount,
   myMeat,
   runChoice,
   toInt,
@@ -53,12 +52,8 @@ export function checkEffect(e: Effect) {
 }
 
 export function checkFax(monster: Monster) {
-  if (
-    !containsText(
-      visitUrl(`desc_item.php?whichitem=${$item`photocopied monster`.descid}`),
-      `${monster}`
-    )
-  ) {
+  const id = $item`photocopied monster`.descid;
+  if (!containsText(visitUrl(`desc_item.php?whichitem=${id}`), `${monster}`)) {
     throw "Error: grabbed wrong fax?";
   }
 }
@@ -74,8 +69,8 @@ export function tryRunChoice(pageIndex: number, choiceID: number, goal: string) 
   }
 }
 
-export function tryUse(n: number, i: Item) {
-  if (itemAmount(i) >= n) use(n, i);
+export function tryUse(i: Item, n: number = 1) {
+  if (have(i, n)) use(i, n);
 }
 
 export function tuple<T extends any[]>(...args: T): T {

@@ -229,9 +229,7 @@ export function equipOutfit(outfit: Quest) {
   if (!equipment.get($slot`back`)) retrocape(outfit);
   equipment.forEach((item, slot) => {
     handleCreateEquip(item);
-    if (have(item)) {
-      equip(slot, item);
-    }
+    if (have(item)) equip(slot, item);
   });
 }
 

@@ -240,7 +240,7 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) cliExecute(`make ${$item`burning paper crane`}`);
-      if (have($item`robin's egg`)) use($item`robin's egg`);
+      tryUse($item`robin's egg`);
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
@@ -392,8 +392,8 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole, sell pork gems, save a baconstone for pantogram
   visitUrl("tutorial.php?action=toot");
-  tryUse(1, $item`letter from King Ralph XI`);
-  tryUse(1, $item`pork elf goodies sack`);
+  tryUse($item`letter from King Ralph XI`);
+  tryUse($item`pork elf goodies sack`);
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     whitelist(MAIN_CLAN);
@@ -529,7 +529,7 @@ function postCoilWire() {
     return k.includes("Dramatic");
   });
   if (!installedRange) buyUpTo(1, range);
-  if (have(range)) use(range);
+  tryUse(range);
   // 10078 - 950 = 9128 meat
   [
     // Need all three of these to craft with
@@ -582,9 +582,9 @@ function postCoilWire() {
   ) {
     create(1, $item`cold-filtered water`);
   }
-  if (have($item`cold-filtered water`)) use($item`cold-filtered water`);
+  tryUse($item`cold-filtered water`);
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
-  if (have($item`Chubby and Plump bar`)) use($item`Chubby and Plump bar`);
+  tryUse($item`Chubby and Plump bar`);
 
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);
