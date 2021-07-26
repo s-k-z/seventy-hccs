@@ -238,7 +238,7 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) cliExecute(`make ${$item`burning paper crane`}`);
-      tryUse($item`robin's egg`);
+      $items`robin's egg,short stack of pancakes`.forEach((drop) => tryUse(drop));
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough

@@ -3,7 +3,6 @@ import {
   buy,
   cliExecute,
   containsText,
-  getClanName,
   getIngredients,
   hermit,
   myMeat,

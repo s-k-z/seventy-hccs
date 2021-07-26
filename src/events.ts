@@ -545,6 +545,7 @@ export const oneOffEvents = {
   hipster: () => {
     if (!get("_ironicMoustache")) {
       familiar($familiar`Mini-Hipster`);
+      equip($slot`familiar`, $item`none`);
       adventure(noobCave, MacroList.FreeFight);
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`ironic moustache`);
@@ -555,6 +556,7 @@ export const oneOffEvents = {
   mimic: () => {
     if (!get("_bagOfCandy")) {
       familiar($familiar`Stocking Mimic`);
+      equip($slot`familiar`, $item`none`);
       const ghostLoc1 = get("ghostLocation");
       if (!ghostLoc1) throw `Failed to get protonic ghost notice`;
       adventure(ghostLoc1, MacroList.FreeFight);
@@ -680,6 +682,7 @@ function familiar(fam: Familiar) {
     [$familiar`Machine Elf`, "meat"],
     [$familiar`Melodramedary`, "myst"],
     [$familiar`Pocket Professor`, "hp"],
+    //[$familiar`Rockin' Robin`, "mp"],
     [$familiar`Shorter-Order Cook`, "item"],
   ]).get(fam);
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);

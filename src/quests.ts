@@ -441,6 +441,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Over-Familiar With Dactyls`, Context.test],
     [$effect`Robot Friends`, Context.test],
     [$effect`Whole Latte Love`, Context.test],
+    [$effect`Shortly Stacked`, Context.test],
     // Food/Booze/Spleen
     [$effect`[1701]Hip to the Jive`, Context.special],
     [$effect`Joy`, Context.special],
