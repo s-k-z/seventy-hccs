@@ -25,8 +25,7 @@ export enum Quest {
 
   Beginning = 900,
   Leveling = 901,
-  Sprinkles = 902,
-  DeepDark = 903,
+  DeepDark = 902,
 }
 
 function handleCreateEquip(equip: Item) {
@@ -94,17 +93,6 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc3`, $item`Beach Comb`],
     ]);
     if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
-    return outfit;
-  },
-
-  [Quest.Sprinkles]: () => {
-    const outfit = new Map([
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
-      [$slot`acc1`, $item`hewn moon-rune spoon`],
-      [$slot`acc2`, $item`Brutal brogues`],
-      [$slot`acc3`, $item`Lil' Doctor™ bag`],
-    ]);
     return outfit;
   },
 
@@ -311,8 +299,6 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Elemental Saucesphere`, Context.leveling],
     //[$effect`Scarysauce`, EffectContext.leveling],
   ]),
-
-  [Quest.Sprinkles]: new Map(),
 
   [Quest.Muscle]: new Map([
     ...sharedStats,

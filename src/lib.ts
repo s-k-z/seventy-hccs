@@ -3,6 +3,8 @@ import {
   buy,
   cliExecute,
   containsText,
+  equip,
+  equippedItem,
   getIngredients,
   hermit,
   myMeat,
@@ -84,16 +86,26 @@ export function wishEffect(e: Effect) {
   if (!have(e)) cliExecute(`genie effect ${e}`);
 }
 
-export function withContext(func: Function, context: Map<string, number | string>) {
-  const previous = new Map();
-  const setPrefsTo = (c: Map<string, number | string>) => {
-    for (const [prop, value] of c) set(prop, value);
-  };
-  for (const [prop] of context) previous.set(prop, get(prop));
+type prop = [string, string | number | boolean];
+export function withContext(callback: Function, context: prop[]) {
+  const previous = context.map(([prop]): prop => [prop, get(prop)]);
+  const setProps = (p: prop[]) => p.forEach(([prop, value]) => set(prop, value));
+  setProps(context);
   try {
-    setPrefsTo(context);
-    func();
+    callback();
   } finally {
-    setPrefsTo(previous);
+    setProps(previous);
+  }
+}
+
+type outfit = [Slot, Item];
+export function withEquipment(callback: Function, equips: outfit[]) {
+  const previous = equips.map(([slot]): outfit => [slot, equippedItem(slot)]);
+  const equipAll = (o: outfit[]) => o.forEach(([slot, item]) => equip(slot, item));
+  equipAll(equips);
+  try {
+    callback();
+  } finally {
+    equipAll(previous);
   }
 }

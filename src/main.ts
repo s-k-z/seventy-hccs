@@ -10,7 +10,6 @@ import {
   eat,
   effectModifier,
   equip,
-  equippedItem,
   getCampground,
   getProperty,
   handlingChoice,
@@ -92,6 +91,7 @@ import {
   tuple,
   wishEffect,
   withContext,
+  withEquipment,
 } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import {
@@ -106,7 +106,7 @@ import {
 import { synthesize } from "./sweetsynthesis";
 import { ascend } from "./valhalla";
 
-const choiceAdventures = new Map([
+const choiceAdventures = [
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
   [326, 1], // Showdown: (1) fight mother slime (2) leave
   [1118, 1], // X-32-F Combat Training Snowman Control Console: (1) muscle (2) mysticality (3) moxie (4) tournament (6) leave
@@ -127,7 +127,7 @@ const choiceAdventures = new Map([
   [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
   [1386, 4], // Upgrade Your May the Fourth Cosplay Saber: (1) 15-20 MP regen (2) +20 ML (3) +3 resists (4) +10 familiar weight
   [1387, 3], // Using the Force: (1) banish (2) find friends (3) force item drops
-]);
+].map(([id, val]): [string, number] => [`choiceAdventure${id}`, val]);
 
 //
 // Community Service Starts!
@@ -155,7 +155,7 @@ export function main() {
   print("Save the Kingdom, save the world. Community Service time!", "green");
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
 
-  const settings = new Map<string, number | string>([
+  withContext(levelAndDoQuests, [
     // breakableHandling values:
     // 1: abort
     // 2: equip previous
@@ -164,9 +164,8 @@ export function main() {
     // 5: acquire & re-equip
     [`breakableHandling${toInt($item`makeshift garbage shirt`)}`, 2],
     ["customCombatScript", "seventy_hccs"],
+    ...choiceAdventures,
   ]);
-  for (const [prop, val] of choiceAdventures) settings.set(`choiceAdventure${prop}`, val);
-  withContext(levelAndDoQuests, settings);
 
   const endTime = date.getTime();
   print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
@@ -198,12 +197,11 @@ function levelAndDoQuests() {
       // Then gulp latte for more libram summons
 
       if (chateauNapReady()) {
-        const prevOffhand = equippedItem($slot`off-hand`);
-        equip($slot`off-hand`, $item`familiar scrapbook`);
-        while (chateauNapReady()) {
-          visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
-        }
-        equip($slot`off-hand`, prevOffhand);
+        withEquipment(() => {
+          while (chateauNapReady()) {
+            visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+          }
+        }, [[$slot`off-hand`, $item`familiar scrapbook`]]);
       }
 
       if (!have($effect`Soulerskates`)) {

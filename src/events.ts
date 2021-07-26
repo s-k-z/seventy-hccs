@@ -5,15 +5,12 @@ import {
   cliExecute,
   containsText,
   equip,
-  equippedItem,
   handlingChoice,
   haveEffect,
-  haveEquipped,
   myHash,
   myHp,
   myLevel,
   runChoice,
-  toEffect,
   toInt,
   use,
   useFamiliar,
@@ -40,7 +37,14 @@ import {
 import { adventure, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
-import { acquireEffect, checkAvailable, checkEffect, tryUse, voterMonsterNow } from "./lib";
+import {
+  acquireEffect,
+  checkAvailable,
+  checkEffect,
+  tryUse,
+  voterMonsterNow,
+  withEquipment,
+} from "./lib";
 import { equipOutfit, Quest } from "./quests";
 
 export enum FamiliarFlag {
@@ -124,21 +128,21 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => availableAmount($item`corrupted marrow`) - 1,
     run: () => {
-      if (!have($item`photocopied monster`)) {
+      const fax = $item`photocopied monster`;
+      const faxMon = $monster`Ungulith`;
+      if (!have(fax)) {
         Clan.join(FAX_AND_SLIME_CLAN);
         cliExecute("fax receive");
         Clan.join(MAIN_CLAN);
       }
-      const copyID = $item`photocopied monster`.descid;
-      const faxMon = $monster`Ungulith`;
-      if (!containsText(visitUrl(`desc_item.php?whichitem=${copyID}`), `${faxMon}`)) {
+      if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
         throw `Failed to retrieve fax of ${faxMon}`;
       }
       equip($slot`off-hand`, $item`tiny black hole`);
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       MacroList.PickpocketFreeRun.setAutoAttack();
-      visitUrl(`inv_use.php?pwd=${myHash()}&whichitem=${toInt($item`photocopied monster`)}`);
+      visitUrl(`inv_use.php?pwd=${myHash()}&whichitem=${toInt(fax)}`);
       checkAvailable($item`corrupted marrow`);
     },
   },
@@ -163,9 +167,10 @@ export const events: Record<string, eventData> = {
     },
     run: () => {
       equip($slot`back`, $item`protonic accelerator pack`);
-      const phylum = ChateauMantegna.paintingMonster()!.phylum;
+      const monster = ChateauMantegna.paintingMonster();
+      if (!monster) throw `Empty Chateau painting?`;
       const carols = $phyla`beast, bug, constellation, elf, goblin, humanoid`;
-      if (carols.includes(phylum)) {
+      if (carols.includes(monster.phylum)) {
         equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
         familiar($familiar`Ghost of Crimbo Carols`);
         MacroList.Banish.setAutoAttack();
@@ -175,16 +180,21 @@ export const events: Record<string, eventData> = {
         MacroList.PickpocketFreeRun.setAutoAttack();
       }
       ChateauMantegna.fightPainting();
-      if (!get("_chateauMonsterFought")) {
-        throw "Error: Chateau painted not properly marked as fought.";
-      }
+      if (!get("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
       if (get("ghostLocation") === null) throw `Failed to get protonic ghost message?`;
     },
   },
 
   ghostCarol: {
     max: 0,
-    current: () => haveEffect($effect`Do You Crush What I Crush?`) - 1,
+    current: () =>
+      [
+        $effect`All I Want For Crimbo Is Stuff`,
+        $effect`Crimbo Wrapping`,
+        $effect`Do You Crush What I Crush?`,
+        $effect`Holiday Yoked`,
+        $effect`Let It Snow/Boil/Stink/Frighten/Grease`,
+      ].reduce((sum, carol) => sum + haveEffect(carol), 0) - 1,
     run: () => {
       equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
       familiar($familiar`Ghost of Crimbo Carols`);
@@ -241,13 +251,12 @@ export const events: Record<string, eventData> = {
       checkEffect($effect`That's Just Cloud-Talk, Man`);
       checkEffect($effect`Inscrutable Gaze`);
       checkEffect($effect`Synthesis: Learning`);
-      if (!haveEquipped($item`LOV Epaulettes`)) {
-        throw `Error: ${$item`LOV Epaulettes`} not equipped`;
-      }
-      const prevOffhand = equippedItem($slot`off-hand`);
-      equip($slot`off-hand`, $item`familiar scrapbook`);
-      use($item`a ten-percent bonus`);
-      equip($slot`off-hand`, prevOffhand);
+      if (!have($item`LOV Epaulettes`)) throw `Missing ${$item`LOV Epaulettes`}`;
+      equip($slot`back`, $item`LOV Epaulettes`);
+      withEquipment(
+        () => use($item`a ten-percent bonus`),
+        [[$slot`off-hand`, $item`familiar scrapbook`]]
+      );
     },
   },
 
@@ -257,10 +266,17 @@ export const events: Record<string, eventData> = {
       return have($effect`Whole Latte Love`) ? this.max : availableAmount($item`sprinkles`) - 54;
     },
     run: () => {
-      equipOutfit(Quest.Sprinkles);
       familiar($familiar`Chocolate Lab`);
-      adventure(upscaleDistrict, MacroList.Sprinkles);
-      equipOutfit(Quest.Leveling);
+      withEquipment(
+        () => adventure(upscaleDistrict, MacroList.Sprinkles),
+        [
+          [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+          [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
+          [$slot`acc1`, $item`hewn moon-rune spoon`],
+          [$slot`acc2`, $item`Brutal brogues`],
+          [$slot`acc3`, $item`Lil' Doctor™ bag`],
+        ]
+      );
       checkAvailable($item`sprinkles`, 55);
     },
   },
@@ -272,11 +288,12 @@ export const events: Record<string, eventData> = {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(upscaleDistrict, MacroList.PickpocketFreeRun);
-      if (have($item`gingerbread spice latte`)) {
-        use($item`gingerbread spice latte`);
+      const latte = $item`gingerbread spice latte`;
+      if (have(latte)) {
+        use(latte);
         checkAvailable($item`sprinkles`, 5);
       } else if (get("_gingerbreadCityTurns") > 5) {
-        throw `Failed to obtain ${$item`gingerbread spice latte`}`;
+        throw `Failed to obtain ${latte}`;
       }
     },
   },
@@ -298,7 +315,7 @@ export const events: Record<string, eventData> = {
 
   witchessRook: {
     max: 0,
-    current: () => haveEffect(toEffect("Sweetbreads Flambé")) - 1,
+    current: () => haveEffect($effect`Sweetbreads Flambé`) - 1,
     run: () => {
       acquireEffect($effect`Ur-Kel's Aria of Annoyance`);
       equipOutfit(Quest.Leveling);
@@ -375,11 +392,11 @@ export const events: Record<string, eventData> = {
       return voterMonsterNow() ? get("_voteFreeFights") : this.max;
     },
     run: () => {
-      const prev = equippedItem($slot`acc3`);
-      equip($slot`acc3`, $item`"I Voted!" sticker`);
       selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
-      equip($slot`acc3`, prev);
+      withEquipment(
+        () => adventure(toxicTeacups, MacroList.FreeFight),
+        [[$slot`acc3`, $item`"I Voted!" sticker`]]
+      );
     },
   },
 
