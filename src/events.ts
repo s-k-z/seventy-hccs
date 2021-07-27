@@ -35,7 +35,7 @@ import {
   set,
 } from "libram";
 import { adventure, MacroList, mapMonster } from "./combat";
-import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MAIN_CLAN } from "./config";
+import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
 import {
   acquireEffect,
@@ -102,10 +102,8 @@ export const events: Record<string, eventData> = {
       return myLevel() < 13 || have($effect`Inner Elf`) ? this.max : -1;
     },
     run: () => {
-      Clan.join(FAX_AND_SLIME_CLAN);
       familiar($familiar`Machine Elf`);
-      adventure(slimeTube, MacroList.MotherSlime);
-      Clan.join(MAIN_CLAN);
+      Clan.with(FAX_AND_SLIME_CLAN, () => adventure(slimeTube, MacroList.MotherSlime));
       checkEffect($effect`Inner Elf`);
     },
   },
@@ -130,11 +128,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       const fax = $item`photocopied monster`;
       const faxMon = $monster`Ungulith`;
-      if (!have(fax)) {
-        Clan.join(FAX_AND_SLIME_CLAN);
-        cliExecute("fax receive");
-        Clan.join(MAIN_CLAN);
-      }
+      if (!have(fax)) Clan.with(FAX_AND_SLIME_CLAN, () => cliExecute("fax receive"));
       if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
         throw `Failed to retrieve fax of ${faxMon}`;
       }
@@ -235,11 +229,9 @@ export const events: Record<string, eventData> = {
       adventure(loveTunnel, MacroList.TunnelOfLOV);
       if (handlingChoice()) throw "Stuck in LOV?";
       checkEffect($effect`Open Heart Surgery`);
-      checkAvailable($item`LOV Elixir #3`);
+      $items`LOV Elixir #3,LOV Elixir #6,LOV Epaulettes`.forEach((r) => checkAvailable(r));
       use($item`LOV Elixir #3`);
-      checkAvailable($item`LOV Elixir #6`);
       use($item`LOV Elixir #6`);
-      checkAvailable($item`LOV Epaulettes`);
       equip($slot`back`, $item`LOV Epaulettes`);
     },
   },
@@ -248,9 +240,11 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => 0 - availableAmount($item`a ten-percent bonus`),
     run: () => {
-      checkEffect($effect`That's Just Cloud-Talk, Man`);
-      checkEffect($effect`Inscrutable Gaze`);
-      checkEffect($effect`Synthesis: Learning`);
+      [
+        $effect`That's Just Cloud-Talk, Man`,
+        $effect`Inscrutable Gaze`,
+        $effect`Synthesis: Learning`,
+      ].forEach((multiplier) => checkEffect(multiplier));
       if (!have($item`LOV Epaulettes`)) throw `Missing ${$item`LOV Epaulettes`}`;
       equip($slot`back`, $item`LOV Epaulettes`);
       withEquipment(
@@ -541,9 +535,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       checkEffect($effect`Ode to Booze`);
       equip($slot`off-hand`, $item`latte lovers member's mug`);
-      if (get("_latteDrinkUsed")) {
-        cliExecute("latte refill pumpkin cinnamon carrot");
-      }
+      if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon carrot");
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.LatteGulpRunaway);
     },

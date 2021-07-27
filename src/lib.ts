@@ -86,10 +86,10 @@ export function wishEffect(e: Effect) {
   if (!have(e)) cliExecute(`genie effect ${e}`);
 }
 
-type prop = [string, string | number | boolean];
-export function withContext(callback: Function, context: prop[]) {
-  const previous = context.map(([prop]): prop => [prop, get(prop)]);
-  const setProps = (p: prop[]) => p.forEach(([prop, value]) => set(prop, value));
+type propertyPair = [string, string | number | boolean];
+export function withContext(callback: Function, context: propertyPair[]) {
+  const previous = context.map(([prop]): propertyPair => [prop, get(prop)]);
+  const setProps = (p: propertyPair[]) => p.forEach(([prop, value]) => set(prop, value));
   setProps(context);
   try {
     callback();
@@ -98,10 +98,10 @@ export function withContext(callback: Function, context: prop[]) {
   }
 }
 
-type outfit = [Slot, Item];
-export function withEquipment(callback: Function, equips: outfit[]) {
-  const previous = equips.map(([slot]): outfit => [slot, equippedItem(slot)]);
-  const equipAll = (o: outfit[]) => o.forEach(([slot, item]) => equip(slot, item));
+type slottedItem = [Slot, Item];
+export function withEquipment(callback: Function, equips: slottedItem[]) {
+  const previous = equips.map(([slot]): slottedItem => [slot, equippedItem(slot)]);
+  const equipAll = (o: slottedItem[]) => o.forEach(([slot, item]) => equip(slot, item));
   equipAll(equips);
   try {
     callback();

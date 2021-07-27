@@ -129,6 +129,10 @@ const choiceAdventures = [
   [1387, 3], // Using the Force: (1) banish (2) find friends (3) force item drops
 ].map(([id, val]): [string, number] => [`choiceAdventure${id}`, val]);
 
+function checkMainClan() {
+  if (Clan.get().name !== MAIN_CLAN) throw `Not in main clan?`;
+}
+
 //
 // Community Service Starts!
 //
@@ -172,6 +176,7 @@ export function main() {
 }
 
 function levelAndDoQuests() {
+  Clan.join(MAIN_CLAN);
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
     // 60 turns down the drain 😢
@@ -276,15 +281,14 @@ function levelAndDoQuests() {
   }
 
   // Leveling done, time to put on the final effects before the tests
+  checkMainClan();
   cliExecute("shower hot");
   shrugEffect($effect`Ur-Kel's Aria of Annoyance`);
   shrugEffect($effect`Polka of Plenty`);
   wishEffect($effect`Sparkly!`);
 
   prepAndDoQuest(Quest.Muscle);
-
   prepAndDoQuest(Quest.Moxie);
-
   prepAndDoQuest(Quest.HP);
 
   if (haveQuest(Quest.SpellDamage)) {
@@ -380,7 +384,7 @@ function preCoilWire() {
   tryUse($item`pork elf goodies sack`);
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
-    Clan.join(MAIN_CLAN);
+    checkMainClan();
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
   if (!have($item`battery (AAA)`)) harvestBatteries();
@@ -540,11 +544,9 @@ function postCoilWire() {
   buyUpTo(1, $item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
   // 9128 - 142 - 95 - 950 - 28 = 7913 meat
-  Clan.join(MAIN_CLAN);
-  drink($item`Hot Socks`); // 3 drunk, 5000 meat
-  // 7913 - 5000 = 2913 meat
-  drink($item`Sockdollager`); // 2 drunk, 500 meat
-  // 2913 - 500 = 2413 meat
+  checkMainClan();
+  $items`Hot Socks,Sockdollager`.forEach((speakeasy) => drink(speakeasy)); // 5 drunk, 5500 meat
+  // 7913 - 5500 = 2413 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas();

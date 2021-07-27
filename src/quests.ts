@@ -199,6 +199,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
     return new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`back`, $item`vampyric cloake`],
+      //[$slot`weapon`, $item`oversized sparkler`],
       [$slot`off-hand`, carrot ? $item`latte lovers member's mug` : $item`Kramco Sausage-o-Matic™`],
       [$slot`acc1`, $item`Guzzlr tablet`],
       [$slot`acc2`, $item`gold detective badge`],
