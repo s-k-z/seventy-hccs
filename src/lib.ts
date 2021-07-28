@@ -79,7 +79,7 @@ export function tuple<T extends any[]>(...args: T): T {
 }
 
 export function voterMonsterNow(): boolean {
-  return totalTurnsPlayed() % 11 === 1;
+  return totalTurnsPlayed() % 11 === 1 && get("lastVoteMonsterTurn") < totalTurnsPlayed();
 }
 
 export function wishEffect(e: Effect) {

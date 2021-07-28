@@ -29,9 +29,8 @@ import {
   myPath,
   myPrimestat,
   mySoulsauce,
-  mySpleenUse,
   print,
-  retrieveItem,
+  reverseNumberology,
   soulsauceCost,
   toInt,
   totalFreeRests,
@@ -44,6 +43,7 @@ import {
 import {
   $class,
   $effect,
+  $effects,
   $familiar,
   $item,
   $items,
@@ -53,9 +53,9 @@ import {
   get,
   have,
   sinceKolmafiaRevision,
+  SongBoom,
   SourceTerminal,
 } from "libram";
-import { educate } from "libram/dist/resources/2016/SourceTerminal";
 import {
   BRICKOS_PER_FIGHT,
   BRICKO_TARGET_ITEM,
@@ -226,7 +226,7 @@ function levelAndDoQuests() {
         myMaxmp() - mpCost($skill`Summon BRICKOs`) > MP_SAFE_LIMIT &&
         get("_sausagesEaten") < 23
       ) {
-        cliExecute(`make ${$item`magical sausage`}`);
+        create($item`magical sausage`);
         eat($item`magical sausage`);
       }
 
@@ -237,10 +237,10 @@ function levelAndDoQuests() {
       useLibramsDrops();
 
       while (have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKOS_PER_FIGHT)) {
-        cliExecute(`make ${BRICKO_TARGET_ITEM}`);
+        create(BRICKO_TARGET_ITEM);
       }
 
-      if (have($item`burning newspaper`)) cliExecute(`make ${$item`burning paper crane`}`);
+      if (have($item`burning newspaper`)) create($item`burning paper crane`);
       $items`robin's egg,short stack of pancakes`.forEach((drop) => tryUse(drop));
 
       // Save the Garbage shirt for the last 37 fights
@@ -249,7 +249,7 @@ function levelAndDoQuests() {
       if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37) {
         if (!have(garbageShirt)) {
           cliExecute(`fold ${garbageShirt}`);
-          educate(SourceTerminal.Skills.Turbo);
+          SourceTerminal.educate(SourceTerminal.Skills.Turbo);
         }
         equip($slot`shirt`, garbageShirt);
         equip($slot`hat`, $item`Iunion Crown`);
@@ -396,23 +396,23 @@ function preCoilWire() {
   //
   $items`baconstone,hamethyst,porquoise`.forEach((gem) => autosell(5, gem));
   useSkill($skill`Communism!`);
-  if (myLevel() + mySpleenUse() === 1) {
-    while (get("_universeCalculated") < get("skillLevel144")) {
-      cliExecute("numberology 14");
-    }
-    autosell(14 * get("_universeCalculated"), $item`moxie weed`);
-  }
+  const calculation = "14";
+  const canCalculate = () => get("_universeCalculated") < get("skillLevel144");
+  const hasSolution = () => Object.keys(reverseNumberology()).includes(calculation);
+  while (canCalculate() && hasSolution()) cliExecute(`numberology ${calculation}`);
+  autosell(14 * get("skillLevel144"), $item`moxie weed`);
   if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
-  if (get("boomBoxSong").toLowerCase() !== "total eclipse of your meat") cliExecute("boombox meat");
   if (!get("_horsery")) cliExecute("horsery dark");
+  SongBoom.setSong("Total Eclipse of Your Meat");
   // 8600 meat
 
   // Get Community Service quests
   visitUrl("guild.php?place=challenge");
   openQuestZones();
-
-  visitUrl("place.php?whichplace=town_right&action=townright_ltt");
-  checkAvailable($item`your cowboy boots`);
+  if (!have($item`your cowboy boots`)) {
+    visitUrl("place.php?whichplace=town_right&action=townright_ltt");
+    checkAvailable($item`your cowboy boots`);
+  }
   cliExecute("Detective Solver");
   checkAvailable($item`gold detective badge`);
   buffUpBeginning();
@@ -431,36 +431,31 @@ function preCoilWire() {
   });
 
   if (!have($skill`Digitize`) && get("_sourceTerminalDigitizeUses") < 1) {
-    educate(SourceTerminal.Skills.Digitize);
+    SourceTerminal.educate(SourceTerminal.Skills.Digitize);
     if (!have($skill`Digitize`)) throw `Error: need to learn ${$skill`Digitize`}`;
   }
 
   if (myAdventures() < 60) {
-    if (!have($item`borrowed time`)) create(1, $item`borrowed time`);
+    if (!have($item`borrowed time`)) create($item`borrowed time`);
     use($item`borrowed time`);
   }
 
   if (myHp() < myMaxhp()) cliExecute("hottub");
 
   // Fight Kramco
+  if (!haveEquipped($item`Kramco Sausage-o-Matic™`)) throw `Kramco not equipped?`;
   oneOffEvents.hipster();
 
   if (get("_sourceTerminalDigitizeUses") > 0) {
-    educate(SourceTerminal.Skills.Compress);
-    educate(SourceTerminal.Skills.Extract);
+    SourceTerminal.educate(SourceTerminal.Skills.Compress);
+    SourceTerminal.educate(SourceTerminal.Skills.Extract);
   }
   if (have($skill`Digitize`)) throw `Error: need to unlearn ${$skill`Digitize`}`;
 
   const wand = $item`weeping willow wand`;
-  if (!haveEquipped(wand)) {
-    visitUrl("shop.php?whichshop=lathe");
-    if (have($item`flimsy hardwood scraps`)) {
-      retrieveItem(1, wand);
-    } else {
-      checkAvailable(wand);
-    }
-    equip($slot`off-hand`, wand);
-  }
+  if (!have(wand) && !have($item`flimsy hardwood scraps`)) visitUrl("shop.php?whichshop=lathe");
+  if (!have(wand)) create(wand);
+  equip($slot`off-hand`, wand);
 
   buyUpTo(1, $item`detuned radio`); // 8600 - 285 = 8315 meat
   changeMcd(10);
@@ -474,7 +469,8 @@ function preCoilWire() {
   oneOffEvents.tropicalSkeleton();
   // 8078 + 2000 = 10078 meat
 
-  if (!have($item`occult jelly donut`)) create(1, $item`occult jelly donut`);
+  const donut = $item`occult jelly donut`;
+  if (!have(donut)) create(donut);
   acquireEffect($effect`Blood Sugar Sauce Magic`);
 
   spendAllMpOnLibrams();
@@ -483,7 +479,7 @@ function preCoilWire() {
 function postCoilWire() {
   gazeAtTheStars();
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
-  if (!have($skill`Seek out a Bird`)) use(1, $item`bird-a-day calendar`);
+  if (!have($skill`Seek out a Bird`)) use($item`bird-a-day calendar`);
   if (!have($item`Yeg's Motel hand soap`)) cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
   cliExecute("Briefcase e spell hot -combat");
   let click = true;
@@ -539,13 +535,13 @@ function postCoilWire() {
       checkAvailable(saucePotion, 3);
     }
   });
-  if (!have($item`tiny black hole`)) cliExecute(`make ${$item`tiny black hole`}`);
+  if (!have($item`tiny black hole`)) create($item`tiny black hole`);
 
   buyUpTo(1, $item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
   // 9128 - 142 - 95 - 950 - 28 = 7913 meat
   checkMainClan();
-  $items`Hot Socks,Sockdollager`.forEach((speakeasy) => drink(speakeasy)); // 5 drunk, 5500 meat
+  $effects`[1701]Hip to the Jive,In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
   // 7913 - 5500 = 2413 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
@@ -559,7 +555,7 @@ function postCoilWire() {
     !have($item`cold-filtered water`) &&
     !have($effect`Purity of Spirit`)
   ) {
-    create(1, $item`cold-filtered water`);
+    create($item`cold-filtered water`);
   }
   tryUse($item`cold-filtered water`);
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
