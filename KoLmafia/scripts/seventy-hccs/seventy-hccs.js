@@ -12084,7 +12084,7 @@ function ascend() {
   (0,external_kolmafia_.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=".concat(Math.round(Math.random()), "&whichclass=").concat((0,external_kolmafia_.toInt)((0,dist.$class)(valhalla_templateObject3 || (valhalla_templateObject3 = valhalla_taggedTemplateLiteral(["Sauceror"])))), "&whichpath=25&asctype=3&nopetok=1&noskillsok=1&pwd=").concat((0,external_kolmafia_.myHash)()), true);
 }
 ;// CONCATENATED MODULE: ./src/main.ts
-var main_templateObject, main_templateObject2, main_templateObject3, main_templateObject4, main_templateObject5, main_templateObject6, main_templateObject7, main_templateObject8, main_templateObject9, main_templateObject10, main_templateObject11, main_templateObject12, main_templateObject13, main_templateObject14, main_templateObject15, main_templateObject16, main_templateObject17, main_templateObject18, main_templateObject19, main_templateObject20, main_templateObject21, main_templateObject22, main_templateObject23, main_templateObject24, main_templateObject25, main_templateObject26, main_templateObject27, main_templateObject28, main_templateObject29, main_templateObject30, main_templateObject31, main_templateObject32, main_templateObject33, main_templateObject34, main_templateObject35, main_templateObject36, main_templateObject37, main_templateObject38, main_templateObject39, main_templateObject40, main_templateObject41, main_templateObject42, main_templateObject43, main_templateObject44, main_templateObject45, main_templateObject46, main_templateObject47, main_templateObject48, main_templateObject49, main_templateObject50, main_templateObject51, main_templateObject52, main_templateObject53, main_templateObject54, main_templateObject55, main_templateObject56, main_templateObject57, main_templateObject58, main_templateObject59, main_templateObject60, main_templateObject61, main_templateObject62, main_templateObject63, main_templateObject64, main_templateObject65, main_templateObject66, main_templateObject67, main_templateObject68, main_templateObject69, main_templateObject70, main_templateObject71, main_templateObject72, main_templateObject73, main_templateObject74, main_templateObject75, main_templateObject76, main_templateObject77, main_templateObject78, main_templateObject79, main_templateObject80, main_templateObject81, main_templateObject82, main_templateObject83, main_templateObject84, main_templateObject85, main_templateObject86, main_templateObject87, main_templateObject88, main_templateObject89, main_templateObject90, main_templateObject91, main_templateObject92, main_templateObject93, main_templateObject94, main_templateObject95, main_templateObject96, main_templateObject97, main_templateObject98, main_templateObject99, main_templateObject100, main_templateObject101, main_templateObject102, main_templateObject103, main_templateObject104, main_templateObject105, main_templateObject106, main_templateObject107, main_templateObject108, main_templateObject109, main_templateObject110, main_templateObject111, main_templateObject112, main_templateObject113, main_templateObject114, main_templateObject115, main_templateObject116;
+var main_templateObject, main_templateObject2, main_templateObject3, main_templateObject4, main_templateObject5, main_templateObject6, main_templateObject7, main_templateObject8, main_templateObject9, main_templateObject10, main_templateObject11, main_templateObject12, main_templateObject13, main_templateObject14, main_templateObject15, main_templateObject16, main_templateObject17, main_templateObject18, main_templateObject19, main_templateObject20, main_templateObject21, main_templateObject22, main_templateObject23, main_templateObject24, main_templateObject25, main_templateObject26, main_templateObject27, main_templateObject28, main_templateObject29, main_templateObject30, main_templateObject31, main_templateObject32, main_templateObject33, main_templateObject34, main_templateObject35, main_templateObject36, main_templateObject37, main_templateObject38, main_templateObject39, main_templateObject40, main_templateObject41, main_templateObject42, main_templateObject43, main_templateObject44, main_templateObject45, main_templateObject46, main_templateObject47, main_templateObject48, main_templateObject49, main_templateObject50, main_templateObject51, main_templateObject52, main_templateObject53, main_templateObject54, main_templateObject55, main_templateObject56, main_templateObject57, main_templateObject58, main_templateObject59, main_templateObject60, main_templateObject61, main_templateObject62, main_templateObject63, main_templateObject64, main_templateObject65, main_templateObject66, main_templateObject67, main_templateObject68, main_templateObject69, main_templateObject70, main_templateObject71, main_templateObject72, main_templateObject73, main_templateObject74, main_templateObject75, main_templateObject76, main_templateObject77, main_templateObject78, main_templateObject79, main_templateObject80, main_templateObject81, main_templateObject82, main_templateObject83, main_templateObject84, main_templateObject85, main_templateObject86, main_templateObject87, main_templateObject88, main_templateObject89, main_templateObject90, main_templateObject91, main_templateObject92, main_templateObject93, main_templateObject94, main_templateObject95, main_templateObject96, main_templateObject97, main_templateObject98, main_templateObject99, main_templateObject100, main_templateObject101, main_templateObject102, main_templateObject103, main_templateObject104, main_templateObject105, main_templateObject106, main_templateObject107, main_templateObject108, main_templateObject109, main_templateObject110, main_templateObject111;
 
 function main_toConsumableArray(arr) { return main_arrayWithoutHoles(arr) || main_iterableToArray(arr) || main_unsupportedIterableToArray(arr) || main_nonIterableSpread(); }
 
@@ -12531,23 +12531,27 @@ function postCoilWire() {
   tryUse((0,dist.$item)(main_templateObject87 || (main_templateObject87 = main_taggedTemplateLiteral(["Dramatic\u2122 range"])))); // 10078 - 950 = 9128 meat
 
   [// Need all of these to craft with
-  (0,dist.$skill)(main_templateObject88 || (main_templateObject88 = main_taggedTemplateLiteral(["Advanced Saucecrafting"]))), (0,dist.$skill)(main_templateObject89 || (main_templateObject89 = main_taggedTemplateLiteral(["Advanced Cocktailcrafting"]))), (0,dist.$skill)(main_templateObject90 || (main_templateObject90 = main_taggedTemplateLiteral(["Perfect Freeze"]))), (0,dist.$skill)(main_templateObject91 || (main_templateObject91 = main_taggedTemplateLiteral(["Prevent Scurvy and Sobriety"]))), // Only need Alice's Army for now
-  (0,dist.$skill)(main_templateObject92 || (main_templateObject92 = main_taggedTemplateLiteral(["Summon Alice's Army Cards"]))), (0,dist.$skill)(main_templateObject93 || (main_templateObject93 = main_taggedTemplateLiteral(["Summon Confiscated Things"]))), (0,dist.$skill)(main_templateObject94 || (main_templateObject94 = main_taggedTemplateLiteral(["Summon Geeky Gifts"]))), (0,dist.$skill)(main_templateObject95 || (main_templateObject95 = main_taggedTemplateLiteral(["Summon Tasteful Items"]))), // Buffs that can't fit elsewhere
-  (0,dist.$skill)(main_templateObject96 || (main_templateObject96 = main_taggedTemplateLiteral(["Incredible Self-Esteem"])))].forEach(function (summon) {
+  (0,dist.$skill)(main_templateObject88 || (main_templateObject88 = main_taggedTemplateLiteral(["Advanced Cocktailcrafting"]))), (0,dist.$skill)(main_templateObject89 || (main_templateObject89 = main_taggedTemplateLiteral(["Advanced Saucecrafting"]))), (0,dist.$skill)(main_templateObject90 || (main_templateObject90 = main_taggedTemplateLiteral(["Chubby and Plump"]))), (0,dist.$skill)(main_templateObject91 || (main_templateObject91 = main_taggedTemplateLiteral(["Perfect Freeze"]))), (0,dist.$skill)(main_templateObject92 || (main_templateObject92 = main_taggedTemplateLiteral(["Prevent Scurvy and Sobriety"]))), // Only need Alice's Army and Crimbo Candy for now
+  (0,dist.$skill)(main_templateObject93 || (main_templateObject93 = main_taggedTemplateLiteral(["Summon Alice's Army Cards"]))), //$skill`Summon Confiscated Things`,
+  (0,dist.$skill)(main_templateObject94 || (main_templateObject94 = main_taggedTemplateLiteral(["Summon Crimbo Candy"]))), //$skill`Summon Geeky Gifts`,
+  //$skill`Summon Tasteful Items`,
+  // Buffs that can't fit elsewhere
+  (0,dist.$skill)(main_templateObject95 || (main_templateObject95 = main_taggedTemplateLiteral(["Incredible Self-Esteem"])))].forEach(function (summon) {
     return (0,external_kolmafia_.useSkill)(summon);
-  });
-  [(0,dist.$item)(main_templateObject97 || (main_templateObject97 = main_taggedTemplateLiteral(["oil of expertise"]))), (0,dist.$item)(main_templateObject98 || (main_templateObject98 = main_taggedTemplateLiteral(["philter of phorce"]))), (0,dist.$item)(main_templateObject99 || (main_templateObject99 = main_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(main_templateObject100 || (main_templateObject100 = main_taggedTemplateLiteral(["eyedrops of the ermine"])))].forEach(function (saucePotion) {
+  }); // 143 mp
+
+  [(0,dist.$item)(main_templateObject96 || (main_templateObject96 = main_taggedTemplateLiteral(["oil of expertise"]))), (0,dist.$item)(main_templateObject97 || (main_templateObject97 = main_taggedTemplateLiteral(["philter of phorce"]))), (0,dist.$item)(main_templateObject98 || (main_templateObject98 = main_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(main_templateObject99 || (main_templateObject99 = main_taggedTemplateLiteral(["eyedrops of the ermine"])))].forEach(function (saucePotion) {
     if (!(0,dist.have)(saucePotion) && !(0,dist.have)((0,external_kolmafia_.effectModifier)(saucePotion, "effect"))) {
       (0,external_kolmafia_.create)(saucePotion);
       checkAvailable(saucePotion, 3);
     }
   });
-  if (!(0,dist.have)((0,dist.$item)(main_templateObject101 || (main_templateObject101 = main_taggedTemplateLiteral(["tiny black hole"]))))) (0,external_kolmafia_.create)((0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["tiny black hole"]))));
-  buyUpTo(1, (0,dist.$item)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["toy accordion"]))));
-  acquireEffect((0,dist.$effect)(main_templateObject104 || (main_templateObject104 = main_taggedTemplateLiteral(["Ode to Booze"])))); // 9128 - 142 - 95 - 950 - 28 = 7913 meat
+  if (!(0,dist.have)((0,dist.$item)(main_templateObject100 || (main_templateObject100 = main_taggedTemplateLiteral(["tiny black hole"]))))) (0,external_kolmafia_.create)((0,dist.$item)(main_templateObject101 || (main_templateObject101 = main_taggedTemplateLiteral(["tiny black hole"]))));
+  buyUpTo(1, (0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["toy accordion"]))));
+  acquireEffect((0,dist.$effect)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["Ode to Booze"])))); // 9128 - 142 - 95 - 950 - 28 = 7913 meat
 
   checkMainClan();
-  (0,dist.$effects)(main_templateObject105 || (main_templateObject105 = main_taggedTemplateLiteral(["[1701]Hip to the Jive,In a Lather"]))).forEach(function (speakeasy) {
+  (0,dist.$effects)(main_templateObject104 || (main_templateObject104 = main_taggedTemplateLiteral(["[1701]Hip to the Jive,In a Lather"]))).forEach(function (speakeasy) {
     return acquireEffect(speakeasy);
   }); // 5 drunk, 5500 meat
   // 7913 - 5500 = 2413 meat
@@ -12555,22 +12559,18 @@ function postCoilWire() {
 
   eatPizzas();
   if ((0,external_kolmafia_.myGardenType)().toLowerCase().includes("peppermint")) (0,external_kolmafia_.cliExecute)("garden pick");
-  [(0,dist.$skill)(main_templateObject106 || (main_templateObject106 = main_taggedTemplateLiteral(["Chubby and Plump"]))), (0,dist.$skill)(main_templateObject107 || (main_templateObject107 = main_taggedTemplateLiteral(["Summon Crimbo Candy"])))].forEach(function (s) {
-    return (0,external_kolmafia_.useSkill)(s);
-  });
   synthesize(); // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
 
-  if ((0,dist.get)("tomeSummons") < 3 && !(0,dist.have)((0,dist.$item)(main_templateObject108 || (main_templateObject108 = main_taggedTemplateLiteral(["cold-filtered water"])))) && !(0,dist.have)((0,dist.$effect)(main_templateObject109 || (main_templateObject109 = main_taggedTemplateLiteral(["Purity of Spirit"]))))) {
-    (0,external_kolmafia_.create)((0,dist.$item)(main_templateObject110 || (main_templateObject110 = main_taggedTemplateLiteral(["cold-filtered water"]))));
-  }
+  var water = (0,dist.$item)(main_templateObject105 || (main_templateObject105 = main_taggedTemplateLiteral(["cold-filtered water"])));
+  if ((0,dist.get)("tomeSummons") < 3 && !(0,dist.have)(water) && !(0,dist.have)((0,dist.$effect)(main_templateObject106 || (main_templateObject106 = main_taggedTemplateLiteral(["Purity of Spirit"]))))) (0,external_kolmafia_.create)(water);
+  tryUse(water); // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
 
-  tryUse((0,dist.$item)(main_templateObject111 || (main_templateObject111 = main_taggedTemplateLiteral(["cold-filtered water"])))); // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
+  tryUse((0,dist.$item)(main_templateObject107 || (main_templateObject107 = main_taggedTemplateLiteral(["Chubby and Plump bar"]))));
+  (0,external_kolmafia_.equip)((0,dist.$slot)(main_templateObject108 || (main_templateObject108 = main_taggedTemplateLiteral(["acc2"]))), (0,dist.$item)(main_templateObject109 || (main_templateObject109 = main_taggedTemplateLiteral(["Powerful Glove"]))));
+  acquireGumOrHermitItem((0,dist.$item)(main_templateObject110 || (main_templateObject110 = main_taggedTemplateLiteral(["turtle totem"]))));
+  acquireGumOrHermitItem((0,dist.$item)(main_templateObject111 || (main_templateObject111 = main_taggedTemplateLiteral(["saucepan"]))));
+  buffUpLeveling(); // 316 mp
 
-  tryUse((0,dist.$item)(main_templateObject112 || (main_templateObject112 = main_taggedTemplateLiteral(["Chubby and Plump bar"]))));
-  (0,external_kolmafia_.equip)((0,dist.$slot)(main_templateObject113 || (main_templateObject113 = main_taggedTemplateLiteral(["acc2"]))), (0,dist.$item)(main_templateObject114 || (main_templateObject114 = main_taggedTemplateLiteral(["Powerful Glove"]))));
-  acquireGumOrHermitItem((0,dist.$item)(main_templateObject115 || (main_templateObject115 = main_taggedTemplateLiteral(["turtle totem"]))));
-  acquireGumOrHermitItem((0,dist.$item)(main_templateObject116 || (main_templateObject116 = main_taggedTemplateLiteral(["saucepan"]))));
-  buffUpLeveling();
   equipOutfit(Quest.Leveling);
 }
 

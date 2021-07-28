@@ -509,20 +509,23 @@ function postCoilWire() {
   // 10078 - 950 = 9128 meat
   [
     // Need all of these to craft with
-    $skill`Advanced Saucecrafting`,
     $skill`Advanced Cocktailcrafting`,
+    $skill`Advanced Saucecrafting`,
+    $skill`Chubby and Plump`,
     $skill`Perfect Freeze`,
     $skill`Prevent Scurvy and Sobriety`,
 
-    // Only need Alice's Army for now
+    // Only need Alice's Army and Crimbo Candy for now
     $skill`Summon Alice's Army Cards`,
-    $skill`Summon Confiscated Things`,
-    $skill`Summon Geeky Gifts`,
-    $skill`Summon Tasteful Items`,
+    //$skill`Summon Confiscated Things`,
+    $skill`Summon Crimbo Candy`,
+    //$skill`Summon Geeky Gifts`,
+    //$skill`Summon Tasteful Items`,
 
     // Buffs that can't fit elsewhere
     $skill`Incredible Self-Esteem`,
   ].forEach((summon) => useSkill(summon));
+  // 143 mp
 
   [
     $item`oil of expertise`,
@@ -547,17 +550,11 @@ function postCoilWire() {
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas();
   if (myGardenType().toLowerCase().includes("peppermint")) cliExecute("garden pick");
-  [$skill`Chubby and Plump`, $skill`Summon Crimbo Candy`].forEach((s) => useSkill(s));
   synthesize();
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
-  if (
-    get("tomeSummons") < 3 &&
-    !have($item`cold-filtered water`) &&
-    !have($effect`Purity of Spirit`)
-  ) {
-    create($item`cold-filtered water`);
-  }
-  tryUse($item`cold-filtered water`);
+  const water = $item`cold-filtered water`;
+  if (get("tomeSummons") < 3 && !have(water) && !have($effect`Purity of Spirit`)) create(water);
+  tryUse(water);
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
   tryUse($item`Chubby and Plump bar`);
 
@@ -565,5 +562,6 @@ function postCoilWire() {
   acquireGumOrHermitItem($item`turtle totem`);
   acquireGumOrHermitItem($item`saucepan`);
   buffUpLeveling();
+  // 316 mp
   equipOutfit(Quest.Leveling);
 }
