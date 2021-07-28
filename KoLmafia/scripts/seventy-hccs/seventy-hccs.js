@@ -10414,12 +10414,9 @@ function acquireGumOrHermitItem(i) {
   } else if (source[0] === (0,dist.$item)(lib_templateObject2 || (lib_templateObject2 = lib_taggedTemplateLiteral(["worthless item"]))).name) {
     if ((0,dist.have)(i)) return;
     if ((0,external_kolmafia_.myMeat)() < 50) throw "Out of meat for chewing gums!!!";
-    buyUpTo(1, (0,dist.$item)(lib_templateObject3 || (lib_templateObject3 = lib_taggedTemplateLiteral(["hermit permit"]))));
+    (0,external_kolmafia_.retrieveItem)((0,dist.$item)(lib_templateObject3 || (lib_templateObject3 = lib_taggedTemplateLiteral(["hermit permit"]))));
     if (!(0,external_kolmafia_.hermit)(i, 1)) throw "Failed to purchase ".concat(i, " from Hermit");
   } else throw "".concat(i, " is not a gum or hermit item");
-}
-function buyUpTo(n, i) {
-  if (!(0,dist.have)(i, n)) (0,external_kolmafia_.buy)(i, n - (0,external_kolmafia_.availableAmount)(i));
 }
 function checkAvailable(i) {
   var n = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -10567,8 +10564,8 @@ var recipes = new Map([[(0,dist.$item)(diet_templateObject || (diet_templateObje
 }], [(0,dist.$item)(_templateObject18 || (_templateObject18 = diet_taggedTemplateLiteral(["ravioli hat"]))), function () {
   return acquireGumOrHermitItem((0,dist.$item)(_templateObject19 || (_templateObject19 = diet_taggedTemplateLiteral(["ravioli hat"]))));
 }], [(0,dist.$item)(_templateObject20 || (_templateObject20 = diet_taggedTemplateLiteral(["useless powder"]))), function () {
-  buyUpTo(1, (0,dist.$item)(_templateObject21 || (_templateObject21 = diet_taggedTemplateLiteral(["tenderizing hammer"]))));
-  buyUpTo(1, (0,dist.$item)(_templateObject22 || (_templateObject22 = diet_taggedTemplateLiteral(["cool whip"]))));
+  (0,external_kolmafia_.retrieveItem)((0,dist.$item)(_templateObject21 || (_templateObject21 = diet_taggedTemplateLiteral(["tenderizing hammer"]))));
+  (0,external_kolmafia_.retrieveItem)((0,dist.$item)(_templateObject22 || (_templateObject22 = diet_taggedTemplateLiteral(["cool whip"]))));
   (0,external_kolmafia_.cliExecute)("pulverize 1 ".concat((0,dist.$item)(_templateObject23 || (_templateObject23 = diet_taggedTemplateLiteral(["cool whip"])))));
 }], [(0,dist.$item)(_templateObject24 || (_templateObject24 = diet_taggedTemplateLiteral(["wooden figurine"]))), function () {
   return acquireGumOrHermitItem((0,dist.$item)(_templateObject25 || (_templateObject25 = diet_taggedTemplateLiteral(["wooden figurine"]))));
@@ -10835,11 +10832,6 @@ function scavengeDaycare() {
   if ((0,dist.get)("_daycareGymScavenges") < 1) {
     tryRunChoice(3, 1334, "enter the gym.");
     tryRunChoice(2, 1336, "scavenge for gym equipment.");
-
-    if ((0,dist.get)("_daycareGymScavenges") < 1) {
-      (0,external_kolmafia_.print)("Incrementing daycare scavenges count", "red");
-      (0,dist.set)("_daycareGymScavenges", 1);
-    }
   }
 }
 function spendAllMpOnLibrams() {
@@ -12483,10 +12475,10 @@ function preCoilWire() {
   if (!(0,dist.have)(wand) && !(0,dist.have)((0,dist.$item)(main_templateObject72 || (main_templateObject72 = main_taggedTemplateLiteral(["flimsy hardwood scraps"]))))) (0,external_kolmafia_.visitUrl)("shop.php?whichshop=lathe");
   if (!(0,dist.have)(wand)) (0,external_kolmafia_.create)(wand);
   (0,external_kolmafia_.equip)((0,dist.$slot)(main_templateObject73 || (main_templateObject73 = main_taggedTemplateLiteral(["off-hand"]))), wand);
-  buyUpTo(1, (0,dist.$item)(main_templateObject74 || (main_templateObject74 = main_taggedTemplateLiteral(["detuned radio"])))); // 8600 - 285 = 8315 meat
+  (0,external_kolmafia_.retrieveItem)((0,dist.$item)(main_templateObject74 || (main_templateObject74 = main_taggedTemplateLiteral(["detuned radio"])))); // 8600 - 285 = 8315 meat
 
   (0,external_kolmafia_.changeMcd)(10);
-  buyUpTo(1, (0,dist.$item)(main_templateObject75 || (main_templateObject75 = main_taggedTemplateLiteral(["blue rocket"])))); // 8315 - 237 = 8078 meat
+  (0,external_kolmafia_.retrieveItem)((0,dist.$item)(main_templateObject75 || (main_templateObject75 = main_taggedTemplateLiteral(["blue rocket"])))); // 8315 - 237 = 8078 meat
   // Fight Protonic Ghost
 
   oneOffEvents.mimic(); // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
@@ -12527,7 +12519,7 @@ function postCoilWire() {
   var installedRange = Object.keys(camp).some(function (k) {
     return k.includes("Dramatic");
   });
-  if (!installedRange) buyUpTo(1, (0,dist.$item)(main_templateObject86 || (main_templateObject86 = main_taggedTemplateLiteral(["Dramatic\u2122 range"]))));
+  if (!installedRange) (0,external_kolmafia_.retrieveItem)((0,dist.$item)(main_templateObject86 || (main_templateObject86 = main_taggedTemplateLiteral(["Dramatic\u2122 range"]))));
   tryUse((0,dist.$item)(main_templateObject87 || (main_templateObject87 = main_taggedTemplateLiteral(["Dramatic\u2122 range"])))); // 10078 - 950 = 9128 meat
 
   [// Need all of these to craft with
@@ -12547,7 +12539,7 @@ function postCoilWire() {
     }
   });
   if (!(0,dist.have)((0,dist.$item)(main_templateObject100 || (main_templateObject100 = main_taggedTemplateLiteral(["tiny black hole"]))))) (0,external_kolmafia_.create)((0,dist.$item)(main_templateObject101 || (main_templateObject101 = main_taggedTemplateLiteral(["tiny black hole"]))));
-  buyUpTo(1, (0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["toy accordion"]))));
+  (0,external_kolmafia_.retrieveItem)((0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["toy accordion"]))));
   acquireEffect((0,dist.$effect)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["Ode to Booze"])))); // 9128 - 142 - 95 - 950 - 28 = 7913 meat
 
   checkMainClan();

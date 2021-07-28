@@ -5,13 +5,12 @@ import {
   myHash,
   myMp,
   myPrimestat,
-  print,
   toInt,
   use,
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $class, $effect, $item, $skill, $stat, get, have, Macro, set, Witchess } from "libram";
+import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } from "libram";
 import { BRICKOS_PER_FIGHT } from "./config";
 import { tryRunChoice } from "./lib";
 
@@ -86,17 +85,11 @@ export function scavengeDaycare() {
   if (get("_daycareGymScavenges") < 1) {
     tryRunChoice(3, 1334, "enter the gym.");
     tryRunChoice(2, 1336, "scavenge for gym equipment.");
-    if (get("_daycareGymScavenges") < 1) {
-      print("Incrementing daycare scavenges count", "red");
-      set("_daycareGymScavenges", 1);
-    }
   }
 }
 
 export function spendAllMpOnLibrams() {
-  while (myMp() > mpCost($skill`Summon BRICKOs`)) {
-    castBestLibram();
-  }
+  while (myMp() > mpCost($skill`Summon BRICKOs`)) castBestLibram();
 }
 
 export enum MoonSign {

@@ -30,6 +30,7 @@ import {
   myPrimestat,
   mySoulsauce,
   print,
+  retrieveItem,
   reverseNumberology,
   soulsauceCost,
   toInt,
@@ -83,7 +84,6 @@ import {
 import {
   acquireEffect,
   acquireGumOrHermitItem,
-  buyUpTo,
   checkAvailable,
   shrugEffect,
   tryRunChoice,
@@ -457,10 +457,10 @@ function preCoilWire() {
   if (!have(wand)) create(wand);
   equip($slot`off-hand`, wand);
 
-  buyUpTo(1, $item`detuned radio`); // 8600 - 285 = 8315 meat
+  retrieveItem($item`detuned radio`); // 8600 - 285 = 8315 meat
   changeMcd(10);
 
-  buyUpTo(1, $item`blue rocket`); // 8315 - 237 = 8078 meat
+  retrieveItem($item`blue rocket`); // 8315 - 237 = 8078 meat
   // Fight Protonic Ghost
   oneOffEvents.mimic();
 
@@ -504,7 +504,7 @@ function postCoilWire() {
   const installedRange = Object.keys(camp).some((k: string) => {
     return k.includes("Dramatic");
   });
-  if (!installedRange) buyUpTo(1, $item`Dramatic™ range`);
+  if (!installedRange) retrieveItem($item`Dramatic™ range`);
   tryUse($item`Dramatic™ range`);
   // 10078 - 950 = 9128 meat
   [
@@ -540,7 +540,7 @@ function postCoilWire() {
   });
   if (!have($item`tiny black hole`)) create($item`tiny black hole`);
 
-  buyUpTo(1, $item`toy accordion`);
+  retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
   // 9128 - 142 - 95 - 950 - 28 = 7913 meat
   checkMainClan();

@@ -1,6 +1,6 @@
-import { cliExecute, eat, equip, use, useFamiliar, toInt, visitUrl } from "kolmafia";
+import { cliExecute, eat, equip, retrieveItem, toInt, use, useFamiliar, visitUrl } from "kolmafia";
 import { $effect, $familiar, $item, $slot, have } from "libram";
-import { acquireEffect, acquireGumOrHermitItem, buyUpTo, checkAvailable, tuple } from "./lib";
+import { acquireEffect, acquireGumOrHermitItem, checkAvailable, tuple } from "./lib";
 
 const recipes = new Map<Item, Function>([
   [
@@ -39,8 +39,8 @@ const recipes = new Map<Item, Function>([
   [
     $item`useless powder`,
     () => {
-      buyUpTo(1, $item`tenderizing hammer`);
-      buyUpTo(1, $item`cool whip`);
+      retrieveItem($item`tenderizing hammer`);
+      retrieveItem($item`cool whip`);
       cliExecute(`pulverize 1 ${$item`cool whip`}`);
     },
   ],

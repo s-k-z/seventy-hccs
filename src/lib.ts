@@ -1,5 +1,4 @@
 import {
-  availableAmount,
   buy,
   cliExecute,
   containsText,
@@ -8,6 +7,7 @@ import {
   getIngredients,
   hermit,
   myMeat,
+  retrieveItem,
   runChoice,
   toInt,
   totalTurnsPlayed,
@@ -33,13 +33,9 @@ export function acquireGumOrHermitItem(i: Item) {
   } else if (source[0] === $item`worthless item`.name) {
     if (have(i)) return;
     if (myMeat() < 50) throw "Out of meat for chewing gums!!!";
-    buyUpTo(1, $item`hermit permit`);
+    retrieveItem($item`hermit permit`);
     if (!hermit(i, 1)) throw `Failed to purchase ${i} from Hermit`;
   } else throw `${i} is not a gum or hermit item`;
-}
-
-export function buyUpTo(n: number, i: Item) {
-  if (!have(i, n)) buy(i, n - availableAmount(i));
 }
 
 export function checkAvailable(i: Item, n: number = 1) {
