@@ -3,13 +3,13 @@ import { $item, $monster, ChateauMantegna } from "libram";
 
 export function checkReadyToAscend() {
   const badDays = [
-    "El Dia De Los Muertos Borrachos",
-    "Feast of Boris",
-    "April Fool's Day",
-    "Talk Like a Pirate Day",
+    "el dia de los muertos borrachos",
+    "feast of boris",
+    "april fool's day",
+    "talk like a pirate day",
   ];
   const today = holiday().split("/");
-  const badDayToday = badDays.some((day) => today.includes(day));
+  const badDayToday = today.some((day) => badDays.includes(day.toLowerCase()));
   if (badDayToday) throw `Don't want to ascend during ${holiday()}`;
   const targetPaintingMon = $monster`Pterodactyl`;
   if (ChateauMantegna.paintingMonster() !== targetPaintingMon) {

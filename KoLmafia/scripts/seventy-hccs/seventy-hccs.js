@@ -11768,10 +11768,10 @@ function prep_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.sl
 
 
 function checkReadyToAscend() {
-  var badDays = ["El Dia De Los Muertos Borrachos", "Feast of Boris", "April Fool's Day", "Talk Like a Pirate Day"];
+  var badDays = ["el dia de los muertos borrachos", "feast of boris", "april fool's day", "talk like a pirate day"];
   var today = (0,external_kolmafia_.holiday)().split("/");
-  var badDayToday = badDays.some(function (day) {
-    return today.includes(day);
+  var badDayToday = today.some(function (day) {
+    return badDays.includes(day.toLowerCase());
   });
   if (badDayToday) throw "Don't want to ascend during ".concat((0,external_kolmafia_.holiday)());
   var targetPaintingMon = (0,dist.$monster)(prep_templateObject || (prep_templateObject = prep_taggedTemplateLiteral(["Pterodactyl"])));
