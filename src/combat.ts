@@ -2,7 +2,6 @@ import {
   adv1,
   choiceFollowsFight,
   inMultiFight,
-  myHash,
   runCombat,
   runChoice,
   toInt,
@@ -184,9 +183,7 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro) {
         throw "Failed to encounter map monster page and wasted a turn somehow?";
       }
     }
-    visitUrl(
-      `choice.php?pwd=${myHash()}&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`
-    );
+    visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
     runCombat(macro.toString());
     if (choiceFollowsFight()) runChoice(-1);
   } else {

@@ -7,7 +7,6 @@ import {
   equip,
   handlingChoice,
   haveEffect,
-  myHash,
   myHp,
   myLevel,
   runChoice,
@@ -136,7 +135,7 @@ export const events: Record<string, eventData> = {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       MacroList.PickpocketFreeRun.setAutoAttack();
-      visitUrl(`inv_use.php?pwd=${myHash()}&whichitem=${toInt(fax)}`);
+      visitUrl(`inv_use.php?pwd=&whichitem=${toInt(fax)}`);
       checkAvailable($item`corrupted marrow`);
     },
   },
@@ -580,13 +579,9 @@ export const oneOffEvents = {
       familiar($familiar`Crimbo Shrub`);
       if (!get("_shrubDecorated")) {
         visitUrl(
-          `inv_use.php?pwd=${myHash()}&which=99&whichitem=${toInt(
-            $item`box of old Crimbo decorations`
-          )}`
+          `inv_use.php?pwd=&which=99&whichitem=${toInt($item`box of old Crimbo decorations`)}`
         );
-        visitUrl(
-          `choice.php?whichchoice=999&pwd=${myHash()}&option=1&topper=2&lights=5&garland=3&gift=2`
-        );
+        visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
       }
       mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
       checkEffect($effect`Everything Looks Red`);

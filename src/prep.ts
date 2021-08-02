@@ -11,20 +11,15 @@ export function checkReadyToAscend() {
   const today = holiday().split("/");
   const badDayToday = today.some((day) => badDays.includes(day.toLowerCase()));
   if (badDayToday) throw `Don't want to ascend during ${holiday()}`;
-  const targetPaintingMon = $monster`Pterodactyl`;
-  if (ChateauMantegna.paintingMonster() !== targetPaintingMon) {
-    throw `Missing ${targetPaintingMon} in Chateau painting`;
-  }
+
+  const target = $monster`Pterodactyl`;
+  if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
+
+  if (!myGardenType().toLowerCase().includes("peppermint")) throw `Install a peppermint garden`;
+
+  if (getWorkshed() !== $item`diabolic pizza cube`) throw `Install a diabolic pizza cube`;
 
   if ((totalTurnsPlayed() + 60) % 11 !== 1) {
-    throw `Spend ${(totalTurnsPlayed() + 60 - 1) % 11} turns to prepare for the next voter monster`;
+    throw `Spend ${(totalTurnsPlayed() + 60 - 1) % 11} turns to prepare a voter monster`;
   }
-
-  if (!myGardenType().toLowerCase().includes("peppermint")) {
-    throw `Need a peppermint garden installed`;
-  }
-  if (getWorkshed() !== $item`diabolic pizza cube`) {
-    throw `Need a diabolic pizza cube installed`;
-  }
-  return true;
 }

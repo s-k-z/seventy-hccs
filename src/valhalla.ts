@@ -1,4 +1,4 @@
-import { myHash, toInt, visitUrl } from "kolmafia";
+import { toInt, visitUrl } from "kolmafia";
 import { $class, $item } from "libram";
 
 export function ascend() {
@@ -12,9 +12,7 @@ export function ascend() {
   visitUrl(
     `afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=${Math.round(
       Math.random()
-    )}&whichclass=${toInt(
-      $class`Sauceror`
-    )}&whichpath=25&asctype=3&nopetok=1&noskillsok=1&pwd=${myHash()}`,
+    )}&whichclass=${toInt($class`Sauceror`)}&whichpath=25&asctype=3&nopetok=1&noskillsok=1&pwd=`,
     true
   );
 }

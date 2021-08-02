@@ -2,7 +2,6 @@ import {
   effectModifier,
   mpCost,
   myClass,
-  myHash,
   myMp,
   myPrimestat,
   toInt,
@@ -65,17 +64,15 @@ export function getPantogramPants() {
   const s1 = have($item`baconstone`) ? `${toInt($item`baconstone`)},1` : "-2,0";
   const s2 = "-2,0"; // Spell Damage +20%
   const s3 = "-1,0"; // Monsters will be less attracted to you
-  visitUrl(`inv_use.php?pwd=${myHash()}&whichitem=${toInt($item`portable pantogram`)}`);
-  visitUrl(
-    `choice.php?pwd=${myHash()}&whichchoice=1270&option=1&m=${m}&e=${e}&s1=${s1}&s2=${s2}&s3=${s3}`
-  );
+  visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`portable pantogram`)}`);
+  visitUrl(`choice.php?pwd=&whichchoice=1270&option=1&m=${m}&e=${e}&s1=${s1}&s2=${s2}&s3=${s3}`);
   if (!have($item`pantogram pants`)) throw "Failed to create pantogram pants";
 }
 
 export function harvestBatteries() {
-  visitUrl(`inv_use.php?pwd=${myHash()}&whichitem=${toInt($item`potted power plant`)}`);
+  visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`potted power plant`)}`);
   for (let i = 0; i < 7; i++) {
-    visitUrl(`choice.php?pwd=${myHash()}&whichchoice=1448&option=1&pp=${i + 1}`);
+    visitUrl(`choice.php?pwd=&whichchoice=1448&option=1&pp=${i + 1}`);
   }
 }
 
@@ -131,6 +128,6 @@ export function useLibramsDrops() {
 export function vote() {
   if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as a ${myClass()}`;
   visitUrl("place.php?whichplace=town_right&action=townright_vote");
-  visitUrl(`choice.php?pwd=${myHash()}&option=1&whichchoice=1331&g=2&local[]=1&local[]=3`);
+  visitUrl(`choice.php?pwd=&option=1&whichchoice=1331&g=2&local[]=1&local[]=3`);
   if (!have($item`"I Voted!" sticker`)) throw "Voting failed";
 }
