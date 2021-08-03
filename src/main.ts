@@ -380,8 +380,13 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole, sell pork gems, save a baconstone for pantogram
   visitUrl("tutorial.php?action=toot");
-  tryUse($item`letter from King Ralph XI`);
-  tryUse($item`pork elf goodies sack`);
+  [
+    $item`letter from King Ralph XI`,
+    $item`pork elf goodies sack`,
+    $item`natural magick candle`,
+    $item`rainbow glitter candle`,
+    $item`votive of confidence`,
+  ].forEach((item: Item) => tryUse(item));
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     checkMainClan();
@@ -404,7 +409,7 @@ function preCoilWire() {
   if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   if (!get("_horsery")) cliExecute("horsery dark");
   SongBoom.setSong("Total Eclipse of Your Meat");
-  // 8600 meat
+  // 8601 meat
 
   // Get Community Service quests
   visitUrl("guild.php?place=challenge");
@@ -457,17 +462,17 @@ function preCoilWire() {
   if (!have(wand)) create(wand);
   equip($slot`off-hand`, wand);
 
-  retrieveItem($item`detuned radio`); // 8600 - 285 = 8315 meat
+  retrieveItem($item`detuned radio`); // 8601 - 285 = 8316 meat
   changeMcd(10);
 
-  retrieveItem($item`blue rocket`); // 8315 - 237 = 8078 meat
+  retrieveItem($item`blue rocket`); // 8316 - 237 = 8079 meat
   // Fight Protonic Ghost
   oneOffEvents.mimic();
 
   // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
-  // 8078 + 2000 = 10078 meat
+  // 8079 + 2000 = 10079 meat
 
   const donut = $item`occult jelly donut`;
   if (!have(donut)) create(donut);
@@ -501,12 +506,10 @@ function postCoilWire() {
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
   const camp = getCampground();
-  const installedRange = Object.keys(camp).some((k: string) => {
-    return k.includes("Dramatic");
-  });
+  const installedRange = Object.keys(camp).some((k: string): boolean => k.includes("Dramatic"));
   if (!installedRange) retrieveItem($item`Dramatic™ range`);
   tryUse($item`Dramatic™ range`);
-  // 10078 - 950 = 9128 meat
+  // 10079 - 950 = 9129 meat
   [
     // Need all of these to craft with
     $skill`Advanced Cocktailcrafting`,
@@ -533,22 +536,19 @@ function postCoilWire() {
     $item`ointment of the occult`,
     $item`eyedrops of the ermine`,
   ].forEach((saucePotion) => {
-    if (!have(saucePotion) && !have(effectModifier(saucePotion, "effect"))) {
-      create(saucePotion);
-      checkAvailable(saucePotion, 3);
-    }
+    if (!have(saucePotion) && !have(effectModifier(saucePotion, "effect"))) create(saucePotion);
   });
   if (!have($item`tiny black hole`)) create($item`tiny black hole`);
 
   retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
-  // 9128 - 142 - 95 - 950 - 28 = 7913 meat
+  // 9129 - 142 = 8987 meat
   checkMainClan();
   $effects`[1701]Hip to the Jive,In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
-  // 7913 - 5500 = 2413 meat
+  // 8987 - 5500 = 3487 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
-  eatPizzas();
+  eatPizzas(); // 3487 - 987 - 950 - 215 - 95 - 28 = 1212 meat
   if (myGardenType().toLowerCase().includes("peppermint")) cliExecute("garden pick");
   synthesize();
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
@@ -556,7 +556,12 @@ function postCoilWire() {
   if (get("tomeSummons") < 3 && !have(water) && !have($effect`Purity of Spirit`)) create(water);
   tryUse(water);
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
-  tryUse($item`Chubby and Plump bar`);
+  [
+    $item`Chubby and Plump bar`,
+    $item`Napalm In The Morning™ candle`,
+    $item`Salsa Caliente™ candle`,
+    $item`Smoldering Clover™ candle`,
+  ].forEach((potion) => tryUse(potion));
 
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);

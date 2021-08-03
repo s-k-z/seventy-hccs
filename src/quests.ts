@@ -117,8 +117,9 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.HP]: () => {
+    const candle = $item`extra-wide head candle`;
     return new Map([
-      [$slot`hat`, $item`wad of used tape`],
+      [$slot`hat`, have(candle) ? candle : $item`wad of used tape`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`pants`, $item`Cargo Cultist Shorts`],
       [$slot`acc3`, $item`"I Voted!" sticker`],
@@ -135,6 +136,8 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.SpellDamage]: () => {
+    // TODO: handle spell damage candle
+    //const candle = $item`Abracandalabra`;
     return new Map([
       [$slot`weapon`, $item`wrench`],
       [$slot`off-hand`, $item`weeping willow wand`],
@@ -146,12 +149,15 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 
   [Quest.WeaponDamage]: () => {
-    return new Map([
+    const outfit = new Map([
       [$slot`weapon`, $item`broken champagne bottle`],
       [$slot`off-hand`, $item`dented scepter`],
       [$slot`acc1`, $item`Brutal brogues`],
       [$slot`acc2`, $item`Powerful Glove`],
     ]);
+    const candle = $item`extra-wide head candle`;
+    if (have(candle)) outfit.set($item`hat`, candle);
+    return outfit;
   },
 
   [Quest.Mysticality]: () => {
@@ -196,15 +202,24 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 
   [Quest.ItemDrop]: () => {
     const carrot = numericModifier($item`latte lovers member's mug`, "item drop") > 0;
-    return new Map([
+    const candles = [
+      $item`extra-large utility candle`,
+      $item`novelty sparkling candle`,
+      $item`runed taper candle`,
+    ];
+    const spark = $item`oversized sparkler`;
+    const outfit = new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`back`, $item`vampyric cloake`],
-      //[$slot`weapon`, $item`oversized sparkler`],
       [$slot`off-hand`, carrot ? $item`latte lovers member's mug` : $item`Kramco Sausage-o-Matic™`],
       [$slot`acc1`, $item`Guzzlr tablet`],
       [$slot`acc2`, $item`gold detective badge`],
       [$slot`acc3`, $item`your cowboy boots`],
     ]);
+    if (!candles.some((c) => have(c)) && have(spark)) outfit.set($slot`weapon`, spark);
+    // these candles are mutually exclusive
+    for (const c of candles) if (have(c)) outfit.set($slot`weapon`, c);
+    return outfit;
   },
 
   [Quest.Donate]: () => {

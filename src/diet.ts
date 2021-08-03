@@ -41,7 +41,7 @@ const recipes = new Map<Item, Function>([
     () => {
       retrieveItem($item`tenderizing hammer`);
       retrieveItem($item`cool whip`);
-      cliExecute(`pulverize 1 ${$item`cool whip`}`);
+      cliExecute(`pulverize ${$item`cool whip`}`);
     },
   ],
 
