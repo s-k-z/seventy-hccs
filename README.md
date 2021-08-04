@@ -48,7 +48,7 @@ svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
 
 ## To run the script
 
-1. Ensure you have KoLMafia r20795 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
+1. Ensure you have KoLMafia r20807 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
 2. Ensure you have Java Runtime Environment 11 or later [available here](https://adoptopenjdk.net/). (Oracle JRE 8 was not sufficient in my testing)
 3. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
 4. Set properties in kolmafia to appropriate values:

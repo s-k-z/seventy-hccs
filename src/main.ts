@@ -98,7 +98,6 @@ import {
   buffUpBeginning,
   buffUpLeveling,
   equipOutfit,
-  equipWadOfUsedTape,
   haveQuest,
   prepAndDoQuest,
   Quest,
@@ -137,7 +136,7 @@ function checkMainClan() {
 // Community Service Starts!
 //
 export function main() {
-  sinceKolmafiaRevision(20795);
+  sinceKolmafiaRevision(20807);
 
   if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventycs_side_clan not set`;
@@ -176,11 +175,12 @@ export function main() {
 }
 
 function levelAndDoQuests() {
+  const results = new Map<Quest, number>();
+  const completeQuest = (q: Quest) => results.set(q, prepAndDoQuest(q));
   Clan.join(MAIN_CLAN);
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
-    // 60 turns down the drain 😢
-    prepAndDoQuest(Quest.CoilWire);
+    completeQuest(Quest.CoilWire);
     print(`Coil Wire done: have ${myHp()} HP and ${myMp()} MP available.`);
   }
 
@@ -245,18 +245,22 @@ function levelAndDoQuests() {
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
+      const crown = $item`Iunion Crown`;
       const garbageShirt = $item`makeshift garbage shirt`;
+      const wad = $item`wad of used tape`;
       if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37) {
         if (!have(garbageShirt)) {
           cliExecute(`fold ${garbageShirt}`);
+          // Turbo used a flag to cast pride
           SourceTerminal.educate(SourceTerminal.Skills.Turbo);
+          equip($slot`shirt`, garbageShirt);
+          equip($slot`hat`, crown);
         }
-        equip($slot`shirt`, garbageShirt);
-        equip($slot`hat`, $item`Iunion Crown`);
       } else if (myBasestat(mainstat) > 100) {
-        equipWadOfUsedTape();
+        if (!have(wad)) cliExecute(`fold ${wad}`);
+        equip($slot`hat`, wad);
       } else {
-        equip($slot`hat`, $item`Iunion Crown`);
+        equip($slot`hat`, crown);
       }
 
       // This is where all the leveling happens
@@ -287,9 +291,9 @@ function levelAndDoQuests() {
   shrugEffect($effect`Polka of Plenty`);
   wishEffect($effect`Sparkly!`);
 
-  prepAndDoQuest(Quest.Muscle);
-  prepAndDoQuest(Quest.Moxie);
-  prepAndDoQuest(Quest.HP);
+  completeQuest(Quest.Muscle);
+  completeQuest(Quest.Moxie);
+  completeQuest(Quest.HP);
 
   if (haveQuest(Quest.SpellDamage)) {
     events.innerElf.run();
@@ -305,24 +309,24 @@ function levelAndDoQuests() {
       use($item`corrupted marrow`);
       if (myHp() < myMaxhp() * 0.5) cliExecute("hottub");
     }
-    prepAndDoQuest(Quest.SpellDamage);
+    completeQuest(Quest.SpellDamage);
   }
 
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     events.innerElf.run();
     oneOffEvents.velvetGoldMine();
-    prepAndDoQuest(Quest.WeaponDamage);
+    completeQuest(Quest.WeaponDamage);
   }
 
   shrugEffect($effect`Jackasses' Symphony of Destruction`);
 
-  prepAndDoQuest(Quest.Mysticality);
+  completeQuest(Quest.Mysticality);
 
   if (haveQuest(Quest.CombatFrequency)) {
     useFamiliar($familiar`Disgeist`);
     equip($slot`acc2`, $item`Powerful Glove`);
-    prepAndDoQuest(Quest.CombatFrequency);
+    completeQuest(Quest.CombatFrequency);
   }
 
   if (haveQuest(Quest.HotResist)) {
@@ -330,7 +334,7 @@ function levelAndDoQuests() {
     useFamiliar($familiar`Exotic Parrot`);
     if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
     if (!get("_horsery").startsWith("pale")) cliExecute("horsery pale");
-    prepAndDoQuest(Quest.HotResist);
+    completeQuest(Quest.HotResist);
   }
 
   shrugEffect($effect`The Sonata of Sneakiness`);
@@ -348,17 +352,18 @@ function levelAndDoQuests() {
       cliExecute("pillkeeper extend");
       use(icyRevenge);
     }
-    prepAndDoQuest(Quest.FamiliarWeight);
+    completeQuest(Quest.FamiliarWeight);
   }
 
   if (haveQuest(Quest.ItemDrop)) {
     oneOffEvents.batform();
     useFamiliar($familiar`Trick-or-Treating Tot`);
     equip($slot`familiar`, $item`li'l ninja costume`);
-    prepAndDoQuest(Quest.ItemDrop);
+    completeQuest(Quest.ItemDrop);
   }
 
   prepAndDoQuest(Quest.Donate);
+  print(`${results.forEach((turnCount, id) => `\n${Quest[id]}: ${turnCount}`)}`);
 }
 
 function openQuestZones() {
@@ -383,6 +388,8 @@ function preCoilWire() {
   [
     $item`letter from King Ralph XI`,
     $item`pork elf goodies sack`,
+    $item`banana candle`,
+    $item`ear candle`,
     $item`natural magick candle`,
     $item`rainbow glitter candle`,
     $item`votive of confidence`,

@@ -14,10 +14,8 @@ import { BRICKOS_PER_FIGHT } from "./config";
 import { tryRunChoice } from "./lib";
 
 export function castBestLibram() {
-  if (
-    get("_brickoEyeSummons") < 3 ||
-    !have($item`BRICKO brick`, BRICKOS_PER_FIGHT * (3 - get("_brickoFights")))
-  ) {
+  const needed = BRICKOS_PER_FIGHT * (3 - get("_brickoFights"));
+  if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, needed)) {
     useSkill($skill`Summon BRICKOs`);
   } else if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
     useSkill($skill`Summon Candy Heart`);

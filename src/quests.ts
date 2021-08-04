@@ -3,7 +3,9 @@ import {
   containsText,
   equip,
   getIngredients,
+  getRelated,
   numericModifier,
+  totalTurnsPlayed,
   visitUrl,
 } from "kolmafia";
 import { $effect, $item, $slot, have } from "libram";
@@ -26,32 +28,6 @@ export enum Quest {
   Beginning = 900,
   Leveling = 901,
   DeepDark = 902,
-}
-
-function handleCreateEquip(equip: Item) {
-  switch (equip) {
-    case $item`broken champagne bottle`:
-    case $item`wad of used tape`: {
-      if (!have(equip)) {
-        cliExecute(`fold ${equip}`);
-      }
-      return;
-    }
-
-    case $item`burning paper crane`:
-    case $item`meteorite guard`: {
-      const ingredients = Object.keys(getIngredients(equip));
-      if (!have(equip) && have(Item.get(ingredients[0] ?? "none"))) {
-        cliExecute(`make ${equip}`);
-      }
-      return;
-    }
-  }
-}
-
-export function equipWadOfUsedTape() {
-  handleCreateEquip($item`wad of used tape`);
-  equip($slot`hat`, $item`wad of used tape`);
 }
 
 const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
@@ -137,7 +113,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 
   [Quest.SpellDamage]: () => {
     // TODO: handle spell damage candle
-    //const candle = $item`Abracandalabra`;
+    //const candle = [$slot`off-hand`, $item`Abracandalabra`];
     return new Map([
       [$slot`weapon`, $item`wrench`],
       [$slot`off-hand`, $item`weeping willow wand`],
@@ -207,7 +183,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       $item`novelty sparkling candle`,
       $item`runed taper candle`,
     ];
-    const spark = $item`oversized sparkler`;
+    const sparkler = $item`oversized sparkler`;
     const outfit = new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`back`, $item`vampyric cloake`],
@@ -216,8 +192,8 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc2`, $item`gold detective badge`],
       [$slot`acc3`, $item`your cowboy boots`],
     ]);
-    if (!candles.some((c) => have(c)) && have(spark)) outfit.set($slot`weapon`, spark);
-    // these candles are mutually exclusive
+    if (!candles.some((c) => have(c)) && have(sparkler)) outfit.set($slot`weapon`, sparkler);
+    // can only have one candle
     for (const c of candles) if (have(c)) outfit.set($slot`weapon`, c);
     return outfit;
   },
@@ -227,7 +203,6 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 };
 
-// Who needs the maximizer? It's slow!
 export function equipOutfit(quest: Quest) {
   const mode = new Map([
     [Quest.Muscle, "muscle"],
@@ -240,8 +215,13 @@ export function equipOutfit(quest: Quest) {
   const outfit = questOutfits[quest]();
   if (!outfit.get($slot`back`)) cliExecute(`retrocape ${mode.get(quest) ?? "heck thrill"}`);
   outfit.forEach((item, slot) => {
-    handleCreateEquip(item);
-    if (have(item)) equip(slot, item);
+    if (!have(item)) {
+      const ingredients = Object.keys(getIngredients(item));
+      if (getRelated(item, "fold")) cliExecute(`fold ${item}`);
+      else if (have(Item.get(ingredients[0] ?? "none"))) cliExecute(`make ${item}`);
+      else throw `Unable to find ${item}?`;
+    }
+    equip(slot, item);
   });
 }
 
@@ -514,7 +494,8 @@ export function haveQuest(id: number) {
   return containsText(visitUrl("council.php"), `<input type=hidden name=option value=${id}>`);
 }
 
-export function prepAndDoQuest(id: Quest) {
+export function prepAndDoQuest(id: Quest): number {
+  const turns = totalTurnsPlayed();
   if (id > Quest.Donate) throw `Invalid Quest ${id} (these are just for outfits)!!`;
   if (haveQuest(id)) {
     acquireQuestEffects(id);
@@ -522,4 +503,5 @@ export function prepAndDoQuest(id: Quest) {
     visitUrl(`choice.php?whichchoice=1089&option=${id}`);
     if (haveQuest(id)) throw `Couldn't complete quest ${id}?`;
   }
+  return totalTurnsPlayed() - turns;
 }
