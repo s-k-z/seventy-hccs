@@ -1,5 +1,12 @@
-import { eudoraItem, getWorkshed, holiday, myGardenType, totalTurnsPlayed } from "kolmafia";
-import { $item, $monster, ChateauMantegna } from "libram";
+import {
+  eudoraItem,
+  getWorkshed,
+  holiday,
+  myGardenType,
+  visitUrl,
+  totalTurnsPlayed,
+} from "kolmafia";
+import { $item, $monster, ChateauMantegna, get } from "libram";
 
 export function checkReadyToAscend() {
   const badDays = [
@@ -14,6 +21,11 @@ export function checkReadyToAscend() {
 
   const target = $monster`Pterodactyl`;
   if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
+
+  const banish = $monster`Perceiver of Sensations`;
+  const notFound = () => get("banishedMonsters").match(`(.+)?${banish}:ice house.+`) === null;
+  if (notFound()) visitUrl("museum.php?action=icehouse");
+  if (notFound()) throw `Need to ice house ${banish}`;
 
   if (!myGardenType().toLowerCase().includes("peppermint")) throw `Install a peppermint garden`;
 

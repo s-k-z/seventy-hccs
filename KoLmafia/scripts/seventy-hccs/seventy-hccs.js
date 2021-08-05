@@ -11756,7 +11756,7 @@ function selectBestFamiliar() {
   }
 }
 ;// CONCATENATED MODULE: ./src/prep.ts
-var prep_templateObject, prep_templateObject2, prep_templateObject3;
+var prep_templateObject, prep_templateObject2, prep_templateObject3, prep_templateObject4;
 
 function prep_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -11771,9 +11771,17 @@ function checkReadyToAscend() {
   if (badDayToday) throw "Don't want to ascend during ".concat((0,external_kolmafia_.holiday)());
   var target = (0,dist.$monster)(prep_templateObject || (prep_templateObject = prep_taggedTemplateLiteral(["Pterodactyl"])));
   if (dist.ChateauMantegna.paintingMonster() !== target) throw "Missing ".concat(target, " in Chateau painting");
+  var banish = (0,dist.$monster)(prep_templateObject2 || (prep_templateObject2 = prep_taggedTemplateLiteral(["Perceiver of Sensations"])));
+
+  var notFound = function notFound() {
+    return (0,dist.get)("banishedMonsters").match("(.+)?".concat(banish, ":ice house.+")) === null;
+  };
+
+  if (notFound()) (0,external_kolmafia_.visitUrl)("museum.php?action=icehouse");
+  if (notFound()) throw "Need to ice house ".concat(banish);
   if (!(0,external_kolmafia_.myGardenType)().toLowerCase().includes("peppermint")) throw "Install a peppermint garden";
-  if ((0,external_kolmafia_.getWorkshed)() !== (0,dist.$item)(prep_templateObject2 || (prep_templateObject2 = prep_taggedTemplateLiteral(["diabolic pizza cube"])))) throw "Install a diabolic pizza cube";
-  if ((0,external_kolmafia_.eudoraItem)() !== (0,dist.$item)(prep_templateObject3 || (prep_templateObject3 = prep_taggedTemplateLiteral(["New-You Club Membership Form"])))) throw "Select New-You Club for Eudora"; //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
+  if ((0,external_kolmafia_.getWorkshed)() !== (0,dist.$item)(prep_templateObject3 || (prep_templateObject3 = prep_taggedTemplateLiteral(["diabolic pizza cube"])))) throw "Install a diabolic pizza cube";
+  if ((0,external_kolmafia_.eudoraItem)() !== (0,dist.$item)(prep_templateObject4 || (prep_templateObject4 = prep_taggedTemplateLiteral(["New-You Club Membership Form"])))) throw "Select New-You Club for Eudora"; //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
 
   if (((0,external_kolmafia_.totalTurnsPlayed)() + 60) % 11 !== 1) {
     throw "Spend ".concat(((0,external_kolmafia_.totalTurnsPlayed)() + 60 - 1) % 11, " turns to prepare a voter monster");
