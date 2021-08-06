@@ -192,6 +192,7 @@ function levelAndDoQuests() {
       return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
     };
 
+    // eslint-disable-next-line no-constant-condition
     leveling: while (true) {
       // Spend excess MP on librams
       // Use free rests on stats at configured level
@@ -483,7 +484,8 @@ function preCoilWire() {
 
   const donut = $item`occult jelly donut`;
   if (!have(donut)) create(donut);
-  acquireEffect($effect`Blood Sugar Sauce Magic`);
+  // TODO: handle non-sauceror [1457]Blood Sugar Sauce Magic
+  acquireEffect($effect`[1458]Blood Sugar Sauce Magic`);
 
   spendAllMpOnLibrams();
 }

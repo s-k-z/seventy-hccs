@@ -10315,7 +10315,8 @@ function tryRunChoice(pageIndex, choiceID, goal) {
 function tryUse(i) {
   var n = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
   if ((0,dist.have)(i, n)) (0,external_kolmafia_.use)(i, n);
-}
+} // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 function tuple() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
     args[_key] = arguments[_key];
@@ -10499,7 +10500,7 @@ function eatPizzas() {
 
 function cookPizza(a, b, c, d) {
   var counts = new Map();
-  Array.prototype.slice.call(arguments).forEach(function (f) {
+  [a, b, c, d].forEach(function (f) {
     return counts.set(f, 1 + (counts.get(f) || 0));
   });
 
@@ -12062,7 +12063,8 @@ function levelAndDoQuests() {
 
       var chateauNapReady = function chateauNapReady() {
         return (0,external_kolmafia_.myLevel)() >= CHATEAU_REST_LEVEL && (0,dist.get)("timesRested") < (0,external_kolmafia_.totalFreeRests)();
-      };
+      }; // eslint-disable-next-line no-constant-condition
+
 
       leveling: while (true) {
         // Spend excess MP on librams
@@ -12361,8 +12363,9 @@ function preCoilWire() {
   oneOffEvents.tropicalSkeleton(); // 8079 + 2000 = 10079 meat
 
   var donut = (0,dist.$item)(main_templateObject82 || (main_templateObject82 = main_taggedTemplateLiteral(["occult jelly donut"])));
-  if (!(0,dist.have)(donut)) (0,external_kolmafia_.create)(donut);
-  acquireEffect((0,dist.$effect)(main_templateObject83 || (main_templateObject83 = main_taggedTemplateLiteral(["Blood Sugar Sauce Magic"]))));
+  if (!(0,dist.have)(donut)) (0,external_kolmafia_.create)(donut); // TODO: handle non-sauceror [1457]Blood Sugar Sauce Magic
+
+  acquireEffect((0,dist.$effect)(main_templateObject83 || (main_templateObject83 = main_taggedTemplateLiteral(["[1458]Blood Sugar Sauce Magic"]))));
   spendAllMpOnLibrams();
 }
 

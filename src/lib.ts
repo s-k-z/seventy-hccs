@@ -70,6 +70,7 @@ export function tryUse(i: Item, n = 1): void {
   if (have(i, n)) use(i, n);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function tuple<T extends any[]>(...args: T): T {
   return args;
 }
