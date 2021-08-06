@@ -9,7 +9,7 @@ import {
 } from "kolmafia";
 import { $effect, $effects, $item, $skill, get, have } from "libram";
 
-enum candyType {
+const enum candyType {
   complex = "complex",
   simple = "simple",
 }

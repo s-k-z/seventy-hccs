@@ -46,7 +46,7 @@ import {
 } from "./lib";
 import { equipOutfit, Quest } from "./quests";
 
-export enum FamiliarFlag {
+export const enum FamiliarFlag {
   Default,
   NoAttack,
   ToxicTeacups,

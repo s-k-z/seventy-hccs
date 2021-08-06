@@ -180,7 +180,7 @@ function levelAndDoQuests() {
   Clan.join(MAIN_CLAN);
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
-    completeQuest(Quest.CoilWire);
+    prepAndDoQuest(Quest.CoilWire);
     print(`Coil Wire done: have ${myHp()} HP and ${myMp()} MP available.`);
   }
 
@@ -512,10 +512,11 @@ function postCoilWire() {
   wishEffect($effect`Witch Breaded`);
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
-  const camp = getCampground();
-  const installedRange = Object.keys(camp).some((k: string): boolean => k.includes("Dramatic"));
-  if (!installedRange) retrieveItem($item`Dramatic™ range`);
-  tryUse($item`Dramatic™ range`);
+  if (!getCampground()["Dramatic&trade; range"]) {
+    const range = $item`Dramatic™ range`;
+    if (!have(range)) retrieveItem(range);
+    use($item`Dramatic™ range`);
+  }
   // 10079 - 950 = 9129 meat
   [
     // Need all of these to craft with
