@@ -2,7 +2,7 @@ import { cliExecute, eat, equip, retrieveItem, toInt, use, useFamiliar, visitUrl
 import { $effect, $familiar, $item, $slot, have } from "libram";
 import { acquireEffect, acquireGumOrHermitItem, checkAvailable, tuple } from "./lib";
 
-const recipes = new Map<Item, Function>([
+const recipes = new Map<Item, () => void>([
   [
     $item`bugged balaclava`,
     () => {
@@ -98,7 +98,7 @@ const diabolicPizzas = {
   },
 };
 
-export function eatPizzas() {
+export function eatPizzas(): void {
   for (const pizza of Object.values(diabolicPizzas)) {
     if (!have(pizza.effect)) {
       for (const ingredient of pizza.ingredients) {
@@ -110,7 +110,7 @@ export function eatPizzas() {
       }
       useFamiliar(pizza.familiar);
       cookPizza(...pizza.ingredients);
-      eat($item`Diabolic pizza`);
+      eat($item`diabolic pizza`);
       equip($slot`familiar`, pizza.equip);
     }
   }

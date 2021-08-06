@@ -57,7 +57,7 @@ const civicCenter = $location`Gingerbread Civic Center`;
 const deepMachineTunnels = $location`The Deep Machine Tunnels`;
 const direWarren = $location`The Dire Warren`;
 const haikuDungeon = $location`The Haiku Dungeon`;
-const lavaCo = $location`LavaCo Lamp Factory`;
+const lavaCo = $location`LavaCo™ Lamp Factory`;
 const loveTunnel = $location`The Tunnel of L.O.V.E.`;
 const neverendingParty = $location`The Neverending Party`;
 const noobCave = $location`Noob Cave`;
@@ -89,7 +89,8 @@ export const events: Record<string, eventData> = {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
       const ghostLoc2 = get("ghostLocation");
-      adventure(ghostLoc2!, MacroList.FreeFight);
+      if (!ghostLoc2) throw `No ghost location found?`;
+      adventure(ghostLoc2, MacroList.FreeFight);
       checkAvailable($item`Friendliness Beverage`);
       use($item`Friendliness Beverage`);
     },
@@ -126,7 +127,7 @@ export const events: Record<string, eventData> = {
     current: () => availableAmount($item`corrupted marrow`) - 1,
     run: () => {
       const fax = $item`photocopied monster`;
-      const faxMon = $monster`Ungulith`;
+      const faxMon = $monster`ungulith`;
       if (!have(fax)) Clan.with(FAX_AND_SLIME_CLAN, () => cliExecute("fax receive"));
       if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
         throw `Failed to retrieve fax of ${faxMon}`;
@@ -228,7 +229,7 @@ export const events: Record<string, eventData> = {
       adventure(loveTunnel, MacroList.TunnelOfLOV);
       if (handlingChoice()) throw "Stuck in LOV?";
       checkEffect($effect`Open Heart Surgery`);
-      $items`LOV Elixir #3,LOV Elixir #6,LOV Epaulettes`.forEach((r) => checkAvailable(r));
+      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((r) => checkAvailable(r));
       use($item`LOV Elixir #3`);
       use($item`LOV Elixir #6`);
       equip($slot`back`, $item`LOV Epaulettes`);
@@ -550,7 +551,7 @@ export function getRemainingFreeFights(): number {
 
 // Not all of the combats are going to occur while leveling, the rest can go here
 export const oneOffEvents = {
-  hipster: () => {
+  hipster: (): void => {
     if (!get("_ironicMoustache")) {
       familiar($familiar`Mini-Hipster`);
       equip($slot`familiar`, $item`none`);
@@ -561,7 +562,7 @@ export const oneOffEvents = {
     }
   },
 
-  mimic: () => {
+  mimic: (): void => {
     if (!get("_bagOfCandy")) {
       familiar($familiar`Stocking Mimic`);
       equip($slot`familiar`, $item`none`);
@@ -573,7 +574,7 @@ export const oneOffEvents = {
     }
   },
 
-  tropicalSkeleton: () => {
+  tropicalSkeleton: (): void => {
     if (!have($effect`Everything Looks Red`)) {
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       familiar($familiar`Crimbo Shrub`);
@@ -585,11 +586,11 @@ export const oneOffEvents = {
       }
       mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
       checkEffect($effect`Everything Looks Red`);
-      $items`cherry,grapefruit,lemon,strawberry`.forEach((fruit) => checkAvailable(fruit));
+      $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
     }
   },
 
-  nanobrainy: () => {
+  nanobrainy: (): void => {
     if (!get("_gingerbreadClockAdvanced")) adventure(civicCenter, Macro.abort());
     if (!have($effect`Nanobrainy`)) {
       equip($slot`back`, $item`vampyric cloake`);
@@ -600,7 +601,7 @@ export const oneOffEvents = {
     }
   },
 
-  lavaCo: () => {
+  lavaCo: (): void => {
     while (!have($effect`Meteor Showered`)) {
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       equip($slot`acc2`, $item`Lil' Doctor™ bag`);
@@ -617,7 +618,7 @@ export const oneOffEvents = {
     }
   },
 
-  velvetGoldMine: () => {
+  velvetGoldMine: (): void => {
     while (!have($effect`Meteor Showered`)) {
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       equip($slot`acc2`, $item`Lil' Doctor™ bag`);
@@ -634,7 +635,7 @@ export const oneOffEvents = {
     }
   },
 
-  mistform: () => {
+  mistform: (): void => {
     if (!have($effect`Misty Form`)) {
       equip($item`vampyric cloake`);
       useSkill($skill`The Ode to Booze`);
@@ -644,10 +645,10 @@ export const oneOffEvents = {
     }
   },
 
-  meteorShower: () => {
+  meteorShower: (): void => {
     tryUse($item`tiny bottle of absinthe`);
     if (
-      have($effect`absinthe minded`) &&
+      have($effect`Absinthe-Minded`) &&
       !have($effect`Meteor Showered`) &&
       !have($item`disintegrating spiky collar`)
     ) {
@@ -668,7 +669,7 @@ export const oneOffEvents = {
     }
   },
 
-  batform: () => {
+  batform: (): void => {
     if (!have($effect`Bat-Adjacent Form`)) {
       equip($item`vampyric cloake`);
       useSkill($skill`The Ode to Booze`);
@@ -704,7 +705,7 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
   } else if (
     flag === FamiliarFlag.Default &&
     !have($item`tiny bottle of absinthe`) &&
-    !have($effect`absinthe minded`)
+    !have($effect`Absinthe-Minded`)
   ) {
     familiar($familiar`Green Pixie`);
   } else if (

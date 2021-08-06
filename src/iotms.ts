@@ -13,7 +13,7 @@ import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } fro
 import { BRICKOS_PER_FIGHT } from "./config";
 import { tryRunChoice } from "./lib";
 
-export function castBestLibram() {
+export function castBestLibram(): void {
   const needed = BRICKOS_PER_FIGHT * (3 - get("_brickoFights"));
   if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, needed)) {
     useSkill($skill`Summon BRICKOs`);
@@ -32,18 +32,18 @@ export function castBestLibram() {
   }
 }
 
-export function fightWitchess(piece: Monster, macro: Macro) {
+export function fightWitchess(piece: Monster, macro: Macro): void {
   macro.setAutoAttack();
   Witchess.fightPiece(piece);
 }
 
-export function gazeAtTheStars() {
+export function gazeAtTheStars(): void {
   while (get("_campAwaySmileBuffs") < 3) {
     visitUrl("place.php?whichplace=campaway&action=campaway_sky");
   }
 }
 
-export function getPantogramPants() {
+export function getPantogramPants(): void {
   if (!have($item`portable pantogram`) || have($item`pantogram pants`)) return;
   const m = new Map([
     [$stat`Muscle`, 1],
@@ -67,14 +67,14 @@ export function getPantogramPants() {
   if (!have($item`pantogram pants`)) throw "Failed to create pantogram pants";
 }
 
-export function harvestBatteries() {
+export function harvestBatteries(): void {
   visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`potted power plant`)}`);
   for (let i = 0; i < 7; i++) {
     visitUrl(`choice.php?pwd=&whichchoice=1448&option=1&pp=${i + 1}`);
   }
 }
 
-export function scavengeDaycare() {
+export function scavengeDaycare(): void {
   visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
   if (!get("_daycareNap")) tryRunChoice(1, 1334, "have a boxing daydream.");
   if (get("_daycareGymScavenges") < 1) {
@@ -83,7 +83,7 @@ export function scavengeDaycare() {
   }
 }
 
-export function spendAllMpOnLibrams() {
+export function spendAllMpOnLibrams(): void {
   while (myMp() > mpCost($skill`Summon BRICKOs`)) castBestLibram();
 }
 
@@ -99,7 +99,7 @@ export enum MoonSign {
   Packrat = 9,
 }
 
-export function tuneMoon(moon: MoonSign) {
+export function tuneMoon(moon: MoonSign): void {
   visitUrl(`inv_use.php?whichitem=${toInt($item`hewn moon-rune spoon`)}&doit=96&whichsign=${moon}`);
 }
 
@@ -115,7 +115,7 @@ const libramDrops = new Map([
   [$item`resolution: be wealthier`, 1],
 ]);
 
-export function useLibramsDrops() {
+export function useLibramsDrops(): void {
   for (const [item, duration] of libramDrops) {
     while (have(item) && !have(effectModifier(item, "effect"), duration)) {
       use(item);
@@ -123,7 +123,7 @@ export function useLibramsDrops() {
   }
 }
 
-export function vote() {
+export function vote(): void {
   if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as a ${myClass()}`;
   visitUrl("place.php?whichplace=town_right&action=townright_vote");
   visitUrl(`choice.php?pwd=&option=1&whichchoice=1331&g=2&local[]=1&local[]=3`);

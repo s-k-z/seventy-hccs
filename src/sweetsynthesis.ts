@@ -69,7 +69,7 @@ const transforms = new Map<Item, candySet>([
  * @param reserveCandies Optional list of [candy,quantity] to keep if possible
  */
 export function synthesize(
-  allowTomeUse: boolean = true,
+  allowTomeUse = true,
   targetEffects: Effect[] = $effects`Synthesis: Smart, Synthesis: Collection, Synthesis: Learning`,
   reserveCandies: [Item, number][] = [
     [$item`Chubby and Plump bar`, 1],
@@ -77,7 +77,7 @@ export function synthesize(
     [$item`sugar sheet`, 1],
     [$item`sugar sheet`, 1],
   ]
-) {
+): void {
   const candies = {
     [candyType.complex]: <candySet>[],
     [candyType.simple]: <candySet>[],

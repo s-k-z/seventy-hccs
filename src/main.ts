@@ -58,14 +58,14 @@ import {
   SourceTerminal,
 } from "libram";
 import {
-  BRICKOS_PER_FIGHT,
   BRICKO_TARGET_ITEM,
+  BRICKOS_PER_FIGHT,
   CHATEAU_REST_LEVEL,
-  MEAT_SAFE_LIMIT,
-  MP_SAFE_LIMIT,
-  MAIN_CLAN,
   FAX_AND_SLIME_CLAN,
   FORTUNE_TELLER_FRIEND,
+  MAIN_CLAN,
+  MEAT_SAFE_LIMIT,
+  MP_SAFE_LIMIT,
 } from "./config";
 import { eatPizzas } from "./diet";
 import { events, getRemainingFreeFights, oneOffEvents } from "./events";
@@ -135,7 +135,7 @@ function checkMainClan() {
 //
 // Community Service Starts!
 //
-export function main() {
+export function main(): void {
   sinceKolmafiaRevision(20807);
 
   if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
@@ -210,7 +210,7 @@ function levelAndDoQuests() {
       }
 
       if (!have($effect`Soulerskates`)) {
-        if (mySoulsauce() >= soulsauceCost($skill`Soulerskates`)) {
+        if (mySoulsauce() >= soulsauceCost($skill`Soul Rotation`)) {
           acquireEffect($effect`Soulerskates`);
         }
       } else {
@@ -220,7 +220,7 @@ function levelAndDoQuests() {
       }
 
       while (
-        have($item`sausage casing`) &&
+        have($item`magical sausage casing`) &&
         (get("_sausagesMade") + 1) * 111 < myMeat() - MEAT_SAFE_LIMIT &&
         myMaxmp() - myMp() > 1000 &&
         myMaxmp() - mpCost($skill`Summon BRICKOs`) > MP_SAFE_LIMIT &&
@@ -241,7 +241,7 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      $items`robin's egg,short stack of pancakes`.forEach((drop) => tryUse(drop));
+      $items`robin's egg, short stack of pancakes`.forEach((drop) => tryUse(drop));
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
@@ -406,7 +406,7 @@ function preCoilWire() {
   //
   // Let's get a buncha meat!
   //
-  $items`baconstone,hamethyst,porquoise`.forEach((gem) => autosell(5, gem));
+  $items`baconstone, hamethyst, porquoise`.forEach((gem) => autosell(5, gem));
   useSkill($skill`Communism!`);
   const calculation = "14";
   const canCalculate = () => get("_universeCalculated") < get("skillLevel144");
@@ -491,7 +491,7 @@ function preCoilWire() {
 function postCoilWire() {
   gazeAtTheStars();
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
-  if (!have($skill`Seek out a Bird`)) use($item`bird-a-day calendar`);
+  if (!have($skill`Seek out a Bird`)) use($item`Bird-a-Day calendar`);
   if (!have($item`Yeg's Motel hand soap`)) cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
   cliExecute("Briefcase e spell hot -combat");
   let click = true;
@@ -508,7 +508,7 @@ function postCoilWire() {
   if (get("_saberMod") < 1) visitUrl("main.php?action=may4");
   if (handlingChoice()) throw `Stuck picking saber mod?`;
   if (!get("_pottedTeaTreeUsed")) cliExecute("teatree loyal");
-  wishEffect($effect`All is Forgiven`);
+  wishEffect($effect`All Is Forgiven`);
   wishEffect($effect`Witch Breaded`);
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
@@ -552,7 +552,7 @@ function postCoilWire() {
   acquireEffect($effect`Ode to Booze`);
   // 9129 - 142 = 8987 meat
   checkMainClan();
-  $effects`[1701]Hip to the Jive,In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
+  $effects`[1701]Hip to the Jive, In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
   // 8987 - 5500 = 3487 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza

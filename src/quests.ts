@@ -132,7 +132,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc2`, $item`Powerful Glove`],
     ]);
     const candle = $item`extra-wide head candle`;
-    if (have(candle)) outfit.set($item`hat`, candle);
+    if (have(candle)) outfit.set($slot`hat`, candle);
     return outfit;
   },
 
@@ -203,7 +203,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
   },
 };
 
-export function equipOutfit(quest: Quest) {
+export function equipOutfit(quest: Quest): void {
   const mode = new Map([
     [Quest.Muscle, "muscle"],
     [Quest.Mysticality, "mysticality"],
@@ -284,7 +284,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     // Beach comb
     [$effect`Cold as Nice`, Context.leveling],
     [$effect`A Brush with Grossness`, Context.leveling],
-    [$effect`Does It Have a Skull in There??`, Context.leveling],
+    [$effect`Does It Have a Skull In There??`, Context.leveling],
     [$effect`Oiled, Slick`, Context.leveling],
     [$effect`Resting Beach Face`, Context.leveling],
     [$effect`You Learned Something Maybe!`, Context.leveling],
@@ -449,7 +449,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Blessing of your favorite Bird`, Context.leveling],
     [$effect`Ermine Eyes`, Context.leveling],
     [$effect`Hustlin'`, Context.leveling],
-    [$effect`Leon's Phat Loot Lyric`, Context.leveling],
+    [$effect`Fat Leon's Phat Loot Lyric`, Context.leveling],
     [$effect`Singer's Faithful Ocelot`, Context.leveling],
 
     [$effect`Feeling Lost`, Context.test],
@@ -481,16 +481,16 @@ function buffUp(progress: Context) {
   }
 }
 
-export function buffUpBeginning() {
+export function buffUpBeginning(): void {
   buffUp(Context.beginning);
 }
 
-export function buffUpLeveling() {
+export function buffUpLeveling(): void {
   // TODO: Want to swap pants to maybe spend less MP but also don't want to lose MP by swapping pants...
   buffUp(Context.leveling);
 }
 
-export function haveQuest(id: number) {
+export function haveQuest(id: number): boolean {
   return containsText(visitUrl("council.php"), `<input type=hidden name=option value=${id}>`);
 }
 

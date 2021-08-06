@@ -2,21 +2,21 @@ import {
   adv1,
   choiceFollowsFight,
   inMultiFight,
-  runCombat,
+  myTurncount,
   runChoice,
+  runCombat,
+  setAutoAttack,
   toInt,
   toUrl,
   useSkill,
   visitUrl,
-  myTurncount,
-  setAutoAttack,
 } from "kolmafia";
 import { $effect, $item, $location, $monster, $skill, get, Macro } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
 const toxicBeastie = $monster`toxic beastie`.id;
-const ungulith = $monster`Ungulith`.id;
+const ungulith = $monster`ungulith`.id;
 const LOVEnforcer = $monster`LOV Enforcer`.id;
 const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquareMon = $monster`Performer of Actions`.id;
@@ -51,7 +51,7 @@ const TryBanish = new Macro() // Reserve Snokebomb for Mother Slime
 const Replace = new Macro()
   //.trySkill($skill`CHEAT CODE: Replace Enemy`)
   //.if_(`!hasskill ${toInt($skill`CHEAT CODE: Replace Enemy`)}`, Macro
-  .skill($skill`Macrometeor`);
+  .skill($skill`Macrometeorite`);
 const MeteorShowerForce = new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`);
 
 const FreeInstaKill = new Macro()
@@ -75,7 +75,7 @@ const DefaultMacro = new Macro()
   .if_(`monsterid ${amateurNinja} || monsterid ${toxicBeastie}`, FreeInstaKill)
   .if_(`snarfblat ${retailDistrict}`, CigKill)
   .trySkill($skill`Digitize`)
-  .trySkill($skill`spit on me!`)
+  .trySkill($skill`%fn, spit on me!`)
   .if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`)) // Turbo used a flag to cast pride
   .skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
@@ -162,14 +162,14 @@ export const MacroList = {
 };
 
 // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
-export function adventure(loc: Location, macro: Macro) {
+export function adventure(loc: Location, macro: Macro): void {
   setAutoAttack(0);
   adv1(loc, 0, macro.toString());
   while (inMultiFight()) runCombat(macro.toString());
   if (choiceFollowsFight()) visitUrl("choice.php");
 }
 
-export function mapMonster(location: Location, monster: Monster, macro: Macro) {
+export function mapMonster(location: Location, monster: Monster, macro: Macro): void {
   if (get("_monstersMapped") < 3) {
     if (!get("mappingMonsters")) {
       useSkill($skill`Map the Monsters`);

@@ -16,12 +16,12 @@ import {
 } from "kolmafia";
 import { $item, get, have, set } from "libram";
 
-export function acquireEffect(e: Effect) {
+export function acquireEffect(e: Effect): void {
   if (e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
   if (!have(e)) cliExecute(e.default);
 }
 
-export function acquireGumOrHermitItem(i: Item) {
+export function acquireGumOrHermitItem(i: Item): void {
   const gum = $item`chewing gum on a string`;
   const source = Object.keys(getIngredients(i));
   if (source[0] === gum.name) {
@@ -30,7 +30,7 @@ export function acquireGumOrHermitItem(i: Item) {
       if (!have(gum)) buy(gum, 1);
       use(gum);
     }
-  } else if (source[0] === $item`worthless item`.name) {
+  } else if (source[0] === "worthless item") {
     if (have(i)) return;
     if (myMeat() < 50) throw "Out of meat for chewing gums!!!";
     retrieveItem($item`hermit permit`);
@@ -38,35 +38,35 @@ export function acquireGumOrHermitItem(i: Item) {
   } else throw `${i} is not a gum or hermit item`;
 }
 
-export function checkAvailable(i: Item, n: number = 1) {
+export function checkAvailable(i: Item, n = 1): void {
   if (!have(i, n)) {
     throw `Why don't we have at least ${n} ${n > 1 ? i.plural : i} (id: ${toInt(i)})?`;
   }
 }
 
-export function checkEffect(e: Effect) {
+export function checkEffect(e: Effect): void {
   if (!have(e)) throw `Missing effect ${e}`;
 }
 
-export function checkFax(monster: Monster) {
+export function checkFax(monster: Monster): void {
   const id = $item`photocopied monster`.descid;
   if (!containsText(visitUrl(`desc_item.php?whichitem=${id}`), `${monster}`)) {
     throw "Error: grabbed wrong fax?";
   }
 }
 
-export function shrugEffect(effect: Effect) {
+export function shrugEffect(effect: Effect): void {
   if (have(effect)) cliExecute(`shrug ${effect}`);
 }
 
-export function tryRunChoice(pageIndex: number, choiceID: number, goal: string) {
+export function tryRunChoice(pageIndex: number, choiceID: number, goal: string): void {
   if (!runChoice(pageIndex).includes(`whichchoice=${choiceID}`)) {
     const trim = goal.trim();
     throw `Error: failed to ${trim.charAt(0).toLowerCase()}${trim.slice(1)}`;
   }
 }
 
-export function tryUse(i: Item, n: number = 1) {
+export function tryUse(i: Item, n = 1): void {
   if (have(i, n)) use(i, n);
 }
 
@@ -78,12 +78,12 @@ export function voterMonsterNow(): boolean {
   return totalTurnsPlayed() % 11 === 1 && get("lastVoteMonsterTurn") < totalTurnsPlayed();
 }
 
-export function wishEffect(e: Effect) {
+export function wishEffect(e: Effect): void {
   if (!have(e)) cliExecute(`genie effect ${e}`);
 }
 
 type propertyPair = [string, string | number | boolean];
-export function withContext(callback: Function, context: propertyPair[]) {
+export function withContext(callback: () => void, context: propertyPair[]): void {
   const previous = context.map(([prop]): propertyPair => [prop, get(prop)]);
   const setProps = (p: propertyPair[]) => p.forEach(([prop, value]) => set(prop, value));
   setProps(context);
@@ -95,7 +95,7 @@ export function withContext(callback: Function, context: propertyPair[]) {
 }
 
 type slottedItem = [Slot, Item];
-export function withEquipment(callback: Function, equips: slottedItem[]) {
+export function withEquipment(callback: () => void, equips: slottedItem[]): void {
   const previous = equips.map(([slot]): slottedItem => [slot, equippedItem(slot)]);
   const equipAll = (o: slottedItem[]) => o.forEach(([slot, item]) => equip(slot, item));
   equipAll(equips);
