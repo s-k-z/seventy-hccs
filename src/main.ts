@@ -120,13 +120,13 @@ const choiceAdventures = [
   [1226, 2], // L.O.V. Emergency Room: (1) Lovebotamy (2) Open Heart Surgery (3) Wandering Eye Surgery (4) skip
   [1227, 1], // L.O.V. Elbow Room: (1) fight the equivocator (2) skip
   [1228, 3], // L.O.V. Emporium: (1) enamorang (2) emotionizer (3) chocolate (4) bouquet (5) elephant (6) toast (7) skip
-  [1310, 1], // Granted a Boon: (1) equipment (2) blessing (3) experience
+  [1310, ""], // Granted a Boon: (1) equipment (2) blessing (3) experience
   [1322, 2], // The Beginning of the Neverend: (1) accept quest (2) decline quest (3) leave
   [1324, 5], // It Hasn't Ended, It's Just Paused: (1) upstairs (2) kitchen (3) backyard (4) basement (5) fight
   [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
   [1386, 4], // Upgrade Your May the Fourth Cosplay Saber: (1) 15-20 MP regen (2) +20 ML (3) +3 resists (4) +10 familiar weight
   [1387, 3], // Using the Force: (1) banish (2) find friends (3) force item drops
-].map(([id, val]): [string, number] => [`choiceAdventure${id}`, val]);
+].map(([id, val]): [string, string | number] => [`choiceAdventure${id}`, val]);
 
 function checkMainClan() {
   if (Clan.get().name !== MAIN_CLAN) throw `Not in main clan?`;
