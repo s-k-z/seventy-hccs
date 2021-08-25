@@ -517,7 +517,7 @@ function postCoilWire() {
   if (!get("hasRange")) {
     const range = $item`Dramatic™ range`;
     if (!have(range)) retrieveItem(range);
-    use($item`Dramatic™ range`);
+    use(range);
   }
   // 10079 - 950 = 9129 meat
   [
