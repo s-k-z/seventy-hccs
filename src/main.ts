@@ -514,7 +514,7 @@ function postCoilWire() {
   wishEffect($effect`Witch Breaded`);
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
-  if (!getCampground()["Dramatic&trade; range"]) {
+  if (!get("hasRange")) {
     const range = $item`Dramatic™ range`;
     if (!have(range)) retrieveItem(range);
     use($item`Dramatic™ range`);
