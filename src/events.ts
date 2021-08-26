@@ -213,7 +213,7 @@ export const events: Record<string, eventData> = {
       adventure(loveTunnel, MacroList.TunnelOfLOV);
       if (handlingChoice()) throw "Stuck in LOV?";
       checkEffect($effect`Open Heart Surgery`);
-      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((r) => checkAvailable(r));
+      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach(checkAvailable);
       use($item`LOV Elixir #3`);
       use($item`LOV Elixir #6`);
       equip($slot`back`, $item`LOV Epaulettes`);
@@ -228,8 +228,8 @@ export const events: Record<string, eventData> = {
         $effect`That's Just Cloud-Talk, Man`,
         $effect`Inscrutable Gaze`,
         $effect`Synthesis: Learning`,
-      ].forEach((multiplier) => checkEffect(multiplier));
-      if (!have($item`LOV Epaulettes`)) throw `Missing ${$item`LOV Epaulettes`}`;
+      ].forEach(checkEffect);
+      checkAvailable($item`LOV Epaulettes`);
       equip($slot`back`, $item`LOV Epaulettes`);
       withEquipment(
         () => use($item`a ten-percent bonus`),
@@ -546,7 +546,7 @@ export const oneOffEvents = {
       }
       mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
       checkEffect($effect`Everything Looks Red`);
-      $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
+      $items`cherry, grapefruit, lemon, strawberry`.forEach(checkAvailable);
     }
   },
 

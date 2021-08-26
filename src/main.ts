@@ -10,7 +10,6 @@ import {
   eat,
   effectModifier,
   equip,
-  getCampground,
   getProperty,
   handlingChoice,
   haveEquipped,
@@ -242,7 +241,7 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      $items`robin's egg, short stack of pancakes`.forEach((drop) => tryUse(drop));
+      $items`robin's egg, short stack of pancakes`.forEach(tryUse);
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
@@ -394,7 +393,7 @@ function preCoilWire() {
     $item`natural magick candle`,
     $item`rainbow glitter candle`,
     $item`votive of confidence`,
-  ].forEach((item: Item) => tryUse(item));
+  ].forEach(tryUse);
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     checkMainClan();
@@ -537,7 +536,7 @@ function postCoilWire() {
 
     // Buffs that can't fit elsewhere
     $skill`Incredible Self-Esteem`,
-  ].forEach((summon) => useSkill(summon));
+  ].forEach(useSkill);
   // 143 mp
 
   [
@@ -554,7 +553,7 @@ function postCoilWire() {
   acquireEffect($effect`Ode to Booze`);
   // 9129 - 142 = 8987 meat
   checkMainClan();
-  $effects`[1701]Hip to the Jive, In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
+  $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, 5500 meat
   // 8987 - 5500 = 3487 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
@@ -571,7 +570,7 @@ function postCoilWire() {
     $item`Napalm In The Morning™ candle`,
     $item`Salsa Caliente™ candle`,
     $item`Smoldering Clover™ candle`,
-  ].forEach((potion) => tryUse(potion));
+  ].forEach(tryUse);
 
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);
