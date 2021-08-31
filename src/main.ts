@@ -49,9 +49,12 @@ import {
   $items,
   $skill,
   $slot,
+  ascend,
   Clan,
   get,
   have,
+  Lifestyle,
+  Paths,
   sinceKolmafiaRevision,
   SongBoom,
   SourceTerminal,
@@ -102,7 +105,6 @@ import {
   Quest,
 } from "./quests";
 import { synthesize } from "./sweetsynthesis";
-import { ascend } from "./valhalla";
 
 const choiceAdventures = [
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
@@ -146,7 +148,14 @@ export function main(): void {
   if (myPath() !== "Community Service") {
     checkReadyToAscend();
     if (canInteract() && userConfirm(`Ready to Ascend into Community Service?`)) {
-      ascend();
+      ascend(
+        Paths.CommunityService,
+        $class`Sauceror`,
+        Lifestyle.hardcore,
+        "wallaby",
+        $item`astral six-pack`,
+        $item`astral statuette`
+      );
     } else {
       abort();
     }
