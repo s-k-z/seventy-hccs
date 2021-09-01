@@ -70,7 +70,9 @@ const transforms = new Map<Item, candySet>([
  */
 export function synthesize(
   allowTomeUse = true,
-  targetEffects: Effect[] = $effects`Synthesis: Smart, Synthesis: Collection, Synthesis: Learning`,
+  targetEffects: Effect[] = $effects`Synthesis: Smart, Synthesis: Collection, Synthesis: Learning`.filter(
+    (e) => !have(e)
+  ),
   reserveCandies: [Item, number][] = [
     [$item`Chubby and Plump bar`, 1],
     [$item`sugar sheet`, 1],

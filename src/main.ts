@@ -11,7 +11,6 @@ import {
   effectModifier,
   equip,
   getProperty,
-  handlingChoice,
   haveEquipped,
   mpCost,
   myAdventures,
@@ -31,6 +30,7 @@ import {
   print,
   retrieveItem,
   reverseNumberology,
+  runChoice,
   soulsauceCost,
   toInt,
   totalFreeRests,
@@ -88,9 +88,7 @@ import {
   acquireGumOrHermitItem,
   checkAvailable,
   shrugEffect,
-  tryRunChoice,
   tryUse,
-  tuple,
   wishEffect,
   withContext,
   withEquipment,
@@ -109,7 +107,6 @@ import { synthesize } from "./sweetsynthesis";
 const choiceAdventures = [
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
   [326, 1], // Showdown: (1) fight mother slime (2) leave
-  [1118, 1], // X-32-F Combat Training Snowman Control Console: (1) muscle (2) mysticality (3) moxie (4) tournament (6) leave
   [1203, 4], // Midnight in the Civic Center: (1) 500 myst stats (2) counterfeit city for 300 sprinkles (3) N/A (4) 5 gingerbread cigarettes for 5 sprinkles (5) N/A
   [1204, 1], // Noon at the Train Station: (1) get a bunch of candy (2) increase size of sewer gators (3) 250 myst stats
   [1208, 3], // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
@@ -139,8 +136,8 @@ function checkMainClan() {
 export function main(): void {
   sinceKolmafiaRevision(20807);
 
-  if (MAIN_CLAN.length < 1) throw `seventycs_main_clan property not set`;
-  if (FAX_AND_SLIME_CLAN.length < 1) throw `seventycs_side_clan not set`;
+  if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
+  if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
 
   const date = new Date();
   const startTime = date.getTime();
@@ -165,7 +162,8 @@ export function main(): void {
 
   print("Save the Kingdom, save the world. Community Service time!", "green");
   print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
-
+  // Gotta talk to the Council the first time before seeing quests
+  visitUrl("council.php");
   withContext(levelAndDoQuests, [
     // breakableHandling values:
     // 1: abort
@@ -305,7 +303,7 @@ function levelAndDoQuests() {
   completeQuest(Quest.HP);
 
   if (haveQuest(Quest.SpellDamage)) {
-    events.innerElf.run();
+    if (!have($effect`Inner Elf`)) events.innerElf.run();
     oneOffEvents.lavaCo();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
       print(`Current HP before Deep Dark Visions: ${myHp()}`);
@@ -323,7 +321,7 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
-    events.innerElf.run();
+    if (!have($effect`Inner Elf`)) events.innerElf.run();
     oneOffEvents.velvetGoldMine();
     completeQuest(Quest.WeaponDamage);
   }
@@ -377,16 +375,13 @@ function levelAndDoQuests() {
 
 function openQuestZones() {
   [
-    tuple("questM23Meatsmith", "meatsmith", 1059),
-    tuple("questM24Doc", "doc", 1064),
-    tuple("questM25Armorer", "armory", 1065),
-  ].forEach(([prop, name, id]) => {
+    ["questM23Meatsmith", "meatsmith"],
+    ["questM24Doc", "doc"],
+    ["questM25Armorer", "armory"],
+  ].forEach(([prop, name]) => {
     if (getProperty(prop).toLowerCase() === "unstarted") {
-      // Don't think we need?
-      //visitUrl("shop.php?whichshop=${b}");
       visitUrl(`shop.php?whichshop=${name}&action=talk`);
-      tryRunChoice(1, id, `start ${name} quest`);
-      if (getProperty(prop).toLowerCase() === "unstarted") throw `Failed to start ${name} quest`;
+      runChoice(1);
     }
   });
 }
@@ -451,9 +446,8 @@ function preCoilWire() {
     if (!get("_deckCardsSeen").toLowerCase().includes(card)) cliExecute(`cheat ${card}`);
   });
 
-  if (!have($skill`Digitize`) && get("_sourceTerminalDigitizeUses") < 1) {
+  if (get("_sourceTerminalDigitizeUses") < 1) {
     SourceTerminal.educate(SourceTerminal.Skills.Digitize);
-    if (!have($skill`Digitize`)) throw `Error: need to learn ${$skill`Digitize`}`;
   }
 
   if (myAdventures() < 60) {
@@ -471,7 +465,6 @@ function preCoilWire() {
     SourceTerminal.educate(SourceTerminal.Skills.Compress);
     SourceTerminal.educate(SourceTerminal.Skills.Extract);
   }
-  if (have($skill`Digitize`)) throw `Error: need to unlearn ${$skill`Digitize`}`;
 
   const wand = $item`weeping willow wand`;
   if (!have(wand) && !have($item`flimsy hardwood scraps`)) visitUrl("shop.php?whichshop=lathe");
@@ -502,7 +495,9 @@ function postCoilWire() {
   gazeAtTheStars();
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
   if (!have($skill`Seek out a Bird`)) use($item`Bird-a-Day calendar`);
-  if (!have($item`Yeg's Motel hand soap`)) cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
+  if (!have($item`Yeg's Motel hand soap`) && !have($effect`Sigils of Yeg`)) {
+    cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
+  }
   cliExecute("Briefcase e spell hot -combat");
   let click = true;
   for (let i = 0; i < 22 && click; ++i) {
@@ -515,8 +510,10 @@ function postCoilWire() {
   // Then use nanorhino for nanobrainy and increment the gingerbread city counter
   oneOffEvents.nanobrainy();
   // Upgrade Cosplay Saber and start buffing familiar weight now that we're done with Nanorhino
-  if (get("_saberMod") < 1) visitUrl("main.php?action=may4");
-  if (handlingChoice()) throw `Stuck picking saber mod?`;
+  if (get("_saberMod") < 1) {
+    visitUrl("main.php?action=may4");
+    runChoice(4);
+  }
   if (!get("_pottedTeaTreeUsed")) cliExecute("teatree loyal");
   wishEffect($effect`All Is Forgiven`);
   wishEffect($effect`Witch Breaded`);
@@ -557,6 +554,7 @@ function postCoilWire() {
     if (!have(saucePotion) && !have(effectModifier(saucePotion, "effect"))) create(saucePotion);
   });
   if (!have($item`tiny black hole`)) create($item`tiny black hole`);
+  checkAvailable($item`tiny black hole`);
 
   retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);

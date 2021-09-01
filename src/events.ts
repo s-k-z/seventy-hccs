@@ -122,6 +122,7 @@ export const events: Record<string, eventData> = {
       if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
         throw `Failed to retrieve fax of ${faxMon}`;
       }
+      checkAvailable($item`tiny black hole`);
       equip($slot`off-hand`, $item`tiny black hole`);
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
@@ -213,7 +214,7 @@ export const events: Record<string, eventData> = {
       adventure(loveTunnel, MacroList.TunnelOfLOV);
       if (handlingChoice()) throw "Stuck in LOV?";
       checkEffect($effect`Open Heart Surgery`);
-      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach(checkAvailable);
+      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((l) => checkAvailable(l, 1));
       use($item`LOV Elixir #3`);
       use($item`LOV Elixir #6`);
       equip($slot`back`, $item`LOV Epaulettes`);
@@ -303,8 +304,10 @@ export const events: Record<string, eventData> = {
     max: 10,
     current: () => get("_snojoFreeFights"),
     run: () => {
-      if (!get("snojoSetting")) visitUrl("place.php?whichplace=snojo&action=snojo_controller");
-      if (handlingChoice()) throw `Stuck in Snojo?`;
+      if (!get("snojoSetting")) {
+        visitUrl("place.php?whichplace=snojo&action=snojo_controller");
+        runChoice(1);
+      }
       selectBestFamiliar();
       adventure(snojo, MacroList.FreeFight);
     },
@@ -428,7 +431,7 @@ export const events: Record<string, eventData> = {
   },
 
   lecture: {
-    max: 17,
+    max: 16,
     current: () => get("_pocketProfessorLectures"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
@@ -453,6 +456,7 @@ export const events: Record<string, eventData> = {
     current: () => get("_chestXRayUsed"),
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
+      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
     },
@@ -552,7 +556,7 @@ export const oneOffEvents = {
 
   nanobrainy: (): void => {
     if (!get("_gingerbreadClockAdvanced")) adventure(civicCenter, Macro.abort());
-    if (!have($effect`Nanobrainy`)) {
+    if (!have($effect`Nanobrainy`) && get("_nanorhinoCharge") > 99) {
       equip($slot`back`, $item`vampyric cloake`);
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       familiar($familiar`Nanorhino`);

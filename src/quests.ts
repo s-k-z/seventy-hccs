@@ -35,7 +35,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
     return new Map([
       [$slot`hat`, $item`Iunion Crown`],
       [$slot`back`, $item`protonic accelerator pack`],
-      [$slot`shirt`, $item`fresh coat of paint`],
+      //[$slot`shirt`, $item`fresh coat of paint`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
       [$slot`pants`, $item`pantogram pants`],
@@ -278,7 +278,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Inscrutable Gaze`, Context.leveling],
     //[$effect`Purity of Spirit`, EffectContext.leveling],
     [$effect`Ruthlessly Efficient`, Context.leveling],
-    [$effect`Shield of the Pastalord`, Context.leveling],
+    // Need the non-flimsy effect for PM
+    [$effect`Flimsy Shield of the Pastalord`, Context.leveling],
     [$effect`Springy Fusilli`, Context.leveling],
 
     // Beach comb
@@ -341,7 +342,7 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`The Magic of LOV`, Context.test],
     // Food/Booze/Spleen
     [$effect`Filled with Magic`, Context.special],
-    [$effect`Drunk With Power`, Context.special],
+    //[$effect`Drunk With Power`, Context.special],
     // Wish
     [$effect`Sparkly!`, Context.special],
     // Other
@@ -500,6 +501,7 @@ export function prepAndDoQuest(id: Quest): number {
   if (haveQuest(id)) {
     acquireQuestEffects(id);
     equipOutfit(id);
+    visitUrl("council.php");
     visitUrl(`choice.php?whichchoice=1089&option=${id}`);
     if (haveQuest(id)) throw `Couldn't complete quest ${id}?`;
   }

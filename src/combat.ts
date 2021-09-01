@@ -1,6 +1,7 @@
 import {
   adv1,
   choiceFollowsFight,
+  handlingChoice,
   inMultiFight,
   myTurncount,
   runChoice,
@@ -186,6 +187,7 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro): 
     visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
     runCombat(macro.toString());
     if (choiceFollowsFight()) runChoice(-1);
+    if (handlingChoice()) runChoice(-1);
   } else {
     throw "Trying to map too many monsters in one day";
   }

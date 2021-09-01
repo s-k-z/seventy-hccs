@@ -8,7 +8,6 @@ import {
   hermit,
   myMeat,
   retrieveItem,
-  runChoice,
   toInt,
   totalTurnsPlayed,
   use,
@@ -17,7 +16,7 @@ import {
 import { $item, get, have, set } from "libram";
 
 export function acquireEffect(e: Effect): void {
-  if (e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
+  if (!have(e) && e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
   if (!have(e)) cliExecute(e.default);
 }
 
@@ -57,13 +56,6 @@ export function checkFax(monster: Monster): void {
 
 export function shrugEffect(effect: Effect): void {
   if (have(effect)) cliExecute(`shrug ${effect}`);
-}
-
-export function tryRunChoice(pageIndex: number, choiceID: number, goal: string): void {
-  if (!runChoice(pageIndex).includes(`whichchoice=${choiceID}`)) {
-    const trim = goal.trim();
-    throw `Error: failed to ${trim.charAt(0).toLowerCase()}${trim.slice(1)}`;
-  }
 }
 
 export function tryUse(i: Item, n = 1): void {

@@ -4,6 +4,7 @@ import {
   myClass,
   myMp,
   myPrimestat,
+  runChoice,
   toInt,
   use,
   useSkill,
@@ -11,7 +12,6 @@ import {
 } from "kolmafia";
 import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } from "libram";
 import { BRICKOS_PER_FIGHT } from "./config";
-import { tryRunChoice } from "./lib";
 
 export function castBestLibram(): void {
   const needed = BRICKOS_PER_FIGHT * (3 - get("_brickoFights"));
@@ -76,10 +76,10 @@ export function harvestBatteries(): void {
 
 export function scavengeDaycare(): void {
   visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-  if (!get("_daycareNap")) tryRunChoice(1, 1334, "have a boxing daydream.");
+  if (!get("_daycareNap")) runChoice(1);
   if (get("_daycareGymScavenges") < 1) {
-    tryRunChoice(3, 1334, "enter the gym.");
-    tryRunChoice(2, 1336, "scavenge for gym equipment.");
+    runChoice(3);
+    runChoice(2);
   }
 }
 

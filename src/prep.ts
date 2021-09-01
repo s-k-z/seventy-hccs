@@ -23,7 +23,7 @@ export function checkReadyToAscend(): void {
   if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
 
   const banish = $monster`Perceiver of Sensations`;
-  const notFound = () => get("banishedMonsters").match(`(.+)?${banish}:ice house.+`) === null;
+  const notFound = () => !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
   if (notFound()) visitUrl("museum.php?action=icehouse");
   if (notFound()) throw `Need to ice house ${banish}`;
 
@@ -35,6 +35,6 @@ export function checkReadyToAscend(): void {
   //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
 
   if ((totalTurnsPlayed() + 60) % 11 !== 1) {
-    throw `Spend ${(totalTurnsPlayed() + 60 - 1) % 11} turns to prepare a voter monster`;
+    throw `Spend some turns to prepare a voter monster`;
   }
 }
