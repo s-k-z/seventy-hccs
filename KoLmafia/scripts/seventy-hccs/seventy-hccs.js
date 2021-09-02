@@ -19279,7 +19279,6 @@ function levelAndDoQuests() {
     oneOffEvents.foamYourself();
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(main_templateObject43 || (main_templateObject43 = main_taggedTemplateLiteral(["Exotic Parrot"]))));
     if (!(0,external_kolmafia_.haveEquipped)((0,dist.$item)(main_templateObject44 || (main_templateObject44 = main_taggedTemplateLiteral(["cracker"]))))) throw "Wrong familiar equipment?";
-    if (!(0,dist.get)("_horsery").startsWith("pale")) (0,external_kolmafia_.cliExecute)("horsery pale");
     completeQuest(Quest.HotResist);
   }
 

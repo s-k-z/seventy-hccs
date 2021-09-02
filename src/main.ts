@@ -337,7 +337,6 @@ function levelAndDoQuests() {
     oneOffEvents.foamYourself();
     useFamiliar($familiar`Exotic Parrot`);
     if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
-    if (!get("_horsery").startsWith("pale")) cliExecute("horsery pale");
     completeQuest(Quest.HotResist);
   }
 
