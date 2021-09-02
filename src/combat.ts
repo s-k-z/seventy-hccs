@@ -17,7 +17,6 @@ import { $effect, $item, $location, $monster, $skill, get, Macro } from "libram"
 const amateurNinja = $monster`amateur ninja`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
 const toxicBeastie = $monster`toxic beastie`.id;
-const ungulith = $monster`ungulith`.id;
 const LOVEnforcer = $monster`LOV Enforcer`.id;
 const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquareMon = $monster`Performer of Actions`.id;
@@ -91,7 +90,7 @@ const DefaultMacro = new Macro()
 export const MacroList = {
   FreeFight: DefaultMacro,
 
-  PickpocketFreeRun: new Macro().if_(`monsterid ${ungulith}`, "pickpocket").step("runaway"),
+  Runaway: new Macro().step("runaway"),
 
   Banish: TryBanish,
 
@@ -139,7 +138,7 @@ export const MacroList = {
 
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 
-  MeteorShowerForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
+  MeteorForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
   FoamForce: new Macro().skill($skill`Foam Yourself`).skill($skill`Use the Force`),
 };
 
@@ -149,10 +148,19 @@ export function adventure(loc: Location, macro: Macro): void {
   adv1(loc, 0, macro.toString());
   while (inMultiFight()) runCombat(macro.toString());
   if (choiceFollowsFight()) visitUrl("choice.php");
+  if (handlingChoice()) runChoice(-1);
+}
+
+export function adventureUrl(url: string, macro: Macro): void {
+  visitUrl(url);
+  runCombat(macro.toString());
+  if (choiceFollowsFight()) visitUrl("choice.php");
+  if (handlingChoice()) runChoice(-1);
 }
 
 export function mapMonster(location: Location, monster: Monster, macro: Macro): void {
   if (get("_monstersMapped") < 3) {
+    setAutoAttack(0);
     if (!get("mappingMonsters")) {
       useSkill($skill`Map the Monsters`);
       if (!get("mappingMonsters")) throw "Failed to cast map the monsters?";

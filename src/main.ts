@@ -130,9 +130,6 @@ function checkMainClan() {
   if (Clan.get().name !== MAIN_CLAN) throw `Not in main clan?`;
 }
 
-//
-// Community Service Starts!
-//
 export function main(): void {
   sinceKolmafiaRevision(20807);
 
@@ -304,7 +301,7 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.SpellDamage)) {
     if (!have($effect`Inner Elf`)) events.innerElf.run();
-    oneOffEvents.meteorShower();
+    oneOffEvents.meteorUngulith();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
       print(`Current HP before Deep Dark Visions: ${myHp()}`);
       equipOutfit(Quest.DeepDark);
@@ -538,7 +535,7 @@ function postCoilWire() {
 
     // Buffs that can't fit elsewhere
     $skill`Incredible Self-Esteem`,
-  ].forEach(useSkill);
+  ].forEach((s) => useSkill(s));
   // 143 mp
 
   [
@@ -549,8 +546,6 @@ function postCoilWire() {
   ].forEach((saucePotion) => {
     if (!have(saucePotion) && !have(effectModifier(saucePotion, "effect"))) create(saucePotion);
   });
-  if (!have($item`tiny black hole`)) create($item`tiny black hole`);
-  checkAvailable($item`tiny black hole`);
 
   retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);

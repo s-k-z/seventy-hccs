@@ -31,7 +31,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { adventure, MacroList, mapMonster } from "./combat";
+import { adventure, adventureUrl, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
 import {
@@ -110,26 +110,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  ungulith: {
-    max: 0,
-    current: () => availableAmount($item`corrupted marrow`) - 1,
-    run: () => {
-      const fax = $item`photocopied monster`;
-      const faxMon = $monster`ungulith`;
-      if (!have(fax)) Clan.with(FAX_AND_SLIME_CLAN, () => cliExecute("fax receive"));
-      if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
-        throw `Failed to retrieve fax of ${faxMon}`;
-      }
-      checkAvailable($item`tiny black hole`);
-      equip($slot`off-hand`, $item`tiny black hole`);
-      checkEffect($effect`Ode to Booze`);
-      familiar($familiar`Frumious Bandersnatch`);
-      MacroList.PickpocketFreeRun.setAutoAttack();
-      visitUrl(`inv_use.php?pwd=&whichitem=${toInt(fax)}`);
-      checkAvailable($item`corrupted marrow`);
-    },
-  },
-
   latteCarrot: {
     max: 0,
     current: () => (get("latteUnlocks").includes("carrot") ? 0 : -1),
@@ -137,7 +117,7 @@ export const events: Record<string, eventData> = {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
-      adventure(direWarren, MacroList.PickpocketFreeRun);
+      adventure(direWarren, MacroList.Runaway);
     },
   },
 
@@ -156,7 +136,7 @@ export const events: Record<string, eventData> = {
       } else {
         checkEffect($effect`Ode to Booze`);
         familiar($familiar`Frumious Bandersnatch`);
-        MacroList.PickpocketFreeRun.setAutoAttack();
+        MacroList.Runaway.setAutoAttack();
       }
       ChateauMantegna.fightPainting();
       if (!get("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
@@ -262,7 +242,7 @@ export const events: Record<string, eventData> = {
     run: () => {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
-      adventure(upscaleDistrict, MacroList.PickpocketFreeRun);
+      adventure(upscaleDistrict, MacroList.Runaway);
       const latte = $item`gingerbread spice latte`;
       if (have(latte)) {
         use(latte);
@@ -279,7 +259,7 @@ export const events: Record<string, eventData> = {
     run() {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
-      adventure(civicCenter, MacroList.PickpocketFreeRun);
+      adventure(civicCenter, MacroList.Runaway);
       const cig = $item`gingerbread cigarette`;
       if (get("_gingerbreadCityTurns") === 15 && !have(cig)) throw `Failed to obtain ${cig}`;
     },
@@ -564,6 +544,17 @@ export const oneOffEvents = {
     }
   },
 
+  meteorUngulith: (): void => {
+    const fax = $item`photocopied monster`;
+    const faxMon = $monster`ungulith`;
+    if (!have(fax)) Clan.with(FAX_AND_SLIME_CLAN, () => cliExecute("fax receive"));
+    if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
+      throw `Failed to retrieve fax of ${faxMon}`;
+    }
+    adventureUrl(`inv_use.php?pwd=&whichitem=${toInt(fax)}`, MacroList.MeteorForce);
+    checkAvailable($item`corrupted marrow`);
+  },
+
   foamYourself: (): void => {
     if (!have($effect`Fireproof Foam Suit`)) {
       useFamiliar($familiar`Exotic Parrot`);
@@ -582,17 +573,13 @@ export const oneOffEvents = {
         !have($effect`Man's Worst Enemy`)
       ) {
         equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        mapMonster(
-          statelyPleasureDome,
-          $monster`toothless mastiff bitch`,
-          MacroList.MeteorShowerForce
-        );
+        mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.MeteorForce);
         checkAvailable($item`disintegrating spiky collar`);
         checkEffect($effect`Meteor Showered`);
         tryUse($item`disintegrating spiky collar`);
       } else {
         equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        adventure(direWarren, MacroList.MeteorShowerForce);
+        adventure(direWarren, MacroList.MeteorForce);
         checkEffect($effect`Meteor Showered`);
       }
     }
