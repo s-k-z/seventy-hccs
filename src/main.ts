@@ -304,7 +304,7 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.SpellDamage)) {
     if (!have($effect`Inner Elf`)) events.innerElf.run();
-    oneOffEvents.lavaCo();
+    oneOffEvents.meteorShower();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
       print(`Current HP before Deep Dark Visions: ${myHp()}`);
       equipOutfit(Quest.DeepDark);
@@ -322,7 +322,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     if (!have($effect`Inner Elf`)) events.innerElf.run();
-    oneOffEvents.velvetGoldMine();
+    oneOffEvents.meteorShower();
     completeQuest(Quest.WeaponDamage);
   }
 
@@ -337,7 +337,7 @@ function levelAndDoQuests() {
   }
 
   if (haveQuest(Quest.HotResist)) {
-    oneOffEvents.mistform();
+    oneOffEvents.foamYourself();
     useFamiliar($familiar`Exotic Parrot`);
     if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
     if (!get("_horsery").startsWith("pale")) cliExecute("horsery pale");
@@ -498,7 +498,7 @@ function postCoilWire() {
   if (!have($item`Yeg's Motel hand soap`) && !have($effect`Sigils of Yeg`)) {
     cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
   }
-  cliExecute("Briefcase e spell hot -combat");
+  cliExecute("Briefcase e spell spooky -combat");
   let click = true;
   for (let i = 0; i < 22 && click; ++i) {
     click = !containsText(

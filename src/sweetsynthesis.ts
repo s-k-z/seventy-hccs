@@ -73,11 +73,11 @@ export function synthesize(
   targetEffects: Effect[] = $effects`Synthesis: Smart, Synthesis: Collection, Synthesis: Learning`.filter(
     (e) => !have(e)
   ),
-  reserveCandies: [Item, number][] = [
-    [$item`Chubby and Plump bar`, 1],
-    [$item`sugar sheet`, 1],
-    [$item`sugar sheet`, 1],
-    [$item`sugar sheet`, 1],
+  reserveCandies: Item[] = [
+    $item`Chubby and Plump bar`,
+    $item`sugar sheet`,
+    $item`sugar sheet`,
+    $item`sugar sheet`,
   ]
 ): void {
   const candies = {
@@ -93,18 +93,17 @@ export function synthesize(
   });
 
   // Pretend summon sugar sheets if tome summons available
-  const sheet = $item`sugar sheet`;
-  if (allowTomeUse) {
+  if (allowTomeUse && get("tomeSummons") < 3) {
     candies.complex.push({
-      candy: sheet,
-      count: inv[`${sheet}`] + Math.min(0, 3 - get("tomeSummons")),
+      candy: $item`sugar sheet`,
+      count: inv["sugar sheet"] + 3 - get("tomeSummons"),
     });
   }
 
   // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
   let sim: simulateResult = { result: false, pairs: [] };
-  for (let i = 0; i < reserveCandies.length; i++) {
-    const used = new Map<Item, number>([...reserveCandies.slice(i)]);
+  for (let i = 0; i <= reserveCandies.length; i++) {
+    const used = new Map<Item, number>(reserveCandies.slice(i).map((r) => [r, 1]));
     sim = simulate(targetEffects, candies, used);
     if (sim.result) break;
   }

@@ -22,10 +22,6 @@ const LOVEnforcer = $monster`LOV Enforcer`.id;
 const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquareMon = $monster`Performer of Actions`.id;
 const DMTCircleMon = $monster`Thinker of Thoughts`.id;
-const factoryOverseerF = $monster`factory overseer (female)`.id;
-const factoryWorkerF = $monster`factory worker (female)`.id;
-const mineWorkerF = $monster`mine worker (female)`.id;
-const mineWorkerM = $monster`mine worker (male)`.id;
 
 const retailDistrict = toUrl($location`Gingerbread Upscale Retail District`).split("=")[1];
 
@@ -53,7 +49,6 @@ const Replace = new Macro()
   //.trySkill($skill`CHEAT CODE: Replace Enemy`)
   //.if_(`!hasskill ${toInt($skill`CHEAT CODE: Replace Enemy`)}`, Macro
   .skill($skill`Macrometeorite`);
-const MeteorShowerForce = new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`);
 
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
@@ -140,26 +135,12 @@ export const MacroList = {
     .step(DefaultMacro),
 
   MotherSlime: new Macro().trySkill($skill`KGB tranquilizer dart`).skill($skill`Snokebomb`),
-
-  LavaCoFactory1: new Macro()
-    .if_(`!monsterid ${factoryWorkerF} && !monsterid ${factoryOverseerF}`, TryBanish)
-    .step(MeteorShowerForce),
-  LavaCoFactory2: new Macro()
-    .if_(`!monsterid ${factoryWorkerF} && !monsterid ${factoryOverseerF}`, Replace)
-    .step(MeteorShowerForce),
-  VelvetGoldMine1: new Macro()
-    .if_(`!monsterid ${mineWorkerF} && !monsterid ${mineWorkerM}`, TryBanish)
-    .step(MeteorShowerForce),
-  VelvetGoldMine2: new Macro()
-    .if_(`!monsterid ${mineWorkerF} && !monsterid ${mineWorkerM}`, Replace)
-    .step(MeteorShowerForce),
-
-  MistForm: new Macro().trySkill($skill`Become a Cloud of Mist`).step(TryBanish),
   BatForm: new Macro().trySkill($skill`Become a Bat`).step(TryBanish),
 
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 
-  MeteorShowerForce: MeteorShowerForce,
+  MeteorShowerForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
+  FoamForce: new Macro().skill($skill`Foam Yourself`).skill($skill`Use the Force`),
 };
 
 // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11

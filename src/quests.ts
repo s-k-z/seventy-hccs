@@ -37,7 +37,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`back`, $item`protonic accelerator pack`],
       //[$slot`shirt`, $item`fresh coat of paint`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
+      [$slot`off-hand`, $item`industrial fire extinguisher`],
       [$slot`pants`, $item`pantogram pants`],
       [$slot`acc1`, $item`hewn moon-rune spoon`],
       [$slot`acc2`, $item`Powerful Glove`],
@@ -106,6 +106,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
     const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`pants`, $item`pantogram pants`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
     if (have($item`burning paper crane`)) outfit.set($slot`off-hand`, $item`burning paper crane`);
     return outfit;
@@ -156,13 +157,11 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
 
   [Quest.HotResist]: () => {
     return new Map([
-      [$slot`hat`, $item`high-temperature mining mask`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`meteorite guard`],
-      [$slot`pants`, $item`lava-proof pants`],
+      [$slot`off-hand`, $item`industrial fire extinguisher`],
       [$slot`acc1`, $item`Brutal brogues`],
-      [$slot`acc2`, $item`heat-resistant gloves`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+      [$slot`acc2`, $item`hewn moon-rune spoon`],
+      [$slot`acc3`, $item`Beach Comb`],
     ]);
   },
 
@@ -192,7 +191,7 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc2`, $item`gold detective badge`],
       [$slot`acc3`, $item`your cowboy boots`],
     ]);
-    if (!candles.some((c) => have(c)) && have(sparkler)) outfit.set($slot`weapon`, sparkler);
+    if (!candles.some(have) && have(sparkler)) outfit.set($slot`weapon`, sparkler);
     // can only have one candle
     for (const c of candles) if (have(c)) outfit.set($slot`weapon`, c);
     return outfit;
@@ -281,7 +280,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     // Need the non-flimsy effect for PM
     [$effect`Flimsy Shield of the Pastalord`, Context.leveling],
     [$effect`Springy Fusilli`, Context.leveling],
-
+    // Take the stat vaccine instead of resists now
+    [$effect`Broad-Spectrum Vaccine`, Context.leveling],
     // Beach comb
     [$effect`Cold as Nice`, Context.leveling],
     [$effect`A Brush with Grossness`, Context.leveling],
@@ -401,12 +401,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Astral Shell`, Context.leveling],
     [$effect`Elemental Saucesphere`, Context.leveling],
     [$effect`Hot-Headed`, Context.leveling],
-    [$effect`Rainbow Vaccine`, Context.leveling],
 
-    [$effect`Amazing`, Context.test],
-
-    //[$effect`Egged On`, Context.special],
-    [$effect`Misty Form`, Context.special],
+    [$effect`Fireproof Foam Suit`, Context.special],
   ]),
 
   [Quest.FamiliarWeight]: new Map([
