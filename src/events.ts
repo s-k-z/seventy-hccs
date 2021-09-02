@@ -515,6 +515,7 @@ export function getRemainingFreeFights(): number {
 export const oneOffEvents = {
   hipster: (): void => {
     if (!get("_ironicMoustache")) {
+      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       familiar($familiar`Mini-Hipster`);
       equip($slot`familiar`, $item`none`);
       adventure(noobCave, MacroList.FreeFight);
@@ -615,7 +616,6 @@ function familiar(fam: Familiar) {
     [$familiar`Machine Elf`, "meat"],
     [$familiar`Melodramedary`, "myst"],
     [$familiar`Pocket Professor`, "hp"],
-    //[$familiar`Rockin' Robin`, "mp"],
     [$familiar`Shorter-Order Cook`, "item"],
   ]).get(fam);
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);
@@ -643,12 +643,6 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     get("garbageFireProgress") + getRemainingFreeFights() >= 30
   ) {
     familiar($familiar`Garbage Fire`);
-    /*} else if (
-    !have($item`robin's egg`) &&
-    !have($effect`Egged On`) &&
-    get("rockinRobinProgress") + getRemainingFreeFights() >= 30
-  ) {
-    familiar($familiar`Rockin' Robin`);*/
   } else if (flag === FamiliarFlag.ToxicTeacups && get("_hipsterAdv") < 7) {
     familiar($familiar`Artistic Goth Kid`);
   } else {

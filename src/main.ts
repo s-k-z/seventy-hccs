@@ -248,7 +248,7 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      $items`robin's egg, short stack of pancakes`.forEach(tryUse);
+      tryUse($item`short stack of pancakes`);
 
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
@@ -457,8 +457,6 @@ function preCoilWire() {
 
   if (myHp() < myMaxhp()) cliExecute("hottub");
 
-  // Fight Kramco
-  if (!haveEquipped($item`Kramco Sausage-o-Matic™`)) throw `Kramco not equipped?`;
   oneOffEvents.hipster();
 
   if (get("_sourceTerminalDigitizeUses") > 0) {
@@ -473,15 +471,13 @@ function preCoilWire() {
 
   retrieveItem($item`detuned radio`); // 8601 - 285 = 8316 meat
   changeMcd(10);
-
-  retrieveItem($item`blue rocket`); // 8316 - 237 = 8079 meat
   // Fight Protonic Ghost
   oneOffEvents.mimic();
 
   // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
-  // 8079 + 2000 = 10079 meat
+  // 8316 + 2000 = 10316 meat
 
   const donut = $item`occult jelly donut`;
   if (!have(donut)) create(donut);
@@ -524,7 +520,7 @@ function postCoilWire() {
     if (!have(range)) retrieveItem(range);
     use(range);
   }
-  // 10079 - 950 = 9129 meat
+  // 10316 - 950 = 9366 meat
   [
     // Need all of these to craft with
     $skill`Advanced Cocktailcrafting`,
@@ -558,13 +554,13 @@ function postCoilWire() {
 
   retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
-  // 9129 - 142 = 8987 meat
+  // 9366 - 142 = 9224 meat
   checkMainClan();
   $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, 5500 meat
-  // 8987 - 5500 = 3487 meat
+  // 9224 - 5500 = 3724 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
-  eatPizzas(); // 3487 - 987 - 950 - 215 - 95 - 28 = 1212 meat
+  eatPizzas(); // 3724 - 987 - 950 - 215 - 95 - 28 = 1449 meat
   if (myGardenType().toLowerCase().includes("peppermint")) cliExecute("garden pick");
   synthesize();
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
