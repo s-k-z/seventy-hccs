@@ -17827,7 +17827,7 @@ var MacroList = {
   BatForm: new dist.Macro().trySkill((0,dist.$skill)(_templateObject62 || (_templateObject62 = combat_taggedTemplateLiteral(["Become a Bat"])))).step(TryBanish),
   LatteGulpRunaway: new dist.Macro().trySkill((0,dist.$skill)(_templateObject63 || (_templateObject63 = combat_taggedTemplateLiteral(["Gulp Latte"])))).step("runaway"),
   MeteorForce: new dist.Macro().skill((0,dist.$skill)(_templateObject64 || (_templateObject64 = combat_taggedTemplateLiteral(["Meteor Shower"])))).skill((0,dist.$skill)(_templateObject65 || (_templateObject65 = combat_taggedTemplateLiteral(["Use the Force"])))),
-  FoamForce: new dist.Macro().skill((0,dist.$skill)(_templateObject66 || (_templateObject66 = combat_taggedTemplateLiteral(["Foam Yourself"])))).skill((0,dist.$skill)(_templateObject67 || (_templateObject67 = combat_taggedTemplateLiteral(["Use the Force"]))))
+  FoamForce: new dist.Macro().skill((0,dist.$skill)(_templateObject66 || (_templateObject66 = combat_taggedTemplateLiteral(["Fire Extinguisher: Foam Yourself"])))).skill((0,dist.$skill)(_templateObject67 || (_templateObject67 = combat_taggedTemplateLiteral(["Use the Force"]))))
 }; // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
 
 function adventure(loc, macro) {

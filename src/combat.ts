@@ -139,7 +139,9 @@ export const MacroList = {
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 
   MeteorForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
-  FoamForce: new Macro().skill($skill`Foam Yourself`).skill($skill`Use the Force`),
+  FoamForce: new Macro()
+    .skill($skill`Fire Extinguisher: Foam Yourself`)
+    .skill($skill`Use the Force`),
 };
 
 // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
