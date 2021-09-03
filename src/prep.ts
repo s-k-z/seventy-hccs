@@ -21,6 +21,13 @@ export function checkReadyToAscend(): void {
 
   const target = $monster`pterodactyl`;
   if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
+  [
+    [$item`ceiling fan`, ChateauMantegna.getCeiling],
+    [$item`Swiss piggy bank`, ChateauMantegna.getDesk],
+    [$item`foreign language tapes`, ChateauMantegna.getNightstand],
+  ].forEach(([item, check]) => {
+    if (check !== item) throw `Install ${item} in Chateau Mantegna`;
+  });
 
   const banish = $monster`Perceiver of Sensations`;
   const notFound = () => !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());

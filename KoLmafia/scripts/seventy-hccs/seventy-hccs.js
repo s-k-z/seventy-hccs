@@ -18745,7 +18745,19 @@ function selectBestFamiliar() {
   }
 }
 ;// CONCATENATED MODULE: ./src/prep.ts
-var prep_templateObject, prep_templateObject2, prep_templateObject3, prep_templateObject4;
+var prep_templateObject, prep_templateObject2, prep_templateObject3, prep_templateObject4, prep_templateObject5, prep_templateObject6, prep_templateObject7;
+
+function prep_slicedToArray(arr, i) { return prep_arrayWithHoles(arr) || prep_iterableToArrayLimit(arr, i) || prep_unsupportedIterableToArray(arr, i) || prep_nonIterableRest(); }
+
+function prep_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function prep_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return prep_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return prep_arrayLikeToArray(o, minLen); }
+
+function prep_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function prep_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function prep_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function prep_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -18758,15 +18770,22 @@ function checkReadyToAscend() {
   if (badDayToday) throw "Don't want to ascend during ".concat((0,external_kolmafia_.holiday)());
   var target = (0,dist.$monster)(prep_templateObject || (prep_templateObject = prep_taggedTemplateLiteral(["pterodactyl"])));
   if (dist.ChateauMantegna.paintingMonster() !== target) throw "Missing ".concat(target, " in Chateau painting");
-  var banish = (0,dist.$monster)(prep_templateObject2 || (prep_templateObject2 = prep_taggedTemplateLiteral(["Perceiver of Sensations"])));
+  [[(0,dist.$item)(prep_templateObject2 || (prep_templateObject2 = prep_taggedTemplateLiteral(["ceiling fan"]))), dist.ChateauMantegna.getCeiling], [(0,dist.$item)(prep_templateObject3 || (prep_templateObject3 = prep_taggedTemplateLiteral(["Swiss piggy bank"]))), dist.ChateauMantegna.getDesk], [(0,dist.$item)(prep_templateObject4 || (prep_templateObject4 = prep_taggedTemplateLiteral(["foreign language tapes"]))), dist.ChateauMantegna.getNightstand]].forEach(_ref => {
+    var _ref2 = prep_slicedToArray(_ref, 2),
+        item = _ref2[0],
+        check = _ref2[1];
+
+    if (check !== item) throw "Install ".concat(item, " in Chateau Mantegna");
+  });
+  var banish = (0,dist.$monster)(prep_templateObject5 || (prep_templateObject5 = prep_taggedTemplateLiteral(["Perceiver of Sensations"])));
 
   var notFound = () => !(0,dist.get)("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
 
   if (notFound()) (0,external_kolmafia_.visitUrl)("museum.php?action=icehouse");
   if (notFound()) throw "Need to ice house ".concat(banish);
   if (!(0,external_kolmafia_.myGardenType)().toLowerCase().includes("peppermint")) throw "Install a peppermint garden";
-  if ((0,external_kolmafia_.getWorkshed)() !== (0,dist.$item)(prep_templateObject3 || (prep_templateObject3 = prep_taggedTemplateLiteral(["diabolic pizza cube"])))) throw "Install a diabolic pizza cube";
-  if ((0,external_kolmafia_.eudoraItem)() !== (0,dist.$item)(prep_templateObject4 || (prep_templateObject4 = prep_taggedTemplateLiteral(["New-You Club Membership Form"])))) throw "Select New-You Club for Eudora"; //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
+  if ((0,external_kolmafia_.getWorkshed)() !== (0,dist.$item)(prep_templateObject6 || (prep_templateObject6 = prep_taggedTemplateLiteral(["diabolic pizza cube"])))) throw "Install a diabolic pizza cube";
+  if ((0,external_kolmafia_.eudoraItem)() !== (0,dist.$item)(prep_templateObject7 || (prep_templateObject7 = prep_taggedTemplateLiteral(["New-You Club Membership Form"])))) throw "Select New-You Club for Eudora"; //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
 
   if (((0,external_kolmafia_.totalTurnsPlayed)() + 60) % 11 !== 1) {
     throw "Spend some turns to prepare a voter monster";
@@ -19331,7 +19350,7 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole, sell pork gems, save a baconstone for pantogram
   (0,external_kolmafia_.visitUrl)("tutorial.php?action=toot");
-  [(0,dist.$item)(main_templateObject56 || (main_templateObject56 = main_taggedTemplateLiteral(["letter from King Ralph XI"]))), (0,dist.$item)(main_templateObject57 || (main_templateObject57 = main_taggedTemplateLiteral(["pork elf goodies sack"]))), (0,dist.$item)(main_templateObject58 || (main_templateObject58 = main_taggedTemplateLiteral(["banana candle"]))), (0,dist.$item)(main_templateObject59 || (main_templateObject59 = main_taggedTemplateLiteral(["ear candle"]))), (0,dist.$item)(main_templateObject60 || (main_templateObject60 = main_taggedTemplateLiteral(["natural magick candle"]))), (0,dist.$item)(main_templateObject61 || (main_templateObject61 = main_taggedTemplateLiteral(["rainbow glitter candle"]))), (0,dist.$item)(main_templateObject62 || (main_templateObject62 = main_taggedTemplateLiteral(["votive of confidence"])))].forEach(tryUse); // Only need one consult for a candy
+  [(0,dist.$item)(main_templateObject56 || (main_templateObject56 = main_taggedTemplateLiteral(["letter from King Ralph XI"]))), (0,dist.$item)(main_templateObject57 || (main_templateObject57 = main_taggedTemplateLiteral(["pork elf goodies sack"]))), (0,dist.$item)(main_templateObject58 || (main_templateObject58 = main_taggedTemplateLiteral(["banana candle"]))), (0,dist.$item)(main_templateObject59 || (main_templateObject59 = main_taggedTemplateLiteral(["ear candle"]))), (0,dist.$item)(main_templateObject60 || (main_templateObject60 = main_taggedTemplateLiteral(["natural magick candle"]))), (0,dist.$item)(main_templateObject61 || (main_templateObject61 = main_taggedTemplateLiteral(["rainbow glitter candle"]))), (0,dist.$item)(main_templateObject62 || (main_templateObject62 = main_taggedTemplateLiteral(["votive of confidence"])))].forEach(gift => tryUse(gift)); // Only need one consult for a candy
 
   if ((0,dist.get)("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     checkMainClan();
@@ -19381,15 +19400,15 @@ function preCoilWire() {
   vote(); // Get free stats
 
   scavengeDaycare();
-  if (!(0,dist.have)((0,dist.$item)(main_templateObject71 || (main_templateObject71 = main_taggedTemplateLiteral(["Brutal brogues"]))))) (0,external_kolmafia_.cliExecute)("bastille bbq brutalist gesture");
-  checkAvailable((0,dist.$item)(main_templateObject72 || (main_templateObject72 = main_taggedTemplateLiteral(["Brutal brogues"]))));
+
+  if (!(0,dist.have)((0,dist.$item)(main_templateObject71 || (main_templateObject71 = main_taggedTemplateLiteral(["Brutal brogues"]))))) {
+    (0,external_kolmafia_.cliExecute)("bastille bbq brutalist gesture");
+    checkAvailable((0,dist.$item)(main_templateObject72 || (main_templateObject72 = main_taggedTemplateLiteral(["Brutal brogues"]))));
+  }
+
   ["forest", "rope", "wrench"].forEach(card => {
     if (!(0,dist.get)("_deckCardsSeen").toLowerCase().includes(card)) (0,external_kolmafia_.cliExecute)("cheat ".concat(card));
   });
-
-  if ((0,dist.get)("_sourceTerminalDigitizeUses") < 1) {
-    dist.SourceTerminal.educate(dist.SourceTerminal.Skills.Digitize);
-  }
 
   if ((0,external_kolmafia_.myAdventures)() < 60) {
     if (!(0,dist.have)((0,dist.$item)(main_templateObject73 || (main_templateObject73 = main_taggedTemplateLiteral(["borrowed time"]))))) (0,external_kolmafia_.create)((0,dist.$item)(main_templateObject74 || (main_templateObject74 = main_taggedTemplateLiteral(["borrowed time"]))));
@@ -19397,6 +19416,11 @@ function preCoilWire() {
   }
 
   if ((0,external_kolmafia_.myHp)() < (0,external_kolmafia_.myMaxhp)()) (0,external_kolmafia_.cliExecute)("hottub");
+
+  if ((0,dist.get)("_sourceTerminalDigitizeUses") < 1) {
+    dist.SourceTerminal.educate(dist.SourceTerminal.Skills.Digitize);
+  }
+
   oneOffEvents.hipster();
 
   if ((0,dist.get)("_sourceTerminalDigitizeUses") > 0) {
@@ -19467,7 +19491,7 @@ function postCoilWire() {
   (0,dist.$skill)(main_templateObject98 || (main_templateObject98 = main_taggedTemplateLiteral(["Summon Crimbo Candy"]))), //$skill`Summon Geeky Gifts`,
   //$skill`Summon Tasteful Items`,
   // Buffs that can't fit elsewhere
-  (0,dist.$skill)(main_templateObject99 || (main_templateObject99 = main_taggedTemplateLiteral(["Incredible Self-Esteem"])))].forEach(s => (0,external_kolmafia_.useSkill)(s)); // 143 mp
+  (0,dist.$skill)(main_templateObject99 || (main_templateObject99 = main_taggedTemplateLiteral(["Incredible Self-Esteem"])))].forEach(skill => (0,external_kolmafia_.useSkill)(skill)); // 143 mp
 
   [(0,dist.$item)(main_templateObject100 || (main_templateObject100 = main_taggedTemplateLiteral(["oil of expertise"]))), (0,dist.$item)(main_templateObject101 || (main_templateObject101 = main_taggedTemplateLiteral(["philter of phorce"]))), (0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["ointment of the occult"]))), (0,dist.$item)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["eyedrops of the ermine"])))].forEach(saucePotion => {
     if (!(0,dist.have)(saucePotion) && !(0,dist.have)((0,external_kolmafia_.effectModifier)(saucePotion, "effect"))) (0,external_kolmafia_.create)(saucePotion);
@@ -19489,7 +19513,7 @@ function postCoilWire() {
   if ((0,dist.get)("tomeSummons") < 3 && !(0,dist.have)(water) && !(0,dist.have)((0,dist.$effect)(main_templateObject108 || (main_templateObject108 = main_taggedTemplateLiteral(["Purity of Spirit"]))))) (0,external_kolmafia_.create)(water);
   tryUse(water); // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
 
-  [(0,dist.$item)(main_templateObject109 || (main_templateObject109 = main_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(main_templateObject110 || (main_templateObject110 = main_taggedTemplateLiteral(["Napalm In The Morning\u2122 candle"]))), (0,dist.$item)(main_templateObject111 || (main_templateObject111 = main_taggedTemplateLiteral(["Salsa Caliente\u2122 candle"]))), (0,dist.$item)(main_templateObject112 || (main_templateObject112 = main_taggedTemplateLiteral(["Smoldering Clover\u2122 candle"])))].forEach(tryUse);
+  [(0,dist.$item)(main_templateObject109 || (main_templateObject109 = main_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(main_templateObject110 || (main_templateObject110 = main_taggedTemplateLiteral(["Napalm In The Morning\u2122 candle"]))), (0,dist.$item)(main_templateObject111 || (main_templateObject111 = main_taggedTemplateLiteral(["Salsa Caliente\u2122 candle"]))), (0,dist.$item)(main_templateObject112 || (main_templateObject112 = main_taggedTemplateLiteral(["Smoldering Clover\u2122 candle"])))].forEach(potion => tryUse(potion));
   (0,external_kolmafia_.equip)((0,dist.$slot)(main_templateObject113 || (main_templateObject113 = main_taggedTemplateLiteral(["acc2"]))), (0,dist.$item)(main_templateObject114 || (main_templateObject114 = main_taggedTemplateLiteral(["Powerful Glove"]))));
   acquireGumOrHermitItem((0,dist.$item)(main_templateObject115 || (main_templateObject115 = main_taggedTemplateLiteral(["turtle totem"]))));
   acquireGumOrHermitItem((0,dist.$item)(main_templateObject116 || (main_templateObject116 = main_taggedTemplateLiteral(["saucepan"]))));

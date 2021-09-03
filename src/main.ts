@@ -28,6 +28,7 @@ import {
   myPrimestat,
   mySoulsauce,
   print,
+  printHtml,
   retrieveItem,
   reverseNumberology,
   runChoice,
@@ -157,8 +158,11 @@ export function main(): void {
 
   if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as ${myClass()}`;
 
-  print("Save the Kingdom, save the world. Community Service time!", "green");
-  print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
+  const colorPrint = (message: string, bgColor: string, textColor = "white") => {
+    printHtml(`<span style="background: ${bgColor}; color: ${textColor};"> ${message}</span>`);
+  };
+  colorPrint("Save the Kingdom, save the world. Community Service time!", "blue");
+  colorPrint(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`, "green");
   // Gotta talk to the Council the first time before seeing quests
   visitUrl("council.php");
   withContext(levelAndDoQuests, [
@@ -174,7 +178,7 @@ export function main(): void {
   ]);
 
   const endTime = date.getTime();
-  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
+  colorPrint(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
 }
 
 function levelAndDoQuests() {
@@ -393,7 +397,7 @@ function preCoilWire() {
     $item`natural magick candle`,
     $item`rainbow glitter candle`,
     $item`votive of confidence`,
-  ].forEach(tryUse);
+  ].forEach((gift) => tryUse(gift));
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
     checkMainClan();
@@ -435,16 +439,14 @@ function preCoilWire() {
 
   // Get free stats
   scavengeDaycare();
-  if (!have($item`Brutal brogues`)) cliExecute("bastille bbq brutalist gesture");
-  checkAvailable($item`Brutal brogues`);
+  if (!have($item`Brutal brogues`)) {
+    cliExecute("bastille bbq brutalist gesture");
+    checkAvailable($item`Brutal brogues`);
+  }
 
   ["forest", "rope", "wrench"].forEach((card) => {
     if (!get("_deckCardsSeen").toLowerCase().includes(card)) cliExecute(`cheat ${card}`);
   });
-
-  if (get("_sourceTerminalDigitizeUses") < 1) {
-    SourceTerminal.educate(SourceTerminal.Skills.Digitize);
-  }
 
   if (myAdventures() < 60) {
     if (!have($item`borrowed time`)) create($item`borrowed time`);
@@ -452,6 +454,10 @@ function preCoilWire() {
   }
 
   if (myHp() < myMaxhp()) cliExecute("hottub");
+
+  if (get("_sourceTerminalDigitizeUses") < 1) {
+    SourceTerminal.educate(SourceTerminal.Skills.Digitize);
+  }
 
   oneOffEvents.hipster();
 
@@ -534,7 +540,7 @@ function postCoilWire() {
 
     // Buffs that can't fit elsewhere
     $skill`Incredible Self-Esteem`,
-  ].forEach((s) => useSkill(s));
+  ].forEach((skill) => useSkill(skill));
   // 143 mp
 
   [
@@ -567,7 +573,7 @@ function postCoilWire() {
     $item`Napalm In The Morning™ candle`,
     $item`Salsa Caliente™ candle`,
     $item`Smoldering Clover™ candle`,
-  ].forEach(tryUse);
+  ].forEach((potion) => tryUse(potion));
 
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);
