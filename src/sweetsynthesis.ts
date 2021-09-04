@@ -70,7 +70,7 @@ const transforms = new Map<Item, candySet>([
  */
 export function synthesize(
   allowTomeUse = true,
-  targetEffects: Effect[] = $effects`Synthesis: Smart, Synthesis: Collection, Synthesis: Learning`.filter(
+  targetEffects: Effect[] = $effects`Synthesis: Collection, Synthesis: Learning, Synthesis: Smart`.filter(
     (e) => !have(e)
   ),
   reserveCandies: Item[] = [
@@ -110,8 +110,8 @@ export function synthesize(
   if (!sim.result) throw `Unable to find a combination for all synthesis targets`;
 
   // Found a solution, now transform candies and synthesize
-  for (const [a, b] of sim.pairs) {
-    [a, b].forEach((creatable) => {
+  for (const pair of sim.pairs) {
+    for (const creatable of pair) {
       // source will be $item`none` if no ingredients
       const source = toItem(Object.keys(getIngredients(creatable))[0]);
       if (!have(creatable) && transforms.has(source)) {
@@ -119,8 +119,8 @@ export function synthesize(
         if (allowTomeUse && source === $item`sugar sheet`) useSkill($skill`Summon Sugar Sheets`);
         cliExecute(`make ${creatable}`);
       }
-    });
-    sweetSynthesis(a, b);
+    }
+    sweetSynthesis(pair[0], pair[1]);
   }
 }
 

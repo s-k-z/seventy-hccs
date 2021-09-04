@@ -414,6 +414,10 @@ function preCoilWire() {
       () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
     ],
     [
+      $item`"DRINK ME" potion`, // Why is this necessary? I don't know why it won't just grab the potion
+      () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
+    ],
+    [
       $item`your cowboy boots`,
       () => visitUrl("place.php?whichplace=town_right&action=townright_ltt"),
     ],

@@ -25,6 +25,7 @@ import {
   $phyla,
   $skill,
   $slot,
+  $stat,
   ChateauMantegna,
   Clan,
   get,
@@ -152,27 +153,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  digitize: {
-    max: 1,
-    current: () => get("_sourceTerminalDigitizeMonsterCount"),
-    run: () => {
-      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  ninjaCostume: {
-    max: 1,
-    current: () => availableAmount($item`li'l ninja costume`),
-    run: () => {
-      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
-      selectBestFamiliar(FamiliarFlag.NoAttack);
-      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
-      checkAvailable($item`li'l ninja costume`);
-    },
-  },
-
   loveTunnel: {
     max: 3,
     current: () => (get("_loveTunnelUsed") ? 3 : 0),
@@ -272,7 +252,7 @@ export const events: Record<string, eventData> = {
     max: 10,
     current: () => get("_snojoFreeFights"),
     run: () => {
-      if (!get("snojoSetting")) {
+      if (!get("snojoSetting") !== $stat`Muscle`) {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
         runChoice(1);
       }
@@ -319,6 +299,27 @@ export const events: Record<string, eventData> = {
     run: () => {
       selectBestFamiliar(FamiliarFlag.NoAttack);
       adventure(upscaleDistrict, MacroList.FreeFight);
+    },
+  },
+
+  digitize: {
+    max: 1,
+    current: () => get("_sourceTerminalDigitizeMonsterCount"),
+    run: () => {
+      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  ninjaCostume: {
+    max: 1,
+    current: () => availableAmount($item`li'l ninja costume`),
+    run: () => {
+      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
+      checkAvailable($item`li'l ninja costume`);
     },
   },
 
@@ -529,7 +530,7 @@ export const oneOffEvents = {
       }
       mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
       checkEffect($effect`Everything Looks Red`);
-      $items`cherry, grapefruit, lemon, strawberry`.forEach(checkAvailable);
+      $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
     }
   },
 
@@ -559,6 +560,7 @@ export const oneOffEvents = {
     if (!have($effect`Fireproof Foam Suit`)) {
       useFamiliar($familiar`Exotic Parrot`);
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      equip($slot`off-hand`, $item`industrial fire extinguisher`);
       adventure(direWarren, MacroList.FoamForce);
       checkEffect($effect`Fireproof Foam Suit`);
     }

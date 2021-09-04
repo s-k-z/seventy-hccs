@@ -21,18 +21,23 @@ export function checkReadyToAscend(): void {
 
   const target = $monster`pterodactyl`;
   if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
-  [
+  for (const [item, check] of [
     [$item`ceiling fan`, ChateauMantegna.getCeiling],
     [$item`Swiss piggy bank`, ChateauMantegna.getDesk],
     [$item`foreign language tapes`, ChateauMantegna.getNightstand],
-  ].forEach(([item, check]) => {
-    if (check !== item) throw `Install ${item} in Chateau Mantegna`;
-  });
+  ] as [Item, () => Item][]) {
+    if (check() !== item) throw `Install ${item} in Chateau Mantegna`;
+  }
 
   const banish = $monster`Perceiver of Sensations`;
   const notFound = () => !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
   if (notFound()) visitUrl("museum.php?action=icehouse");
   if (notFound()) throw `Need to ice house ${banish}`;
+
+  if ((totalTurnsPlayed() + 60) % 11 !== 1) {
+    // Still doesn't quite tell the right thing yet...
+    throw `Spend ${12 - ((totalTurnsPlayed() + 60) % 11)} turns to prepare a voter monster`;
+  }
 
   if (!myGardenType().toLowerCase().includes("peppermint")) throw `Install a peppermint garden`;
 
@@ -40,10 +45,6 @@ export function checkReadyToAscend(): void {
 
   if (eudoraItem() !== $item`New-You Club Membership Form`) throw `Select New-You Club for Eudora`;
   //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
-
-  if ((totalTurnsPlayed() + 60) % 11 !== 1) {
-    throw `Spend some turns to prepare a voter monster`;
-  }
 
   /*
 

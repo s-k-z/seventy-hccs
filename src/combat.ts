@@ -90,7 +90,8 @@ const DefaultMacro = new Macro()
 export const MacroList = {
   FreeFight: DefaultMacro,
 
-  Runaway: new Macro().step("runaway"),
+  // Just runaway on its own causes a null pointer exception?
+  Runaway: new Macro().trySkill($skill`Saucy Salve`).step("runaway"),
 
   Banish: TryBanish,
 
