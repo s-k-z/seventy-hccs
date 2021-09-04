@@ -18949,6 +18949,7 @@ function synthesize() {
   var targetEffects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,dist.$effects)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Collection, Synthesis: Learning, Synthesis: Smart"]))).filter(e => !(0,dist.have)(e));
   var reserveCandies = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [(0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), (0,dist.$item)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), (0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))];
   var candies = (_candies = {}, sweetsynthesis_defineProperty(_candies, candyType.complex, []), sweetsynthesis_defineProperty(_candies, candyType.simple, []), _candies);
+  (0,external_kolmafia_.cliExecute)("refresh inventory");
   var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
 
   Object.keys(inv).forEach((name, count) => {

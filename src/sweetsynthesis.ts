@@ -84,6 +84,7 @@ export function synthesize(
     [candyType.complex]: <candySet>[],
     [candyType.simple]: <candySet>[],
   };
+  cliExecute("refresh inventory");
   const inv = getInventory();
   // Initialize candies with ones in inventory
   Object.keys(inv).forEach((name, count) => {
