@@ -6,9 +6,10 @@ import {
   getRelated,
   numericModifier,
   totalTurnsPlayed,
+  useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $slot, have } from "libram";
+import { $effect, $familiar, $item, $slot, have } from "libram";
 import { acquireEffect, checkEffect } from "./lib";
 
 export enum Quest {
@@ -30,32 +31,36 @@ export enum Quest {
   DeepDark = 902,
 }
 
-const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
+const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?: Familiar }> = {
   [Quest.Beginning]: () => {
-    return new Map([
-      [$slot`hat`, $item`Iunion Crown`],
-      [$slot`back`, $item`protonic accelerator pack`],
-      //[$slot`shirt`, $item`fresh coat of paint`],
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
-      [$slot`pants`, $item`pantogram pants`],
-      [$slot`acc1`, $item`hewn moon-rune spoon`],
-      [$slot`acc2`, $item`Powerful Glove`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, $item`Iunion Crown`],
+        [$slot`back`, $item`protonic accelerator pack`],
+        //[$slot`shirt`, $item`fresh coat of paint`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
+        [$slot`pants`, $item`pantogram pants`],
+        [$slot`acc1`, $item`hewn moon-rune spoon`],
+        [$slot`acc2`, $item`Powerful Glove`],
+        [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+      ]),
+    };
   },
 
   // Maximize Myst and MP, blue rocket will do all the regen for us
   [Quest.CoilWire]: () => {
-    return new Map([
-      [$slot`hat`, $item`Iunion Crown`],
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`industrial fire extinguisher`],
-      [$slot`pants`, $item`Cargo Cultist Shorts`],
-      [$slot`acc1`, $item`hewn moon-rune spoon`],
-      [$slot`acc2`, $item`Retrospecs`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, $item`Iunion Crown`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, $item`industrial fire extinguisher`],
+        [$slot`pants`, $item`Cargo Cultist Shorts`],
+        [$slot`acc1`, $item`hewn moon-rune spoon`],
+        [$slot`acc2`, $item`Retrospecs`],
+        [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+      ]),
+    };
   },
 
   [Quest.Leveling]: () => {
@@ -69,37 +74,43 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc3`, $item`Beach Comb`],
     ]);
     if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
-    return outfit;
+    return { equipment: outfit };
   },
 
   [Quest.Muscle]: () => {
-    return new Map([
-      [$slot`hat`, $item`wad of used tape`],
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`dented scepter`],
-      [$slot`acc1`, $item`Brutal brogues`],
-      [$slot`acc3`, $item`"I Voted!" sticker`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, $item`wad of used tape`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, $item`dented scepter`],
+        [$slot`acc1`, $item`Brutal brogues`],
+        [$slot`acc3`, $item`"I Voted!" sticker`],
+      ]),
+    };
   },
 
   [Quest.Moxie]: () => {
-    return new Map([
-      [$slot`hat`, $item`very pointy crown`],
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`acc1`, $item`your cowboy boots`],
-      [$slot`acc2`, $item`Beach Comb`],
-      [$slot`acc3`, $item`"I Voted!" sticker`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, $item`very pointy crown`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`acc1`, $item`your cowboy boots`],
+        [$slot`acc2`, $item`Beach Comb`],
+        [$slot`acc3`, $item`"I Voted!" sticker`],
+      ]),
+    };
   },
 
   [Quest.HP]: () => {
     const candle = $item`extra-wide head candle`;
-    return new Map([
-      [$slot`hat`, have(candle) ? candle : $item`wad of used tape`],
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`pants`, $item`Cargo Cultist Shorts`],
-      [$slot`acc3`, $item`"I Voted!" sticker`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, have(candle) ? candle : $item`wad of used tape`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`pants`, $item`Cargo Cultist Shorts`],
+        [$slot`acc3`, $item`"I Voted!" sticker`],
+      ]),
+    };
   },
 
   [Quest.DeepDark]: () => {
@@ -109,20 +120,24 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
     if (have($item`burning paper crane`)) outfit.set($slot`off-hand`, $item`burning paper crane`);
-    return outfit;
+    return { equipment: outfit };
   },
 
   [Quest.SpellDamage]: () => {
     // TODO: handle spell damage candle
     //const candle = [$slot`off-hand`, $item`Abracandalabra`];
-    return new Map([
-      [$slot`weapon`, $item`wrench`],
-      [$slot`off-hand`, $item`weeping willow wand`],
-      [$slot`pants`, $item`pantogram pants`],
-      [$slot`acc1`, $item`battle broom`],
-      [$slot`acc2`, $item`Powerful Glove`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`weapon`, $item`wrench`],
+        [$slot`off-hand`, $item`weeping willow wand`],
+        [$slot`pants`, $item`pantogram pants`],
+        [$slot`acc1`, $item`battle broom`],
+        [$slot`acc2`, $item`Powerful Glove`],
+        [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+        [$slot`familiar`, $item`astral statuette`],
+      ]),
+      familiar: $familiar`Left-Hand Man`,
+    };
   },
 
   [Quest.WeaponDamage]: () => {
@@ -134,45 +149,58 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
     ]);
     const candle = $item`extra-wide head candle`;
     if (have(candle)) outfit.set($slot`hat`, candle);
-    return outfit;
+    return { equipment: outfit };
   },
 
   [Quest.Mysticality]: () => {
-    return new Map([
-      [$slot`hat`, $item`wad of used tape`],
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`acc1`, $item`battle broom`],
-      [$slot`acc3`, $item`"I Voted!" sticker`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, $item`wad of used tape`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`acc1`, $item`battle broom`],
+        [$slot`acc3`, $item`"I Voted!" sticker`],
+      ]),
+    };
   },
 
   [Quest.CombatFrequency]: () => {
-    return new Map([
-      [$slot`hat`, $item`very pointy crown`],
-      [$slot`back`, $item`protonic accelerator pack`],
-      [$slot`pants`, $item`pantogram pants`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`hat`, $item`very pointy crown`],
+        [$slot`back`, $item`protonic accelerator pack`],
+        [$slot`pants`, $item`pantogram pants`],
+        [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+      ]),
+      familiar: $familiar`Disgeist`,
+    };
   },
 
   [Quest.HotResist]: () => {
-    return new Map([
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`industrial fire extinguisher`],
-      [$slot`acc1`, $item`Brutal brogues`],
-      [$slot`acc2`, $item`hewn moon-rune spoon`],
-      [$slot`acc3`, $item`Beach Comb`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, $item`industrial fire extinguisher`],
+        [$slot`acc1`, $item`Brutal brogues`],
+        [$slot`acc2`, $item`hewn moon-rune spoon`],
+        [$slot`acc3`, $item`Beach Comb`],
+        [$slot`familiar`, $item`cracker`],
+      ]),
+      familiar: $familiar`Exotic Parrot`,
+    };
   },
 
   [Quest.FamiliarWeight]: () => {
-    return new Map([
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
-      [$slot`acc1`, $item`Brutal brogues`],
-      [$slot`acc2`, $item`hewn moon-rune spoon`],
-      [$slot`acc3`, $item`Beach Comb`],
-    ]);
+    return {
+      equipment: new Map([
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
+        [$slot`acc1`, $item`Brutal brogues`],
+        [$slot`acc2`, $item`hewn moon-rune spoon`],
+        [$slot`acc3`, $item`Beach Comb`],
+        [$slot`familiar`, $item`cracker`],
+      ]),
+      familiar: $familiar`Exotic Parrot`,
+    };
   },
 
   [Quest.ItemDrop]: () => {
@@ -190,15 +218,16 @@ const questOutfits: Record<Quest, () => Map<Slot, Item>> = {
       [$slot`acc1`, $item`Guzzlr tablet`],
       [$slot`acc2`, $item`gold detective badge`],
       [$slot`acc3`, $item`your cowboy boots`],
+      [$slot`familiar`, $item`li'l ninja costume`],
     ]);
     if (!candles.some(have) && have(sparkler)) outfit.set($slot`weapon`, sparkler);
     // can only have one candle
     for (const c of candles) if (have(c)) outfit.set($slot`weapon`, c);
-    return outfit;
+    return { equipment: outfit, familiar: $familiar`Trick-or-Treating Tot` };
   },
 
   [Quest.Donate]: () => {
-    return new Map();
+    return { equipment: new Map() };
   },
 };
 
@@ -212,8 +241,11 @@ export function equipOutfit(quest: Quest): void {
     [Quest.DeepDark, "vampire hold"],
   ]);
   const outfit = questOutfits[quest]();
-  if (!outfit.get($slot`back`)) cliExecute(`retrocape ${mode.get(quest) ?? "heck thrill"}`);
-  outfit.forEach((item, slot) => {
+  if (outfit.familiar) useFamiliar(outfit.familiar);
+  if (!outfit.equipment.get($slot`back`)) {
+    cliExecute(`retrocape ${mode.get(quest) ?? "heck thrill"}`);
+  }
+  outfit.equipment.forEach((item, slot) => {
     if (!have(item)) {
       const ingredients = Object.keys(getIngredients(item));
       if (getRelated(item, "fold")) cliExecute(`fold ${item}`);

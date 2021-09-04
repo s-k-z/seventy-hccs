@@ -44,4 +44,22 @@ export function checkReadyToAscend(): void {
   if ((totalTurnsPlayed() + 60) % 11 !== 1) {
     throw `Spend some turns to prepare a voter monster`;
   }
+
+  /*
+
+    prepareAscension(
+      {
+        workshed: $item`diabolic pizza cube`,
+        garden: $item`Peppermint Pip Packet`,
+        eudora: $item`New-You Club Membership Form`,
+      },
+      {
+        desk: $item`S ss piggy bank`,
+        ceiling: $item`ceiling fan`,
+        nightstand: $item`foreign language tapes`,
+      },
+      true
+    );
+
+  */
 }

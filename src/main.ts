@@ -13,7 +13,6 @@ import {
   getProperty,
   haveEquipped,
   mpCost,
-  myAdventures,
   myBasestat,
   myBuffedstat,
   myClass,
@@ -28,7 +27,6 @@ import {
   myPrimestat,
   mySoulsauce,
   print,
-  printHtml,
   retrieveItem,
   reverseNumberology,
   runChoice,
@@ -36,7 +34,6 @@ import {
   toInt,
   totalFreeRests,
   use,
-  useFamiliar,
   userConfirm,
   useSkill,
   visitUrl,
@@ -45,7 +42,6 @@ import {
   $class,
   $effect,
   $effects,
-  $familiar,
   $item,
   $items,
   $skill,
@@ -87,7 +83,6 @@ import {
 import {
   acquireEffect,
   acquireGumOrHermitItem,
-  checkAvailable,
   shrugEffect,
   tryUse,
   wishEffect,
@@ -157,12 +152,8 @@ export function main(): void {
   }
 
   if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as ${myClass()}`;
-
-  const colorPrint = (message: string, bgColor: string, textColor = "white") => {
-    printHtml(`<span style="background: ${bgColor}; color: ${textColor};"> ${message}</span>`);
-  };
-  colorPrint("Save the Kingdom, save the world. Community Service time!", "blue");
-  colorPrint(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`, "green");
+  print("Save the Kingdom, save the world. Community Service time!", "green");
+  print(`Using main clan ${MAIN_CLAN} and fax/slime clan ${FAX_AND_SLIME_CLAN}`);
   // Gotta talk to the Council the first time before seeing quests
   visitUrl("council.php");
   withContext(levelAndDoQuests, [
@@ -178,12 +169,12 @@ export function main(): void {
   ]);
 
   const endTime = date.getTime();
-  colorPrint(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
+  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
 }
 
 function levelAndDoQuests() {
   const results = new Map<Quest, number>();
-  const completeQuest = (q: Quest) => results.set(q, prepAndDoQuest(q));
+  const completeQuest = (quest: Quest) => results.set(quest, prepAndDoQuest(quest));
   Clan.join(MAIN_CLAN);
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
@@ -260,7 +251,7 @@ function levelAndDoQuests() {
         if (!have(garbageShirt)) {
           cliExecute(`fold ${garbageShirt}`);
           // Turbo used a flag to cast pride
-          SourceTerminal.educate(SourceTerminal.Skills.Turbo);
+          SourceTerminal.educate($skill`Turbo`);
           equip($slot`shirt`, garbageShirt);
           equip($slot`hat`, crown);
         }
@@ -297,6 +288,7 @@ function levelAndDoQuests() {
   cliExecute("shower hot");
   shrugEffect($effect`Ur-Kel's Aria of Annoyance`);
   shrugEffect($effect`Polka of Plenty`);
+  changeMcd(0);
   wishEffect($effect`Sparkly!`);
 
   completeQuest(Quest.Muscle);
@@ -332,15 +324,12 @@ function levelAndDoQuests() {
   completeQuest(Quest.Mysticality);
 
   if (haveQuest(Quest.CombatFrequency)) {
-    useFamiliar($familiar`Disgeist`);
     equip($slot`acc2`, $item`Powerful Glove`);
     completeQuest(Quest.CombatFrequency);
   }
 
   if (haveQuest(Quest.HotResist)) {
     oneOffEvents.foamYourself();
-    useFamiliar($familiar`Exotic Parrot`);
-    if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
     completeQuest(Quest.HotResist);
   }
 
@@ -348,8 +337,6 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorShower();
-    useFamiliar($familiar`Exotic Parrot`);
-    if (!haveEquipped($item`cracker`)) throw "Wrong familiar equipment?";
     if (!have($effect`Smart Drunk`)) {
       useSkill(2, $skill`The Ode to Booze`);
       drink($item`vintage smart drink`); // 10 drunk
@@ -364,8 +351,6 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.ItemDrop)) {
     oneOffEvents.batform();
-    useFamiliar($familiar`Trick-or-Treating Tot`);
-    equip($slot`familiar`, $item`li'l ninja costume`);
     completeQuest(Quest.ItemDrop);
   }
 
@@ -403,7 +388,6 @@ function preCoilWire() {
     checkMainClan();
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
-  if (!have($item`battery (AAA)`)) harvestBatteries();
   getPantogramPants();
   equipOutfit(Quest.Beginning);
 
@@ -421,81 +405,71 @@ function preCoilWire() {
   if (!get("_horsery")) cliExecute("horsery dark");
   SongBoom.setSong("Total Eclipse of Your Meat");
   // 8601 meat
-
-  // Get Community Service quests
-  visitUrl("guild.php?place=challenge");
   openQuestZones();
-  if (!have($item`your cowboy boots`)) {
-    visitUrl("place.php?whichplace=town_right&action=townright_ltt");
-    checkAvailable($item`your cowboy boots`);
-  }
-  cliExecute("Detective Solver");
-  checkAvailable($item`gold detective badge`);
   buffUpBeginning();
-  if (!have($effect`That's Just Cloud-Talk, Man`)) {
-    visitUrl("place.php?whichplace=campaway&action=campaway_sky");
+  for (const [check, retrieve] of [
+    [
+      $effect`That's Just Cloud-Talk, Man`,
+      () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
+    ],
+    [
+      $item`your cowboy boots`,
+      () => visitUrl("place.php?whichplace=town_right&action=townright_ltt"),
+    ],
+    [
+      $item`detuned radio`,
+      () => {
+        retrieveItem($item`detuned radio`); // 8601 - 285 = 8316 meat
+        changeMcd(10);
+      },
+    ],
+    [$item`flimsy hardwood scraps`, () => visitUrl("shop.php?whichshop=lathe")],
+    [
+      $item`weeping willow wand`,
+      () => {
+        create($item`weeping willow wand`);
+        equip($slot`off-hand`, $item`weeping willow wand`);
+      },
+    ],
+    [$item`battery (AAA)`, () => harvestBatteries()],
+    [$item`Brutal brogues`, () => cliExecute("bastille bbq brutalist gesture")],
+    [$item`cop dollar`, () => cliExecute("Detective Solver")],
+    [$item`green mana`, () => cliExecute(`cheat forest`)],
+    [$item`wrench`, () => cliExecute(`cheat wrench`)],
+    [$item`rope`, () => cliExecute(`cheat rope`)],
+    [$item`occult jelly donut`, () => create($item`occult jelly donut`)],
+    [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
+    [$skill`Seek out a Bird`, () => use($item`Bird-a-Day calendar`)],
+  ] as [Effect | Item | Skill, () => void][]) {
+    if (!have(check)) retrieve();
   }
   vote();
-
-  // Get free stats
   scavengeDaycare();
-  if (!have($item`Brutal brogues`)) {
-    cliExecute("bastille bbq brutalist gesture");
-    checkAvailable($item`Brutal brogues`);
-  }
-
-  ["forest", "rope", "wrench"].forEach((card) => {
-    if (!get("_deckCardsSeen").toLowerCase().includes(card)) cliExecute(`cheat ${card}`);
-  });
-
-  if (myAdventures() < 60) {
+  if (!get("_borrowedTimeUsed")) {
     if (!have($item`borrowed time`)) create($item`borrowed time`);
     use($item`borrowed time`);
   }
-
   if (myHp() < myMaxhp()) cliExecute("hottub");
-
-  if (get("_sourceTerminalDigitizeUses") < 1) {
-    SourceTerminal.educate(SourceTerminal.Skills.Digitize);
-  }
-
+  if (get("_sourceTerminalDigitizeUses") < 1) SourceTerminal.educate($skill`Digitize`);
   oneOffEvents.hipster();
-
   if (get("_sourceTerminalDigitizeUses") > 0) {
-    SourceTerminal.educate(SourceTerminal.Skills.Compress);
-    SourceTerminal.educate(SourceTerminal.Skills.Extract);
+    SourceTerminal.educate($skill`Compress`);
+    SourceTerminal.educate($skill`Extract`);
   }
-
-  const wand = $item`weeping willow wand`;
-  if (!have(wand) && !have($item`flimsy hardwood scraps`)) visitUrl("shop.php?whichshop=lathe");
-  if (!have(wand)) create(wand);
-  equip($slot`off-hand`, wand);
-
-  retrieveItem($item`detuned radio`); // 8601 - 285 = 8316 meat
-  changeMcd(10);
   // Fight Protonic Ghost
   oneOffEvents.mimic();
-
   // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
   // 8316 + 2000 = 10316 meat
-
-  const donut = $item`occult jelly donut`;
-  if (!have(donut)) create(donut);
   // TODO: handle non-sauceror [1457]Blood Sugar Sauce Magic
   acquireEffect($effect`[1458]Blood Sugar Sauce Magic`);
-
   spendAllMpOnLibrams();
 }
 
 function postCoilWire() {
   gazeAtTheStars();
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
-  if (!have($skill`Seek out a Bird`)) use($item`Bird-a-Day calendar`);
-  if (!have($item`Yeg's Motel hand soap`) && !have($effect`Sigils of Yeg`)) {
-    cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`);
-  }
   cliExecute("Briefcase e spell spooky -combat");
   let click = true;
   for (let i = 0; i < 22 && click; ++i) {
@@ -556,7 +530,7 @@ function postCoilWire() {
   acquireEffect($effect`Ode to Booze`);
   // 9366 - 142 = 9224 meat
   checkMainClan();
-  $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, 5500 meat
+  $effects`[1701]Hip to the Jive, In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
   // 9224 - 5500 = 3724 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza

@@ -495,10 +495,12 @@ export function getRemainingFreeFights(): number {
 export const oneOffEvents = {
   hipster: (): void => {
     if (!get("_ironicMoustache")) {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       familiar($familiar`Mini-Hipster`);
       equip($slot`familiar`, $item`none`);
-      adventure(noobCave, MacroList.FreeFight);
+      withEquipment(
+        () => adventure(noobCave, MacroList.FreeFight),
+        [[$slot`off-hand`, $item`Kramco Sausage-o-Matic™`]]
+      );
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`ironic moustache`);
       cliExecute(`fold ${$item`chiptune guitar`}`);
