@@ -169,7 +169,8 @@ export function main(): void {
   ]);
 
   const endTime = date.getTime();
-  print(`Community Service completed in ${(endTime - startTime) / 1000} seconds`, "green");
+  const duration = Math.round((endTime - startTime) / 1000);
+  print(`Community Service completed in ${duration} seconds`, "green");
 }
 
 function levelAndDoQuests() {
