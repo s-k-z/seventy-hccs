@@ -261,7 +261,7 @@ function levelAndDoQuests() {
       } else {
         equip($slot`hat`, crown);
       }
-
+      oneOffEvents.innerElf();
       // This is where all the leveling happens
       // Loop through the list of events until an unfinished one is found
       // After doing an event, go back to the top of the outer loop to
@@ -283,7 +283,7 @@ function levelAndDoQuests() {
     );
   }
 
-  // Leveling done, time to put on the final effects before the tests
+  // Leveling done
   checkMainClan();
   cliExecute("shower hot");
   shrugEffect($effect`Ur-Kel's Aria of Annoyance`);
@@ -296,7 +296,7 @@ function levelAndDoQuests() {
   completeQuest(Quest.HP);
 
   if (haveQuest(Quest.SpellDamage)) {
-    if (!have($effect`Inner Elf`)) events.innerElf.run();
+    oneOffEvents.innerElf();
     oneOffEvents.meteorUngulith();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
       print(`Current HP before Deep Dark Visions: ${myHp()}`);
@@ -314,7 +314,7 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
-    if (!have($effect`Inner Elf`)) events.innerElf.run();
+    oneOffEvents.innerElf();
     oneOffEvents.meteorShower();
     completeQuest(Quest.WeaponDamage);
   }

@@ -89,16 +89,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  innerElf: {
-    max: 0,
-    current: () => (myLevel() < 13 || have($effect`Inner Elf`) ? 0 : -1),
-    run: () => {
-      familiar($familiar`Machine Elf`);
-      Clan.with(FAX_AND_SLIME_CLAN, () => adventure(slimeTube, MacroList.MotherSlime));
-      checkEffect($effect`Inner Elf`);
-    },
-  },
-
   backupCamera: {
     max: 11,
     current: () =>
@@ -493,6 +483,14 @@ export function getRemainingFreeFights(): number {
 
 // Not all of the combats are going to occur while leveling, the rest can go here
 export const oneOffEvents = {
+  innerElf: (): void => {
+    if (myLevel() >= 13 && !have($effect`Inner Elf`)) {
+      familiar($familiar`Machine Elf`);
+      Clan.with(FAX_AND_SLIME_CLAN, () => adventure(slimeTube, MacroList.MotherSlime));
+      checkEffect($effect`Inner Elf`);
+    }
+  },
+
   hipster: (): void => {
     if (!get("_ironicMoustache")) {
       familiar($familiar`Mini-Hipster`);
