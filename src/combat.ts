@@ -24,7 +24,7 @@ const DMTCircleMon = $monster`Thinker of Thoughts`.id;
 
 const retailDistrict = toUrl($location`Gingerbread Upscale Retail District`).split("=")[1];
 
-const GhostMacro = new Macro()
+const Ghost = new Macro()
   .skill($skill`Summon Love Gnats`)
   .skill($skill`Sing Along`)
   .skill($skill`Shoot Ghost`)
@@ -41,6 +41,10 @@ const TryBanish = new Macro() // Reserve Snokebomb for Mother Slime
   .abort();
 
 const Replace = new Macro().skill($skill`Macrometeorite`);
+const Backup = new Macro().if_(
+  `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
+  Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
+);
 
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
@@ -55,11 +59,8 @@ const CigKill = new Macro()
   .abort();
 
 const DefaultMacro = new Macro()
-  .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, GhostMacro)
-  .if_(
-    `monsterid ${toxicBeastie}`,
-    Macro.trySkill($skill`Back-Up to your Last Enemy`).skill($skill`Summon Love Mosquito`)
-  )
+  .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
+  .if_(`monsterid ${toxicBeastie}`, Backup)
   .if_(`monsterid ${amateurNinja} || monsterid ${toxicBeastie}`, FreeInstaKill)
   .if_(`snarfblat ${retailDistrict}`, CigKill)
   .trySkill($skill`Digitize`)
