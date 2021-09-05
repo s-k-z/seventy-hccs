@@ -12,7 +12,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $location, $monster, $skill, get, Macro } from "libram";
+import { $item, $location, $monster, $skill, get, Macro } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
@@ -24,12 +24,8 @@ const DMTCircleMon = $monster`Thinker of Thoughts`.id;
 
 const retailDistrict = toUrl($location`Gingerbread Upscale Retail District`).split("=")[1];
 
-const EnvyNostalgia = new Macro().trySkill($skill`Feel Envy`).trySkill($skill`Feel Nostalgic`);
-
 const GhostMacro = new Macro()
   .skill($skill`Summon Love Gnats`)
-  // kind of a hack but the plan is to always runaway before the second ghost
-  .if_(`haseffect ${toInt($effect`Ode to Booze`)}`, EnvyNostalgia)
   .skill($skill`Sing Along`)
   .skill($skill`Shoot Ghost`)
   .skill($skill`Shoot Ghost`)
@@ -44,10 +40,7 @@ const TryBanish = new Macro() // Reserve Snokebomb for Mother Slime
   .trySkill($skill`Feel Hatred`)
   .abort();
 
-const Replace = new Macro()
-  //.trySkill($skill`CHEAT CODE: Replace Enemy`)
-  //.if_(`!hasskill ${toInt($skill`CHEAT CODE: Replace Enemy`)}`, Macro
-  .skill($skill`Macrometeorite`);
+const Replace = new Macro().skill($skill`Macrometeorite`);
 
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
@@ -131,7 +124,7 @@ export const MacroList = {
     .step(DefaultMacro),
 
   MotherSlime: new Macro().trySkill($skill`KGB tranquilizer dart`).skill($skill`Snokebomb`),
-  BatForm: new Macro().trySkill($skill`Become a Bat`).step(TryBanish),
+  BatForm: new Macro().trySkill($skill`Become a Bat`).step("runaway"),
 
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 

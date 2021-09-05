@@ -316,7 +316,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     oneOffEvents.innerElf();
-    oneOffEvents.meteorShower();
+    oneOffEvents.meteorChateau();
     completeQuest(Quest.WeaponDamage);
   }
 
@@ -337,7 +337,7 @@ function levelAndDoQuests() {
   shrugEffect($effect`The Sonata of Sneakiness`);
 
   if (haveQuest(Quest.FamiliarWeight)) {
-    oneOffEvents.meteorShower();
+    oneOffEvents.meteorPleasureDome();
     if (!have($effect`Smart Drunk`)) {
       useSkill(2, $skill`The Ode to Booze`);
       drink($item`vintage smart drink`); // 10 drunk

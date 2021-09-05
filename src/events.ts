@@ -22,7 +22,6 @@ import {
   $items,
   $location,
   $monster,
-  $phyla,
   $skill,
   $slot,
   $stat,
@@ -77,16 +76,13 @@ interface eventData {
 export const events: Record<string, eventData> = {
   protonicGhost: {
     max: 1,
-    current: () =>
-      get("ghostLocation") === null || get("lastCopyableMonster") !== $monster`pterodactyl` ? 1 : 0,
+    current: () => (get("ghostLocation") ? 0 : 1),
     run: () => {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
-      const ghostLoc2 = get("ghostLocation");
-      if (!ghostLoc2) throw `No ghost location found?`;
-      adventure(ghostLoc2, MacroList.FreeFight);
-      checkAvailable($item`Friendliness Beverage`);
-      use($item`Friendliness Beverage`);
+      const ghostLoc = get("ghostLocation");
+      if (!ghostLoc) throw `No ghost location found?`;
+      adventure(ghostLoc, MacroList.FreeFight);
     },
   },
 
@@ -109,29 +105,6 @@ export const events: Record<string, eventData> = {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.Runaway);
-    },
-  },
-
-  chateauPainting: {
-    max: 0,
-    current: () => (get("_chateauMonsterFought") ? 0 : -1),
-    run: () => {
-      equip($slot`back`, $item`protonic accelerator pack`);
-      const monster = ChateauMantegna.paintingMonster();
-      if (!monster) throw `Empty Chateau painting?`;
-      const carols = $phyla`beast, bug, constellation, elf, goblin, humanoid`;
-      if (carols.includes(monster.phylum)) {
-        equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
-        familiar($familiar`Ghost of Crimbo Carols`);
-        MacroList.Banish.setAutoAttack();
-      } else {
-        checkEffect($effect`Ode to Booze`);
-        familiar($familiar`Frumious Bandersnatch`);
-        MacroList.Runaway.setAutoAttack();
-      }
-      ChateauMantegna.fightPainting();
-      if (!get("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
-      if (get("ghostLocation") === null) throw `Failed to get protonic ghost message?`;
     },
   },
 
@@ -195,6 +168,7 @@ export const events: Record<string, eventData> = {
       withEquipment(
         () => adventure(upscaleDistrict, MacroList.Sprinkles),
         [
+          [$slot`back`, $item`protonic accelerator pack`],
           [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
           [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
           [$slot`acc1`, $item`hewn moon-rune spoon`],
@@ -552,38 +526,57 @@ export const oneOffEvents = {
     if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
       throw `Failed to retrieve fax of ${faxMon}`;
     }
+    equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+    useFamiliar($familiar`Machine Elf`);
     adventureUrl(`inv_use.php?pwd=&whichitem=${toInt(fax)}`, MacroList.MeteorForce);
     checkAvailable($item`corrupted marrow`);
   },
 
   foamYourself: (): void => {
     if (!have($effect`Fireproof Foam Suit`)) {
-      useFamiliar($familiar`Exotic Parrot`);
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       equip($slot`off-hand`, $item`industrial fire extinguisher`);
+      useFamiliar($familiar`Machine Elf`);
       adventure(direWarren, MacroList.FoamForce);
       checkEffect($effect`Fireproof Foam Suit`);
     }
   },
 
-  meteorShower: (): void => {
+  meteorChateau: (): void => {
+    if (!have($effect`Meteor Showered`)) {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      useFamiliar($familiar`Machine Elf`);
+      const monster = ChateauMantegna.paintingMonster();
+      if (monster && !get("_chateauMonsterFought")) {
+        MacroList.MeteorForce.setAutoAttack();
+        ChateauMantegna.fightPainting();
+        if (!get("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
+        checkAvailable($item`Friendliness Beverage`);
+        use($item`Friendliness Beverage`);
+      } else {
+        adventure(direWarren, MacroList.MeteorForce);
+      }
+      checkEffect($effect`Meteor Showered`);
+    }
+  },
+
+  meteorPleasureDome: (): void => {
     if (!have($effect`Meteor Showered`)) {
       tryUse($item`tiny bottle of absinthe`);
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      useFamiliar($familiar`Machine Elf`);
       if (
         have($effect`Absinthe-Minded`) &&
         !have($item`disintegrating spiky collar`) &&
         !have($effect`Man's Worst Enemy`)
       ) {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
         mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.MeteorForce);
         checkAvailable($item`disintegrating spiky collar`);
-        checkEffect($effect`Meteor Showered`);
-        tryUse($item`disintegrating spiky collar`);
+        use($item`disintegrating spiky collar`);
       } else {
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
         adventure(direWarren, MacroList.MeteorForce);
-        checkEffect($effect`Meteor Showered`);
       }
+      checkEffect($effect`Meteor Showered`);
     }
   },
 
