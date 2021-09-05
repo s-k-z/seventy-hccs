@@ -10,6 +10,7 @@ import {
   eat,
   effectModifier,
   equip,
+  gametimeToInt,
   getProperty,
   haveEquipped,
   mpCost,
@@ -132,8 +133,7 @@ export function main(): void {
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
 
-  const date = new Date();
-  const startTime = date.getTime();
+  const startTime = gametimeToInt();
 
   if (myPath() !== "Community Service") {
     checkReadyToAscend();
@@ -168,7 +168,7 @@ export function main(): void {
     ...choiceAdventures,
   ]);
 
-  const endTime = date.getTime();
+  const endTime = gametimeToInt();
   const duration = endTime - startTime;
   print(`Community Service completed in ${duration} miliseconds`, "green");
 }
@@ -287,7 +287,6 @@ function levelAndDoQuests() {
   // Leveling done
   checkMainClan();
   cliExecute("shower hot");
-  shrugEffect($effect`Ur-Kel's Aria of Annoyance`);
   shrugEffect($effect`Polka of Plenty`);
   changeMcd(0);
   wishEffect($effect`Sparkly!`);

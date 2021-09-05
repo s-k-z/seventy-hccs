@@ -71,7 +71,7 @@ const transforms = new Map<Item, candySet>([
 export function synthesize(
   allowTomeUse = true,
   targetEffects: Effect[] = $effects`Synthesis: Collection, Synthesis: Learning, Synthesis: Smart`.filter(
-    (e) => !have(e)
+    (effect) => !have(effect)
   ),
   reserveCandies: Item[] = [
     $item`Chubby and Plump bar`,
@@ -92,7 +92,6 @@ export function synthesize(
     if (item.candyType === candyType.complex) candies.complex.push({ candy: item, count: count });
     if (item.candyType === candyType.simple) candies.simple.push({ candy: item, count: count });
   });
-
   // Pretend summon sugar sheets if tome summons available
   if (allowTomeUse && get("tomeSummons") < 3) {
     candies.complex.push({
@@ -100,7 +99,6 @@ export function synthesize(
       count: inv["sugar sheet"] + 3 - get("tomeSummons"),
     });
   }
-
   // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
   let sim: simulateResult = { result: false, pairs: [] };
   for (let i = 0; i <= reserveCandies.length; i++) {
@@ -109,7 +107,6 @@ export function synthesize(
     if (sim.result) break;
   }
   if (!sim.result) throw `Unable to find a combination for all synthesis targets`;
-
   // Found a solution, now transform candies and synthesize
   for (const pair of sim.pairs) {
     for (const creatable of pair) {
