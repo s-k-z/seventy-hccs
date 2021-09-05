@@ -34,7 +34,7 @@ svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
 12. [Your cowboy boots](https://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots) from the LT&T Office with nicksilver spurs and mountain lion skin applied (item drops and moxie stats)
 13. A [Peppermint patch](https://kol.coldfront.net/thekolwiki/index.php/A_Peppermint_Patch) growing in your garden
 14. [Source Terminal](https://kol.coldfront.net/thekolwiki/index.php/Source_Terminal) full upgraded
-15. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Rainbow Vaccine unlocked
+15. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
 16. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed
 
 ## Requirements in Valhalla
