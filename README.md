@@ -4,8 +4,6 @@ _A 70-turn Hardcore Community Service script for Kingdom of Loathing_
 
 This script requires a large swath of Mr. Store items and permed skills which are too exhaustive to list here. Two clans are relied upon due to my lack of a private clan with a complete set of fully unlocked clan VIP items, unused fax machine and prepped Slimetube.
 
-Currently it is untested and without expectations that it will work as intended.
-
 ## To Install
 
 Run this command in the graphical CLI:

@@ -1,12 +1,5 @@
-import {
-  eudoraItem,
-  getWorkshed,
-  holiday,
-  myGardenType,
-  totalTurnsPlayed,
-  visitUrl,
-} from "kolmafia";
-import { $item, $monster, ChateauMantegna, get } from "libram";
+import { holiday, totalTurnsPlayed, visitUrl } from "kolmafia";
+import { $item, $monster, ChateauMantegna, get, prepareAscension } from "libram";
 
 export function checkReadyToAscend(): void {
   const badDays = [
@@ -21,13 +14,6 @@ export function checkReadyToAscend(): void {
 
   const target = $monster`pterodactyl`;
   if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
-  for (const [item, check] of [
-    [$item`ceiling fan`, ChateauMantegna.getCeiling],
-    [$item`Swiss piggy bank`, ChateauMantegna.getDesk],
-    [$item`foreign language tapes`, ChateauMantegna.getNightstand],
-  ] as [Item, () => Item][]) {
-    if (check() !== item) throw `Install ${item} in Chateau Mantegna`;
-  }
 
   const banish = $monster`Perceiver of Sensations`;
   const notFound = () => !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
@@ -35,32 +21,20 @@ export function checkReadyToAscend(): void {
   if (notFound()) throw `Need to ice house ${banish}`;
 
   if ((totalTurnsPlayed() + 60) % 11 !== 1) {
-    // Still doesn't quite tell the right thing yet...
-    throw `Spend ${12 - ((totalTurnsPlayed() + 60) % 11)} turns to prepare a voter monster`;
+    throw `Spend more turns for voter monster`;
   }
 
-  if (!myGardenType().toLowerCase().includes("peppermint")) throw `Install a peppermint garden`;
-
-  if (getWorkshed() !== $item`diabolic pizza cube`) throw `Install a diabolic pizza cube`;
-
-  if (eudoraItem() !== $item`New-You Club Membership Form`) throw `Select New-You Club for Eudora`;
-  //if( eudoraItem() !== $item`Our Daily Candles™ order form`) throw `Select Daily Candles for Eudora`;
-
-  /*
-
-    prepareAscension(
-      {
-        workshed: $item`diabolic pizza cube`,
-        garden: $item`Peppermint Pip Packet`,
-        eudora: $item`New-You Club Membership Form`,
-      },
-      {
-        desk: $item`S ss piggy bank`,
-        ceiling: $item`ceiling fan`,
-        nightstand: $item`foreign language tapes`,
-      },
-      true
-    );
-
-  */
+  prepareAscension(
+    {
+      workshed: $item`diabolic pizza cube`,
+      garden: $item`Peppermint Pip Packet`,
+      eudora: $item`New-You Club Membership Form`,
+    },
+    {
+      desk: $item`Swiss piggy bank`,
+      ceiling: $item`ceiling fan`,
+      nightstand: $item`foreign language tapes`,
+    },
+    true
+  );
 }
