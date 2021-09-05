@@ -74,11 +74,7 @@ const DefaultMacro = new Macro()
   .if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`)) // Turbo used a flag to cast pride
   .skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
-  .if_(`!hascombatitem ${toInt($item`blue rocket`)}`, Macro.item($item`Time-Spinner`))
-  .if_(
-    `hascombatitem ${toInt($item`blue rocket`)}`,
-    Macro.item($item`Time-Spinner`, $item`blue rocket`)
-  )
+  .item($item`Time-Spinner`)
   .if_(
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
