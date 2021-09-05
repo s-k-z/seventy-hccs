@@ -1,5 +1,6 @@
 import {
   effectModifier,
+  itemAmount,
   mpCost,
   myClass,
   myMp,
@@ -11,10 +12,11 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } from "libram";
-import { BRICKOS_PER_FIGHT } from "./config";
+import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
 
 export function castBestLibram(): void {
-  const needed = BRICKOS_PER_FIGHT * (3 - get("_brickoFights"));
+  const owned = itemAmount(BRICKO_TARGET_ITEM);
+  const needed = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + owned));
   if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, needed)) {
     useSkill($skill`Summon BRICKOs`);
   } else if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
