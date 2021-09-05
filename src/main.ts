@@ -300,16 +300,11 @@ function levelAndDoQuests() {
     oneOffEvents.innerElf();
     oneOffEvents.meteorUngulith();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
-      print(`Current HP before Deep Dark Visions: ${myHp()}`);
       equipOutfit(Quest.DeepDark);
-      if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
-      useSkill($skill`Deep Dark Visions`);
-      print(`Current HP after Deep Dark Visions: ${myHp()}`);
-    }
-    if (!have($effect`Cowrruption`)) {
-      use($item`corrupted marrow`);
       if (myHp() < myMaxhp() * 0.5) cliExecute("hottub");
+      useSkill($skill`Deep Dark Visions`);
     }
+    if (!have($effect`Cowrruption`)) use($item`corrupted marrow`);
     completeQuest(Quest.SpellDamage);
   }
 
@@ -342,11 +337,11 @@ function levelAndDoQuests() {
       useSkill(2, $skill`The Ode to Booze`);
       drink($item`vintage smart drink`); // 10 drunk
     }
-    const icyRevenge = $item`love song of icy revenge`;
-    if (!have($effect`Cold Hearted`) && have(icyRevenge)) {
-      cliExecute("pillkeeper extend");
-      use(icyRevenge);
+    while (have($item`love song of icy revenge`)) {
+      if (!have($effect`Cold Hearted`)) cliExecute("pillkeeper extend");
+      use($item`love song of icy revenge`);
     }
+    while (have($item`pulled blue taffy`)) use($item`pulled blue taffy`);
     completeQuest(Quest.FamiliarWeight);
   }
 
@@ -456,7 +451,7 @@ function preCoilWire() {
     if (!have($item`borrowed time`)) create($item`borrowed time`);
     use($item`borrowed time`);
   }
-  if (myHp() < myMaxhp()) cliExecute("hottub");
+  if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
   if (get("_sourceTerminalDigitizeUses") < 1) SourceTerminal.educate($skill`Digitize`);
   oneOffEvents.hipster();
   if (get("_sourceTerminalDigitizeUses") > 0) {
@@ -479,7 +474,7 @@ function postCoilWire() {
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
   cliExecute("Briefcase e spell spooky -combat");
   let click = true;
-  for (let i = 0; i < 22 && click; ++i) {
+  while (get("_kgbClicksUsed") < 22 && click) {
     click = !containsText(
       visitUrl("place.php?whichplace=kgb&action=kgb_actuator1"),
       "Nothing happens."

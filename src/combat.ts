@@ -1,6 +1,7 @@
 import {
   adv1,
   choiceFollowsFight,
+  getAutoAttack,
   handlingChoice,
   inMultiFight,
   myTurncount,
@@ -125,8 +126,8 @@ export const MacroList = {
     .step(DefaultMacro),
 
   MotherSlime: new Macro().trySkill($skill`KGB tranquilizer dart`).skill($skill`Snokebomb`),
-  BatForm: new Macro().trySkill($skill`Become a Bat`).step("runaway"),
 
+  BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).step("runaway"),
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 
   MeteorForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
@@ -137,7 +138,7 @@ export const MacroList = {
 
 // Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
 export function adventure(loc: Location, macro: Macro): void {
-  setAutoAttack(0);
+  if (getAutoAttack() !== 0) setAutoAttack(0);
   adv1(loc, 0, macro.toString());
   while (inMultiFight()) runCombat(macro.toString());
   if (choiceFollowsFight()) visitUrl("choice.php");
@@ -145,6 +146,7 @@ export function adventure(loc: Location, macro: Macro): void {
 }
 
 export function adventureUrl(url: string, macro: Macro): void {
+  if (getAutoAttack() !== 0) setAutoAttack(0);
   visitUrl(url);
   runCombat(macro.toString());
   if (choiceFollowsFight()) visitUrl("choice.php");
@@ -152,25 +154,18 @@ export function adventureUrl(url: string, macro: Macro): void {
 }
 
 export function mapMonster(location: Location, monster: Monster, macro: Macro): void {
-  if (get("_monstersMapped") < 3) {
-    setAutoAttack(0);
-    if (!get("mappingMonsters")) {
-      useSkill($skill`Map the Monsters`);
-      if (!get("mappingMonsters")) throw "Failed to cast map the monsters?";
-    }
-    const expectedTurnCount = myTurncount();
-    let mapPage = visitUrl(toUrl(location));
-    while (!mapPage.includes("Leading Yourself Right to Them")) {
-      mapPage = visitUrl(toUrl(location));
-      if (myTurncount() > expectedTurnCount) {
-        throw "Failed to encounter map monster page and wasted a turn somehow?";
-      }
-    }
-    visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
-    runCombat(macro.toString());
-    if (choiceFollowsFight()) runChoice(-1);
-    if (handlingChoice()) runChoice(-1);
-  } else {
-    throw "Trying to map too many monsters in one day";
+  if (getAutoAttack() !== 0) setAutoAttack(0);
+  if (get("_monstersMapped") >= 3) throw "Trying to map too many monsters";
+  if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
+  const expectedTurnCount = myTurncount();
+  let mapPage = "";
+  while (!mapPage.includes("Leading Yourself Right to Them")) {
+    mapPage = visitUrl(toUrl(location));
+    if (myTurncount() > expectedTurnCount) throw "Wasted a turn somehow mapping monsters?";
   }
+  visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
+  runCombat(macro.toString());
+  if (choiceFollowsFight()) runChoice(-1);
+  if (handlingChoice()) runChoice(-1);
+  if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
 }

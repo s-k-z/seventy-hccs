@@ -89,7 +89,7 @@ export function spendAllMpOnLibrams(): void {
   while (myMp() > mpCost($skill`Summon BRICKOs`)) castBestLibram();
 }
 
-export enum MoonSign {
+export const enum MoonSign {
   Mongoose = 1,
   Wallaby = 2,
   Vole = 3,

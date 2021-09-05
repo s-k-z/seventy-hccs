@@ -458,14 +458,6 @@ export function getRemainingFreeFights(): number {
 
 // Not all of the combats are going to occur while leveling, the rest can go here
 export const oneOffEvents = {
-  innerElf: (): void => {
-    if (myLevel() >= 13 && !have($effect`Inner Elf`)) {
-      familiar($familiar`Machine Elf`);
-      Clan.with(FAX_AND_SLIME_CLAN, () => adventure(slimeTube, MacroList.MotherSlime));
-      checkEffect($effect`Inner Elf`);
-    }
-  },
-
   hipster: (): void => {
     if (!get("_ironicMoustache")) {
       familiar($familiar`Mini-Hipster`);
@@ -516,6 +508,15 @@ export const oneOffEvents = {
       familiar($familiar`Nanorhino`);
       adventure(upscaleDistrict, MacroList.Nanobrainy);
       checkEffect($effect`Nanobrainy`);
+    }
+  },
+
+  innerElf: (): void => {
+    if (myLevel() >= 13 && !have($effect`Inner Elf`)) {
+      familiar($familiar`Machine Elf`);
+      // TODO: Handle Mother is Busy Right Now case
+      Clan.with(FAX_AND_SLIME_CLAN, () => adventure(slimeTube, MacroList.MotherSlime));
+      checkEffect($effect`Inner Elf`);
     }
   },
 
@@ -585,7 +586,7 @@ export const oneOffEvents = {
       equip($slot`back`, $item`vampyric cloake`);
       useSkill($skill`The Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
-      adventure(direWarren, MacroList.BatForm);
+      adventure(direWarren, MacroList.BatFormRunaway);
       checkEffect($effect`Bat-Adjacent Form`);
     }
   },
