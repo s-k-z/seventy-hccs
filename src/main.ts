@@ -169,8 +169,8 @@ export function main(): void {
   ]);
 
   const endTime = date.getTime();
-  const duration = Math.round((endTime - startTime) / 1000);
-  print(`Community Service completed in ${duration} seconds`, "green");
+  const duration = endTime - startTime;
+  print(`Community Service completed in ${duration} miliseconds`, "green");
 }
 
 function levelAndDoQuests() {
@@ -356,7 +356,9 @@ function levelAndDoQuests() {
   }
 
   prepAndDoQuest(Quest.Donate);
-  print(`${results.forEach((turnCount, id) => `\n${Quest[id]}: ${turnCount}`)}`);
+  print("\n\nTest Results", "orange");
+  results.forEach((turnCount, id) => print(`${Quest[id]}: ${turnCount}`, "orange"));
+  print("\n\n");
 }
 
 function openQuestZones() {

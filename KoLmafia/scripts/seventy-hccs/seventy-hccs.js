@@ -19210,8 +19210,8 @@ function main() {
   // 5: acquire & re-equip
   ["breakableHandling".concat((0,external_kolmafia_.toInt)((0,dist.$item)(main_templateObject5 || (main_templateObject5 = main_taggedTemplateLiteral(["makeshift garbage shirt"]))))), 2], ["customCombatScript", "seventy_hccs"]].concat(main_toConsumableArray(choiceAdventures)));
   var endTime = date.getTime();
-  var duration = Math.round((endTime - startTime) / 1000);
-  (0,external_kolmafia_.print)("Community Service completed in ".concat(duration, " seconds"), "green");
+  var duration = endTime - startTime;
+  (0,external_kolmafia_.print)("Community Service completed in ".concat(duration, " miliseconds"), "green");
 }
 
 function levelAndDoQuests() {
@@ -19401,7 +19401,9 @@ function levelAndDoQuests() {
   }
 
   prepAndDoQuest(Quest.Donate);
-  (0,external_kolmafia_.print)("".concat(results.forEach((turnCount, id) => "\n".concat(Quest[id], ": ").concat(turnCount))));
+  (0,external_kolmafia_.print)("\n\nTest Results", "orange");
+  results.forEach((turnCount, id) => (0,external_kolmafia_.print)("".concat(Quest[id], ": ").concat(turnCount), "orange"));
+  (0,external_kolmafia_.print)("\n\n");
 }
 
 function openQuestZones() {
