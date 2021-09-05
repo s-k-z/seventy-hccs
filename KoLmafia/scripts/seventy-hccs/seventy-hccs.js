@@ -18634,9 +18634,9 @@ var oneOffEvents = {
     if (!(0,dist.get)("_bagOfCandy")) {
       familiar((0,dist.$familiar)(events_templateObject142 || (events_templateObject142 = events_taggedTemplateLiteral(["Stocking Mimic"]))));
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject143 || (events_templateObject143 = events_taggedTemplateLiteral(["familiar"]))), (0,dist.$item)(events_templateObject144 || (events_templateObject144 = events_taggedTemplateLiteral(["none"]))));
-      var ghostLoc1 = (0,dist.get)("ghostLocation");
-      if (!ghostLoc1) throw "Failed to get protonic ghost notice";
-      adventure(ghostLoc1, MacroList.FreeFight);
+      var ghostLoc = (0,dist.get)("ghostLocation");
+      if (!ghostLoc) throw "Failed to get protonic ghost notice";
+      adventure(ghostLoc, MacroList.FreeFight);
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject145 || (events_templateObject145 = events_taggedTemplateLiteral(["familiar"]))), (0,dist.$item)(events_templateObject146 || (events_templateObject146 = events_taggedTemplateLiteral(["none"]))));
       checkAvailable((0,dist.$item)(events_templateObject147 || (events_templateObject147 = events_taggedTemplateLiteral(["bag of many confections"]))));
     }
@@ -18963,8 +18963,8 @@ function synthesize() {
   };
 
   for (var i = 0; i <= reserveCandies.length; i++) {
-    var used = new Map(reserveCandies.slice(i).map(r => [r, 1]));
-    sim = simulate(targetEffects, candies, used);
+    var reserved = new Map(reserveCandies.slice(i).map(r => [r, 1]));
+    sim = simulate(targetEffects, candies, reserved);
     if (sim.result) break;
   }
 
@@ -19008,11 +19008,13 @@ function synthesize() {
 }
 
 function simulate(synthTargets, candies, reserveCandies) {
-  var used = new Map(reserveCandies);
   var sim = {
     result: true,
     pairs: []
   };
+  var used = new Map(reserveCandies);
+
+  var markUsed = item => used.set(item, 1 + (used.get(item) || 0));
 
   var _iterator3 = sweetsynthesis_createForOfIteratorHelper(synthTargets),
       _step3;
@@ -19022,18 +19024,18 @@ function simulate(synthTargets, candies, reserveCandies) {
       var target = _step3.value;
       var startA = candies[tier(target).a];
       var startB = candies[tier(target).b];
-      var res = search(startA, startB, used, target);
+      var res = search(target, startA, startB, used);
       if (!res.found) return {
         result: false,
         pairs: []
       }; // Add the candies from each search to the list of used candies
 
       sim.pairs.push([res.a, res.b]);
-      used.set(res.a, 1 + (used.get(res.a) || 0));
-      used.set(res.b, 1 + (used.get(res.b) || 0)); // Increment candies transformed from too, if any
+      markUsed(res.a);
+      markUsed(res.b); // Increment candies transformed from too, if any
 
-      if (res.fromA) used.set(res.fromA, 1 + (used.get(res.fromA) || 0));
-      if (res.fromB) used.set(res.fromB, 1 + (used.get(res.fromB) || 0));
+      if (res.fromA) markUsed(res.fromA);
+      if (res.fromB) markUsed(res.fromB);
     }
   } catch (err) {
     _iterator3.e(err);
@@ -19044,24 +19046,32 @@ function simulate(synthTargets, candies, reserveCandies) {
   return sim;
 }
 
-function search(setA, setB, used, target) {
-  var fromA = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-  var fromB = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
+function search(target, setA, setB, used) {
+  var fromA = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : undefined;
+  var fromB = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : undefined;
   var indexA = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : setA.length - 1;
   var indexB = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : setB.length - 1;
-  var A = setA[indexA].candy;
-  var B = setB[indexB].candy;
-  var countA = setA[indexA].count - (used.get(A) || 0);
-  var countB = setB[indexB].count - (used.get(B) || 0); // Test a solution if we have the candies available
+
+  var get = (set, index) => {
+    var candy = set[index].candy;
+    var count = set[index].count - (used.get(candy) || 0);
+    return {
+      candy: candy,
+      count: count
+    };
+  };
+
+  var A = get(setA, indexA);
+  var B = get(setB, indexB); // Test a solution if we have the candies available
   // If A and B are the same then we need to ensure we have 2 or more candies
 
-  var enoughIfSame = A !== B || countA >= 2;
+  var haveEnough = A.count > 0 && B.count > 0 && A.candy !== B.candy || A.count >= 2;
 
-  if (countA > 0 && countB > 0 && enoughIfSame && (0,external_kolmafia_.sweetSynthesisResult)(A, B) === target) {
+  if (haveEnough && (0,external_kolmafia_.sweetSynthesisResult)(A.candy, B.candy) === target) {
     return {
       found: true,
-      a: A,
-      b: B,
+      a: A.candy,
+      b: B.candy,
       fromA: fromA,
       fromB: fromB
     };
@@ -19069,32 +19079,30 @@ function search(setA, setB, used, target) {
   // Fall through if we don't find a match
 
 
-  var subA = transforms.get(A);
-  var subB = transforms.get(B); // ensure we have the available candy to transform
+  var subA = transforms.get(A.candy);
+  var subB = transforms.get(B.candy); // ensure we have the available candy to transform
 
-  if (countA > 0 && subA) {
+  if (A.count > 0 && subA) {
     if (fromA) throw "Can't transform candy again from ".concat(fromA);
-    var simA = search(subA, setB, used, target, A, fromB);
+    var simA = search(target, subA, setB, used, A.candy, fromB);
     if (simA.found) return simA;
   }
 
-  if (countB > 0 && subB) {
+  if (B.count > 0 && subB) {
     if (fromB) throw "Can't transform candy again from ".concat(fromB);
-    var simB = search(setA, subB, used, target, fromA, B);
+    var simB = search(target, setA, subB, used, fromA, B.candy);
     if (simB.found) return simB;
   } // Try the next candy in the list
 
 
-  if (indexB > 0) return search(setA, setB, used, target, fromA, fromB, indexA, indexB - 1); // Loop around once b reaches 0
+  if (indexB > 0) return search(target, setA, setB, used, fromA, fromB, indexA, indexB - 1); // Loop around once b reaches 0
 
-  if (indexA > 0) return search(setA, setB, used, target, fromA, fromB, indexA - 1); // No solution found
+  if (indexA > 0) return search(target, setA, setB, used, fromA, fromB, indexA - 1); // No solution found
 
   return {
     found: false,
     a: (0,dist.$item)(sweetsynthesis_templateObject34 || (sweetsynthesis_templateObject34 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
-    b: (0,dist.$item)(sweetsynthesis_templateObject35 || (sweetsynthesis_templateObject35 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
-    fromA: fromA,
-    fromB: fromB
+    b: (0,dist.$item)(sweetsynthesis_templateObject35 || (sweetsynthesis_templateObject35 = sweetsynthesis_taggedTemplateLiteral(["none"])))
   };
 }
 ;// CONCATENATED MODULE: ./src/main.ts

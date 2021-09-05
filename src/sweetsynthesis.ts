@@ -104,8 +104,8 @@ export function synthesize(
   // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
   let sim: simulateResult = { result: false, pairs: [] };
   for (let i = 0; i <= reserveCandies.length; i++) {
-    const used = new Map<Item, number>(reserveCandies.slice(i).map((r) => [r, 1]));
-    sim = simulate(targetEffects, candies, used);
+    const reserved = new Map<Item, number>(reserveCandies.slice(i).map((r) => [r, 1]));
+    sim = simulate(targetEffects, candies, reserved);
     if (sim.result) break;
   }
   if (!sim.result) throw `Unable to find a combination for all synthesis targets`;
@@ -132,20 +132,21 @@ function simulate(
   candies: { complex: candySet; simple: candySet },
   reserveCandies: Map<Item, number>
 ): simulateResult {
-  const used = new Map<Item, number>(reserveCandies);
   const sim: simulateResult = { result: true, pairs: [] };
+  const used = new Map<Item, number>(reserveCandies);
+  const markUsed = (item: Item) => used.set(item, 1 + (used.get(item) || 0));
   for (const target of synthTargets) {
     const startA = candies[tier(target).a];
     const startB = candies[tier(target).b];
-    const res = search(startA, startB, used, target);
+    const res = search(target, startA, startB, used);
     if (!res.found) return { result: false, pairs: [] };
     // Add the candies from each search to the list of used candies
     sim.pairs.push([res.a, res.b]);
-    used.set(res.a, 1 + (used.get(res.a) || 0));
-    used.set(res.b, 1 + (used.get(res.b) || 0));
+    markUsed(res.a);
+    markUsed(res.b);
     // Increment candies transformed from too, if any
-    if (res.fromA) used.set(res.fromA, 1 + (used.get(res.fromA) || 0));
-    if (res.fromB) used.set(res.fromB, 1 + (used.get(res.fromB) || 0));
+    if (res.fromA) markUsed(res.fromA);
+    if (res.fromB) markUsed(res.fromB);
   }
   return sim;
 }
@@ -154,49 +155,52 @@ type searchResult = {
   found: boolean;
   a: Item;
   b: Item;
-  fromA: Item | null;
-  fromB: Item | null;
+  fromA?: Item;
+  fromB?: Item;
 };
 
 function search(
+  target: Effect,
   setA: candySet,
   setB: candySet,
   used: Map<Item, number>,
-  target: Effect,
-  fromA: Item | null = null,
-  fromB: Item | null = null,
+  fromA: Item | undefined = undefined,
+  fromB: Item | undefined = undefined,
   indexA: number = setA.length - 1,
   indexB: number = setB.length - 1
 ): searchResult {
-  const A = setA[indexA].candy;
-  const B = setB[indexB].candy;
-  const countA = setA[indexA].count - (used.get(A) || 0);
-  const countB = setB[indexB].count - (used.get(B) || 0);
+  const get = (set: candySet, index: number): { candy: Item; count: number } => {
+    const candy = set[index].candy;
+    const count = set[index].count - (used.get(candy) || 0);
+    return { candy: candy, count: count };
+  };
+  const A = get(setA, indexA);
+  const B = get(setB, indexB);
   // Test a solution if we have the candies available
   // If A and B are the same then we need to ensure we have 2 or more candies
-  const enoughIfSame = A !== B || countA >= 2;
-  if (countA > 0 && countB > 0 && enoughIfSame && sweetSynthesisResult(A, B) === target) {
-    return { found: true, a: A, b: B, fromA: fromA, fromB: fromB };
+  const haveEnough = (A.count > 0 && B.count > 0 && A.candy !== B.candy) || A.count >= 2;
+  if (haveEnough && sweetSynthesisResult(A.candy, B.candy) === target) {
+    return { found: true, a: A.candy, b: B.candy, fromA: fromA, fromB: fromB };
   }
   // Try transforming candy into another type
   // Fall through if we don't find a match
-  const subA = transforms.get(A);
-  const subB = transforms.get(B);
+  const subA = transforms.get(A.candy);
+  const subB = transforms.get(B.candy);
   // ensure we have the available candy to transform
-  if (countA > 0 && subA) {
+  if (A.count > 0 && subA) {
     if (fromA) throw `Can't transform candy again from ${fromA}`;
-    const simA = search(subA, setB, used, target, A, fromB);
+    const simA = search(target, subA, setB, used, A.candy, fromB);
     if (simA.found) return simA;
   }
-  if (countB > 0 && subB) {
+  if (B.count > 0 && subB) {
     if (fromB) throw `Can't transform candy again from ${fromB}`;
-    const simB = search(setA, subB, used, target, fromA, B);
+    const simB = search(target, setA, subB, used, fromA, B.candy);
     if (simB.found) return simB;
   }
   // Try the next candy in the list
-  if (indexB > 0) return search(setA, setB, used, target, fromA, fromB, indexA, indexB - 1);
+  if (indexB > 0) return search(target, setA, setB, used, fromA, fromB, indexA, indexB - 1);
   // Loop around once b reaches 0
-  if (indexA > 0) return search(setA, setB, used, target, fromA, fromB, indexA - 1);
+  if (indexA > 0) return search(target, setA, setB, used, fromA, fromB, indexA - 1);
   // No solution found
-  return { found: false, a: $item`none`, b: $item`none`, fromA: fromA, fromB: fromB };
+  return { found: false, a: $item`none`, b: $item`none` };
 }
