@@ -21,7 +21,10 @@ export function checkReadyToAscend(): void {
   if (notFound()) throw `Need to ice house ${banish}`;
 
   if ((totalTurnsPlayed() + 60) % 11 !== 1) {
-    throw `Spend more turns for voter monster`;
+    const targetTurnBaseline = totalTurnsPlayed() + 60;
+    const m = Math.floor((targetTurnBaseline - 1) / 11);
+    const turns = 11 * (m + 1) + 1 - (totalTurnsPlayed() + 60);
+    throw `Spend more ${turns} turns for voter monster`;
   }
 
   prepareAscension(
