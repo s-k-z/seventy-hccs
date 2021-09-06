@@ -512,9 +512,6 @@ function postCoilWire() {
     $skill`Summon Crimbo Candy`,
     //$skill`Summon Geeky Gifts`,
     //$skill`Summon Tasteful Items`,
-
-    // Buffs that can't fit elsewhere
-    $skill`Incredible Self-Esteem`,
   ].forEach((skill) => useSkill(skill));
   // 143 mp
 
