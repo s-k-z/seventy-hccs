@@ -35,6 +35,8 @@ svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
 15. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
 16. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed
 
+The script can be run either in Aftercore, or in Community Service provided that the following are selected:
+
 ## Requirements in Valhalla
 
 1. Astral Statuette from Pet Heaven
