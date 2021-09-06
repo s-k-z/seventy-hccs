@@ -70,7 +70,7 @@ const transforms = new Map<Item, candySet>([
  */
 export function synthesize(
   allowTomeUse = true,
-  targetEffects: Effect[] = $effects`Synthesis: Collection, Synthesis: Learning, Synthesis: Smart`.filter(
+  targetEffects: Effect[] = $effects`Synthesis: Collection, Synthesis: Smart, Synthesis: Learning`.filter(
     (effect) => !have(effect)
   ),
   reserveCandies: Item[] = [
@@ -89,8 +89,7 @@ export function synthesize(
   // Initialize candies with ones in inventory
   Object.entries(inv).forEach(([name, count]) => {
     const item = Item.get(name);
-    if (item.candyType === candyType.complex) candies.complex.push({ candy: item, count: count });
-    if (item.candyType === candyType.simple) candies.simple.push({ candy: item, count: count });
+    candies[item.candyType as candyType]?.push({ candy: item, count: count });
   });
   // Pretend summon sugar sheets if tome summons available
   if (allowTomeUse && get("tomeSummons") < 3) {
