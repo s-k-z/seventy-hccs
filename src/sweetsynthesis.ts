@@ -87,7 +87,7 @@ export function synthesize(
   cliExecute("refresh inventory");
   const inv = getInventory();
   // Initialize candies with ones in inventory
-  Object.keys(inv).forEach((name, count) => {
+  Object.entries(inv).forEach(([name, count]) => {
     const item = Item.get(name);
     if (item.candyType === candyType.complex) candies.complex.push({ candy: item, count: count });
     if (item.candyType === candyType.simple) candies.simple.push({ candy: item, count: count });

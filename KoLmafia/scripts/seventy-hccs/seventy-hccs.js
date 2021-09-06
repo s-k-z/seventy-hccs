@@ -18807,11 +18807,19 @@ function checkReadyToAscend() {
 ;// CONCATENATED MODULE: ./src/sweetsynthesis.ts
 var sweetsynthesis_templateObject, sweetsynthesis_templateObject2, sweetsynthesis_templateObject3, sweetsynthesis_templateObject4, sweetsynthesis_templateObject5, sweetsynthesis_templateObject6, sweetsynthesis_templateObject7, sweetsynthesis_templateObject8, sweetsynthesis_templateObject9, sweetsynthesis_templateObject10, sweetsynthesis_templateObject11, sweetsynthesis_templateObject12, sweetsynthesis_templateObject13, sweetsynthesis_templateObject14, sweetsynthesis_templateObject15, sweetsynthesis_templateObject16, sweetsynthesis_templateObject17, sweetsynthesis_templateObject18, sweetsynthesis_templateObject19, sweetsynthesis_templateObject20, sweetsynthesis_templateObject21, sweetsynthesis_templateObject22, sweetsynthesis_templateObject23, sweetsynthesis_templateObject24, sweetsynthesis_templateObject25, sweetsynthesis_templateObject26, sweetsynthesis_templateObject27, sweetsynthesis_templateObject28, sweetsynthesis_templateObject29, sweetsynthesis_templateObject30, sweetsynthesis_templateObject31, sweetsynthesis_templateObject32, sweetsynthesis_templateObject33, sweetsynthesis_templateObject34, sweetsynthesis_templateObject35;
 
-function sweetsynthesis_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function sweetsynthesis_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function sweetsynthesis_slicedToArray(arr, i) { return sweetsynthesis_arrayWithHoles(arr) || sweetsynthesis_iterableToArrayLimit(arr, i) || sweetsynthesis_unsupportedIterableToArray(arr, i) || sweetsynthesis_nonIterableRest(); }
+
+function sweetsynthesis_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
 function sweetsynthesis_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return sweetsynthesis_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return sweetsynthesis_arrayLikeToArray(o, minLen); }
 
 function sweetsynthesis_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function sweetsynthesis_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function sweetsynthesis_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function sweetsynthesis_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -18895,7 +18903,11 @@ function synthesize() {
   (0,external_kolmafia_.cliExecute)("refresh inventory");
   var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
 
-  Object.keys(inv).forEach((name, count) => {
+  Object.entries(inv).forEach(_ref => {
+    var _ref2 = sweetsynthesis_slicedToArray(_ref, 2),
+        name = _ref2[0],
+        count = _ref2[1];
+
     var item = Item.get(name);
     if (item.candyType === candyType.complex) candies.complex.push({
       candy: item,
