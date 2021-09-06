@@ -17865,7 +17865,7 @@ function mapMonster(location, monster, macro) {
   if ((0,dist.get)("mappingMonsters")) throw "Failed to unset map the monsters?";
 }
 ;// CONCATENATED MODULE: ./src/iotms.ts
-var iotms_templateObject, iotms_templateObject2, iotms_templateObject3, iotms_templateObject4, iotms_templateObject5, iotms_templateObject6, iotms_templateObject7, iotms_templateObject8, iotms_templateObject9, iotms_templateObject10, iotms_templateObject11, iotms_templateObject12, iotms_templateObject13, iotms_templateObject14, iotms_templateObject15, iotms_templateObject16, iotms_templateObject17, iotms_templateObject18, iotms_templateObject19, iotms_templateObject20, iotms_templateObject21, iotms_templateObject22, iotms_templateObject23, iotms_templateObject24, iotms_templateObject25, iotms_templateObject26, iotms_templateObject27, iotms_templateObject28, iotms_templateObject29, iotms_templateObject30, iotms_templateObject31, iotms_templateObject32, iotms_templateObject33, iotms_templateObject34, iotms_templateObject35, iotms_templateObject36, iotms_templateObject37, iotms_templateObject38;
+var iotms_templateObject, iotms_templateObject2, iotms_templateObject3, iotms_templateObject4, iotms_templateObject5, iotms_templateObject6, iotms_templateObject7, iotms_templateObject8, iotms_templateObject9, iotms_templateObject10, iotms_templateObject11, iotms_templateObject12, iotms_templateObject13, iotms_templateObject14, iotms_templateObject15, iotms_templateObject16, iotms_templateObject17, iotms_templateObject18, iotms_templateObject19, iotms_templateObject20, iotms_templateObject21, iotms_templateObject22, iotms_templateObject23, iotms_templateObject24, iotms_templateObject25, iotms_templateObject26, iotms_templateObject27, iotms_templateObject28, iotms_templateObject29, iotms_templateObject30, iotms_templateObject31, iotms_templateObject32, iotms_templateObject33, iotms_templateObject34, iotms_templateObject35, iotms_templateObject36, iotms_templateObject37, iotms_templateObject38, iotms_templateObject39, iotms_templateObject40, iotms_templateObject41;
 
 function iotms_slicedToArray(arr, i) { return iotms_arrayWithHoles(arr) || iotms_iterableToArrayLimit(arr, i) || iotms_unsupportedIterableToArray(arr, i) || iotms_nonIterableRest(); }
 
@@ -17887,23 +17887,24 @@ function iotms_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.s
 
 
 function castBestLibram() {
-  var owned = (0,external_kolmafia_.itemAmount)(BRICKO_TARGET_ITEM);
-  var needed = BRICKOS_PER_FIGHT * Math.max(0, 3 - ((0,dist.get)("_brickoFights") + owned));
+  var rareResolutions = [(0,dist.$item)(iotms_templateObject || (iotms_templateObject = iotms_taggedTemplateLiteral(["resolution: be kinder"]))), (0,dist.$item)(iotms_templateObject2 || (iotms_templateObject2 = iotms_taggedTemplateLiteral(["resolution: be luckier"]))), (0,dist.$item)(iotms_templateObject3 || (iotms_templateObject3 = iotms_taggedTemplateLiteral(["resolution: be more adventurous"]))), (0,dist.$effect)(iotms_templateObject4 || (iotms_templateObject4 = iotms_taggedTemplateLiteral(["Kindly Resolve"]))), (0,dist.$effect)(iotms_templateObject5 || (iotms_templateObject5 = iotms_taggedTemplateLiteral(["Fortunate Resolve"])))].reduce((sum, res) => sum + (res instanceof Item ? (0,external_kolmafia_.itemAmount)(res) : (0,dist.have)(res) ? 1 : 0), 0);
+  var brickosOwned = (0,external_kolmafia_.itemAmount)(BRICKO_TARGET_ITEM);
+  var brickosNeeded = BRICKOS_PER_FIGHT * Math.max(0, 3 - ((0,dist.get)("_brickoFights") + brickosOwned));
 
-  if ((0,dist.get)("_brickoEyeSummons") < 3 || !(0,dist.have)((0,dist.$item)(iotms_templateObject || (iotms_templateObject = iotms_taggedTemplateLiteral(["BRICKO brick"]))), needed)) {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject2 || (iotms_templateObject2 = iotms_taggedTemplateLiteral(["Summon BRICKOs"]))));
-  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject3 || (iotms_templateObject3 = iotms_taggedTemplateLiteral(["green candy heart"])))) && !(0,dist.have)((0,dist.$effect)(iotms_templateObject4 || (iotms_templateObject4 = iotms_taggedTemplateLiteral(["Heart of Green"]))))) {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject5 || (iotms_templateObject5 = iotms_taggedTemplateLiteral(["Summon Candy Heart"]))));
-  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject6 || (iotms_templateObject6 = iotms_taggedTemplateLiteral(["love song of icy revenge"]))))) {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject7 || (iotms_templateObject7 = iotms_taggedTemplateLiteral(["Summon Love Song"]))));
-  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject8 || (iotms_templateObject8 = iotms_taggedTemplateLiteral(["resolution: be kinder"])))) && !(0,dist.have)((0,dist.$effect)(iotms_templateObject9 || (iotms_templateObject9 = iotms_taggedTemplateLiteral(["Kindly Resolve"]))))) {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject10 || (iotms_templateObject10 = iotms_taggedTemplateLiteral(["Summon Resolutions"]))));
-  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject11 || (iotms_templateObject11 = iotms_taggedTemplateLiteral(["love song of icy revenge"]))), 2)) {
+  if ((0,dist.get)("_brickoEyeSummons") < 3 || !(0,dist.have)((0,dist.$item)(iotms_templateObject6 || (iotms_templateObject6 = iotms_taggedTemplateLiteral(["BRICKO brick"]))), brickosNeeded)) {
+    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject7 || (iotms_templateObject7 = iotms_taggedTemplateLiteral(["Summon BRICKOs"]))));
+  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject8 || (iotms_templateObject8 = iotms_taggedTemplateLiteral(["green candy heart"])))) && !(0,dist.have)((0,dist.$effect)(iotms_templateObject9 || (iotms_templateObject9 = iotms_taggedTemplateLiteral(["Heart of Green"]))))) {
+    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject10 || (iotms_templateObject10 = iotms_taggedTemplateLiteral(["Summon Candy Heart"]))));
+  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject11 || (iotms_templateObject11 = iotms_taggedTemplateLiteral(["love song of icy revenge"]))))) {
     (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject12 || (iotms_templateObject12 = iotms_taggedTemplateLiteral(["Summon Love Song"]))));
-  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject13 || (iotms_templateObject13 = iotms_taggedTemplateLiteral(["pulled blue taffy"]))), 4)) {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject14 || (iotms_templateObject14 = iotms_taggedTemplateLiteral(["Summon Taffy"]))));
+  } else if (rareResolutions < 3) {
+    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject13 || (iotms_templateObject13 = iotms_taggedTemplateLiteral(["Summon Resolutions"]))));
+  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject14 || (iotms_templateObject14 = iotms_taggedTemplateLiteral(["love song of icy revenge"]))), 2)) {
+    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject15 || (iotms_templateObject15 = iotms_taggedTemplateLiteral(["Summon Love Song"]))));
+  } else if (!(0,dist.have)((0,dist.$item)(iotms_templateObject16 || (iotms_templateObject16 = iotms_taggedTemplateLiteral(["pulled blue taffy"]))), 4)) {
+    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject17 || (iotms_templateObject17 = iotms_taggedTemplateLiteral(["Summon Taffy"]))));
   } else {
-    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject15 || (iotms_templateObject15 = iotms_taggedTemplateLiteral(["Summon Resolutions"]))));
+    (0,external_kolmafia_.useSkill)((0,dist.$skill)(iotms_templateObject18 || (iotms_templateObject18 = iotms_taggedTemplateLiteral(["Summon Resolutions"]))));
   }
 }
 function fightWitchess(piece, macro) {
@@ -17916,8 +17917,8 @@ function gazeAtTheStars() {
   }
 }
 function getPantogramPants() {
-  if (!(0,dist.have)((0,dist.$item)(iotms_templateObject16 || (iotms_templateObject16 = iotms_taggedTemplateLiteral(["portable pantogram"])))) || (0,dist.have)((0,dist.$item)(iotms_templateObject17 || (iotms_templateObject17 = iotms_taggedTemplateLiteral(["pantogram pants"]))))) return;
-  var m = new Map([[(0,dist.$stat)(iotms_templateObject18 || (iotms_templateObject18 = iotms_taggedTemplateLiteral(["Muscle"]))), 1], [(0,dist.$stat)(iotms_templateObject19 || (iotms_templateObject19 = iotms_taggedTemplateLiteral(["Mysticality"]))), 2], [(0,dist.$stat)(iotms_templateObject20 || (iotms_templateObject20 = iotms_taggedTemplateLiteral(["Moxie"]))), 3]]).get((0,external_kolmafia_.myPrimestat)());
+  if (!(0,dist.have)((0,dist.$item)(iotms_templateObject19 || (iotms_templateObject19 = iotms_taggedTemplateLiteral(["portable pantogram"])))) || (0,dist.have)((0,dist.$item)(iotms_templateObject20 || (iotms_templateObject20 = iotms_taggedTemplateLiteral(["pantogram pants"]))))) return;
+  var m = new Map([[(0,dist.$stat)(iotms_templateObject21 || (iotms_templateObject21 = iotms_taggedTemplateLiteral(["Muscle"]))), 1], [(0,dist.$stat)(iotms_templateObject22 || (iotms_templateObject22 = iotms_taggedTemplateLiteral(["Mysticality"]))), 2], [(0,dist.$stat)(iotms_templateObject23 || (iotms_templateObject23 = iotms_taggedTemplateLiteral(["Moxie"]))), 3]]).get((0,external_kolmafia_.myPrimestat)());
   var element;
 
   (function (element) {
@@ -17930,17 +17931,17 @@ function getPantogramPants() {
 
   var e = element.spooky; // -3 mp to use skills or +20 mp
 
-  var s1 = (0,dist.have)((0,dist.$item)(iotms_templateObject21 || (iotms_templateObject21 = iotms_taggedTemplateLiteral(["baconstone"])))) ? "".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject22 || (iotms_templateObject22 = iotms_taggedTemplateLiteral(["baconstone"])))), ",1") : "-2,0";
+  var s1 = (0,dist.have)((0,dist.$item)(iotms_templateObject24 || (iotms_templateObject24 = iotms_taggedTemplateLiteral(["baconstone"])))) ? "".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject25 || (iotms_templateObject25 = iotms_taggedTemplateLiteral(["baconstone"])))), ",1") : "-2,0";
   var s2 = "-2,0"; // Spell Damage +20%
 
   var s3 = "-1,0"; // Monsters will be less attracted to you
 
-  (0,external_kolmafia_.visitUrl)("inv_use.php?pwd=&whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject23 || (iotms_templateObject23 = iotms_taggedTemplateLiteral(["portable pantogram"]))))));
+  (0,external_kolmafia_.visitUrl)("inv_use.php?pwd=&whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject26 || (iotms_templateObject26 = iotms_taggedTemplateLiteral(["portable pantogram"]))))));
   (0,external_kolmafia_.visitUrl)("choice.php?pwd=&whichchoice=1270&option=1&m=".concat(m, "&e=").concat(e, "&s1=").concat(s1, "&s2=").concat(s2, "&s3=").concat(s3));
-  if (!(0,dist.have)((0,dist.$item)(iotms_templateObject24 || (iotms_templateObject24 = iotms_taggedTemplateLiteral(["pantogram pants"]))))) throw "Failed to create pantogram pants";
+  if (!(0,dist.have)((0,dist.$item)(iotms_templateObject27 || (iotms_templateObject27 = iotms_taggedTemplateLiteral(["pantogram pants"]))))) throw "Failed to create pantogram pants";
 }
 function harvestBatteries() {
-  (0,external_kolmafia_.visitUrl)("inv_use.php?pwd=&whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject25 || (iotms_templateObject25 = iotms_taggedTemplateLiteral(["potted power plant"]))))));
+  (0,external_kolmafia_.visitUrl)("inv_use.php?pwd=&whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject28 || (iotms_templateObject28 = iotms_taggedTemplateLiteral(["potted power plant"]))))));
 
   for (var i = 0; i < 7; i++) {
     (0,external_kolmafia_.visitUrl)("choice.php?pwd=&whichchoice=1448&option=1&pp=".concat(i + 1));
@@ -17956,7 +17957,7 @@ function scavengeDaycare() {
   }
 }
 function spendAllMpOnLibrams() {
-  while ((0,external_kolmafia_.myMp)() > (0,external_kolmafia_.mpCost)((0,dist.$skill)(iotms_templateObject26 || (iotms_templateObject26 = iotms_taggedTemplateLiteral(["Summon BRICKOs"]))))) {
+  while ((0,external_kolmafia_.myMp)() > (0,external_kolmafia_.mpCost)((0,dist.$skill)(iotms_templateObject29 || (iotms_templateObject29 = iotms_taggedTemplateLiteral(["Summon BRICKOs"]))))) {
     castBestLibram();
   }
 }
@@ -17975,9 +17976,9 @@ var MoonSign;
 })(MoonSign || (MoonSign = {}));
 
 function tuneMoon(moon) {
-  (0,external_kolmafia_.visitUrl)("inv_use.php?whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject27 || (iotms_templateObject27 = iotms_taggedTemplateLiteral(["hewn moon-rune spoon"])))), "&doit=96&whichsign=").concat(moon));
+  (0,external_kolmafia_.visitUrl)("inv_use.php?whichitem=".concat((0,external_kolmafia_.toInt)((0,dist.$item)(iotms_templateObject30 || (iotms_templateObject30 = iotms_taggedTemplateLiteral(["hewn moon-rune spoon"])))), "&doit=96&whichsign=").concat(moon));
 }
-var libramDrops = new Map([[(0,dist.$item)(iotms_templateObject28 || (iotms_templateObject28 = iotms_taggedTemplateLiteral(["green candy heart"]))), 1], [(0,dist.$item)(iotms_templateObject29 || (iotms_templateObject29 = iotms_taggedTemplateLiteral(["pulled violet taffy"]))), 50], [(0,dist.$item)(iotms_templateObject30 || (iotms_templateObject30 = iotms_taggedTemplateLiteral(["pulled yellow taffy"]))), 50], [(0,dist.$item)(iotms_templateObject31 || (iotms_templateObject31 = iotms_taggedTemplateLiteral(["resolution: be feistier"]))), 1], [(0,dist.$item)(iotms_templateObject32 || (iotms_templateObject32 = iotms_taggedTemplateLiteral(["resolution: be happier"]))), 1], [(0,dist.$item)(iotms_templateObject33 || (iotms_templateObject33 = iotms_taggedTemplateLiteral(["resolution: be kinder"]))), 1], [(0,dist.$item)(iotms_templateObject34 || (iotms_templateObject34 = iotms_taggedTemplateLiteral(["resolution: be luckier"]))), 1], [(0,dist.$item)(iotms_templateObject35 || (iotms_templateObject35 = iotms_taggedTemplateLiteral(["resolution: be smarter"]))), 1], [(0,dist.$item)(iotms_templateObject36 || (iotms_templateObject36 = iotms_taggedTemplateLiteral(["resolution: be wealthier"]))), 1]]);
+var libramDrops = new Map([[(0,dist.$item)(iotms_templateObject31 || (iotms_templateObject31 = iotms_taggedTemplateLiteral(["green candy heart"]))), 1], [(0,dist.$item)(iotms_templateObject32 || (iotms_templateObject32 = iotms_taggedTemplateLiteral(["pulled violet taffy"]))), 50], [(0,dist.$item)(iotms_templateObject33 || (iotms_templateObject33 = iotms_taggedTemplateLiteral(["pulled yellow taffy"]))), 50], [(0,dist.$item)(iotms_templateObject34 || (iotms_templateObject34 = iotms_taggedTemplateLiteral(["resolution: be feistier"]))), 1], [(0,dist.$item)(iotms_templateObject35 || (iotms_templateObject35 = iotms_taggedTemplateLiteral(["resolution: be happier"]))), 1], [(0,dist.$item)(iotms_templateObject36 || (iotms_templateObject36 = iotms_taggedTemplateLiteral(["resolution: be kinder"]))), 1], [(0,dist.$item)(iotms_templateObject37 || (iotms_templateObject37 = iotms_taggedTemplateLiteral(["resolution: be luckier"]))), 1], [(0,dist.$item)(iotms_templateObject38 || (iotms_templateObject38 = iotms_taggedTemplateLiteral(["resolution: be smarter"]))), 1], [(0,dist.$item)(iotms_templateObject39 || (iotms_templateObject39 = iotms_taggedTemplateLiteral(["resolution: be wealthier"]))), 1]]);
 function useLibramsDrops() {
   var _iterator = iotms_createForOfIteratorHelper(libramDrops),
       _step;
@@ -17999,10 +18000,10 @@ function useLibramsDrops() {
   }
 }
 function vote() {
-  if ((0,external_kolmafia_.myClass)() !== (0,dist.$class)(iotms_templateObject37 || (iotms_templateObject37 = iotms_taggedTemplateLiteral(["Sauceror"])))) throw "Don't yet know how to run this as a ".concat((0,external_kolmafia_.myClass)());
+  if ((0,external_kolmafia_.myClass)() !== (0,dist.$class)(iotms_templateObject40 || (iotms_templateObject40 = iotms_taggedTemplateLiteral(["Sauceror"])))) throw "Don't yet know how to run this as a ".concat((0,external_kolmafia_.myClass)());
   (0,external_kolmafia_.visitUrl)("place.php?whichplace=town_right&action=townright_vote");
   (0,external_kolmafia_.visitUrl)("choice.php?pwd=&option=1&whichchoice=1331&g=2&local[]=1&local[]=3");
-  if (!(0,dist.have)((0,dist.$item)(iotms_templateObject38 || (iotms_templateObject38 = iotms_taggedTemplateLiteral(["\"I Voted!\" sticker"]))))) throw "Voting failed";
+  if (!(0,dist.have)((0,dist.$item)(iotms_templateObject41 || (iotms_templateObject41 = iotms_taggedTemplateLiteral(["\"I Voted!\" sticker"]))))) throw "Voting failed";
 }
 ;// CONCATENATED MODULE: ./src/quests.ts
 var quests_templateObject, quests_templateObject2, quests_templateObject3, quests_templateObject4, quests_templateObject5, quests_templateObject6, quests_templateObject7, quests_templateObject8, quests_templateObject9, quests_templateObject10, quests_templateObject11, quests_templateObject12, quests_templateObject13, quests_templateObject14, quests_templateObject15, quests_templateObject16, quests_templateObject17, quests_templateObject18, quests_templateObject19, quests_templateObject20, quests_templateObject21, quests_templateObject22, quests_templateObject23, quests_templateObject24, quests_templateObject25, quests_templateObject26, quests_templateObject27, quests_templateObject28, quests_templateObject29, quests_templateObject30, quests_templateObject31, quests_templateObject32, quests_templateObject33, quests_templateObject34, quests_templateObject35, quests_templateObject36, quests_templateObject37, quests_templateObject38, quests_templateObject39, quests_templateObject40, quests_templateObject41, quests_templateObject42, quests_templateObject43, quests_templateObject44, quests_templateObject45, quests_templateObject46, quests_templateObject47, quests_templateObject48, quests_templateObject49, quests_templateObject50, quests_templateObject51, quests_templateObject52, quests_templateObject53, quests_templateObject54, quests_templateObject55, quests_templateObject56, quests_templateObject57, quests_templateObject58, quests_templateObject59, quests_templateObject60, quests_templateObject61, quests_templateObject62, quests_templateObject63, _templateObject64, _templateObject65, _templateObject66, _templateObject67, _templateObject68, _templateObject69, _templateObject70, _templateObject71, _templateObject72, _templateObject73, _templateObject74, _templateObject75, _templateObject76, _templateObject77, _templateObject78, _templateObject79, _templateObject80, _templateObject81, _templateObject82, _templateObject83, _templateObject84, _templateObject85, _templateObject86, _templateObject87, _templateObject88, _templateObject89, _templateObject90, _templateObject91, _templateObject92, _templateObject93, _templateObject94, _templateObject95, _templateObject96, _templateObject97, _templateObject98, _templateObject99, _templateObject100, _templateObject101, _templateObject102, _templateObject103, _templateObject104, _templateObject105, _templateObject106, _templateObject107, _templateObject108, _templateObject109, _templateObject110, _templateObject111, _templateObject112, _templateObject113, _templateObject114, _templateObject115, _templateObject116, _templateObject117, _templateObject118, _templateObject119, _templateObject120, _templateObject121, _templateObject122, _templateObject123, _templateObject124, _templateObject125, _templateObject126, _templateObject127, _templateObject128, _templateObject129, _templateObject130, _templateObject131, _templateObject132, _templateObject133, _templateObject134, _templateObject135, _templateObject136, _templateObject137, _templateObject138, _templateObject139, _templateObject140, _templateObject141, _templateObject142, _templateObject143, _templateObject144, _templateObject145, _templateObject146, _templateObject147, _templateObject148, _templateObject149, _templateObject150, _templateObject151, _templateObject152, _templateObject153, _templateObject154, _templateObject155, _templateObject156, _templateObject157, _templateObject158, _templateObject159, _templateObject160, _templateObject161, _templateObject162, _templateObject163, _templateObject164, _templateObject165, _templateObject166, _templateObject167, _templateObject168, _templateObject169, _templateObject170, _templateObject171, _templateObject172, _templateObject173, _templateObject174, _templateObject175, _templateObject176, _templateObject177, _templateObject178, _templateObject179, _templateObject180, _questOutfits, _templateObject181, _templateObject182, _templateObject183, _templateObject184, _templateObject185, _templateObject186, _templateObject187, _templateObject188, _templateObject189, _templateObject190, _templateObject191, _templateObject192, _templateObject193, _templateObject194, _templateObject195, _templateObject196, _templateObject197, _templateObject198, _templateObject199, _templateObject200, _templateObject201, _templateObject202, _templateObject203, _templateObject204, _templateObject205, _templateObject206, _templateObject207, _templateObject208, _templateObject209, _templateObject210, _templateObject211, _templateObject212, _templateObject213, _templateObject214, _templateObject215, _templateObject216, _templateObject217, _templateObject218, _templateObject219, _templateObject220, _templateObject221, _templateObject222, _templateObject223, _templateObject224, _templateObject225, _templateObject226, _templateObject227, _templateObject228, _templateObject229, _templateObject230, _templateObject231, _templateObject232, _templateObject233, _templateObject234, _templateObject235, _templateObject236, _templateObject237, _templateObject238, _templateObject239, _templateObject240, _templateObject241, _templateObject242, _templateObject243, _templateObject244, _templateObject245, _templateObject246, _templateObject247, _templateObject248, _templateObject249, _templateObject250, _templateObject251, _templateObject252, _templateObject253, _templateObject254, _templateObject255, _templateObject256, _templateObject257, _templateObject258, _templateObject259, _templateObject260, _templateObject261, _templateObject262, _templateObject263, _templateObject264, _templateObject265, _templateObject266, _templateObject267, _templateObject268, _templateObject269, _templateObject270, _templateObject271, _templateObject272, _templateObject273, _templateObject274, _templateObject275, _templateObject276, _templateObject277, _templateObject278, _templateObject279, _templateObject280, _templateObject281, _templateObject282, _templateObject283, _templateObject284, _templateObject285, _templateObject286, _templateObject287, _templateObject288, _templateObject289, _templateObject290, _templateObject291, _templateObject292, _templateObject293, _templateObject294, _templateObject295, _templateObject296, _templateObject297, _templateObject298, _templateObject299, _templateObject300, _templateObject301, _templateObject302, _templateObject303, _templateObject304, _templateObject305, _templateObject306, _templateObject307, _templateObject308, _templateObject309, _templateObject310, _templateObject311, _templateObject312, _templateObject313, _templateObject314, _templateObject315, _templateObject316, _questEffects;
@@ -18791,7 +18792,10 @@ function checkReadyToAscend() {
   if (notFound()) throw "Need to ice house ".concat(banish);
 
   if (((0,external_kolmafia_.totalTurnsPlayed)() + 60) % 11 !== 1) {
-    throw "Spend more turns for voter monster";
+    var targetTurnBaseline = (0,external_kolmafia_.totalTurnsPlayed)() + 60;
+    var m = Math.floor((targetTurnBaseline - 1) / 11);
+    var turns = 11 * (m + 1) + 1 - ((0,external_kolmafia_.totalTurnsPlayed)() + 60);
+    throw "Spend more ".concat(turns, " turns for voter monster");
   }
 
   (0,dist.prepareAscension)({
@@ -18897,23 +18901,21 @@ function synthesize() {
   var _candies;
 
   var allowTomeUse = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  var targetEffects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,dist.$effects)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Collection, Synthesis: Learning, Synthesis: Smart"]))).filter(effect => !(0,dist.have)(effect));
+  var targetEffects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,dist.$effects)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Collection, Synthesis: Smart, Synthesis: Learning"]))).filter(effect => !(0,dist.have)(effect));
   var reserveCandies = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [(0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), (0,dist.$item)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), (0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))];
   var candies = (_candies = {}, sweetsynthesis_defineProperty(_candies, candyType.complex, []), sweetsynthesis_defineProperty(_candies, candyType.simple, []), _candies);
   (0,external_kolmafia_.cliExecute)("refresh inventory");
   var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
 
   Object.entries(inv).forEach(_ref => {
+    var _candies2;
+
     var _ref2 = sweetsynthesis_slicedToArray(_ref, 2),
         name = _ref2[0],
         count = _ref2[1];
 
     var item = Item.get(name);
-    if (item.candyType === candyType.complex) candies.complex.push({
-      candy: item,
-      count: count
-    });
-    if (item.candyType === candyType.simple) candies.simple.push({
+    (_candies2 = candies[item.candyType]) === null || _candies2 === void 0 ? void 0 : _candies2.push({
       candy: item,
       count: count
     });
