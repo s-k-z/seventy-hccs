@@ -15,15 +15,22 @@ import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } fro
 import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
 
 export function castBestLibram(): void {
-  const owned = itemAmount(BRICKO_TARGET_ITEM);
-  const needed = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + owned));
-  if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, needed)) {
+  const rareResolutions = [
+    $item`resolution: be kinder`,
+    $item`resolution: be luckier`,
+    $item`resolution: be more adventurous`,
+    $effect`Kindly Resolve`,
+    $effect`Fortunate Resolve`,
+  ].reduce((sum, res) => sum + (res instanceof Item ? itemAmount(res) : have(res) ? 1 : 0), 0);
+  const brickosOwned = itemAmount(BRICKO_TARGET_ITEM);
+  const brickosNeeded = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + brickosOwned));
+  if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, brickosNeeded)) {
     useSkill($skill`Summon BRICKOs`);
   } else if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
     useSkill($skill`Summon Candy Heart`);
   } else if (!have($item`love song of icy revenge`)) {
     useSkill($skill`Summon Love Song`);
-  } else if (!have($item`resolution: be kinder`) && !have($effect`Kindly Resolve`)) {
+  } else if (rareResolutions < 3) {
     useSkill($skill`Summon Resolutions`);
   } else if (!have($item`love song of icy revenge`, 2)) {
     useSkill($skill`Summon Love Song`);
