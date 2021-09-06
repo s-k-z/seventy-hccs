@@ -1,6 +1,7 @@
 import {
   availableAmount,
   chew,
+  choiceFollowsFight,
   cliExecute,
   containsText,
   equip,
@@ -543,6 +544,8 @@ export const oneOffEvents = {
       if (monster && !get("_chateauMonsterFought")) {
         MacroList.MeteorForce.setAutoAttack();
         ChateauMantegna.fightPainting();
+        if (choiceFollowsFight()) visitUrl("choice.php");
+        if (handlingChoice()) runChoice(-1);
         if (!get("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
         checkAvailable($item`Friendliness Beverage`);
         use($item`Friendliness Beverage`);

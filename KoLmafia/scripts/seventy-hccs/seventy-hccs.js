@@ -18706,6 +18706,8 @@ var oneOffEvents = {
       if (monster && !(0,dist.get)("_chateauMonsterFought")) {
         MacroList.MeteorForce.setAutoAttack();
         dist.ChateauMantegna.fightPainting();
+        if ((0,external_kolmafia_.choiceFollowsFight)()) (0,external_kolmafia_.visitUrl)("choice.php");
+        if ((0,external_kolmafia_.handlingChoice)()) (0,external_kolmafia_.runChoice)(-1);
         if (!(0,dist.get)("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
         checkAvailable((0,dist.$item)(events_templateObject182 || (events_templateObject182 = events_taggedTemplateLiteral(["Friendliness Beverage"]))));
         (0,external_kolmafia_.use)((0,dist.$item)(events_templateObject183 || (events_templateObject183 = events_taggedTemplateLiteral(["Friendliness Beverage"]))));
