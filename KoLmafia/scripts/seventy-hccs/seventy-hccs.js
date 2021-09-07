@@ -19146,7 +19146,7 @@ function checkMainClan() {
 }
 
 function main() {
-  (0,dist.sinceKolmafiaRevision)(20807);
+  (0,dist.sinceKolmafiaRevision)(20876);
   if (MAIN_CLAN.length < 1) throw "seventyhccs_main_clan property not set";
   if (FAX_AND_SLIME_CLAN.length < 1) throw "seventyhccs_side_clan not set";
   var startTime = (0,external_kolmafia_.gametimeToInt)();

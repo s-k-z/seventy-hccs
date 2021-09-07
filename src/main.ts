@@ -128,7 +128,7 @@ function checkMainClan() {
 }
 
 export function main(): void {
-  sinceKolmafiaRevision(20807);
+  sinceKolmafiaRevision(20876);
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
