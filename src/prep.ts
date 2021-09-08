@@ -1,5 +1,5 @@
 import { holiday, totalTurnsPlayed, visitUrl } from "kolmafia";
-import { $item, $monster, ChateauMantegna, get, prepareAscension } from "libram";
+import { $item, $monster, get, prepareAscension } from "libram";
 
 export function checkReadyToAscend(): void {
   const badDays = [
@@ -11,9 +11,6 @@ export function checkReadyToAscend(): void {
   const today = holiday().split("/");
   const badDayToday = today.some((day) => badDays.includes(day.toLowerCase()));
   if (badDayToday) throw `Don't want to ascend during ${holiday()}`;
-
-  const target = $monster`pterodactyl`;
-  if (ChateauMantegna.paintingMonster() !== target) throw `Missing ${target} in Chateau painting`;
 
   const banish = $monster`Perceiver of Sensations`;
   const notFound = () => !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());

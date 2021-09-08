@@ -1,7 +1,6 @@
 import {
   availableAmount,
   chew,
-  choiceFollowsFight,
   cliExecute,
   containsText,
   equip,
@@ -26,7 +25,6 @@ import {
   $skill,
   $slot,
   $stat,
-  ChateauMantegna,
   Clan,
   get,
   have,
@@ -533,26 +531,6 @@ export const oneOffEvents = {
       useFamiliar($familiar`Machine Elf`);
       adventure(direWarren, MacroList.FoamForce);
       checkEffect($effect`Fireproof Foam Suit`);
-    }
-  },
-
-  meteorChateau: (): void => {
-    if (!have($effect`Meteor Showered`)) {
-      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-      useFamiliar($familiar`Machine Elf`);
-      const monster = ChateauMantegna.paintingMonster();
-      if (monster && !get("_chateauMonsterFought")) {
-        MacroList.MeteorForce.setAutoAttack();
-        ChateauMantegna.fightPainting();
-        if (choiceFollowsFight()) visitUrl("choice.php");
-        if (handlingChoice()) runChoice(-1);
-        if (!get("_chateauMonsterFought")) throw "Error: Chateau not properly flagged";
-        checkAvailable($item`Friendliness Beverage`);
-        use($item`Friendliness Beverage`);
-      } else {
-        adventure(direWarren, MacroList.MeteorForce);
-      }
-      checkEffect($effect`Meteor Showered`);
     }
   },
 

@@ -269,6 +269,7 @@ const sharedStats = new Map([
   [$effect`Triple-Sized`, Context.beginning],
 
   [$effect`Big`, Context.leveling],
+  [$effect`Broad-Spectrum Vaccine`, Context.leveling],
   [$effect`Favored by Lyle`, Context.leveling],
   [$effect`Starry-Eyed`, Context.leveling],
   [$effect`Total Protonic Reversal`, Context.leveling],
@@ -312,8 +313,6 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     // Need the non-flimsy effect for PM
     [$effect`Flimsy Shield of the Pastalord`, Context.leveling],
     [$effect`Springy Fusilli`, Context.leveling],
-    // Take the stat vaccine instead of resists now
-    [$effect`Broad-Spectrum Vaccine`, Context.leveling],
     // Beach comb
     [$effect`Cold as Nice`, Context.leveling],
     [$effect`A Brush with Grossness`, Context.leveling],
@@ -436,7 +435,6 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
   ]),
 
   [Quest.FamiliarWeight]: new Map([
-    [$effect`Loyal Tea`, Context.leveling],
     [$effect`A Girl Named Sue`, Context.leveling],
     [$effect`Billiards Belligerence`, Context.leveling],
     [$effect`Blood Bond`, Context.leveling],
@@ -444,25 +442,23 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Empathy`, Context.leveling],
     [$effect`Fidoxene`, Context.leveling],
     [$effect`Leash of Linguini`, Context.leveling],
+    [$effect`Loyal Tea`, Context.leveling],
     [$effect`Puzzle Champ`, Context.leveling],
 
-    //[$effect`Man's Worst Enemy`, Context.test],
-    [$effect`Over-Familiar With Dactyls`, Context.test],
+    [$effect`Man's Worst Enemy`, Context.test],
     [$effect`Robot Friends`, Context.test],
-    [$effect`Whole Latte Love`, Context.test],
     [$effect`Shortly Stacked`, Context.test],
+    [$effect`Whole Latte Love`, Context.test],
     // Food/Booze/Spleen
     [$effect`[1701]Hip to the Jive`, Context.special],
     [$effect`Joy`, Context.special],
     [$effect`Smart Drunk`, Context.special],
-    // Librams
-    //[$effect`Cold Hearted`, Context.special],
-    //[$effect`Heart of Green`, Context.special],
     // Wishes
     [$effect`All Is Forgiven`, Context.special],
     [$effect`Bureaucratized`, Context.special],
     [$effect`Chorale of Companionship`, Context.special],
     [$effect`Down With Chow`, Context.special],
+    [$effect`Optimist Primal`, Context.special],
     // Other
     [$effect`Meteor Showered`, Context.special],
     [$effect`Open Heart Surgery`, Context.special],
@@ -475,8 +471,8 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Blessing of the Bird`, Context.leveling],
     [$effect`Blessing of your favorite Bird`, Context.leveling],
     [$effect`Ermine Eyes`, Context.leveling],
-    [$effect`Hustlin'`, Context.leveling],
     [$effect`Fat Leon's Phat Loot Lyric`, Context.leveling],
+    [$effect`Hustlin'`, Context.leveling],
     [$effect`Singer's Faithful Ocelot`, Context.leveling],
 
     [$effect`Feeling Lost`, Context.test],

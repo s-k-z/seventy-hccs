@@ -20,7 +20,6 @@ svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
 4. All 11 beach heads unlocked for the [Beach Comb](https://kol.coldfront.net/thekolwiki/index.php/Beach_Comb)
 5. A 50% Item drop and 100% Weapon damage favorite bird from the [Bird-a-Day calendar](https://kol.coldfront.net/thekolwiki/index.php/Bird-a-Day_calendar)
 6. [Chateau Mantegna](https://kol.coldfront.net/thekolwiki/index.php/Chateau_Mantegna) containing:
-   - a painting of a [Pterodactyl](https://kol.coldfront.net/thekolwiki/index.php/Pterodactyl)
    - ceiling fan
    - foreign language tapes
    - a piggy bank

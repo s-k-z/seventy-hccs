@@ -305,7 +305,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     oneOffEvents.innerElf();
-    oneOffEvents.meteorChateau();
+    oneOffEvents.meteorPleasureDome();
     prepAndDoQuest(Quest.WeaponDamage);
   }
 
@@ -399,7 +399,7 @@ function preCoilWire() {
       () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
     ],
     [
-      $item`"DRINK ME" potion`, // Why is this necessary? I don't know why it won't just grab the potion
+      $item`"DRINK ME" potion`,
       () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
     ],
     [
