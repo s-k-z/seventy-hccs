@@ -132,6 +132,8 @@ export function main(): void {
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
+  if (FORTUNE_TELLER_FRIEND.length < 1)
+    print("Maybe set FORTUNE_TELLER_FRIEND property?", "orange");
 
   const startTime = gametimeToInt();
 
@@ -174,8 +176,6 @@ export function main(): void {
 }
 
 function levelAndDoQuests() {
-  const results = new Map<Quest, number>();
-  const completeQuest = (quest: Quest) => results.set(quest, prepAndDoQuest(quest));
   Clan.join(MAIN_CLAN);
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
@@ -209,15 +209,10 @@ function levelAndDoQuests() {
         }, [[$slot`off-hand`, $item`familiar scrapbook`]]);
       }
 
-      if (!have($effect`Soulerskates`)) {
-        if (mySoulsauce() >= soulsauceCost($skill`Soul Rotation`)) {
-          acquireEffect($effect`Soulerskates`);
-        }
-      } else {
-        while (mySoulsauce() >= soulsauceCost($skill`Soul Food`) && myMaxmp() - myMp() >= 15) {
-          useSkill($skill`Soul Food`);
-        }
-      }
+      const maxMPGains = (myMaxmp() - myMp()) / 15;
+      const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
+      const soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
+      if (soulFoodCasts > 0) useSkill(soulFoodCasts, $skill`Soul Food`);
 
       while (
         have($item`magical sausage casing`) &&
@@ -291,9 +286,9 @@ function levelAndDoQuests() {
   changeMcd(0);
   wishEffect($effect`Sparkly!`);
 
-  completeQuest(Quest.Muscle);
-  completeQuest(Quest.Moxie);
-  completeQuest(Quest.HP);
+  prepAndDoQuest(Quest.Muscle);
+  prepAndDoQuest(Quest.Moxie);
+  prepAndDoQuest(Quest.HP);
 
   if (haveQuest(Quest.SpellDamage)) {
     oneOffEvents.innerElf();
@@ -304,28 +299,28 @@ function levelAndDoQuests() {
       useSkill($skill`Deep Dark Visions`);
     }
     if (!have($effect`Cowrruption`)) use($item`corrupted marrow`);
-    completeQuest(Quest.SpellDamage);
+    prepAndDoQuest(Quest.SpellDamage);
   }
 
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     oneOffEvents.innerElf();
     oneOffEvents.meteorChateau();
-    completeQuest(Quest.WeaponDamage);
+    prepAndDoQuest(Quest.WeaponDamage);
   }
 
   shrugEffect($effect`Jackasses' Symphony of Destruction`);
 
-  completeQuest(Quest.Mysticality);
+  prepAndDoQuest(Quest.Mysticality);
 
   if (haveQuest(Quest.CombatFrequency)) {
     equip($slot`acc2`, $item`Powerful Glove`);
-    completeQuest(Quest.CombatFrequency);
+    prepAndDoQuest(Quest.CombatFrequency);
   }
 
   if (haveQuest(Quest.HotResist)) {
     oneOffEvents.foamYourself();
-    completeQuest(Quest.HotResist);
+    prepAndDoQuest(Quest.HotResist);
   }
 
   shrugEffect($effect`The Sonata of Sneakiness`);
@@ -336,23 +331,17 @@ function levelAndDoQuests() {
       useSkill(2, $skill`The Ode to Booze`);
       drink($item`vintage smart drink`); // 10 drunk
     }
-    while (have($item`love song of icy revenge`)) {
-      if (!have($effect`Cold Hearted`)) cliExecute("pillkeeper extend");
-      use($item`love song of icy revenge`);
-    }
+    while (have($item`love song of icy revenge`)) use($item`love song of icy revenge`);
     while (have($item`pulled blue taffy`)) use($item`pulled blue taffy`);
-    completeQuest(Quest.FamiliarWeight);
+    prepAndDoQuest(Quest.FamiliarWeight);
   }
 
   if (haveQuest(Quest.ItemDrop)) {
     oneOffEvents.batform();
-    completeQuest(Quest.ItemDrop);
+    prepAndDoQuest(Quest.ItemDrop);
   }
 
   prepAndDoQuest(Quest.Donate);
-  print("\n\nTest Results", "orange");
-  results.forEach((turnCount, id) => print(`${Quest[id]}: ${turnCount}`, "orange"));
-  print("\n\n");
 }
 
 function openQuestZones() {
@@ -512,8 +501,15 @@ function postCoilWire() {
     $skill`Summon Crimbo Candy`,
     //$skill`Summon Geeky Gifts`,
     //$skill`Summon Tasteful Items`,
+
+    // Buffs that can't fit elsewhere
+    $skill`Incredible Self-Esteem`,
   ].forEach((skill) => useSkill(skill));
   // 143 mp
+
+  const intense = $effect`Become Intensely interested`;
+  if (have(intense)) visitUrl("charsheet.php?pwd=&action=newyouinterest");
+  if (have(intense)) throw `Failed to toggle ${intense}?`;
 
   [
     $item`oil of expertise`,

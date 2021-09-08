@@ -118,7 +118,7 @@ export function eatPizzas(): void {
 
 function cookPizza(a: Item, b: Item, c: Item, d: Item) {
   const counts = new Map<Item, number>();
-  [a, b, c, d].forEach((f) => counts.set(f, 1 + (counts.get(f) || 0)));
+  [a, b, c, d].forEach((f) => counts.set(f, 1 + (counts.get(f) ?? 0)));
   for (const [item, count] of counts) checkAvailable(item, count);
   visitUrl(`campground.php?action=makepizza&pizza=${toInt(a)},${toInt(b)},${toInt(c)},${toInt(d)}`);
 }

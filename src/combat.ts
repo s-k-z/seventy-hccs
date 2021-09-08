@@ -75,7 +75,7 @@ const DefaultMacro = new Macro()
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
   .skill($skill`Sing Along`)
-  .skill($skill`Candyblast`)
+  .skill($skill`Saucestorm`)
   .repeat();
 
 export const MacroList = {

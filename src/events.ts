@@ -255,7 +255,7 @@ export const events: Record<string, eventData> = {
       selectBestFamiliar();
       MacroList.FreeFight.setAutoAttack();
       useSkill($skill`Evoke Eldritch Horror`);
-      // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned, I guess this is enough?
+      // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
       if (myHp() < 30) cliExecute("hottub");
     },
   },

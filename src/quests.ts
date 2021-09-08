@@ -326,7 +326,6 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`Ode to Booze`, Context.leveling],
     [$effect`Astral Shell`, Context.leveling],
     [$effect`Elemental Saucesphere`, Context.leveling],
-    //[$effect`Scarysauce`, EffectContext.leveling],
   ]),
 
   [Quest.Muscle]: new Map([
@@ -374,7 +373,6 @@ const questEffects: Record<Quest, Map<Effect, Context>> = {
     [$effect`The Magic of LOV`, Context.test],
     // Food/Booze/Spleen
     [$effect`Filled with Magic`, Context.special],
-    //[$effect`Drunk With Power`, Context.special],
     // Wish
     [$effect`Sparkly!`, Context.special],
     // Other
