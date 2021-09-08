@@ -133,7 +133,7 @@ export function main(): void {
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
   if (FORTUNE_TELLER_FRIEND.length < 1)
-    print("Maybe set FORTUNE_TELLER_FRIEND property?", "orange");
+    print("Maybe set seventyhccs_fortune_friend property?", "orange");
 
   const startTime = gametimeToInt();
 
