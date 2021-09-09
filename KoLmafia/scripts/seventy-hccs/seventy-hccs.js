@@ -19434,14 +19434,8 @@ function preCoilWire() {
 function postCoilWire() {
   gazeAtTheStars();
   if ((0,dist.have)((0,dist.$item)(main_templateObject81 || (main_templateObject81 = main_taggedTemplateLiteral(["occult jelly donut"]))))) (0,external_kolmafia_.eat)((0,dist.$item)(main_templateObject82 || (main_templateObject82 = main_taggedTemplateLiteral(["occult jelly donut"]))));
-  (0,external_kolmafia_.cliExecute)("Briefcase e spell spooky -combat");
-  var click = true;
-
-  while ((0,dist.get)("_kgbClicksUsed") < 22 && click) {
-    click = !(0,external_kolmafia_.containsText)((0,external_kolmafia_.visitUrl)("place.php?whichplace=kgb&action=kgb_actuator1"), "Nothing happens.");
-  } // Visit Gingerbread Civic Center & fast forward clock
+  (0,external_kolmafia_.cliExecute)("Briefcase e spell spooky -combat"); // Visit Gingerbread Civic Center & fast forward clock
   // Then use nanorhino for nanobrainy and increment the gingerbread city counter
-
 
   oneOffEvents.nanobrainy(); // Upgrade Cosplay Saber and start buffing familiar weight now that we're done with Nanorhino
 

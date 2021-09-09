@@ -371,7 +371,7 @@ function preCoilWire() {
     $item`votive of confidence`,
   ].forEach((gift) => tryUse(gift));
   // Only need one consult for a candy
-  if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 1) {
+  if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 0) {
     checkMainClan();
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
