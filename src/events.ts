@@ -2,7 +2,6 @@ import {
   availableAmount,
   chew,
   cliExecute,
-  containsText,
   equip,
   handlingChoice,
   haveEffect,
@@ -515,7 +514,7 @@ export const oneOffEvents = {
     const fax = $item`photocopied monster`;
     const faxMon = $monster`ungulith`;
     if (!have(fax)) Clan.with(FAX_AND_SLIME_CLAN, () => cliExecute("fax receive"));
-    if (!containsText(visitUrl(`desc_item.php?whichitem=${fax.descid}`), `${faxMon}`)) {
+    if (!visitUrl(`desc_item.php?whichitem=${fax.descid}`).includes(`${faxMon}`)) {
       throw `Failed to retrieve fax of ${faxMon}`;
     }
     equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);

@@ -1,7 +1,6 @@
 import {
   buy,
   cliExecute,
-  containsText,
   equip,
   equippedItem,
   getIngredients,
@@ -11,7 +10,6 @@ import {
   toInt,
   totalTurnsPlayed,
   use,
-  visitUrl,
 } from "kolmafia";
 import { $item, get, have, set } from "libram";
 
@@ -45,13 +43,6 @@ export function checkAvailable(i: Item, n = 1): void {
 
 export function checkEffect(e: Effect): void {
   if (!have(e)) throw `Missing effect ${e}`;
-}
-
-export function checkFax(monster: Monster): void {
-  const id = $item`photocopied monster`.descid;
-  if (!containsText(visitUrl(`desc_item.php?whichitem=${id}`), `${monster}`)) {
-    throw "Error: grabbed wrong fax?";
-  }
 }
 
 export function shrugEffect(effect: Effect): void {
