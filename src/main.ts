@@ -13,6 +13,7 @@ import {
   gametimeToInt,
   getProperty,
   haveEquipped,
+  itemAmount,
   mpCost,
   myBasestat,
   myBuffedstat,
@@ -331,8 +332,9 @@ function levelAndDoQuests() {
       useSkill(2, $skill`The Ode to Booze`);
       drink($item`vintage smart drink`); // 10 drunk
     }
-    while (have($item`love song of icy revenge`)) use($item`love song of icy revenge`);
-    while (have($item`pulled blue taffy`)) use($item`pulled blue taffy`);
+    for (const libram of $items`love song of icy revenge, pulled blue taffy`) {
+      if (have(libram)) use(Math.min(4, itemAmount(libram)), libram);
+    }
     prepAndDoQuest(Quest.FamiliarWeight);
   }
 
