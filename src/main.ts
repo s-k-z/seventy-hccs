@@ -4,7 +4,6 @@ import {
   canInteract,
   changeMcd,
   cliExecute,
-  containsText,
   create,
   drink,
   eat,
@@ -463,13 +462,6 @@ function postCoilWire() {
   gazeAtTheStars();
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
   cliExecute("Briefcase e spell spooky -combat");
-  let click = true;
-  while (get("_kgbClicksUsed") < 22 && click) {
-    click = !containsText(
-      visitUrl("place.php?whichplace=kgb&action=kgb_actuator1"),
-      "Nothing happens."
-    );
-  }
   // Visit Gingerbread Civic Center & fast forward clock
   // Then use nanorhino for nanobrainy and increment the gingerbread city counter
   oneOffEvents.nanobrainy();
