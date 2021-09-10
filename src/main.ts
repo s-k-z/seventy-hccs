@@ -318,12 +318,12 @@ function levelAndDoQuests() {
     prepAndDoQuest(Quest.CombatFrequency);
   }
 
+  shrugEffect($effect`The Sonata of Sneakiness`);
+
   if (haveQuest(Quest.HotResist)) {
     oneOffEvents.foamYourself();
     prepAndDoQuest(Quest.HotResist);
   }
-
-  shrugEffect($effect`The Sonata of Sneakiness`);
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorPleasureDome();
@@ -350,9 +350,9 @@ function openQuestZones() {
     ["questM23Meatsmith", "meatsmith"],
     ["questM24Doc", "doc"],
     ["questM25Armorer", "armory"],
-  ].forEach(([prop, name]) => {
+  ].forEach(([prop, id]) => {
     if (getProperty(prop).toLowerCase() === "unstarted") {
-      visitUrl(`shop.php?whichshop=${name}&action=talk`);
+      visitUrl(`shop.php?whichshop=${id}&action=talk`);
       runChoice(1);
     }
   });
@@ -394,6 +394,7 @@ function preCoilWire() {
   // 8601 meat
   openQuestZones();
   buffUpBeginning();
+  //prettier-ignore
   for (const [check, retrieve] of [
     [
       $effect`That's Just Cloud-Talk, Man`,
@@ -422,15 +423,16 @@ function preCoilWire() {
         equip($slot`off-hand`, $item`weeping willow wand`);
       },
     ],
-    [$item`battery (AAA)`, () => harvestBatteries()],
-    [$item`Brutal brogues`, () => cliExecute("bastille bbq brutalist gesture")],
-    [$item`cop dollar`, () => cliExecute("Detective Solver")],
-    [$item`green mana`, () => cliExecute(`cheat forest`)],
-    [$item`wrench`, () => cliExecute(`cheat wrench`)],
-    [$item`rope`, () => cliExecute(`cheat rope`)],
-    [$item`occult jelly donut`, () => create($item`occult jelly donut`)],
+    [$item`battery (AAA)`,         () => harvestBatteries()],
+    [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist gesture")],
+    [$item`cop dollar`,            () => cliExecute("Detective Solver")],
+    [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
+    [$item`green mana`,            () => cliExecute(`cheat forest`)],
+    [$item`wrench`,                () => cliExecute(`cheat wrench`)],
+    [$item`rope`,                  () => cliExecute(`cheat rope`)],
+    [$item`occult jelly donut`,    () => create($item`occult jelly donut`)],
     [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
-    [$skill`Seek out a Bird`, () => use($item`Bird-a-Day calendar`)],
+    [$skill`Seek out a Bird`,      () => use($item`Bird-a-Day calendar`)],
   ] as [Effect | Item | Skill, () => void][]) {
     if (!have(check)) retrieve();
   }
