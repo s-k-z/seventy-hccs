@@ -204,7 +204,7 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => haveEffect($effect`Sweetbreads Flambé`) - 1,
     run: () => {
-      prep(Quest.Leveling);
+      prep(Quest.LevelingML);
       selectBestFamiliar();
       fightWitchess($monster`Witchess Rook`, MacroList.FreeFight);
       checkAvailable($item`Greek fire`);

@@ -28,7 +28,8 @@ export const Quest: Record<string, QuestInfo> = {
 
   Beginning:       { id: 900, service: "" },
   Leveling:        { id: 901, service: "" },
-  DeepDark:        { id: 902, service: "" },
+  LevelingML:      { id: 902, service: "" },
+  DeepDark:        { id: 903, service: "" },
 } as const;
 
 type QuestData = {
@@ -89,37 +90,21 @@ const questRecords: Record<number, () => QuestData> = {
     const toAcquire = [
       $effect`AAA-Charged`,
       $effect`A Girl Named Sue`,
-      $effect`Big`,
       $effect`Billiards Belligerence`,
-      $effect`Blessing of the Bird`,
-      $effect`Blessing of your favorite Bird`,
-      $effect`Blood Bond`,
-      $effect`Blood Bubble`,
       $effect`Broad-Spectrum Vaccine`,
-      $effect`Carol of the Bulls`,
-      $effect`Carol of the Hells`,
-      $effect`Carol of the Thrills`,
-      $effect`Ermine Eyes`,
       $effect`Favored by Lyle`,
-      $effect`Feeling Excited`,
-      $effect`Feeling Peaceful`,
       $effect`Fidoxene`,
-      $effect`Frenzied, Bloody`,
       $effect`Full Bottle in front of Me`,
       $effect`Grumpy and Ornery`,
       $effect`Hustlin'`,
-      $effect`Inscrutable Gaze`,
       $effect`Loyal Tea`,
       $effect`Mental A-cue-ity`,
       $effect`Mystically Oiled`,
       $effect`Pisces in the Skyces`,
       $effect`Puzzle Champ`,
-      $effect`Ruthlessly Efficient`,
       $effect`Sigils of Yeg`,
-      $effect`Singer's Faithful Ocelot`,
       $effect`Starry-Eyed`,
       $effect`Total Protonic Reversal`,
-      $effect`Triple-Sized`,
       $effect`Warlock, Warstock, and Warbarrel`,
       // Beach comb
       $effect`Cold as Nice`,
@@ -133,7 +118,23 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Resting Beach Face`,
       $effect`We're All Made of Starfish`,
       $effect`You Learned Something Maybe!`,
-      // Class buffs
+      // Skills
+      $effect`Big`,
+      $effect`Blessing of the Bird`,
+      $effect`Blessing of your favorite Bird`,
+      $effect`Blood Bond`,
+      $effect`Blood Bubble`,
+      $effect`Carol of the Bulls`,
+      $effect`Carol of the Hells`,
+      $effect`Carol of the Thrills`,
+      $effect`Feeling Excited`,
+      $effect`Feeling Peaceful`,
+      $effect`Frenzied, Bloody`,
+      $effect`Inscrutable Gaze`,
+      $effect`Ruthlessly Efficient`,
+      $effect`Singer's Faithful Ocelot`,
+      $effect`Triple-Sized`,
+      // Class skills
       $effect`Astral Shell`,
       $effect`Elemental Saucesphere`,
       $effect`Empathy`,
@@ -142,7 +143,6 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Leash of Linguini`,
       $effect`Springy Fusilli`,
       // Songs
-      $effect`Fat Leon's Phat Loot Lyric`,
       $effect`Ode to Booze`,
       $effect`Polka of Plenty`,
     ];
@@ -152,11 +152,29 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`off-hand`, $item`weeping willow wand`],
       [$slot`pants`, mpSavings ? $item`pantogram pants` : $item`Cargo Cultist Shorts`],
       [$slot`acc1`, $item`hewn moon-rune spoon`],
+      // When re-running the script, may have the broom available
       [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
     if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
     return { acquire: toAcquire, check: [], equipment: outfit, retrocape: "heck thrill" };
+  },
+
+  [Quest.LevelingML.id]: () => {
+    return {
+      acquire: [$effect`Ur-Kel's Aria of Annoyance`, $effect`Drescher's Annoying Noise`],
+      check: [],
+      equipment: new Map([
+        [$slot`back`, $item`LOV Epaulettes`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, $item`weeping willow wand`],
+        [$slot`pants`, $item`Cargo Cultist Shorts`],
+        [$slot`acc1`, $item`hewn moon-rune spoon`],
+        [$slot`acc2`, $item`gold detective badge`],
+        [$slot`acc3`, $item`Beach Comb`],
+      ]),
+      retrocape: "heck thrill",
+    };
   },
 
   [Quest.Muscle.id]: () => {
@@ -373,9 +391,12 @@ const questRecords: Record<number, () => QuestData> = {
 
   [Quest.ItemDrop.id]: () => {
     const toAcquire = [
+      $effect`Blessing of the Bird`,
+      $effect`Ermine Eyes`,
       $effect`Fat Leon's Phat Loot Lyric`,
       $effect`Feeling Lost`,
       $effect`Nearly All-Natural`,
+      $effect`Singer's Faithful Ocelot`,
       $effect`Steely-Eyed Squint`,
       $effect`The Spirit of Taking`,
     ];

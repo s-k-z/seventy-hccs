@@ -275,7 +275,7 @@ function levelAndDoQuests() {
   // Leveling done
   checkMainClan();
   cliExecute("shower hot");
-  shrugEffect($effect`Polka of Plenty`);
+  $effects`Polka of Plenty, Ur-Kel's Aria of Annoyance`.forEach(shrugEffect);
   changeMcd(0);
   wishEffect($effect`Sparkly!`);
 
