@@ -91,14 +91,7 @@ import {
   withEquipment,
 } from "./lib";
 import { checkReadyToAscend } from "./prep";
-import {
-  buffUpBeginning,
-  buffUpLeveling,
-  equipOutfit,
-  haveQuest,
-  prepAndDoQuest,
-  Quest,
-} from "./quests";
+import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
 import { synthesize } from "./sweetsynthesis";
 
 const choiceAdventures = [
@@ -294,7 +287,7 @@ function levelAndDoQuests() {
     oneOffEvents.innerElf();
     oneOffEvents.meteorUngulith();
     if (!have($effect`Visions of the Deep Dark Deeps`)) {
-      equipOutfit(Quest.DeepDark);
+      prep(Quest.DeepDark);
       if (myHp() < myMaxhp() * 0.5) cliExecute("hottub");
       useSkill($skill`Deep Dark Visions`);
     }
@@ -376,7 +369,6 @@ function preCoilWire() {
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
   getPantogramPants();
-  equipOutfit(Quest.Beginning);
 
   //
   // Let's get a buncha meat!
@@ -393,7 +385,7 @@ function preCoilWire() {
   SongBoom.setSong("Total Eclipse of Your Meat");
   // 8601 meat
   openQuestZones();
-  buffUpBeginning();
+  prep(Quest.Beginning);
   //prettier-ignore
   for (const [check, retrieve] of [
     [
@@ -472,7 +464,6 @@ function postCoilWire() {
     visitUrl("main.php?action=may4");
     runChoice(4);
   }
-  if (!get("_pottedTeaTreeUsed")) cliExecute("teatree loyal");
   wishEffect($effect`All Is Forgiven`);
   wishEffect($effect`Witch Breaded`);
   useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
@@ -542,7 +533,6 @@ function postCoilWire() {
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);
   acquireGumOrHermitItem($item`saucepan`);
-  buffUpLeveling();
+  prep(Quest.Leveling);
   // 316 mp
-  equipOutfit(Quest.Leveling);
 }

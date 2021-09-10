@@ -1,39 +1,58 @@
 import {
   cliExecute,
-  containsText,
   equip,
   getIngredients,
   getRelated,
   numericModifier,
-  totalTurnsPlayed,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { $effect, $familiar, $item, $slot, have } from "libram";
+import { $effect, $familiar, $item, $slot, get, have } from "libram";
 import { acquireEffect, checkEffect } from "./lib";
 
-export enum Quest {
-  HP = 1,
-  Muscle = 2,
-  Mysticality = 3,
-  Moxie = 4,
-  FamiliarWeight = 5,
-  WeaponDamage = 6,
-  SpellDamage = 7,
-  CombatFrequency = 8,
-  ItemDrop = 9,
-  HotResist = 10,
-  CoilWire = 11,
-  Donate = 30,
+type QuestInfo = { id: number; service: string };
+// prettier-ignore
+export const Quest: Record<string, QuestInfo> = {
+  HP:              { id: 1,   service: "Donate Blood" },
+  Muscle:          { id: 2,   service: "Feed The Children" },
+  Mysticality:     { id: 3,   service: "Build Playground Mazes" },
+  Moxie:           { id: 4,   service: "Feed Conspirators" },
+  FamiliarWeight:  { id: 5,   service: "Breed More Collies" },
+  WeaponDamage:    { id: 6,   service: "Reduce Gazelle Population" },
+  SpellDamage:     { id: 7,   service: "Make Sausage" },
+  CombatFrequency: { id: 8,   service: "Be a Living Statue" },
+  ItemDrop:        { id: 9,   service: "Make Margaritas" },
+  HotResist:       { id: 10,  service: "Clean Steam Tunnels" },
+  CoilWire:        { id: 11,  service: "Coil Wire" },
+  Donate:          { id: 30,  service: "Donate Your Body To Science" },
 
-  Beginning = 900,
-  Leveling = 901,
-  DeepDark = 902,
-}
+  Beginning:       { id: 900, service: "" },
+  Leveling:        { id: 901, service: "" },
+  DeepDark:        { id: 902, service: "" },
+} as const;
 
-const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?: Familiar }> = {
-  [Quest.Beginning]: () => {
+type QuestData = {
+  acquire: Effect[];
+  check: Effect[];
+  equipment: Map<Slot, Item>;
+  retrocape?: string;
+  familiar?: Familiar;
+};
+const questRecords: Record<number, () => QuestData> = {
+  [Quest.Beginning.id]: () => {
     return {
+      acquire: [
+        $effect`Feeling Excited`,
+        $effect`Feeling Peaceful`,
+        $effect`Inscrutable Gaze`,
+        $effect`Spirit of Peppermint`,
+        $effect`Triple-Sized`,
+        $effect`Uncucumbered`,
+        $effect`init.enh`,
+        $effect`items.enh`,
+        $effect`meat.enh`,
+      ],
+      check: [],
       equipment: new Map([
         [$slot`hat`, $item`Iunion Crown`],
         [$slot`back`, $item`protonic accelerator pack`],
@@ -48,9 +67,11 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     };
   },
 
-  // Maximize Myst and MP, blue rocket will do all the regen for us
-  [Quest.CoilWire]: () => {
+  // Maximize Myst and MP
+  [Quest.CoilWire.id]: () => {
     return {
+      acquire: [],
+      check: [],
       equipment: new Map([
         [$slot`hat`, $item`Iunion Crown`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -60,10 +81,71 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
         [$slot`acc2`, $item`Retrospecs`],
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
       ]),
+      retrocape: "heck thrill",
     };
   },
 
-  [Quest.Leveling]: () => {
+  [Quest.Leveling.id]: () => {
+    const toAcquire = [
+      $effect`AAA-Charged`,
+      $effect`A Girl Named Sue`,
+      $effect`Big`,
+      $effect`Billiards Belligerence`,
+      $effect`Blessing of the Bird`,
+      $effect`Blessing of your favorite Bird`,
+      $effect`Blood Bond`,
+      $effect`Blood Bubble`,
+      $effect`Broad-Spectrum Vaccine`,
+      $effect`Carol of the Bulls`,
+      $effect`Carol of the Hells`,
+      $effect`Carol of the Thrills`,
+      $effect`Ermine Eyes`,
+      $effect`Favored by Lyle`,
+      $effect`Feeling Excited`,
+      $effect`Feeling Peaceful`,
+      $effect`Fidoxene`,
+      $effect`Frenzied, Bloody`,
+      $effect`Full Bottle in front of Me`,
+      $effect`Grumpy and Ornery`,
+      $effect`Hustlin'`,
+      $effect`Inscrutable Gaze`,
+      $effect`Loyal Tea`,
+      $effect`Mental A-cue-ity`,
+      $effect`Mystically Oiled`,
+      $effect`Pisces in the Skyces`,
+      $effect`Puzzle Champ`,
+      $effect`Ruthlessly Efficient`,
+      $effect`Sigils of Yeg`,
+      $effect`Singer's Faithful Ocelot`,
+      $effect`Starry-Eyed`,
+      $effect`Total Protonic Reversal`,
+      $effect`Triple-Sized`,
+      $effect`Warlock, Warstock, and Warbarrel`,
+      // Beach comb
+      $effect`Cold as Nice`,
+      $effect`A Brush with Grossness`,
+      $effect`Do I Know You From Somewhere?`,
+      $effect`Does It Have a Skull In There??`,
+      $effect`Hot-Headed`,
+      $effect`Lack of Body-Building`,
+      $effect`Oiled, Slick`,
+      $effect`Pomp & Circumsands`,
+      $effect`Resting Beach Face`,
+      $effect`We're All Made of Starfish`,
+      $effect`You Learned Something Maybe!`,
+      // Class buffs
+      $effect`Astral Shell`,
+      $effect`Elemental Saucesphere`,
+      $effect`Empathy`,
+      $effect`Flimsy Shield of the Pastalord`, // Need the non-flimsy effect for PM
+      $effect`Ghostly Shell`,
+      $effect`Leash of Linguini`,
+      $effect`Springy Fusilli`,
+      // Songs
+      $effect`Fat Leon's Phat Loot Lyric`,
+      $effect`Ode to Booze`,
+      $effect`Polka of Plenty`,
+    ];
     const mpSavings = numericModifier($item`pantogram pants`, "mana cost") !== 0;
     const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -74,11 +156,18 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
       [$slot`acc3`, $item`Beach Comb`],
     ]);
     if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
-    return { equipment: outfit };
+    return { acquire: toAcquire, check: [], equipment: outfit, retrocape: "heck thrill" };
   },
 
-  [Quest.Muscle]: () => {
+  [Quest.Muscle.id]: () => {
     return {
+      acquire: [
+        $effect`Expert Oiliness`,
+        $effect`Phorcefullness`,
+        $effect`Quiet Determination`,
+        $effect`Rage of the Reindeer`,
+      ],
+      check: [$effect`Giant Growth`, $effect`Spit Upon`],
       equipment: new Map([
         [$slot`hat`, $item`wad of used tape`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -86,11 +175,14 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
         [$slot`acc1`, $item`Brutal brogues`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
+      retrocape: "muscle",
     };
   },
 
-  [Quest.Moxie]: () => {
+  [Quest.Moxie.id]: () => {
     return {
+      acquire: [$effect`Disco Fever`, $effect`Expert Oiliness`, $effect`Quiet Desperation`],
+      check: [$effect`Sparkly!`, $effect`Spit Upon`],
       equipment: new Map([
         [$slot`hat`, $item`very pointy crown`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -98,14 +190,18 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
         [$slot`acc2`, $item`Beach Comb`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
+      retrocape: "moxie",
     };
   },
 
-  [Quest.HP]: () => {
+  [Quest.HP.id]: () => {
     const candle = $item`extra-wide head candle`;
     return {
+      acquire: [$effect`Song of Starch`],
+      check: [],
       equipment: new Map([
         [$slot`hat`, have(candle) ? candle : $item`wad of used tape`],
+        [$slot`back`, $item`vampyric cloake`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`pants`, $item`Cargo Cultist Shorts`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
@@ -113,20 +209,39 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     };
   },
 
-  [Quest.DeepDark]: () => {
+  [Quest.DeepDark.id]: () => {
     const outfit = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`pants`, $item`pantogram pants`],
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
     if (have($item`burning paper crane`)) outfit.set($slot`off-hand`, $item`burning paper crane`);
-    return { equipment: outfit };
+    return { acquire: [], check: [], equipment: outfit, retrocape: "vampire hold" };
   },
 
-  [Quest.SpellDamage]: () => {
-    // TODO: handle spell damage candle
-    //const candle = [$slot`off-hand`, $item`Abracandalabra`];
+  [Quest.SpellDamage.id]: () => {
     return {
+      acquire: [
+        $effect`Arched Eyebrow of the Archmage`,
+        $effect`Cowrruption`,
+        $effect`Jackasses' Symphony of Destruction`,
+        $effect`Song of Sauce`,
+        $effect`The Magic of LOV`,
+      ],
+      check: [
+        $effect`Do You Crush What I Crush?`,
+        $effect`Filled with Magic`,
+        $effect`In a Lather`,
+        $effect`Inner Elf`,
+        $effect`Meteor Showered`,
+        $effect`Nanobrainy`,
+        $effect`Sparkly!`,
+        $effect`Spit Upon`,
+        $effect`Toxic Vengeance`,
+        $effect`Visions of the Deep Dark Deeps`,
+      ],
+      // TODO: handle spell damage candle
+      //const candle = [$slot`off-hand`, $item`Abracandalabra`];
       equipment: new Map([
         [$slot`weapon`, $item`wrench`],
         [$slot`off-hand`, $item`weeping willow wand`],
@@ -140,7 +255,24 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     };
   },
 
-  [Quest.WeaponDamage]: () => {
+  [Quest.WeaponDamage.id]: () => {
+    const toAcquire = [
+      $effect`Bow-Legged Swagger`,
+      $effect`Cowrruption`,
+      $effect`Jackasses' Symphony of Destruction`,
+      $effect`Rage of the Reindeer`,
+      $effect`Scowl of the Auk`,
+      $effect`Song of the North`,
+      $effect`Tenacity of the Snapper`,
+      $effect`The Power of LOV`,
+    ];
+    const toCheck = [
+      $effect`Do You Crush What I Crush?`,
+      $effect`In a Lather`,
+      $effect`Inner Elf`,
+      $effect`Meteor Showered`,
+      $effect`Spit Upon`,
+    ];
     const outfit = new Map([
       [$slot`weapon`, $item`broken champagne bottle`],
       [$slot`off-hand`, $item`dented scepter`],
@@ -149,22 +281,36 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     ]);
     const candle = $item`extra-wide head candle`;
     if (have(candle)) outfit.set($slot`hat`, candle);
-    return { equipment: outfit };
+    return { acquire: toAcquire, check: toCheck, equipment: outfit };
   },
 
-  [Quest.Mysticality]: () => {
+  [Quest.Mysticality.id]: () => {
     return {
+      acquire: [$effect`Quiet Judgement`],
+      check: [$effect`Nanobrainy`, $effect`Spit Upon`, $effect`Witch Breaded`],
       equipment: new Map([
         [$slot`hat`, $item`wad of used tape`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`acc1`, $item`battle broom`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
+      retrocape: "mysticality",
     };
   },
 
-  [Quest.CombatFrequency]: () => {
+  [Quest.CombatFrequency.id]: () => {
     return {
+      acquire: [
+        $effect`Become Superficially interested`,
+        $effect`Feeling Lonely`,
+        $effect`Gummed Shoes`,
+        $effect`Invisible Avatar`,
+        $effect`Silent Running`,
+        $effect`Smooth Movements`,
+        $effect`The Sonata of Sneakiness`,
+        $effect`Throwing Some Shade`,
+      ],
+      check: [$effect`Silence of the God Lobster`],
       equipment: new Map([
         [$slot`hat`, $item`very pointy crown`],
         [$slot`back`, $item`protonic accelerator pack`],
@@ -175,8 +321,10 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     };
   },
 
-  [Quest.HotResist]: () => {
+  [Quest.HotResist.id]: () => {
     return {
+      acquire: [$effect`Astral Shell`, $effect`Elemental Saucesphere`],
+      check: [$effect`Fireproof Foam Suit`],
       equipment: new Map([
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, $item`industrial fire extinguisher`],
@@ -185,12 +333,32 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
         [$slot`acc3`, $item`Beach Comb`],
         [$slot`familiar`, $item`cracker`],
       ]),
+      retrocape: "vampire hold",
       familiar: $familiar`Exotic Parrot`,
     };
   },
 
-  [Quest.FamiliarWeight]: () => {
+  [Quest.FamiliarWeight.id]: () => {
     return {
+      acquire: [
+        $effect`Empathy`,
+        $effect`Joy`,
+        $effect`Man's Worst Enemy`,
+        $effect`Robot Friends`,
+        $effect`Shortly Stacked`,
+        $effect`Whole Latte Love`,
+      ],
+      check: [
+        $effect`[1701]Hip to the Jive`,
+        $effect`All Is Forgiven`,
+        $effect`Bureaucratized`,
+        $effect`Chorale of Companionship`,
+        $effect`Down With Chow`,
+        $effect`Meteor Showered`,
+        $effect`Open Heart Surgery`,
+        $effect`Optimist Primal`,
+        $effect`Smart Drunk`,
+      ],
       equipment: new Map([
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
@@ -203,7 +371,15 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     };
   },
 
-  [Quest.ItemDrop]: () => {
+  [Quest.ItemDrop.id]: () => {
+    const toAcquire = [
+      $effect`Fat Leon's Phat Loot Lyric`,
+      $effect`Feeling Lost`,
+      $effect`Nearly All-Natural`,
+      $effect`Steely-Eyed Squint`,
+      $effect`The Spirit of Taking`,
+    ];
+    const toCheck = [$effect`Bat-Adjacent Form`, $effect`Synthesis: Collection`];
     const carrot = numericModifier($item`latte lovers member's mug`, "item drop") > 0;
     const candles = [
       $item`extra-large utility candle`,
@@ -223,29 +399,28 @@ const questOutfits: Record<Quest, () => { equipment: Map<Slot, Item>; familiar?:
     if (!candles.some(have) && have(sparkler)) outfit.set($slot`weapon`, sparkler);
     // can only have one candle
     for (const c of candles) if (have(c)) outfit.set($slot`weapon`, c);
-    return { equipment: outfit, familiar: $familiar`Trick-or-Treating Tot` };
+    return {
+      acquire: toAcquire,
+      check: toCheck,
+      equipment: outfit,
+      familiar: $familiar`Trick-or-Treating Tot`,
+    };
   },
 
-  [Quest.Donate]: () => {
-    return { equipment: new Map() };
+  [Quest.Donate.id]: () => {
+    return { acquire: [], check: [], equipment: new Map() };
   },
-};
+} as const;
 
-export function equipOutfit(quest: Quest): void {
-  const mode = new Map([
-    [Quest.Muscle, "muscle"],
-    [Quest.Mysticality, "mysticality"],
-    [Quest.Moxie, "moxie"],
-    [Quest.HP, "vampire hold"],
-    [Quest.HotResist, "vampire hold"],
-    [Quest.DeepDark, "vampire hold"],
-  ]);
-  const outfit = questOutfits[quest]();
-  if (outfit.familiar) useFamiliar(outfit.familiar);
-  if (!outfit.equipment.get($slot`back`)) {
-    cliExecute(`retrocape ${mode.get(quest) ?? "heck thrill"}`);
-  }
-  outfit.equipment.forEach((item, slot) => {
+export function prep(quest: QuestInfo): void {
+  const record = questRecords[quest.id]();
+  const back = record.equipment.get($slot`back`);
+  if (back && record.retrocape) throw `Multiple back items for ${quest.id}`;
+  record.acquire.forEach((effect) => acquireEffect(effect));
+  record.check.forEach((effect) => checkEffect(effect));
+  if (record.familiar) useFamiliar(record.familiar);
+  if (record.retrocape) cliExecute(`retrocape ${record.retrocape}`);
+  record.equipment.forEach((item, slot) => {
     if (!have(item)) {
       const ingredients = Object.keys(getIngredients(item));
       if (getRelated(item, "fold")) cliExecute(`fold ${item}`);
@@ -256,276 +431,16 @@ export function equipOutfit(quest: Quest): void {
   });
 }
 
-enum Context {
-  beginning,
-  leveling,
-  test,
-
-  special,
+export function haveQuest(quest: QuestInfo): boolean {
+  return get("csServicesPerformed").includes(quest.service);
 }
 
-const sharedStats = new Map([
-  [$effect`Feeling Excited`, Context.beginning],
-  [$effect`Triple-Sized`, Context.beginning],
-
-  [$effect`Big`, Context.leveling],
-  [$effect`Broad-Spectrum Vaccine`, Context.leveling],
-  [$effect`Favored by Lyle`, Context.leveling],
-  [$effect`Starry-Eyed`, Context.leveling],
-  [$effect`Total Protonic Reversal`, Context.leveling],
-
-  [$effect`Spit Upon`, Context.special],
-]);
-
-const sharedSpellWeaponDamage = new Map([
-  [$effect`Grumpy and Ornery`, Context.leveling],
-
-  [$effect`Cowrruption`, Context.test],
-  [$effect`Jackasses' Symphony of Destruction`, Context.test],
-  // Food/Booze/Spleen
-  [$effect`In a Lather`, Context.special],
-  // Other
-  [$effect`Do You Crush What I Crush?`, Context.special],
-  [$effect`Inner Elf`, Context.special],
-  [$effect`Meteor Showered`, Context.special],
-  [$effect`Spit Upon`, Context.special],
-]);
-
-const questEffects: Record<Quest, Map<Effect, Context>> = {
-  [Quest.Beginning]: new Map([
-    [$effect`Inscrutable Gaze`, Context.beginning],
-    [$effect`Spirit of Peppermint`, Context.beginning],
-
-    [$effect`meat.enh`, Context.beginning],
-    [$effect`init.enh`, Context.beginning],
-  ]),
-
-  [Quest.CoilWire]: new Map(),
-
-  // For effects that aren't covered by the stat tests below this key
-  [Quest.Leveling]: new Map([
-    [$effect`Blood Bubble`, Context.leveling],
-    [$effect`Carol of the Thrills`, Context.leveling],
-    [$effect`Ghostly Shell`, Context.leveling],
-    [$effect`Inscrutable Gaze`, Context.leveling],
-    //[$effect`Purity of Spirit`, EffectContext.leveling],
-    [$effect`Ruthlessly Efficient`, Context.leveling],
-    // Need the non-flimsy effect for PM
-    [$effect`Flimsy Shield of the Pastalord`, Context.leveling],
-    [$effect`Springy Fusilli`, Context.leveling],
-    // Beach comb
-    [$effect`Cold as Nice`, Context.leveling],
-    [$effect`A Brush with Grossness`, Context.leveling],
-    [$effect`Does It Have a Skull In There??`, Context.leveling],
-    [$effect`Oiled, Slick`, Context.leveling],
-    [$effect`Resting Beach Face`, Context.leveling],
-    [$effect`You Learned Something Maybe!`, Context.leveling],
-    // Class buffs
-    [$effect`Polka of Plenty`, Context.leveling],
-    [$effect`Ode to Booze`, Context.leveling],
-    [$effect`Astral Shell`, Context.leveling],
-    [$effect`Elemental Saucesphere`, Context.leveling],
-  ]),
-
-  [Quest.Muscle]: new Map([
-    ...sharedStats,
-    [$effect`Lack of Body-Building`, Context.leveling],
-
-    [$effect`Expert Oiliness`, Context.test],
-    [$effect`Phorcefullness`, Context.test],
-    [$effect`Quiet Determination`, Context.test],
-    [$effect`Rage of the Reindeer`, Context.test],
-
-    [$effect`Giant Growth`, Context.special],
-  ]),
-
-  [Quest.Moxie]: new Map([
-    ...sharedStats,
-    [$effect`Blessing of the Bird`, Context.leveling],
-    [$effect`Pomp & Circumsands`, Context.leveling],
-
-    [$effect`Disco Fever`, Context.test],
-    [$effect`Expert Oiliness`, Context.test],
-    [$effect`Quiet Desperation`, Context.test],
-    // Wish
-    [$effect`Sparkly!`, Context.special],
-  ]),
-
-  [Quest.HP]: new Map([[$effect`Song of Starch`, Context.test]]),
-  [Quest.DeepDark]: new Map(),
-
-  [Quest.SpellDamage]: new Map([
-    ...sharedSpellWeaponDamage,
-    [$effect`Spirit of Peppermint`, Context.beginning],
-
-    [$effect`AAA-Charged`, Context.leveling],
-    [$effect`Carol of the Hells`, Context.leveling],
-    [$effect`Full Bottle in front of Me`, Context.leveling],
-    [$effect`Mental A-cue-ity`, Context.leveling],
-    [$effect`Pisces in the Skyces`, Context.leveling],
-    [$effect`Sigils of Yeg`, Context.leveling],
-    [$effect`Warlock, Warstock, and Warbarrel`, Context.leveling],
-    [$effect`We're All Made of Starfish`, Context.leveling],
-
-    [$effect`Arched Eyebrow of the Archmage`, Context.test],
-    [$effect`Song of Sauce`, Context.test],
-    [$effect`The Magic of LOV`, Context.test],
-    // Food/Booze/Spleen
-    [$effect`Filled with Magic`, Context.special],
-    // Wish
-    [$effect`Sparkly!`, Context.special],
-    // Other
-    [$effect`Visions of the Deep Dark Deeps`, Context.special],
-    [$effect`Nanobrainy`, Context.special],
-    [$effect`Toxic Vengeance`, Context.special],
-  ]),
-
-  [Quest.WeaponDamage]: new Map([
-    ...sharedSpellWeaponDamage,
-    [$effect`Billiards Belligerence`, Context.leveling],
-    [$effect`Blessing of your favorite Bird`, Context.leveling],
-    [$effect`Carol of the Bulls`, Context.leveling],
-    [$effect`Frenzied, Bloody`, Context.leveling],
-    [$effect`Lack of Body-Building`, Context.leveling],
-
-    [$effect`Bow-Legged Swagger`, Context.test],
-    [$effect`Rage of the Reindeer`, Context.test],
-    [$effect`Scowl of the Auk`, Context.test],
-    [$effect`Song of the North`, Context.test],
-    [$effect`Tenacity of the Snapper`, Context.test],
-    [$effect`The Power of LOV`, Context.test],
-  ]),
-
-  [Quest.Mysticality]: new Map([
-    ...sharedStats,
-    [$effect`Uncucumbered`, Context.beginning],
-
-    [$effect`Blessing of your favorite Bird`, Context.leveling],
-    [$effect`Mystically Oiled`, Context.leveling],
-    [$effect`We're All Made of Starfish`, Context.leveling],
-
-    [$effect`Quiet Judgement`, Context.test],
-    // Wish
-    [$effect`Witch Breaded`, Context.special],
-    // Other
-    [$effect`Nanobrainy`, Context.special],
-  ]),
-
-  [Quest.CombatFrequency]: new Map([
-    [$effect`Become Superficially interested`, Context.test],
-    [$effect`Feeling Lonely`, Context.test],
-    [$effect`Gummed Shoes`, Context.test],
-    [$effect`Invisible Avatar`, Context.test],
-    [$effect`Silent Running`, Context.test],
-    [$effect`Smooth Movements`, Context.test],
-    [$effect`The Sonata of Sneakiness`, Context.test],
-    [$effect`Throwing Some Shade`, Context.test],
-
-    [$effect`Silence of the God Lobster`, Context.special],
-  ]),
-
-  [Quest.HotResist]: new Map([
-    [$effect`Feeling Peaceful`, Context.beginning],
-
-    [$effect`Astral Shell`, Context.leveling],
-    [$effect`Elemental Saucesphere`, Context.leveling],
-    [$effect`Hot-Headed`, Context.leveling],
-
-    [$effect`Fireproof Foam Suit`, Context.special],
-  ]),
-
-  [Quest.FamiliarWeight]: new Map([
-    [$effect`A Girl Named Sue`, Context.leveling],
-    [$effect`Billiards Belligerence`, Context.leveling],
-    [$effect`Blood Bond`, Context.leveling],
-    [$effect`Do I Know You From Somewhere?`, Context.leveling],
-    [$effect`Empathy`, Context.leveling],
-    [$effect`Fidoxene`, Context.leveling],
-    [$effect`Leash of Linguini`, Context.leveling],
-    [$effect`Loyal Tea`, Context.leveling],
-    [$effect`Puzzle Champ`, Context.leveling],
-
-    [$effect`Man's Worst Enemy`, Context.test],
-    [$effect`Robot Friends`, Context.test],
-    [$effect`Shortly Stacked`, Context.test],
-    [$effect`Whole Latte Love`, Context.test],
-    // Food/Booze/Spleen
-    [$effect`[1701]Hip to the Jive`, Context.special],
-    [$effect`Joy`, Context.special],
-    [$effect`Smart Drunk`, Context.special],
-    // Wishes
-    [$effect`All Is Forgiven`, Context.special],
-    [$effect`Bureaucratized`, Context.special],
-    [$effect`Chorale of Companionship`, Context.special],
-    [$effect`Down With Chow`, Context.special],
-    [$effect`Optimist Primal`, Context.special],
-    // Other
-    [$effect`Meteor Showered`, Context.special],
-    [$effect`Open Heart Surgery`, Context.special],
-  ]),
-
-  [Quest.ItemDrop]: new Map([
-    [$effect`items.enh`, Context.beginning],
-    [$effect`Uncucumbered`, Context.beginning],
-
-    [$effect`Blessing of the Bird`, Context.leveling],
-    [$effect`Blessing of your favorite Bird`, Context.leveling],
-    [$effect`Ermine Eyes`, Context.leveling],
-    [$effect`Fat Leon's Phat Loot Lyric`, Context.leveling],
-    [$effect`Hustlin'`, Context.leveling],
-    [$effect`Singer's Faithful Ocelot`, Context.leveling],
-
-    [$effect`Feeling Lost`, Context.test],
-    [$effect`Nearly All-Natural`, Context.test],
-    [$effect`Steely-Eyed Squint`, Context.test],
-    [$effect`The Spirit of Taking`, Context.test],
-
-    [$effect`Bat-Adjacent Form`, Context.special],
-    [$effect`Synthesis: Collection`, Context.special],
-  ]),
-
-  [Quest.Donate]: new Map(),
-};
-
-function acquireQuestEffects(id: Quest) {
-  questEffects[id].forEach((source, effect) => {
-    if (source !== Context.special) acquireEffect(effect);
-    checkEffect(effect);
-  });
-}
-
-function buffUp(progress: Context) {
-  for (const qe of Object.values(questEffects)) {
-    for (const [effect, source] of qe) {
-      if (source <= progress) {
-        acquireEffect(effect);
-      }
-    }
-  }
-}
-
-export function buffUpBeginning(): void {
-  buffUp(Context.beginning);
-}
-
-export function buffUpLeveling(): void {
-  // TODO: Want to swap pants to maybe spend less MP but also don't want to lose MP by swapping pants...
-  buffUp(Context.leveling);
-}
-
-export function haveQuest(id: number): boolean {
-  return containsText(visitUrl("council.php"), `<input type=hidden name=option value=${id}>`);
-}
-
-export function prepAndDoQuest(id: Quest): number {
-  const turns = totalTurnsPlayed();
-  if (id > Quest.Donate) throw `Invalid Quest ${id} (these are just for outfits)!!`;
-  if (haveQuest(id)) {
-    acquireQuestEffects(id);
-    equipOutfit(id);
+export function prepAndDoQuest(quest: QuestInfo): void {
+  if (quest.id > Quest.Donate.id) throw `Invalid quest ${quest.id}: ${quest.service}!`;
+  if (haveQuest(quest)) {
+    prep(quest);
     visitUrl("council.php");
-    visitUrl(`choice.php?whichchoice=1089&option=${id}`);
-    if (haveQuest(id)) throw `Couldn't complete quest ${id}?`;
+    visitUrl(`choice.php?whichchoice=1089&option=${quest.id}`);
+    if (haveQuest(quest)) throw `Couldn't complete quest ${quest.id}: ${quest.service}?`;
   }
-  return totalTurnsPlayed() - turns;
 }

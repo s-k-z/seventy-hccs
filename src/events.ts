@@ -33,7 +33,7 @@ import { adventure, adventureUrl, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
 import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
 import { checkAvailable, checkEffect, tryUse, voterMonsterNow, withEquipment } from "./lib";
-import { equipOutfit, Quest } from "./quests";
+import { prep, Quest } from "./quests";
 
 export const enum FamiliarFlag {
   Default,
@@ -204,7 +204,7 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => haveEffect($effect`Sweetbreads Flambé`) - 1,
     run: () => {
-      equipOutfit(Quest.Leveling);
+      prep(Quest.Leveling);
       selectBestFamiliar();
       fightWitchess($monster`Witchess Rook`, MacroList.FreeFight);
       checkAvailable($item`Greek fire`);
