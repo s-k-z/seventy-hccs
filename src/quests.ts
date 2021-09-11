@@ -156,8 +156,9 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
+    const retrocape = !have($item`LOV Epaulettes`) ? "heck thrill" : undefined;
     if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
-    return { acquire: toAcquire, check: [], equipment: outfit, retrocape: "heck thrill" };
+    return { acquire: toAcquire, check: [], equipment: outfit, retrocape: retrocape };
   },
 
   [Quest.LevelingML.id]: () => {
@@ -173,7 +174,6 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc2`, $item`gold detective badge`],
         [$slot`acc3`, $item`Beach Comb`],
       ]),
-      retrocape: "heck thrill",
     };
   },
 
@@ -437,8 +437,8 @@ export function prep(quest: QuestInfo): void {
   const record = questRecords[quest.id]();
   const back = record.equipment.get($slot`back`);
   if (back && record.retrocape) throw `Multiple back items for ${quest.id}`;
-  record.acquire.forEach((effect) => acquireEffect(effect));
-  record.check.forEach((effect) => checkEffect(effect));
+  record.acquire.forEach(acquireEffect);
+  record.check.forEach(checkEffect);
   if (record.familiar) useFamiliar(record.familiar);
   if (record.retrocape) cliExecute(`retrocape ${record.retrocape}`);
   record.equipment.forEach((item, slot) => {

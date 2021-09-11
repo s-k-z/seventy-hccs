@@ -126,7 +126,7 @@ export const events: Record<string, eventData> = {
       adventure(loveTunnel, MacroList.TunnelOfLOV);
       if (handlingChoice()) throw "Stuck in LOV?";
       checkEffect($effect`Open Heart Surgery`);
-      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((l) => checkAvailable(l, 1));
+      $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((l) => checkAvailable(l));
       use($item`LOV Elixir #3`);
       use($item`LOV Elixir #6`);
       equip($slot`back`, $item`LOV Epaulettes`);
