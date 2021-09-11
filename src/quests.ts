@@ -302,20 +302,6 @@ const questRecords: Record<number, () => QuestData> = {
     return { acquire: toAcquire, check: toCheck, equipment: outfit };
   },
 
-  [Quest.Mysticality.id]: () => {
-    return {
-      acquire: [$effect`Quiet Judgement`],
-      check: [$effect`Nanobrainy`, $effect`Spit Upon`, $effect`Witch Breaded`],
-      equipment: new Map([
-        [$slot`hat`, $item`wad of used tape`],
-        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-        [$slot`acc1`, $item`battle broom`],
-        [$slot`acc3`, $item`"I Voted!" sticker`],
-      ]),
-      retrocape: "mysticality",
-    };
-  },
-
   [Quest.CombatFrequency.id]: () => {
     return {
       acquire: [
@@ -425,6 +411,20 @@ const questRecords: Record<number, () => QuestData> = {
       check: toCheck,
       equipment: outfit,
       familiar: $familiar`Trick-or-Treating Tot`,
+    };
+  },
+
+  [Quest.Mysticality.id]: () => {
+    return {
+      acquire: [$effect`Quiet Judgement`],
+      check: [$effect`Nanobrainy`, $effect`Spit Upon`, $effect`Witch Breaded`],
+      equipment: new Map([
+        [$slot`hat`, $item`wad of used tape`],
+        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`acc1`, $item`battle broom`],
+        [$slot`acc3`, $item`"I Voted!" sticker`],
+      ]),
+      retrocape: "mysticality",
     };
   },
 
