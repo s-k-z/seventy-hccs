@@ -341,7 +341,7 @@ const questRecords: Record<number, () => QuestData> = {
 
   [Quest.HotResist.id]: () => {
     return {
-      acquire: [$effect`Astral Shell`, $effect`Elemental Saucesphere`],
+      acquire: [$effect`Astral Shell`, $effect`Elemental Saucesphere`, $effect`Empathy`],
       check: [$effect`Fireproof Foam Suit`],
       equipment: new Map([
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
