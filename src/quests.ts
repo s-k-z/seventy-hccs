@@ -78,7 +78,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, $item`industrial fire extinguisher`],
         [$slot`pants`, $item`Cargo Cultist Shorts`],
-        [$slot`acc1`, $item`hewn moon-rune spoon`],
+        [$slot`acc1`, $item`Eight Days a Week Pill Keeper`],
         [$slot`acc2`, $item`Retrospecs`],
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
       ]),
@@ -204,6 +204,7 @@ const questRecords: Record<number, () => QuestData> = {
       equipment: new Map([
         [$slot`hat`, $item`very pointy crown`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+        [$slot`off-hand`, $item`industrial fire extinguisher`],
         [$slot`acc1`, $item`your cowboy boots`],
         [$slot`acc2`, $item`Beach Comb`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
@@ -365,7 +366,14 @@ const questRecords: Record<number, () => QuestData> = {
       ],
       equipment: new Map([
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-        [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
+        [
+          $slot`off-hand`,
+          have($item`rope`)
+            ? $item`rope`
+            : have($item`burning paper crane`)
+            ? $item`burning paper crane`
+            : $item`familiar scrapbook`,
+        ],
         [$slot`acc1`, $item`Brutal brogues`],
         [$slot`acc2`, $item`hewn moon-rune spoon`],
         [$slot`acc3`, $item`Beach Comb`],
@@ -453,8 +461,8 @@ export function prep(quest: QuestInfo): void {
 }
 
 export function haveQuest(quest: QuestInfo): boolean {
-  if (quest.id > 30) throw `Invalid quest ${quest.id}: ${quest.service}!`;
-  if (quest.id < 30) return !get("csServicesPerformed").includes(quest.service);
+  if (quest.id > Quest.Donate.id) throw `Invalid quest ${quest.id}: ${quest.service}!`;
+  if (quest.id < Quest.Donate.id) return !get("csServicesPerformed").includes(quest.service);
   return visitUrl("council.php").includes(`<input type=hidden name=option value=${quest.id}>`);
 }
 

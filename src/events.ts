@@ -574,7 +574,7 @@ export const oneOffEvents = {
       checkEffect($effect`Bat-Adjacent Form`);
     }
   },
-};
+} as const;
 
 function familiar(fam: Familiar) {
   useFamiliar(fam);
