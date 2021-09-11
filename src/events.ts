@@ -88,17 +88,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  latteCarrot: {
-    max: 0,
-    current: () => (get("latteUnlocks").includes("carrot") ? 0 : -1),
-    run: () => {
-      equip($slot`off-hand`, $item`latte lovers member's mug`);
-      checkEffect($effect`Ode to Booze`);
-      familiar($familiar`Frumious Bandersnatch`);
-      adventure(direWarren, MacroList.Runaway);
-    },
-  },
-
   ghostCarol: {
     max: 0,
     current: () =>
@@ -428,11 +417,34 @@ export const events: Record<string, eventData> = {
 
   latteRefills: {
     max: 0,
+    current: () => get("_latteRefillsUsed") - 2,
+    run: () => {
+      equip($slot`off-hand`, $item`latte lovers member's mug`);
+      if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
+      checkEffect($effect`Ode to Booze`);
+      familiar($familiar`Frumious Bandersnatch`);
+      adventure(direWarren, MacroList.LatteGulpRunaway);
+    },
+  },
+
+  latteCarrot: {
+    max: 0,
+    current: () => (get("latteUnlocks").includes("carrot") ? 0 : -1),
+    run: () => {
+      equip($slot`off-hand`, $item`latte lovers member's mug`);
+      checkEffect($effect`Ode to Booze`);
+      familiar($familiar`Frumious Bandersnatch`);
+      adventure(direWarren, MacroList.Runaway);
+    },
+  },
+
+  lastLatteRefill: {
+    max: 0,
     current: () => get("_latteRefillsUsed") - 3,
     run: () => {
-      checkEffect($effect`Ode to Booze`);
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon carrot");
+      checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.LatteGulpRunaway);
     },
