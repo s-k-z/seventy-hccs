@@ -304,8 +304,6 @@ function levelAndDoQuests() {
 
   shrugEffect($effect`Jackasses' Symphony of Destruction`);
 
-  prepAndDoQuest(Quest.Mysticality);
-
   if (haveQuest(Quest.CombatFrequency)) {
     equip($slot`acc2`, $item`Powerful Glove`);
     prepAndDoQuest(Quest.CombatFrequency);
@@ -335,6 +333,7 @@ function levelAndDoQuests() {
     prepAndDoQuest(Quest.ItemDrop);
   }
 
+  prepAndDoQuest(Quest.Mysticality);
   prepAndDoQuest(Quest.Donate);
 }
 
