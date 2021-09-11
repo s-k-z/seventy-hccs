@@ -454,7 +454,7 @@ export function prep(quest: QuestInfo): void {
 
 export function haveQuest(quest: QuestInfo): boolean {
   if (quest.id > 30) throw `Invalid quest ${quest.id}: ${quest.service}!`;
-  if (quest.id < 30) return get("csServicesPerformed").includes(quest.service);
+  if (quest.id < 30) return !get("csServicesPerformed").includes(quest.service);
   return visitUrl("council.php").includes(`<input type=hidden name=option value=${quest.id}>`);
 }
 

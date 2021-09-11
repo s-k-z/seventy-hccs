@@ -18241,7 +18241,7 @@ function prep(quest) {
 }
 function haveQuest(quest) {
   if (quest.id > 30) throw "Invalid quest ".concat(quest.id, ": ").concat(quest.service, "!");
-  if (quest.id < 30) return (0,dist.get)("csServicesPerformed").includes(quest.service);
+  if (quest.id < 30) return !(0,dist.get)("csServicesPerformed").includes(quest.service);
   return (0,external_kolmafia_.visitUrl)("council.php").includes("<input type=hidden name=option value=".concat(quest.id, ">"));
 }
 function prepAndDoQuest(quest) {
