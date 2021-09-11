@@ -49,8 +49,8 @@ export function shrugEffect(effect: Effect): void {
   if (have(effect)) cliExecute(`shrug ${effect}`);
 }
 
-export function tryUse(i: Item, n = 1): void {
-  if (have(i, n)) use(i, n);
+export function tryUse(i: Item): void {
+  if (have(i)) use(i);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

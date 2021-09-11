@@ -361,7 +361,7 @@ function preCoilWire() {
     $item`natural magick candle`,
     $item`rainbow glitter candle`,
     $item`votive of confidence`,
-  ].forEach((gift) => tryUse(gift));
+  ].forEach(tryUse);
   // Only need one consult for a candy
   if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 0) {
     checkMainClan();
@@ -527,7 +527,7 @@ function postCoilWire() {
     $item`Napalm In The Morning™ candle`,
     $item`Salsa Caliente™ candle`,
     $item`Smoldering Clover™ candle`,
-  ].forEach((potion) => tryUse(potion));
+  ].forEach(tryUse);
 
   equip($slot`acc2`, $item`Powerful Glove`);
   acquireGumOrHermitItem($item`turtle totem`);
