@@ -18087,7 +18087,7 @@ var questRecords = (_questRecords = {}, _defineProperty(_questRecords, Quest.Beg
   return {
     acquire: [],
     check: [],
-    equipment: new Map([[(0,dist.$slot)(quests_templateObject26 || (quests_templateObject26 = quests_taggedTemplateLiteral(["hat"]))), (0,dist.$item)(quests_templateObject27 || (quests_templateObject27 = quests_taggedTemplateLiteral(["Iunion Crown"])))], [(0,dist.$slot)(quests_templateObject28 || (quests_templateObject28 = quests_taggedTemplateLiteral(["weapon"]))), (0,dist.$item)(quests_templateObject29 || (quests_templateObject29 = quests_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))], [(0,dist.$slot)(quests_templateObject30 || (quests_templateObject30 = quests_taggedTemplateLiteral(["off-hand"]))), (0,dist.$item)(quests_templateObject31 || (quests_templateObject31 = quests_taggedTemplateLiteral(["industrial fire extinguisher"])))], [(0,dist.$slot)(quests_templateObject32 || (quests_templateObject32 = quests_taggedTemplateLiteral(["pants"]))), (0,dist.$item)(quests_templateObject33 || (quests_templateObject33 = quests_taggedTemplateLiteral(["Cargo Cultist Shorts"])))], [(0,dist.$slot)(quests_templateObject34 || (quests_templateObject34 = quests_taggedTemplateLiteral(["acc1"]))), (0,dist.$item)(quests_templateObject35 || (quests_templateObject35 = quests_taggedTemplateLiteral(["Eight Days a Week Pill Keeper"])))], [(0,dist.$slot)(quests_templateObject36 || (quests_templateObject36 = quests_taggedTemplateLiteral(["acc2"]))), (0,dist.$item)(quests_templateObject37 || (quests_templateObject37 = quests_taggedTemplateLiteral(["Retrospecs"])))], [(0,dist.$slot)(quests_templateObject38 || (quests_templateObject38 = quests_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(quests_templateObject39 || (quests_templateObject39 = quests_taggedTemplateLiteral(["Kremlin's Greatest Briefcase"])))]]),
+    equipment: new Map([[(0,dist.$slot)(quests_templateObject26 || (quests_templateObject26 = quests_taggedTemplateLiteral(["hat"]))), (0,dist.$item)(quests_templateObject27 || (quests_templateObject27 = quests_taggedTemplateLiteral(["Iunion Crown"])))], [(0,dist.$slot)(quests_templateObject28 || (quests_templateObject28 = quests_taggedTemplateLiteral(["weapon"]))), (0,dist.$item)(quests_templateObject29 || (quests_templateObject29 = quests_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))], [(0,dist.$slot)(quests_templateObject30 || (quests_templateObject30 = quests_taggedTemplateLiteral(["off-hand"]))), (0,dist.$item)(quests_templateObject31 || (quests_templateObject31 = quests_taggedTemplateLiteral(["industrial fire extinguisher"])))], [(0,dist.$slot)(quests_templateObject32 || (quests_templateObject32 = quests_taggedTemplateLiteral(["pants"]))), (0,dist.$item)(quests_templateObject33 || (quests_templateObject33 = quests_taggedTemplateLiteral(["Cargo Cultist Shorts"])))], [(0,dist.$slot)(quests_templateObject34 || (quests_templateObject34 = quests_taggedTemplateLiteral(["acc1"]))), (0,dist.$item)(quests_templateObject35 || (quests_templateObject35 = quests_taggedTemplateLiteral(["hewn moon-rune spoon"])))], [(0,dist.$slot)(quests_templateObject36 || (quests_templateObject36 = quests_taggedTemplateLiteral(["acc2"]))), (0,dist.$item)(quests_templateObject37 || (quests_templateObject37 = quests_taggedTemplateLiteral(["Retrospecs"])))], [(0,dist.$slot)(quests_templateObject38 || (quests_templateObject38 = quests_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(quests_templateObject39 || (quests_templateObject39 = quests_taggedTemplateLiteral(["Kremlin's Greatest Briefcase"])))]]),
     retrocape: "heck thrill"
   };
 }), _defineProperty(_questRecords, Quest.Leveling.id, () => {
@@ -18546,6 +18546,16 @@ var events = {
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject110 || (events_templateObject110 = events_taggedTemplateLiteral(["off-hand"]))), (0,dist.$item)(events_templateObject111 || (events_templateObject111 = events_taggedTemplateLiteral(["Kramco Sausage-o-Matic\u2122"]))));
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject112 || (events_templateObject112 = events_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(events_templateObject113 || (events_templateObject113 = events_taggedTemplateLiteral(["Beach Comb"]))));
       selectBestFamiliar();
+
+      var checkQuest = () => (0,dist.get)("_questPartyFair") === "unstarted";
+
+      if (checkQuest()) {
+        (0,external_kolmafia_.visitUrl)((0,external_kolmafia_.toUrl)(neverendingParty));
+        var choice = ["food", "booze"].includes((0,dist.get)("_questPartyFairQuest")) ? 1 : 2;
+        (0,external_kolmafia_.runChoice)(choice);
+        if (checkQuest()) throw "Failed to grab Neverending Party Quest";
+      }
+
       adventure(neverendingParty, MacroList.FreeFight);
     }
   },
@@ -19114,7 +19124,7 @@ var choiceAdventures = [[297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms
 [1227, 1], // L.O.V. Elbow Room: (1) fight the equivocator (2) skip
 [1228, 3], // L.O.V. Emporium: (1) enamorang (2) emotionizer (3) chocolate (4) bouquet (5) elephant (6) toast (7) skip
 [1310, ""], // Granted a Boon: (1) equipment (2) blessing (3) experience
-[1322, 2], // The Beginning of the Neverend: (1) accept quest (2) decline quest (3) leave
+[1322, ""], // The Beginning of the Neverend: (1) accept quest (2) decline quest (3) leave
 [1324, 5], // It Hasn't Ended, It's Just Paused: (1) upstairs (2) kitchen (3) backyard (4) basement (5) fight
 [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
 [1386, 4], // Upgrade Your May the Fourth Cosplay Saber: (1) 15-20 MP regen (2) +20 ML (3) +3 resists (4) +10 familiar weight
@@ -19167,18 +19177,20 @@ function main() {
 
 function levelAndDoQuests() {
   dist.Clan.join(MAIN_CLAN);
+  var mainstat = (0,external_kolmafia_.myPrimestat)();
 
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
+    (0,external_kolmafia_.print)("Coil Wire start: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
+    (0,external_kolmafia_.print)("\tand ".concat((0,external_kolmafia_.myBuffedstat)(mainstat), " (").concat((0,external_kolmafia_.myBasestat)(mainstat), ") ").concat(mainstat));
     prepAndDoQuest(Quest.CoilWire);
-    (0,external_kolmafia_.print)("Coil Wire done: have ".concat((0,external_kolmafia_.myHp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), " MP available."));
+    (0,external_kolmafia_.print)("Coil Wire done: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
   }
-
-  var mainstat = (0,external_kolmafia_.myPrimestat)();
 
   if (getRemainingFreeFights() > 0) {
     (function () {
       postCoilWire();
+      (0,external_kolmafia_.print)("Leveling begin: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
 
       var chateauNapReady = () => {
         return (0,external_kolmafia_.myLevel)() >= CHATEAU_REST_LEVEL && (0,dist.get)("timesRested") < (0,external_kolmafia_.totalFreeRests)();

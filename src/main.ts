@@ -109,7 +109,7 @@ const choiceAdventures = [
   [1227, 1], // L.O.V. Elbow Room: (1) fight the equivocator (2) skip
   [1228, 3], // L.O.V. Emporium: (1) enamorang (2) emotionizer (3) chocolate (4) bouquet (5) elephant (6) toast (7) skip
   [1310, ""], // Granted a Boon: (1) equipment (2) blessing (3) experience
-  [1322, 2], // The Beginning of the Neverend: (1) accept quest (2) decline quest (3) leave
+  [1322, ""], // The Beginning of the Neverend: (1) accept quest (2) decline quest (3) leave
   [1324, 5], // It Hasn't Ended, It's Just Paused: (1) upstairs (2) kitchen (3) backyard (4) basement (5) fight
   [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
   [1386, 4], // Upgrade Your May the Fourth Cosplay Saber: (1) 15-20 MP regen (2) +20 ML (3) +3 resists (4) +10 familiar weight
@@ -170,15 +170,18 @@ export function main(): void {
 
 function levelAndDoQuests() {
   Clan.join(MAIN_CLAN);
+  const mainstat = myPrimestat();
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
+    print(`Coil Wire start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
+    print(`\tand ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}`);
     prepAndDoQuest(Quest.CoilWire);
-    print(`Coil Wire done: have ${myHp()} HP and ${myMp()} MP available.`);
+    print(`Coil Wire done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
   }
 
-  const mainstat = myPrimestat();
   if (getRemainingFreeFights() > 0) {
     postCoilWire();
+    print(`Leveling begin: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
 
     const chateauNapReady = (): boolean => {
       return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();

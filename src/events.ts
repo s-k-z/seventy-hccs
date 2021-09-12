@@ -9,6 +9,7 @@ import {
   myLevel,
   runChoice,
   toInt,
+  toUrl,
   use,
   useFamiliar,
   useSkill,
@@ -369,6 +370,13 @@ export const events: Record<string, eventData> = {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`Beach Comb`);
       selectBestFamiliar();
+      const checkQuest = (): boolean => get("_questPartyFair") === "unstarted";
+      if (checkQuest()) {
+        visitUrl(toUrl(neverendingParty));
+        const choice = ["food", "booze"].includes(get("_questPartyFairQuest")) ? 1 : 2;
+        runChoice(choice);
+        if (checkQuest()) throw `Failed to grab Neverending Party Quest`;
+      }
       adventure(neverendingParty, MacroList.FreeFight);
     },
   },
