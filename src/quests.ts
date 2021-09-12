@@ -344,6 +344,9 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.FamiliarWeight.id]: () => {
+    const rope = $item`rope`;
+    const crane = $item`burning paper crane`;
+    const offhand = have(rope) ? rope : have(crane) ? crane : $item`familiar scrapbook`;
     return {
       acquire: [
         $effect`Empathy`,
@@ -366,14 +369,7 @@ const questRecords: Record<number, () => QuestData> = {
       ],
       equipment: new Map([
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-        [
-          $slot`off-hand`,
-          have($item`rope`)
-            ? $item`rope`
-            : have($item`burning paper crane`)
-            ? $item`burning paper crane`
-            : $item`familiar scrapbook`,
-        ],
+        [$slot`off-hand`, offhand],
         [$slot`acc1`, $item`Brutal brogues`],
         [$slot`acc2`, $item`hewn moon-rune spoon`],
         [$slot`acc3`, $item`Beach Comb`],

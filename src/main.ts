@@ -487,15 +487,8 @@ function postCoilWire() {
     $skill`Summon Crimbo Candy`,
     //$skill`Summon Geeky Gifts`,
     //$skill`Summon Tasteful Items`,
-
-    // Buffs that can't fit elsewhere
-    $skill`Incredible Self-Esteem`,
   ].forEach((skill) => useSkill(skill));
   // 143 mp
-
-  const intense = $effect`Become Intensely interested`;
-  if (have(intense)) visitUrl("charsheet.php?pwd=&action=newyouinterest");
-  if (have(intense)) throw `Failed to toggle ${intense}?`;
 
   [
     $item`oil of expertise`,
