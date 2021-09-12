@@ -18805,9 +18805,17 @@ function checkReadyToAscend() {
   }, true);
 }
 ;// CONCATENATED MODULE: ./src/sweetsynthesis.ts
-var sweetsynthesis_templateObject, sweetsynthesis_templateObject2, sweetsynthesis_templateObject3, sweetsynthesis_templateObject4, sweetsynthesis_templateObject5, sweetsynthesis_templateObject6, sweetsynthesis_templateObject7, sweetsynthesis_templateObject8, sweetsynthesis_templateObject9, sweetsynthesis_templateObject10, sweetsynthesis_templateObject11, sweetsynthesis_templateObject12, sweetsynthesis_templateObject13, sweetsynthesis_templateObject14, sweetsynthesis_templateObject15, sweetsynthesis_templateObject16, sweetsynthesis_templateObject17, sweetsynthesis_templateObject18, sweetsynthesis_templateObject19, sweetsynthesis_templateObject20, sweetsynthesis_templateObject21, sweetsynthesis_templateObject22, sweetsynthesis_templateObject23, sweetsynthesis_templateObject24, sweetsynthesis_templateObject25, sweetsynthesis_templateObject26, sweetsynthesis_templateObject27, sweetsynthesis_templateObject28, sweetsynthesis_templateObject29, sweetsynthesis_templateObject30, sweetsynthesis_templateObject31, sweetsynthesis_templateObject32, sweetsynthesis_templateObject33, sweetsynthesis_templateObject34, sweetsynthesis_templateObject35;
+var sweetsynthesis_templateObject, sweetsynthesis_templateObject2, sweetsynthesis_templateObject3, sweetsynthesis_templateObject4, sweetsynthesis_templateObject5, sweetsynthesis_templateObject6, sweetsynthesis_templateObject7, sweetsynthesis_templateObject8, sweetsynthesis_templateObject9, sweetsynthesis_templateObject10, sweetsynthesis_templateObject11, sweetsynthesis_templateObject12, sweetsynthesis_templateObject13, sweetsynthesis_templateObject14, sweetsynthesis_templateObject15, sweetsynthesis_templateObject16, sweetsynthesis_templateObject17, sweetsynthesis_templateObject18, sweetsynthesis_templateObject19, sweetsynthesis_templateObject20, sweetsynthesis_templateObject21, sweetsynthesis_templateObject22, sweetsynthesis_templateObject23, sweetsynthesis_templateObject24, sweetsynthesis_templateObject25, sweetsynthesis_templateObject26, sweetsynthesis_templateObject27, sweetsynthesis_templateObject28, sweetsynthesis_templateObject29, sweetsynthesis_templateObject30, sweetsynthesis_templateObject31, sweetsynthesis_templateObject32, sweetsynthesis_templateObject33;
 
 function sweetsynthesis_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function sweetsynthesis_toConsumableArray(arr) { return sweetsynthesis_arrayWithoutHoles(arr) || sweetsynthesis_iterableToArray(arr) || sweetsynthesis_unsupportedIterableToArray(arr) || sweetsynthesis_nonIterableSpread(); }
+
+function sweetsynthesis_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function sweetsynthesis_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function sweetsynthesis_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return sweetsynthesis_arrayLikeToArray(arr); }
 
 function sweetsynthesis_slicedToArray(arr, i) { return sweetsynthesis_arrayWithHoles(arr) || sweetsynthesis_iterableToArrayLimit(arr, i) || sweetsynthesis_unsupportedIterableToArray(arr, i) || sweetsynthesis_nonIterableRest(); }
 
@@ -18898,7 +18906,7 @@ function synthesize() {
 
   var allowTomeUse = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
   var targetEffects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (0,dist.$effects)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["Synthesis: Collection, Synthesis: Smart, Synthesis: Learning"]))).filter(effect => !(0,dist.have)(effect));
-  var reserveCandies = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [(0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), (0,dist.$item)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), (0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))];
+  var reserveCandies = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Set([(0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))]);
   var candies = (_candies = {}, sweetsynthesis_defineProperty(_candies, candyType.complex, []), sweetsynthesis_defineProperty(_candies, candyType.simple, []), _candies);
   (0,external_kolmafia_.cliExecute)("refresh inventory");
   var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
@@ -18919,7 +18927,7 @@ function synthesize() {
 
   if (allowTomeUse && (0,dist.get)("tomeSummons") < 3) {
     candies.complex.push({
-      candy: (0,dist.$item)(sweetsynthesis_templateObject31 || (sweetsynthesis_templateObject31 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))),
+      candy: (0,dist.$item)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))),
       count: inv["sugar sheet"] + 3 - (0,dist.get)("tomeSummons")
     });
   } // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
@@ -18930,8 +18938,8 @@ function synthesize() {
     pairs: []
   };
 
-  for (var i = 0; i <= reserveCandies.length; i++) {
-    var reserved = new Map(reserveCandies.slice(i).map(r => [r, 1]));
+  for (var i = 0; i <= reserveCandies.size; i++) {
+    var reserved = new Map(sweetsynthesis_toConsumableArray(reserveCandies).slice(i).map(r => [r, 99]));
     sim = simulate(targetEffects, candies, reserved);
     if (sim.result) break;
   }
@@ -18956,7 +18964,7 @@ function synthesize() {
 
           if (!(0,dist.have)(creatable) && transforms.has(source)) {
             // only cast summon sugar sheets if needed
-            if (allowTomeUse && source === (0,dist.$item)(sweetsynthesis_templateObject32 || (sweetsynthesis_templateObject32 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))) (0,external_kolmafia_.useSkill)((0,dist.$skill)(sweetsynthesis_templateObject33 || (sweetsynthesis_templateObject33 = sweetsynthesis_taggedTemplateLiteral(["Summon Sugar Sheets"]))));
+            if (allowTomeUse && source === (0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))) (0,external_kolmafia_.useSkill)((0,dist.$skill)(sweetsynthesis_templateObject31 || (sweetsynthesis_templateObject31 = sweetsynthesis_taggedTemplateLiteral(["Summon Sugar Sheets"]))));
             (0,external_kolmafia_.cliExecute)("make ".concat(creatable));
           }
         }
@@ -18982,7 +18990,11 @@ function simulate(synthTargets, candies, reserveCandies) {
   };
   var used = new Map(reserveCandies);
 
-  var markUsed = item => used.set(item, 1 + (used.get(item) || 0));
+  var markUsed = item => {
+    var _used$get;
+
+    return used.set(item, 1 + ((_used$get = used.get(item)) !== null && _used$get !== void 0 ? _used$get : 0));
+  };
 
   var _iterator3 = sweetsynthesis_createForOfIteratorHelper(synthTargets),
       _step3;
@@ -19069,8 +19081,8 @@ function search(target, setA, setB, used) {
 
   return {
     found: false,
-    a: (0,dist.$item)(sweetsynthesis_templateObject34 || (sweetsynthesis_templateObject34 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
-    b: (0,dist.$item)(sweetsynthesis_templateObject35 || (sweetsynthesis_templateObject35 = sweetsynthesis_taggedTemplateLiteral(["none"])))
+    a: (0,dist.$item)(sweetsynthesis_templateObject32 || (sweetsynthesis_templateObject32 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
+    b: (0,dist.$item)(sweetsynthesis_templateObject33 || (sweetsynthesis_templateObject33 = sweetsynthesis_taggedTemplateLiteral(["none"])))
   };
 }
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -19182,7 +19194,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
     (0,external_kolmafia_.print)("Coil Wire start: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
-    (0,external_kolmafia_.print)("\tand ".concat((0,external_kolmafia_.myBuffedstat)(mainstat), " (").concat((0,external_kolmafia_.myBasestat)(mainstat), ") ").concat(mainstat));
+    (0,external_kolmafia_.print)("\tand ".concat((0,external_kolmafia_.myBuffedstat)(mainstat), " (").concat((0,external_kolmafia_.myBasestat)(mainstat), ") ").concat(mainstat, "."));
     prepAndDoQuest(Quest.CoilWire);
     (0,external_kolmafia_.print)("Coil Wire done: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
   }
@@ -19190,7 +19202,7 @@ function levelAndDoQuests() {
   if (getRemainingFreeFights() > 0) {
     (function () {
       postCoilWire();
-      (0,external_kolmafia_.print)("Leveling begin: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
+      (0,external_kolmafia_.print)("Leveling start: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP."));
 
       var chateauNapReady = () => {
         return (0,external_kolmafia_.myLevel)() >= CHATEAU_REST_LEVEL && (0,dist.get)("timesRested") < (0,external_kolmafia_.totalFreeRests)();
@@ -19274,7 +19286,8 @@ function levelAndDoQuests() {
         break;
       }
 
-      (0,external_kolmafia_.print)("Finished leveling combats at level ".concat((0,external_kolmafia_.myLevel)(), " with ").concat((0,external_kolmafia_.myBasestat)(mainstat), " base ").concat(mainstat, " and ").concat((0,external_kolmafia_.myBuffedstat)(mainstat), " buffed ").concat(mainstat));
+      (0,external_kolmafia_.print)("Leveling done: have ".concat((0,external_kolmafia_.myHp)(), "/").concat((0,external_kolmafia_.myMaxhp)(), " HP and ").concat((0,external_kolmafia_.myMp)(), "/").concat((0,external_kolmafia_.myMaxmp)(), " MP at level ").concat((0,external_kolmafia_.myLevel)(), "."));
+      (0,external_kolmafia_.print)("\twith ".concat((0,external_kolmafia_.myBuffedstat)(mainstat), " (").concat((0,external_kolmafia_.myBasestat)(mainstat), ") ").concat(mainstat, "."));
     })();
   } // Leveling done
 

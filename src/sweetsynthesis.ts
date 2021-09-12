@@ -73,12 +73,7 @@ export function synthesize(
   targetEffects: Effect[] = $effects`Synthesis: Collection, Synthesis: Smart, Synthesis: Learning`.filter(
     (effect) => !have(effect)
   ),
-  reserveCandies: Item[] = [
-    $item`Chubby and Plump bar`,
-    $item`sugar sheet`,
-    $item`sugar sheet`,
-    $item`sugar sheet`,
-  ]
+  reserveCandies: Set<Item> = new Set([$item`Chubby and Plump bar`, $item`sugar sheet`])
 ): void {
   const candies = {
     [candyType.complex]: <candySet>[],
@@ -100,8 +95,8 @@ export function synthesize(
   }
   // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
   let sim: simulateResult = { result: false, pairs: [] };
-  for (let i = 0; i <= reserveCandies.length; i++) {
-    const reserved = new Map<Item, number>(reserveCandies.slice(i).map((r) => [r, 1]));
+  for (let i = 0; i <= reserveCandies.size; i++) {
+    const reserved = new Map<Item, number>([...reserveCandies].slice(i).map((r) => [r, 99]));
     sim = simulate(targetEffects, candies, reserved);
     if (sim.result) break;
   }
@@ -130,7 +125,7 @@ function simulate(
 ): simulateResult {
   const sim: simulateResult = { result: true, pairs: [] };
   const used = new Map<Item, number>(reserveCandies);
-  const markUsed = (item: Item) => used.set(item, 1 + (used.get(item) || 0));
+  const markUsed = (item: Item) => used.set(item, 1 + (used.get(item) ?? 0));
   for (const target of synthTargets) {
     const startA = candies[tier(target).a];
     const startB = candies[tier(target).b];

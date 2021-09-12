@@ -174,14 +174,14 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
     print(`Coil Wire start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
-    print(`\tand ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}`);
+    print(`\tand ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}.`);
     prepAndDoQuest(Quest.CoilWire);
     print(`Coil Wire done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
   }
 
   if (getRemainingFreeFights() > 0) {
     postCoilWire();
-    print(`Leveling begin: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
+    print(`Leveling start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
 
     const chateauNapReady = (): boolean => {
       return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
@@ -269,10 +269,9 @@ function levelAndDoQuests() {
     }
 
     print(
-      `Finished leveling combats at level ${myLevel()} with ${myBasestat(
-        mainstat
-      )} base ${mainstat} and ${myBuffedstat(mainstat)} buffed ${mainstat}`
+      `Leveling done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP at level ${myLevel()}.`
     );
+    print(`\twith ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}.`);
   }
 
   // Leveling done
