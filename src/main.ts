@@ -84,7 +84,6 @@ import {
 import {
   acquireEffect,
   acquireGumOrHermitItem,
-  shrugEffect,
   tryUse,
   wishEffect,
   withContext,
@@ -277,7 +276,6 @@ function levelAndDoQuests() {
   // Leveling done
   checkMainClan();
   cliExecute("shower hot");
-  $effects`Polka of Plenty, Ur-Kel's Aria of Annoyance`.forEach(shrugEffect);
   changeMcd(0);
   wishEffect($effect`Sparkly!`);
 
@@ -304,14 +302,10 @@ function levelAndDoQuests() {
     prepAndDoQuest(Quest.WeaponDamage);
   }
 
-  shrugEffect($effect`Jackasses' Symphony of Destruction`);
-
   if (haveQuest(Quest.CombatFrequency)) {
     equip($slot`acc2`, $item`Powerful Glove`);
     prepAndDoQuest(Quest.CombatFrequency);
   }
-
-  shrugEffect($effect`The Sonata of Sneakiness`);
 
   if (haveQuest(Quest.HotResist)) {
     oneOffEvents.foamYourself();

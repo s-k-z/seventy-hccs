@@ -3,12 +3,14 @@ import {
   equip,
   getIngredients,
   getRelated,
+  myEffects,
   numericModifier,
+  toEffect,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { $effect, $familiar, $item, $slot, get, have } from "libram";
-import { acquireEffect, checkEffect } from "./lib";
+import { $effect, $effects, $familiar, $item, $slot, get, have, isSong } from "libram";
+import { acquireEffect, checkEffect, shrugEffect } from "./lib";
 
 type QuestInfo = { id: number; service: string };
 // prettier-ignore
@@ -441,6 +443,7 @@ export function prep(quest: QuestInfo): void {
   const record = questRecords[quest.id]();
   const back = record.equipment.get($slot`back`);
   if (back && record.retrocape) throw `Multiple back items for ${quest.id}`;
+  shrugExtraSongs(record.acquire);
   record.acquire.forEach(acquireEffect);
   record.check.forEach(checkEffect);
   if (record.familiar) useFamiliar(record.familiar);
@@ -453,6 +456,20 @@ export function prep(quest: QuestInfo): void {
       else throw `Unable to find ${item}?`;
     }
     equip(slot, item);
+  });
+}
+
+function shrugExtraSongs(effectsToAcquire: Effect[]) {
+  const songsToAlwaysKeep = $effects`Ode to Booze, Chorale of Companionship`;
+  Object.entries(myEffects()).forEach(([effectName]) => {
+    const effect = toEffect(effectName);
+    if (
+      isSong(effect) &&
+      !songsToAlwaysKeep.includes(effect) &&
+      !effectsToAcquire.includes(effect)
+    ) {
+      shrugEffect(effect);
+    }
   });
 }
 
