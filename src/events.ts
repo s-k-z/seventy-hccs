@@ -588,7 +588,6 @@ function familiar(fam: Familiar) {
   useFamiliar(fam);
   const costume = new Map([
     [$familiar`Green Pixie`, "mp"],
-    [$familiar`Machine Elf`, "meat"],
     [$familiar`Melodramedary`, "myst"],
     [$familiar`Pocket Professor`, "hp"],
     [$familiar`Shorter-Order Cook`, "item"],

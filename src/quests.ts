@@ -78,7 +78,10 @@ const questRecords: Record<number, () => QuestData> = {
       equipment: new Map([
         [$slot`hat`, $item`Iunion Crown`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-        [$slot`off-hand`, $item`industrial fire extinguisher`],
+        [
+          $slot`off-hand`,
+          have($item`wrench`) ? $item`wrench` : $item`industrial fire extinguisher`,
+        ],
         [$slot`pants`, $item`Cargo Cultist Shorts`],
         [$slot`acc1`, $item`hewn moon-rune spoon`],
         [$slot`acc2`, $item`Retrospecs`],
