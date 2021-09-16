@@ -17,7 +17,6 @@ import {
   myBasestat,
   myBuffedstat,
   myClass,
-  myGardenType,
   myHp,
   myLevel,
   myMaxhp,
@@ -113,7 +112,7 @@ const choiceAdventures = [
   [1340, 2], // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
   [1386, 4], // Upgrade Your May the Fourth Cosplay Saber: (1) 15-20 MP regen (2) +20 ML (3) +3 resists (4) +10 familiar weight
   [1387, 3], // Using the Force: (1) banish (2) find friends (3) force item drops
-].map(([id, val]): [string, string | number] => [`choiceAdventure${id}`, val]);
+].map(([id, value]): [string, string | number] => [`choiceAdventure${id}`, value]);
 
 function checkMainClan() {
   if (Clan.get().name !== MAIN_CLAN) throw `Not in main clan?`;
@@ -232,25 +231,13 @@ function levelAndDoQuests() {
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
       tryUse($item`short stack of pancakes`);
-
-      // Save the Garbage shirt for the last 37 fights
-      // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
-      const crown = $item`Iunion Crown`;
-      const garbageShirt = $item`makeshift garbage shirt`;
-      const wad = $item`wad of used tape`;
-      if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37) {
-        if (!have(garbageShirt)) {
-          cliExecute(`fold ${garbageShirt}`);
-          // Turbo used a flag to cast pride
-          SourceTerminal.educate($skill`Turbo`);
-          equip($slot`shirt`, garbageShirt);
-          equip($slot`hat`, crown);
-        }
-      } else if (myBasestat(mainstat) > 100) {
-        if (!have(wad)) cliExecute(`fold ${wad}`);
-        equip($slot`hat`, wad);
-      } else {
-        equip($slot`hat`, crown);
+      if (
+        haveEquipped($item`makeshift garbage shirt`) &&
+        get("garbageShirtCharge") === 0 &&
+        myBasestat(mainstat) > 120
+      ) {
+        cliExecute(`fold ${$item`wad of used tape`}`);
+        equip($slot`hat`, $item`wad of used tape`);
       }
       oneOffEvents.innerElf();
       // This is where all the leveling happens
@@ -504,7 +491,7 @@ function postCoilWire() {
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas(); // 3724 - 987 - 950 - 215 - 95 - 28 = 1449 meat
-  if (myGardenType().toLowerCase().includes("peppermint")) cliExecute("garden pick");
+  cliExecute("garden pick");
   synthesize();
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
   const water = $item`cold-filtered water`;

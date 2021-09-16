@@ -29,6 +29,8 @@ import {
   get,
   have,
   Macro,
+  set,
+  SourceTerminal,
 } from "libram";
 import { adventure, adventureUrl, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
@@ -75,17 +77,6 @@ export const events: Record<string, eventData> = {
       const ghostLoc = get("ghostLocation");
       if (!ghostLoc) throw `No ghost location found?`;
       adventure(ghostLoc, MacroList.FreeFight);
-    },
-  },
-
-  backupCamera: {
-    max: 11,
-    current: () =>
-      get("lastCopyableMonster") !== $monster`sausage goblin` ? 11 : get("_backUpUses"),
-    run: () => {
-      equip($slot`acc3`, $item`backup camera`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -202,6 +193,27 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  digitize: {
+    max: 1,
+    current: () => get("_sourceTerminalDigitizeMonsterCount"),
+    run: () => {
+      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  ninjaCostume: {
+    max: 1,
+    current: () => availableAmount($item`li'l ninja costume`),
+    run: () => {
+      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
+      checkAvailable($item`li'l ninja costume`);
+    },
+  },
+
   snojo: {
     max: 10,
     current: () => get("_snojoFreeFights"),
@@ -229,6 +241,9 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => availableAmount($item`battle broom`) - 1,
     run: () => {
+      prep(Quest.LevelingScaling);
+      // Turbo used a flag to cast pride
+      SourceTerminal.educate($skill`Turbo`);
       selectBestFamiliar();
       fightWitchess($monster`Witchess Witch`, MacroList.WitchessWitch);
       equip($slot`acc2`, $item`battle broom`);
@@ -253,27 +268,6 @@ export const events: Record<string, eventData> = {
     run: () => {
       selectBestFamiliar(FamiliarFlag.NoAttack);
       adventure(upscaleDistrict, MacroList.FreeFight);
-    },
-  },
-
-  digitize: {
-    max: 1,
-    current: () => get("_sourceTerminalDigitizeMonsterCount"),
-    run: () => {
-      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  ninjaCostume: {
-    max: 1,
-    current: () => availableAmount($item`li'l ninja costume`),
-    run: () => {
-      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
-      selectBestFamiliar(FamiliarFlag.NoAttack);
-      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
-      checkAvailable($item`li'l ninja costume`);
     },
   },
 
@@ -359,6 +353,17 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       familiar($familiar`Pocket Professor`);
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  backupCamera: {
+    max: 11,
+    current: () =>
+      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
+    run: () => {
+      equip($slot`acc3`, $item`backup camera`);
+      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
@@ -524,9 +529,13 @@ export const oneOffEvents = {
   innerElf: (): void => {
     if (myLevel() >= 13 && !have($effect`Inner Elf`)) {
       familiar($familiar`Machine Elf`);
+      const prev = get("lastCopyableMonster");
       // TODO: Handle Mother is Busy Right Now case
       Clan.with(FAX_AND_SLIME_CLAN, () => adventure(slimeTube, MacroList.MotherSlime));
       checkEffect($effect`Inner Elf`);
+      if (prev && get("lastCopyableMonster") === $monster`Mother Slime`) {
+        set("lastCopyableMonster", prev); // Need the property to be more accurate sometimes
+      }
     }
   },
 
