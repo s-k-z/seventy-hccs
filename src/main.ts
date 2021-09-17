@@ -231,13 +231,24 @@ function levelAndDoQuests() {
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
       tryUse($item`short stack of pancakes`);
-      if (
-        haveEquipped($item`makeshift garbage shirt`) &&
-        get("garbageShirtCharge") === 0 &&
-        myBasestat(mainstat) > 120
-      ) {
-        cliExecute(`fold ${$item`wad of used tape`}`);
-        equip($slot`hat`, $item`wad of used tape`);
+      // Save the Garbage shirt for the last 37 fights
+      // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
+      const crown = $item`Iunion Crown`;
+      const garbageShirt = $item`makeshift garbage shirt`;
+      const wad = $item`wad of used tape`;
+      if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37) {
+        // Turbo used a flag to cast pride
+        if (get("garbageShirtCharge") === 3) SourceTerminal.educate($skill`Turbo`);
+        if (!have(garbageShirt)) {
+          cliExecute(`fold ${garbageShirt}`);
+          equip($slot`shirt`, garbageShirt);
+          equip($slot`hat`, crown);
+        }
+      } else if (myBasestat(mainstat) > 100) {
+        if (!have(wad)) cliExecute(`fold ${wad}`);
+        equip($slot`hat`, wad);
+      } else {
+        equip($slot`hat`, crown);
       }
       oneOffEvents.innerElf();
       // This is where all the leveling happens

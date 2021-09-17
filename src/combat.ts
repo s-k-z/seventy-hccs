@@ -13,7 +13,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $item, $location, $monster, $skill, get, Macro } from "libram";
+import { $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
@@ -165,7 +165,14 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro): 
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
   runCombat(macro.toString());
-  if (choiceFollowsFight()) runChoice(-1);
+  if (choiceFollowsFight()) visitUrl("choice.php");
   if (handlingChoice()) runChoice(-1);
   if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
+}
+
+export function fightWitchess(piece: Monster, macro: Macro): void {
+  macro.setAutoAttack();
+  Witchess.fightPiece(piece);
+  if (choiceFollowsFight()) visitUrl("choice.php");
+  if (handlingChoice()) runChoice(-1);
 }

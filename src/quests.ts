@@ -31,8 +31,7 @@ export const Quest: Record<string, QuestInfo> = {
   Beginning:       { id: 900, service: "" },
   Leveling:        { id: 901, service: "" },
   LevelingML:      { id: 902, service: "" },
-  LevelingScaling: { id: 903, service: "" },
-  DeepDark:        { id: 904, service: "" },
+  DeepDark:        { id: 903, service: "" },
 } as const;
 
 type QuestData = {
@@ -181,11 +180,6 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc3`, $item`Beach Comb`],
       ]),
     };
-  },
-
-  [Quest.LevelingScaling.id]: () => {
-    const equip = new Map([[$slot`shirt`, $item`makeshift garbage shirt`]]);
-    return { acquire: [], check: [], equipment: equip };
   },
 
   [Quest.Muscle.id]: () => {

@@ -30,11 +30,10 @@ import {
   have,
   Macro,
   set,
-  SourceTerminal,
 } from "libram";
-import { adventure, adventureUrl, MacroList, mapMonster } from "./combat";
+import { adventure, adventureUrl, fightWitchess, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
-import { fightWitchess, spendAllMpOnLibrams } from "./iotms";
+import { spendAllMpOnLibrams } from "./iotms";
 import { checkAvailable, checkEffect, tryUse, voterMonsterNow, withEquipment } from "./lib";
 import { prep, Quest } from "./quests";
 
@@ -241,9 +240,6 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => availableAmount($item`battle broom`) - 1,
     run: () => {
-      prep(Quest.LevelingScaling);
-      // Turbo used a flag to cast pride
-      SourceTerminal.educate($skill`Turbo`);
       selectBestFamiliar();
       fightWitchess($monster`Witchess Witch`, MacroList.WitchessWitch);
       equip($slot`acc2`, $item`battle broom`);

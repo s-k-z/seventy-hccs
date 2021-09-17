@@ -11,7 +11,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $class, $effect, $item, $skill, $stat, get, have, Macro, Witchess } from "libram";
+import { $class, $effect, $item, $skill, $stat, get, have } from "libram";
 import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
 
 export function castBestLibram(): void {
@@ -37,11 +37,6 @@ export function castBestLibram(): void {
   } else {
     useSkill($skill`Summon Resolutions`);
   }
-}
-
-export function fightWitchess(piece: Monster, macro: Macro): void {
-  macro.setAutoAttack();
-  Witchess.fightPiece(piece);
 }
 
 export function gazeAtTheStars(): void {
