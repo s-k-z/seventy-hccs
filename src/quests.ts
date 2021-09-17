@@ -167,19 +167,21 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.LevelingML.id]: () => {
-    return {
-      acquire: [$effect`Ur-Kel's Aria of Annoyance`, $effect`Drescher's Annoying Noise`],
-      check: [],
-      equipment: new Map([
-        [$slot`back`, $item`LOV Epaulettes`],
-        [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-        [$slot`off-hand`, $item`weeping willow wand`],
-        [$slot`pants`, $item`Cargo Cultist Shorts`],
-        [$slot`acc1`, $item`hewn moon-rune spoon`],
-        [$slot`acc2`, $item`gold detective badge`],
-        [$slot`acc3`, $item`Beach Comb`],
-      ]),
-    };
+    const acquire = [
+      $effect`Drescher's Annoying Noise`,
+      $effect`Polka of Plenty`,
+      $effect`Ur-Kel's Aria of Annoyance`,
+    ];
+    const equipment = new Map([
+      [$slot`back`, $item`LOV Epaulettes`],
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`off-hand`, $item`weeping willow wand`],
+      [$slot`pants`, $item`Cargo Cultist Shorts`],
+      [$slot`acc1`, $item`hewn moon-rune spoon`],
+      [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
+      [$slot`acc3`, $item`Beach Comb`],
+    ]);
+    return { acquire: acquire, check: [], equipment: equipment };
   },
 
   [Quest.Muscle.id]: () => {
