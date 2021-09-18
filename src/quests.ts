@@ -152,7 +152,7 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Polka of Plenty`,
     ];
     const mpSavings = numericModifier($item`pantogram pants`, "mana cost") !== 0;
-    const outfit = new Map([
+    const toWear = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`off-hand`, $item`weeping willow wand`],
       [$slot`pants`, mpSavings ? $item`pantogram pants` : $item`Cargo Cultist Shorts`],
@@ -161,18 +161,18 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
-    const retrocape = !have($item`LOV Epaulettes`) ? "heck thrill" : undefined;
-    if (have($item`LOV Epaulettes`)) outfit.set($slot`back`, $item`LOV Epaulettes`);
-    return { acquire: toAcquire, check: [], equipment: outfit, retrocape: retrocape };
+    const toCape = !have($item`LOV Epaulettes`) ? "heck thrill" : undefined;
+    if (have($item`LOV Epaulettes`)) toWear.set($slot`back`, $item`LOV Epaulettes`);
+    return { acquire: toAcquire, check: [], equipment: toWear, retrocape: toCape };
   },
 
   [Quest.LevelingML.id]: () => {
-    const acquire = [
+    const toAcquire = [
       $effect`Drescher's Annoying Noise`,
       $effect`Polka of Plenty`,
       $effect`Ur-Kel's Aria of Annoyance`,
     ];
-    const equipment = new Map([
+    const toWear = new Map([
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`off-hand`, $item`weeping willow wand`],
@@ -181,7 +181,7 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
-    return { acquire: acquire, check: [], equipment: equipment };
+    return { acquire: toAcquire, check: [], equipment: toWear };
   },
 
   [Quest.Muscle.id]: () => {
@@ -236,13 +236,13 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.DeepDark.id]: () => {
-    const outfit = new Map([
+    const toWear = new Map([
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`pants`, $item`pantogram pants`],
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
-    if (have($item`burning paper crane`)) outfit.set($slot`off-hand`, $item`burning paper crane`);
-    return { acquire: [], check: [], equipment: outfit, retrocape: "vampire hold" };
+    if (have($item`burning paper crane`)) toWear.set($slot`off-hand`, $item`burning paper crane`);
+    return { acquire: [], check: [], equipment: toWear, retrocape: "vampire hold" };
   },
 
   [Quest.SpellDamage.id]: () => {
@@ -299,15 +299,15 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Meteor Showered`,
       $effect`Spit Upon`,
     ];
-    const outfit = new Map([
+    const toWear = new Map([
       [$slot`weapon`, $item`broken champagne bottle`],
       [$slot`off-hand`, $item`dented scepter`],
       [$slot`acc1`, $item`Brutal brogues`],
       [$slot`acc2`, $item`Powerful Glove`],
     ]);
     const candle = $item`extra-wide head candle`;
-    if (have(candle)) outfit.set($slot`hat`, candle);
-    return { acquire: toAcquire, check: toCheck, equipment: outfit };
+    if (have(candle)) toWear.set($slot`hat`, candle);
+    return { acquire: toAcquire, check: toCheck, equipment: toWear };
   },
 
   [Quest.CombatFrequency.id]: () => {
@@ -405,7 +405,7 @@ const questRecords: Record<number, () => QuestData> = {
       $item`runed taper candle`,
     ];
     const sparkler = $item`oversized sparkler`;
-    const outfit = new Map([
+    const toWear = new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`back`, $item`vampyric cloake`],
       [$slot`off-hand`, carrot ? $item`latte lovers member's mug` : $item`Kramco Sausage-o-Matic™`],
@@ -414,13 +414,13 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc3`, $item`your cowboy boots`],
       [$slot`familiar`, $item`li'l ninja costume`],
     ]);
-    if (!candles.some(have) && have(sparkler)) outfit.set($slot`weapon`, sparkler);
+    if (!candles.some(have) && have(sparkler)) toWear.set($slot`weapon`, sparkler);
     // can only have one candle
-    for (const c of candles) if (have(c)) outfit.set($slot`weapon`, c);
+    for (const c of candles) if (have(c)) toWear.set($slot`weapon`, c);
     return {
       acquire: toAcquire,
       check: toCheck,
-      equipment: outfit,
+      equipment: toWear,
       familiar: $familiar`Trick-or-Treating Tot`,
     };
   },
