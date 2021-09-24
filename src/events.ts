@@ -79,6 +79,17 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  backupCamera: {
+    max: 11,
+    current: () =>
+      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
+    run: () => {
+      equip($slot`acc3`, $item`backup camera`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
   ghostCarol: {
     max: 0,
     current: () =>
@@ -192,27 +203,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  digitize: {
-    max: 1,
-    current: () => get("_sourceTerminalDigitizeMonsterCount"),
-    run: () => {
-      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  ninjaCostume: {
-    max: 1,
-    current: () => availableAmount($item`li'l ninja costume`),
-    run: () => {
-      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
-      selectBestFamiliar(FamiliarFlag.NoAttack);
-      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
-      checkAvailable($item`li'l ninja costume`);
-    },
-  },
-
   snojo: {
     max: 10,
     current: () => get("_snojoFreeFights"),
@@ -264,6 +254,27 @@ export const events: Record<string, eventData> = {
     run: () => {
       selectBestFamiliar(FamiliarFlag.NoAttack);
       adventure(upscaleDistrict, MacroList.FreeFight);
+    },
+  },
+
+  digitize: {
+    max: 1,
+    current: () => get("_sourceTerminalDigitizeMonsterCount"),
+    run: () => {
+      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  ninjaCostume: {
+    max: 1,
+    current: () => availableAmount($item`li'l ninja costume`),
+    run: () => {
+      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
+      checkAvailable($item`li'l ninja costume`);
     },
   },
 
@@ -349,17 +360,6 @@ export const events: Record<string, eventData> = {
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       familiar($familiar`Pocket Professor`);
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  backupCamera: {
-    max: 11,
-    current: () =>
-      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
-    run: () => {
-      equip($slot`acc3`, $item`backup camera`);
-      selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
