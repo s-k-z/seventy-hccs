@@ -4,6 +4,7 @@ import {
   getAutoAttack,
   handlingChoice,
   inMultiFight,
+  mpCost,
   myTurncount,
   runChoice,
   runCombat,
@@ -62,11 +63,11 @@ const CigKill = new Macro()
 const DefaultMacro = new Macro()
   .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
   .if_(`monsterid ${toxicBeastie}`, Backup)
+  .if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`)) // Turbo used a flag to cast pride
   .if_(`monsterid ${amateurNinja} || monsterid ${toxicBeastie}`, FreeInstaKill)
   .if_(`snarfblat ${retailDistrict}`, CigKill)
   .trySkill($skill`Digitize`)
   .trySkill($skill`%fn, spit on me!`)
-  .if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`)) // Turbo used a flag to cast pride
   .skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
@@ -75,7 +76,8 @@ const DefaultMacro = new Macro()
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
   .skill($skill`Sing Along`)
-  .skill($skill`Saucestorm`)
+  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+  .attack()
   .repeat();
 
 export const MacroList = {
