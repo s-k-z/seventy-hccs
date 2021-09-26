@@ -101,9 +101,11 @@ export const events: Record<string, eventData> = {
         $effect`Let It Snow/Boil/Stink/Frighten/Grease`,
       ].reduce((sum, carol) => sum + haveEffect(carol), 0) - 1,
     run: () => {
-      equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
       familiar($familiar`Ghost of Crimbo Carols`);
-      adventure(direWarren, MacroList.Banish);
+      withEquipment(
+        () => adventure(direWarren, MacroList.Banish),
+        [[$slot`acc3`, $item`Kremlin's Greatest Briefcase`]]
+      );
       checkEffect($effect`Do You Crush What I Crush?`);
     },
   },
@@ -271,9 +273,11 @@ export const events: Record<string, eventData> = {
     max: 1,
     current: () => availableAmount($item`li'l ninja costume`),
     run: () => {
-      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
-      mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight);
+      withEquipment(
+        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
+        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
+      );
       checkAvailable($item`li'l ninja costume`);
     },
   },

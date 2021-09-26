@@ -77,7 +77,7 @@ import {
   scavengeDaycare,
   spendAllMpOnLibrams,
   tuneMoon,
-  useLibramsDrops,
+  useDroppedItems,
   vote,
 } from "./iotms";
 import {
@@ -223,14 +223,13 @@ function levelAndDoQuests() {
         castBestLibram();
         continue leveling; // get more MP and make more librams before adventuring on
       }
-      useLibramsDrops();
+      useDroppedItems();
 
       while (have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKOS_PER_FIGHT)) {
         create(BRICKO_TARGET_ITEM);
       }
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      tryUse($item`short stack of pancakes`);
       // Save the Garbage shirt for the last 37 fights
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
       const crown = $item`Iunion Crown`;
@@ -378,6 +377,7 @@ function preCoilWire() {
   SongBoom.setSong("Total Eclipse of Your Meat");
   // 8601 meat
   openQuestZones();
+  equip($slot`acc2`, $item`Powerful Glove`); // Optimize away equipping & unequipping to buff up
   prep(Quest.Beginning);
   //prettier-ignore
   for (const [check, retrieve] of [
@@ -459,7 +459,7 @@ function postCoilWire() {
   }
   wishEffect($effect`All Is Forgiven`);
   wishEffect($effect`Witch Breaded`);
-  useLibramsDrops(); // In case we obtained a green candy heart already, don't want to synthesize it later
+  useDroppedItems(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
   if (!get("hasRange")) {
     const range = $item`Dramatic™ range`;
@@ -503,7 +503,13 @@ function postCoilWire() {
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas(); // 3724 - 987 - 950 - 215 - 95 - 28 = 1449 meat
   cliExecute("garden pick");
-  synthesize();
+  cliExecute("refresh inventory");
+  const toSynth = [
+    $effect`Synthesis: Collection`,
+    $effect`Synthesis: Smart`,
+    $effect`Synthesis: Learning`,
+  ].filter((effect) => !have(effect));
+  synthesize(toSynth, new Set([$item`Chubby and Plump bar`, $item`sugar sheet`]), true);
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
   const water = $item`cold-filtered water`;
   if (get("tomeSummons") < 3 && !have(water) && !have($effect`Purity of Spirit`)) create(water);

@@ -15,13 +15,6 @@ import { $class, $effect, $item, $skill, $stat, get, have } from "libram";
 import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
 
 export function castBestLibram(): void {
-  const rareResolutions = [
-    $item`resolution: be kinder`,
-    $item`resolution: be luckier`,
-    $item`resolution: be more adventurous`,
-    $effect`Kindly Resolve`,
-    $effect`Fortunate Resolve`,
-  ].reduce((sum, res) => sum + (res instanceof Item ? itemAmount(res) : have(res) ? 1 : 0), 0);
   const brickosOwned = itemAmount(BRICKO_TARGET_ITEM);
   const brickosNeeded = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + brickosOwned));
   if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, brickosNeeded)) {
@@ -30,7 +23,7 @@ export function castBestLibram(): void {
     useSkill($skill`Summon Candy Heart`);
   } else if (!have($item`love song of icy revenge`, 4)) {
     useSkill($skill`Summon Love Song`);
-  } else if (rareResolutions < 3) {
+  } else if (get("_resolutionRareSummons") < 3) {
     useSkill($skill`Summon Resolutions`);
   } else if (!have($item`pulled blue taffy`, 4)) {
     useSkill($skill`Summon Taffy`);
@@ -105,23 +98,22 @@ export function tuneMoon(moon: MoonSign): void {
   visitUrl(`inv_use.php?whichitem=${toInt($item`hewn moon-rune spoon`)}&doit=96&whichsign=${moon}`);
 }
 
-const libramDrops = new Map([
-  [$item`green candy heart`, 1],
-  [$item`pulled violet taffy`, 50],
-  [$item`pulled yellow taffy`, 50],
-  [$item`resolution: be feistier`, 1],
-  [$item`resolution: be happier`, 1],
-  [$item`resolution: be kinder`, 1],
-  [$item`resolution: be luckier`, 1],
-  [$item`resolution: be smarter`, 1],
-  [$item`resolution: be wealthier`, 1],
-]);
-
-export function useLibramsDrops(): void {
-  for (const [item, duration] of libramDrops) {
-    while (have(item) && !have(effectModifier(item, "effect"), duration)) {
-      use(item);
-    }
+export function useDroppedItems(): void {
+  for (const multiUse of [$item`pulled violet taffy`]) {
+    if (have(multiUse)) use(itemAmount(multiUse), multiUse);
+  }
+  for (const singleUse of [
+    $item`green candy heart`,
+    $item`pulled yellow taffy`,
+    $item`resolution: be feistier`,
+    $item`resolution: be happier`,
+    $item`resolution: be kinder`,
+    $item`resolution: be luckier`,
+    $item`resolution: be smarter`,
+    $item`resolution: be wealthier`,
+    $item`short stack of pancakes`,
+  ]) {
+    if (have(singleUse) && !have(effectModifier(singleUse, "effect"))) use(singleUse);
   }
 }
 

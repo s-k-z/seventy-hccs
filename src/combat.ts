@@ -14,7 +14,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
+import { $item, $monster, $skill, get, Macro, Witchess } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
@@ -24,7 +24,7 @@ const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquareMon = $monster`Performer of Actions`.id;
 const DMTCircleMon = $monster`Thinker of Thoughts`.id;
 
-const retailDistrict = toUrl($location`Gingerbread Upscale Retail District`).split("=")[1];
+const retailDistrict = 480;
 
 const Ghost = new Macro()
   .skill($skill`Summon Love Gnats`)
@@ -76,7 +76,7 @@ const DefaultMacro = new Macro()
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
   .skill($skill`Sing Along`)
-  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+  .while_(`!mpbelow ${mpCost($skill`Candyblast`)}`, Macro.skill($skill`Candyblast`))
   .attack()
   .repeat();
 

@@ -1,5 +1,5 @@
 import {
-  cliExecute,
+  create,
   getIngredients,
   getInventory,
   sweetSynthesis,
@@ -7,7 +7,7 @@ import {
   toItem,
   useSkill,
 } from "kolmafia";
-import { $effect, $effects, $item, $skill, get, have } from "libram";
+import { $effect, $item, $skill, get, have } from "libram";
 
 const enum candyType {
   complex = "complex",
@@ -41,6 +41,9 @@ function tier(effect: Effect) {
 }
 
 type candySet = { candy: Item; count: number }[];
+// TODO: handle peppermint patty and peppermint crook which take 2 and 3 sprouts respectively
+// Need to alter search function to weight cost of candy transforms
+const peppermintGroup: candySet = [{ candy: $item`peppermint twist`, count: 1 }];
 const sugarGroup: candySet = [
   $item`sugar shotgun`,
   $item`sugar shillelagh`,
@@ -52,34 +55,28 @@ const sugarGroup: candySet = [
 ].map((i) => {
   return { candy: i, count: 1 };
 });
-// TODO: handle peppermint patty and peppermint crook which take 2 and 3 sprouts respectively
-// Need to alter search function to weight cost of candy transforms
-const peppermintGroup: candySet = [{ candy: $item`peppermint twist`, count: 1 }];
 const transforms = new Map<Item, candySet>([
-  [$item`sugar sheet`, sugarGroup],
   [$item`peppermint sprout`, peppermintGroup],
+  [$item`sugar sheet`, sugarGroup],
 ]); // Cyclical references will break searching, no keys allowed in the candySets!
 
 /**
  * Search for a set candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.
  *
  * Throw an error if a solution can't be found.
- * @param allowTomeUse Disallow cast summon sugar sheet tome if false. Default true
- * @param targetEffects Optional list of effects to search for and use.
- * @param reserveCandies Optional list of [candy,quantity] to keep if possible
+ * @param targetEffects Array of effects to search for and cast.
+ * @param allowTomeUse Allow casting summon sugar sheet tome.
+ * @param reserveCandies Set of candies to keep if possible.
  */
 export function synthesize(
-  allowTomeUse = true,
-  targetEffects: Effect[] = $effects`Synthesis: Collection, Synthesis: Smart, Synthesis: Learning`.filter(
-    (effect) => !have(effect)
-  ),
-  reserveCandies: Set<Item> = new Set([$item`Chubby and Plump bar`, $item`sugar sheet`])
+  targetEffects: Effect[],
+  reserveCandies: Set<Item>,
+  allowTomeUse: boolean
 ): void {
   const candies = {
     [candyType.complex]: <candySet>[],
     [candyType.simple]: <candySet>[],
   };
-  cliExecute("refresh inventory");
   const inv = getInventory();
   // Initialize candies with ones in inventory
   Object.entries(inv).forEach(([name, count]) => {
@@ -88,15 +85,16 @@ export function synthesize(
   });
   // Pretend summon sugar sheets if tome summons available
   if (allowTomeUse && get("tomeSummons") < 3) {
+    const owned = inv["sugar sheet"] ?? 0;
     candies.complex.push({
       candy: $item`sugar sheet`,
-      count: inv["sugar sheet"] + 3 - get("tomeSummons"),
+      count: owned + 3 - get("tomeSummons"),
     });
   }
   // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
   let sim: simulateResult = { result: false, pairs: [] };
   for (let i = 0; i <= reserveCandies.size; i++) {
-    const reserved = new Map<Item, number>([...reserveCandies].slice(i).map((r) => [r, 99]));
+    const reserved = new Map<Item, number>([...reserveCandies].slice(i).map((r) => [r, 999999]));
     sim = simulate(targetEffects, candies, reserved);
     if (sim.result) break;
   }
@@ -109,7 +107,7 @@ export function synthesize(
       if (!have(creatable) && transforms.has(source)) {
         // only cast summon sugar sheets if needed
         if (allowTomeUse && source === $item`sugar sheet`) useSkill($skill`Summon Sugar Sheets`);
-        cliExecute(`make ${creatable}`);
+        create(creatable);
       }
     }
     sweetSynthesis(pair[0], pair[1]);
