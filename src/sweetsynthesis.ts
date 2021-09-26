@@ -41,8 +41,6 @@ function tier(effect: Effect) {
 }
 
 type candySet = { candy: Item; count: number }[];
-// TODO: handle peppermint patty and peppermint crook which take 2 and 3 sprouts respectively
-// Need to alter search function to weight cost of candy transforms
 const peppermintGroup: candySet = [{ candy: $item`peppermint twist`, count: 1 }];
 const sugarGroup: candySet = [
   $item`sugar shotgun`,
@@ -61,24 +59,25 @@ const transforms = new Map<Item, candySet>([
 ]); // Cyclical references will break searching, no keys allowed in the candySets!
 
 /**
- * Search for a set candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.
+ * Search for candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.
  *
- * Throw an error if a solution can't be found.
+ * Return true after obtaining all effects.
+ *
+ * Return false if not all effects can be obtained before casting.
  * @param targetEffects Array of effects to search for and cast.
+ * @param reserveCandies Set of candies that will not be used. Always includes Ultra Mega Sour Ball.
  * @param allowTomeUse Allow casting summon sugar sheet tome.
- * @param reserveCandies Set of candies to keep if possible.
  */
 export function synthesize(
   targetEffects: Effect[],
   reserveCandies: Set<Item>,
   allowTomeUse: boolean
-): void {
+): boolean {
   const candies = {
     [candyType.complex]: <candySet>[],
     [candyType.simple]: <candySet>[],
   };
   const inv = getInventory();
-  // Initialize candies with ones in inventory
   Object.entries(inv).forEach(([name, count]) => {
     const item = Item.get(name);
     candies[item.candyType as candyType]?.push({ candy: item, count: count });
@@ -91,16 +90,13 @@ export function synthesize(
       count: owned + 3 - get("tomeSummons"),
     });
   }
-  // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
-  let sim: simulateResult = { result: false, pairs: [] };
-  for (let i = 0; i <= reserveCandies.size; i++) {
-    const reserved = new Map<Item, number>([...reserveCandies].slice(i).map((r) => [r, 999999]));
-    sim = simulate(targetEffects, candies, reserved);
-    if (sim.result) break;
-  }
-  if (!sim.result) throw `Unable to find a combination for all synthesis targets`;
+  const reserved = new Map<Item, number>(
+    [...reserveCandies, $item`Ultra Mega Sour Ball`].map((r) => [r, 999999])
+  );
+  const solution = simulate(targetEffects, candies, reserved);
+  if (!solution.result) return false;
   // Found a solution, now transform candies and synthesize
-  for (const pair of sim.pairs) {
+  for (const pair of solution.pairs) {
     for (const creatable of pair) {
       // source will be $item`none` if no ingredients
       const source = toItem(Object.keys(getIngredients(creatable))[0]);
@@ -112,19 +108,20 @@ export function synthesize(
     }
     sweetSynthesis(pair[0], pair[1]);
   }
+  return true;
 }
 
 type simulateResult = { result: boolean; pairs: [Item, Item][] };
 
 function simulate(
-  synthTargets: Effect[],
+  targetEffects: Effect[],
   candies: { complex: candySet; simple: candySet },
   reserveCandies: Map<Item, number>
 ): simulateResult {
   const sim: simulateResult = { result: true, pairs: [] };
   const used = new Map<Item, number>(reserveCandies);
   const markUsed = (item: Item) => used.set(item, 1 + (used.get(item) ?? 0));
-  for (const target of synthTargets) {
+  for (const target of targetEffects) {
     const startA = candies[tier(target).a];
     const startB = candies[tier(target).b];
     const res = search(target, startA, startB, used);

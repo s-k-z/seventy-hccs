@@ -502,14 +502,22 @@ function postCoilWire() {
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas(); // 3724 - 987 - 950 - 215 - 95 - 28 = 1449 meat
-  cliExecute("garden pick");
-  cliExecute("refresh inventory");
   const toSynth = [
     $effect`Synthesis: Collection`,
     $effect`Synthesis: Smart`,
     $effect`Synthesis: Learning`,
   ].filter((effect) => !have(effect));
-  synthesize(toSynth, new Set([$item`Chubby and Plump bar`, $item`sugar sheet`]), true);
+  if (toSynth.length > 0) {
+    cliExecute("garden pick");
+    cliExecute("refresh inventory");
+    // Sweet synthesis with reserved candies omitted, add them back individually until a solution is found
+    const toKeep = [$item`Chubby and Plump bar`, $item`sugar sheet`];
+    for (let tries = 0; tries <= toKeep.length; tries++) {
+      if (!synthesize(toSynth, new Set(toKeep.slice(tries)), true) && tries === toKeep.length) {
+        throw `Unable to find a combination for all synthesis targets`;
+      }
+    }
+  }
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
   const water = $item`cold-filtered water`;
   if (get("tomeSummons") < 3 && !have(water) && !have($effect`Purity of Spirit`)) create(water);
