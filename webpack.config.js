@@ -14,10 +14,7 @@ module.exports = {
     // Change the final string here to the name you want your script to use in mafia.
     path: path.resolve(__dirname, "KoLmafia", "scripts", packageData.name),
     filename: "[name].js",
-    library: {
-      name: "[name]",
-      type: "commonjs",
-    },
+    libraryTarget: "commonjs",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],

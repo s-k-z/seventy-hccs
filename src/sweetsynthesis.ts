@@ -73,6 +73,7 @@ export function synthesize(
   reserveCandies: Set<Item>,
   allowTomeUse: boolean
 ): boolean {
+  if (targetEffects.length === 0) return true;
   const candies = {
     [candyType.complex]: <candySet>[],
     [candyType.simple]: <candySet>[],
@@ -155,6 +156,8 @@ function search(
   indexA: number = setA.length - 1,
   indexB: number = setB.length - 1
 ): searchResult {
+  const NO_SOLUTION = { found: false, a: $item`none`, b: $item`none` };
+  if (setA.length === 0 || setB.length === 0) return NO_SOLUTION;
   const get = (set: candySet, index: number): { candy: Item; count: number } => {
     const candy = set[index].candy;
     const count = set[index].count - (used.get(candy) || 0);
@@ -187,6 +190,5 @@ function search(
   if (indexB > 0) return search(target, setA, setB, used, fromA, fromB, indexA, indexB - 1);
   // Loop around once b reaches 0
   if (indexA > 0) return search(target, setA, setB, used, fromA, fromB, indexA - 1);
-  // No solution found
-  return { found: false, a: $item`none`, b: $item`none` };
+  return NO_SOLUTION;
 }

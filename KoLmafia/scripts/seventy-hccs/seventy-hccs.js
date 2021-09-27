@@ -18815,7 +18815,7 @@ function checkReadyToAscend() {
   }, true);
 }
 ;// CONCATENATED MODULE: ./src/sweetsynthesis.ts
-var sweetsynthesis_templateObject, sweetsynthesis_templateObject2, sweetsynthesis_templateObject3, sweetsynthesis_templateObject4, sweetsynthesis_templateObject5, sweetsynthesis_templateObject6, sweetsynthesis_templateObject7, sweetsynthesis_templateObject8, sweetsynthesis_templateObject9, sweetsynthesis_templateObject10, sweetsynthesis_templateObject11, sweetsynthesis_templateObject12, sweetsynthesis_templateObject13, sweetsynthesis_templateObject14, sweetsynthesis_templateObject15, sweetsynthesis_templateObject16, sweetsynthesis_templateObject17, sweetsynthesis_templateObject18, sweetsynthesis_templateObject19, sweetsynthesis_templateObject20, sweetsynthesis_templateObject21, sweetsynthesis_templateObject22, sweetsynthesis_templateObject23, sweetsynthesis_templateObject24, sweetsynthesis_templateObject25, sweetsynthesis_templateObject26, sweetsynthesis_templateObject27, sweetsynthesis_templateObject28, sweetsynthesis_templateObject29, sweetsynthesis_templateObject30;
+var sweetsynthesis_templateObject, sweetsynthesis_templateObject2, sweetsynthesis_templateObject3, sweetsynthesis_templateObject4, sweetsynthesis_templateObject5, sweetsynthesis_templateObject6, sweetsynthesis_templateObject7, sweetsynthesis_templateObject8, sweetsynthesis_templateObject9, sweetsynthesis_templateObject10, sweetsynthesis_templateObject11, sweetsynthesis_templateObject12, sweetsynthesis_templateObject13, sweetsynthesis_templateObject14, sweetsynthesis_templateObject15, sweetsynthesis_templateObject16, sweetsynthesis_templateObject17, sweetsynthesis_templateObject18, sweetsynthesis_templateObject19, sweetsynthesis_templateObject20, sweetsynthesis_templateObject21, sweetsynthesis_templateObject22, sweetsynthesis_templateObject23, sweetsynthesis_templateObject24, sweetsynthesis_templateObject25, sweetsynthesis_templateObject26, sweetsynthesis_templateObject27, sweetsynthesis_templateObject28, sweetsynthesis_templateObject29, sweetsynthesis_templateObject30, sweetsynthesis_templateObject31;
 
 function sweetsynthesis_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = sweetsynthesis_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
@@ -18888,8 +18888,6 @@ function tier(effect) {
   throw "Not a type of synthesis effect: ".concat(effect);
 }
 
-// TODO: handle peppermint patty and peppermint crook which take 2 and 3 sprouts respectively
-// Need to alter search function to weight cost of candy transforms
 var peppermintGroup = [{
   candy: (0,dist.$item)(sweetsynthesis_templateObject16 || (sweetsynthesis_templateObject16 = sweetsynthesis_taggedTemplateLiteral(["peppermint twist"]))),
   count: 1
@@ -18903,20 +18901,22 @@ var sugarGroup = [(0,dist.$item)(sweetsynthesis_templateObject17 || (sweetsynthe
 var transforms = new Map([[(0,dist.$item)(sweetsynthesis_templateObject24 || (sweetsynthesis_templateObject24 = sweetsynthesis_taggedTemplateLiteral(["peppermint sprout"]))), peppermintGroup], [(0,dist.$item)(sweetsynthesis_templateObject25 || (sweetsynthesis_templateObject25 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))), sugarGroup]]); // Cyclical references will break searching, no keys allowed in the candySets!
 
 /**
- * Search for a set candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.
+ * Search for candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.
  *
- * Throw an error if a solution can't be found.
+ * Return true after obtaining all effects.
+ *
+ * Return false if not all effects can be obtained before casting.
  * @param targetEffects Array of effects to search for and cast.
+ * @param reserveCandies Set of candies that will not be used. Always includes Ultra Mega Sour Ball.
  * @param allowTomeUse Allow casting summon sugar sheet tome.
- * @param reserveCandies Set of candies to keep if possible.
  */
 
 function synthesize(targetEffects, reserveCandies, allowTomeUse) {
   var _candies;
 
+  if (targetEffects.length === 0) return true;
   var candies = (_candies = {}, sweetsynthesis_defineProperty(_candies, candyType.complex, []), sweetsynthesis_defineProperty(_candies, candyType.simple, []), _candies);
-  var inv = (0,external_kolmafia_.getInventory)(); // Initialize candies with ones in inventory
-
+  var inv = (0,external_kolmafia_.getInventory)();
   Object.entries(inv).forEach(_ref => {
     var _candies2;
 
@@ -18939,23 +18939,13 @@ function synthesize(targetEffects, reserveCandies, allowTomeUse) {
       candy: (0,dist.$item)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"]))),
       count: owned + 3 - (0,dist.get)("tomeSummons")
     });
-  } // Simulate sweet synthesis with reserved candies omitted, add them back individually until a solution is found
-
-
-  var sim = {
-    result: false,
-    pairs: []
-  };
-
-  for (var i = 0; i <= reserveCandies.size; i++) {
-    var reserved = new Map(sweetsynthesis_toConsumableArray(reserveCandies).slice(i).map(r => [r, 999999]));
-    sim = simulate(targetEffects, candies, reserved);
-    if (sim.result) break;
   }
 
-  if (!sim.result) throw "Unable to find a combination for all synthesis targets"; // Found a solution, now transform candies and synthesize
+  var reserved = new Map([].concat(sweetsynthesis_toConsumableArray(reserveCandies), [(0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["Ultra Mega Sour Ball"])))]).map(r => [r, 999999]));
+  var solution = simulate(targetEffects, candies, reserved);
+  if (!solution.result) return false; // Found a solution, now transform candies and synthesize
 
-  var _iterator = sweetsynthesis_createForOfIteratorHelper(sim.pairs),
+  var _iterator = sweetsynthesis_createForOfIteratorHelper(solution.pairs),
       _step;
 
   try {
@@ -18973,7 +18963,7 @@ function synthesize(targetEffects, reserveCandies, allowTomeUse) {
 
           if (!(0,dist.have)(creatable) && transforms.has(source)) {
             // only cast summon sugar sheets if needed
-            if (allowTomeUse && source === (0,dist.$item)(sweetsynthesis_templateObject27 || (sweetsynthesis_templateObject27 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))) (0,external_kolmafia_.useSkill)((0,dist.$skill)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["Summon Sugar Sheets"]))));
+            if (allowTomeUse && source === (0,dist.$item)(sweetsynthesis_templateObject28 || (sweetsynthesis_templateObject28 = sweetsynthesis_taggedTemplateLiteral(["sugar sheet"])))) (0,external_kolmafia_.useSkill)((0,dist.$skill)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["Summon Sugar Sheets"]))));
             (0,external_kolmafia_.create)(creatable);
           }
         }
@@ -18990,9 +18980,11 @@ function synthesize(targetEffects, reserveCandies, allowTomeUse) {
   } finally {
     _iterator.f();
   }
+
+  return true;
 }
 
-function simulate(synthTargets, candies, reserveCandies) {
+function simulate(targetEffects, candies, reserveCandies) {
   var sim = {
     result: true,
     pairs: []
@@ -19005,7 +18997,7 @@ function simulate(synthTargets, candies, reserveCandies) {
     return used.set(item, 1 + ((_used$get = used.get(item)) !== null && _used$get !== void 0 ? _used$get : 0));
   };
 
-  var _iterator3 = sweetsynthesis_createForOfIteratorHelper(synthTargets),
+  var _iterator3 = sweetsynthesis_createForOfIteratorHelper(targetEffects),
       _step3;
 
   try {
@@ -19040,6 +19032,12 @@ function search(target, setA, setB, used) {
   var fromB = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : undefined;
   var indexA = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : setA.length - 1;
   var indexB = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : setB.length - 1;
+  var NO_SOLUTION = {
+    found: false,
+    a: (0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
+    b: (0,dist.$item)(sweetsynthesis_templateObject31 || (sweetsynthesis_templateObject31 = sweetsynthesis_taggedTemplateLiteral(["none"])))
+  };
+  if (setA.length === 0 || setB.length === 0) return NO_SOLUTION;
 
   var get = (set, index) => {
     var candy = set[index].candy;
@@ -19086,13 +19084,8 @@ function search(target, setA, setB, used) {
 
   if (indexB > 0) return search(target, setA, setB, used, fromA, fromB, indexA, indexB - 1); // Loop around once b reaches 0
 
-  if (indexA > 0) return search(target, setA, setB, used, fromA, fromB, indexA - 1); // No solution found
-
-  return {
-    found: false,
-    a: (0,dist.$item)(sweetsynthesis_templateObject29 || (sweetsynthesis_templateObject29 = sweetsynthesis_taggedTemplateLiteral(["none"]))),
-    b: (0,dist.$item)(sweetsynthesis_templateObject30 || (sweetsynthesis_templateObject30 = sweetsynthesis_taggedTemplateLiteral(["none"])))
-  };
+  if (indexA > 0) return search(target, setA, setB, used, fromA, fromB, indexA - 1);
+  return NO_SOLUTION;
 }
 ;// CONCATENATED MODULE: ./src/main.ts
 var main_templateObject, main_templateObject2, main_templateObject3, main_templateObject4, main_templateObject5, main_templateObject6, main_templateObject7, main_templateObject8, main_templateObject9, main_templateObject10, main_templateObject11, main_templateObject12, main_templateObject13, main_templateObject14, main_templateObject15, main_templateObject16, main_templateObject17, main_templateObject18, main_templateObject19, main_templateObject20, main_templateObject21, main_templateObject22, main_templateObject23, main_templateObject24, main_templateObject25, main_templateObject26, main_templateObject27, main_templateObject28, main_templateObject29, main_templateObject30, main_templateObject31, main_templateObject32, main_templateObject33, main_templateObject34, main_templateObject35, main_templateObject36, main_templateObject37, main_templateObject38, main_templateObject39, main_templateObject40, main_templateObject41, main_templateObject42, main_templateObject43, main_templateObject44, main_templateObject45, main_templateObject46, main_templateObject47, main_templateObject48, main_templateObject49, main_templateObject50, main_templateObject51, main_templateObject52, main_templateObject53, main_templateObject54, main_templateObject55, main_templateObject56, main_templateObject57, main_templateObject58, main_templateObject59, main_templateObject60, main_templateObject61, main_templateObject62, main_templateObject63, main_templateObject64, main_templateObject65, main_templateObject66, main_templateObject67, main_templateObject68, main_templateObject69, main_templateObject70, main_templateObject71, main_templateObject72, main_templateObject73, main_templateObject74, main_templateObject75, main_templateObject76, main_templateObject77, main_templateObject78, main_templateObject79, main_templateObject80, main_templateObject81, main_templateObject82, main_templateObject83, main_templateObject84, main_templateObject85, main_templateObject86, main_templateObject87, main_templateObject88, main_templateObject89, main_templateObject90, main_templateObject91, main_templateObject92, main_templateObject93, main_templateObject94, main_templateObject95, main_templateObject96, main_templateObject97, main_templateObject98, main_templateObject99, main_templateObject100, main_templateObject101, main_templateObject102, main_templateObject103, main_templateObject104, main_templateObject105, main_templateObject106, main_templateObject107, main_templateObject108, main_templateObject109, main_templateObject110, main_templateObject111, main_templateObject112, main_templateObject113;
@@ -19519,10 +19512,21 @@ function postCoilWire() {
 
   eatPizzas(); // 3724 - 987 - 950 - 215 - 95 - 28 = 1449 meat
 
-  (0,external_kolmafia_.cliExecute)("garden pick");
-  (0,external_kolmafia_.cliExecute)("refresh inventory");
   var toSynth = [(0,dist.$effect)(main_templateObject99 || (main_templateObject99 = main_taggedTemplateLiteral(["Synthesis: Collection"]))), (0,dist.$effect)(main_templateObject100 || (main_templateObject100 = main_taggedTemplateLiteral(["Synthesis: Smart"]))), (0,dist.$effect)(main_templateObject101 || (main_templateObject101 = main_taggedTemplateLiteral(["Synthesis: Learning"])))].filter(effect => !(0,dist.have)(effect));
-  synthesize(toSynth, new Set([(0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["sugar sheet"])))]), true); // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
+
+  if (toSynth.length > 0) {
+    (0,external_kolmafia_.cliExecute)("garden pick");
+    (0,external_kolmafia_.cliExecute)("refresh inventory"); // Sweet synthesis with reserved candies omitted, add them back individually until a solution is found
+
+    var toKeep = [(0,dist.$item)(main_templateObject102 || (main_templateObject102 = main_taggedTemplateLiteral(["Chubby and Plump bar"]))), (0,dist.$item)(main_templateObject103 || (main_templateObject103 = main_taggedTemplateLiteral(["sugar sheet"])))];
+
+    for (var tries = 0; tries <= toKeep.length; tries++) {
+      if (synthesize(toSynth, new Set(toKeep.slice(tries)), true)) break;else if (tries === toKeep.length) {
+        throw "Unable to find a combination for all synthesis targets";
+      }
+    }
+  } // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
+
 
   var water = (0,dist.$item)(main_templateObject104 || (main_templateObject104 = main_taggedTemplateLiteral(["cold-filtered water"])));
   if ((0,dist.get)("tomeSummons") < 3 && !(0,dist.have)(water) && !(0,dist.have)((0,dist.$effect)(main_templateObject105 || (main_templateObject105 = main_taggedTemplateLiteral(["Purity of Spirit"]))))) (0,external_kolmafia_.create)(water);
@@ -19633,7 +19637,9 @@ module.exports = require("kolmafia");
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	var __webpack_exports__ = __webpack_require__(__webpack_require__.s = 4339);
-/******/ 	exports["seventy-hccs"] = __webpack_exports__;
+/******/ 	var __webpack_export_target__ = exports;
+/******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+/******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
 /******/ 	
 /******/ })()
 ;

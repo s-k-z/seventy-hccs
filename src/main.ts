@@ -513,7 +513,8 @@ function postCoilWire() {
     // Sweet synthesis with reserved candies omitted, add them back individually until a solution is found
     const toKeep = [$item`Chubby and Plump bar`, $item`sugar sheet`];
     for (let tries = 0; tries <= toKeep.length; tries++) {
-      if (!synthesize(toSynth, new Set(toKeep.slice(tries)), true) && tries === toKeep.length) {
+      if (synthesize(toSynth, new Set(toKeep.slice(tries)), true)) break;
+      else if (tries === toKeep.length) {
         throw `Unable to find a combination for all synthesis targets`;
       }
     }
