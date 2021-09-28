@@ -14,7 +14,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $item, $monster, $skill, get, Macro, Witchess } from "libram";
+import { $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
@@ -24,7 +24,7 @@ const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquareMon = $monster`Performer of Actions`.id;
 const DMTCircleMon = $monster`Thinker of Thoughts`.id;
 
-const retailDistrict = 480;
+const retailDistrict = $location`Gingerbread Upscale Retail District`.id;
 
 const Ghost = new Macro()
   .skill($skill`Summon Love Gnats`)
@@ -47,9 +47,15 @@ const Backup = new Macro().if_(
   `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
   Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
 );
+const Pride = new Macro().if_(
+  // Turbo used a flag to cast pride
+  `hasskill ${toInt($skill`Turbo`)}`,
+  Macro.trySkill($skill`Feel Pride`)
+);
 
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
+  .step(Pride)
   .trySkill($skill`Chest X-Ray`)
   .trySkill($skill`Shattering Punch`)
   .trySkill($skill`Gingerbread Mob Hit`)
@@ -57,14 +63,15 @@ const FreeInstaKill = new Macro()
 
 const CigKill = new Macro()
   .skill($skill`Sing Along`)
+  .step(Pride)
   .tryItem($item`gingerbread cigarette`)
   .abort();
 
 const DefaultMacro = new Macro()
   .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
   .if_(`monsterid ${toxicBeastie}`, Backup)
-  .if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`)) // Turbo used a flag to cast pride
-  .if_(`monsterid ${amateurNinja} || monsterid ${toxicBeastie}`, FreeInstaKill)
+  .if_(`monsterid ${toxicBeastie}`, Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill))
+  .if_(`monsterid ${amateurNinja}`, FreeInstaKill)
   .if_(`snarfblat ${retailDistrict}`, CigKill)
   .trySkill($skill`Digitize`)
   .trySkill($skill`%fn, spit on me!`)
@@ -76,6 +83,7 @@ const DefaultMacro = new Macro()
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
   .skill($skill`Sing Along`)
+  .step(Pride)
   .while_(`!mpbelow ${mpCost($skill`Candyblast`)}`, Macro.skill($skill`Candyblast`))
   .attack()
   .repeat();

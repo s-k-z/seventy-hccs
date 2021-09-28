@@ -119,7 +119,7 @@ function checkMainClan() {
 }
 
 export function main(): void {
-  sinceKolmafiaRevision(20876);
+  sinceKolmafiaRevision(25702);
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
@@ -194,6 +194,10 @@ function levelAndDoQuests() {
       // Free run for some items
       // Do all the leveling combats
       // Then gulp latte for more libram summons
+      if (have($effect`Temporary Blindness`)) {
+        if (get("_hotTubSoaks") < 4) cliExecute("hottub");
+        else throw `Can't handle temporary blindness`;
+      }
 
       if (chateauNapReady()) {
         withEquipment(() => {
