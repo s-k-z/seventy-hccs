@@ -52,7 +52,7 @@ const questRecords: Record<number, () => QuestData> = {
         $effect`Spirit of Peppermint`,
         $effect`Triple-Sized`,
         $effect`Uncucumbered`,
-        $effect`init.enh`,
+        $effect`critical.enh`,
         $effect`items.enh`,
         $effect`meat.enh`,
       ],
