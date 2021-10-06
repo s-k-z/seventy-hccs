@@ -364,18 +364,18 @@ function preCoilWire() {
     checkMainClan();
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
   }
+  const calculation = "69";
+  const canCalculate = () => get("_universeCalculated") < get("skillLevel144");
+  const hasSolution = () => Object.keys(reverseNumberology()).includes(calculation);
+  while (canCalculate() && hasSolution()) cliExecute(`numberology ${calculation}`);
   getPantogramPants();
 
   //
   // Let's get a buncha meat!
   //
-  $items`baconstone, hamethyst, porquoise`.forEach((gem) => autosell(5, gem));
+  if (!get("_deckCardsSeen").includes("1952")) cliExecute("cheat 1952");
+  if (have($item`1952 Mickey Mantle card`)) autosell(1, $item`1952 Mickey Mantle card`);
   useSkill($skill`Communism!`);
-  const calculation = "14";
-  const canCalculate = () => get("_universeCalculated") < get("skillLevel144");
-  const hasSolution = () => Object.keys(reverseNumberology()).includes(calculation);
-  while (canCalculate() && hasSolution()) cliExecute(`numberology ${calculation}`);
-  autosell(14 * get("skillLevel144"), $item`moxie weed`);
   if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   if (!get("_horsery")) cliExecute("horsery dark");
   SongBoom.setSong("Total Eclipse of Your Meat");
@@ -418,7 +418,6 @@ function preCoilWire() {
     [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
     [$item`green mana`,            () => cliExecute(`cheat forest`)],
     [$item`wrench`,                () => cliExecute(`cheat wrench`)],
-    [$item`rope`,                  () => cliExecute(`cheat rope`)],
     [$item`occult jelly donut`,    () => create($item`occult jelly donut`)],
     [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
     [$skill`Seek out a Bird`,      () => use($item`Bird-a-Day calendar`)],
