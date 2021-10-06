@@ -1,5 +1,6 @@
 import {
   availableAmount,
+  changeMcd,
   chew,
   cliExecute,
   equip,
@@ -390,6 +391,7 @@ export const events: Record<string, eventData> = {
     current: () =>
       get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
     run: () => {
+      changeMcd(0);
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`backup camera`);
       selectBestFamiliar(FamiliarFlag.Wine);

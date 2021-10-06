@@ -278,7 +278,6 @@ function levelAndDoQuests() {
   checkMainClan();
   cliExecute("shower hot");
   changeMcd(0);
-  wishEffect($effect`Sparkly!`);
 
   prepAndDoQuest(Quest.Muscle);
   prepAndDoQuest(Quest.Moxie);
@@ -379,7 +378,7 @@ function preCoilWire() {
   if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   if (!get("_horsery")) cliExecute("horsery dark");
   SongBoom.setSong("Total Eclipse of Your Meat");
-  // 8601 meat
+  // 10001 meat
   openQuestZones();
   equip($slot`acc2`, $item`Powerful Glove`); // Optimize away equipping & unequipping to buff up
   prep(Quest.Beginning);
@@ -400,7 +399,7 @@ function preCoilWire() {
     [
       $item`detuned radio`,
       () => {
-        retrieveItem($item`detuned radio`); // 8601 - 285 = 8316 meat
+        retrieveItem($item`detuned radio`); // 10001 - 285 = 9716 meat
         changeMcd(10);
       },
     ],
@@ -443,7 +442,7 @@ function preCoilWire() {
   oneOffEvents.ninjaCostume();
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
-  // 8316 + 2000 = 10316 meat
+  // 9716 + 2000 = 11716 meat
   // TODO: handle non-sauceror [1457]Blood Sugar Sauce Magic
   acquireEffect($effect`[1458]Blood Sugar Sauce Magic`);
   spendAllMpOnLibrams();
@@ -461,8 +460,7 @@ function postCoilWire() {
     visitUrl("main.php?action=may4");
     runChoice(4);
   }
-  wishEffect($effect`All Is Forgiven`);
-  wishEffect($effect`Witch Breaded`);
+  [$effect`All Is Forgiven`, $effect`Sparkly!`, $effect`Witch Breaded`].forEach(wishEffect);
   useDroppedItems(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
   if (!get("hasRange")) {
@@ -470,7 +468,7 @@ function postCoilWire() {
     if (!have(range)) retrieveItem(range);
     use(range);
   }
-  // 10316 - 950 = 9366 meat
+  // 11716 - 950 = 10766 meat
   [
     // Need all of these to craft with
     $skill`Advanced Cocktailcrafting`,
@@ -499,13 +497,13 @@ function postCoilWire() {
 
   retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
-  // 9366 - 142 = 9224 meat
+  // 10766 - 142 = 10624 meat
   checkMainClan();
   $effects`[1701]Hip to the Jive, In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
-  // 9224 - 5500 = 3724 meat
+  // 10624 - 5500 = 5124 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
-  eatPizzas(); // 3724 - 987 - 950 - 215 - 95 - 28 = 1449 meat
+  eatPizzas(); // 5124 - 987 - 950 - 215 - 95 - 28 = 2849 meat
   const toSynth = [
     $effect`Synthesis: Collection`,
     $effect`Synthesis: Smart`,
