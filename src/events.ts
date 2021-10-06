@@ -5,6 +5,7 @@ import {
   equip,
   handlingChoice,
   haveEffect,
+  myFamiliar,
   myHp,
   myLevel,
   runChoice,
@@ -41,6 +42,7 @@ export const enum FamiliarFlag {
   Default,
   NoAttack,
   ToxicTeacups,
+  Wine,
 }
 
 // Locations
@@ -76,17 +78,6 @@ export const events: Record<string, eventData> = {
       const ghostLoc = get("ghostLocation");
       if (!ghostLoc) throw `No ghost location found?`;
       adventure(ghostLoc, MacroList.FreeFight);
-    },
-  },
-
-  backupCamera: {
-    max: 11,
-    current: () =>
-      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
-    run: () => {
-      equip($slot`acc3`, $item`backup camera`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
     },
   },
 
@@ -193,18 +184,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  witchessRook: {
-    max: 0,
-    current: () => haveEffect($effect`Sweetbreads Flambé`) - 1,
-    run: () => {
-      prep(Quest.LevelingML);
-      selectBestFamiliar();
-      fightWitchess($monster`Witchess Rook`, MacroList.FreeFight);
-      checkAvailable($item`Greek fire`);
-      use($item`Greek fire`);
-    },
-  },
-
   snojo: {
     max: 10,
     current: () => get("_snojoFreeFights"),
@@ -213,6 +192,7 @@ export const events: Record<string, eventData> = {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
         runChoice(1);
       }
+      prep(Quest.LevelingML);
       selectBestFamiliar();
       adventure(snojo, MacroList.FreeFight);
     },
@@ -259,41 +239,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  digitize: {
-    max: 1,
-    current: () => get("_sourceTerminalDigitizeMonsterCount"),
-    run: () => {
-      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  ninjaCostume: {
-    max: 1,
-    current: () => availableAmount($item`li'l ninja costume`),
-    run: () => {
-      selectBestFamiliar(FamiliarFlag.NoAttack);
-      withEquipment(
-        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
-        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
-      );
-      checkAvailable($item`li'l ninja costume`);
-    },
-  },
-
-  vote: {
-    max: 1,
-    current: () => (voterMonsterNow() ? get("_voteFreeFights") : 1),
-    run: () => {
-      selectBestFamiliar();
-      withEquipment(
-        () => adventure(toxicTeacups, MacroList.FreeFight),
-        [[$slot`acc3`, $item`"I Voted!" sticker`]]
-      );
-    },
-  },
-
   godLobster: {
     max: 3,
     current: () => get("_godLobsterFights"),
@@ -328,6 +273,28 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  digitize: {
+    max: 1,
+    current: () => get("_sourceTerminalDigitizeMonsterCount"),
+    run: () => {
+      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  vote: {
+    max: 1,
+    current: () => (voterMonsterNow() ? get("_voteFreeFights") : 1),
+    run: () => {
+      selectBestFamiliar();
+      withEquipment(
+        () => adventure(toxicTeacups, MacroList.FreeFight),
+        [[$slot`acc3`, $item`"I Voted!" sticker`]]
+      );
+    },
+  },
+
   dmtSquare: {
     max: 0,
     current: () => haveEffect($effect`Joy`) + availableAmount($item`abstraction: action`) - 1,
@@ -358,39 +325,10 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  lecture: {
-    max: 16,
-    current: () => get("_pocketProfessorLectures"),
-    run: () => {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
-      familiar($familiar`Pocket Professor`);
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
-  nep: {
-    max: 10,
-    current: () => get("_neverendingPartyFreeTurns"),
-    run: () => {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
-      equip($slot`acc3`, $item`Beach Comb`);
-      selectBestFamiliar();
-      const checkQuest = (): boolean => get("_questPartyFair") === "unstarted";
-      if (checkQuest()) {
-        visitUrl(toUrl(neverendingParty));
-        const choice = ["food", "booze"].includes(get("_questPartyFairQuest")) ? 1 : 2;
-        runChoice(choice);
-        if (checkQuest()) throw `Failed to grab Neverending Party Quest`;
-      }
-      adventure(neverendingParty, MacroList.FreeFight);
-    },
-  },
-
   chestXRay: {
     max: 3,
     current: () => get("_chestXRayUsed"),
     run: () => {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc1`, $item`Lil' Doctor™ bag`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
@@ -401,7 +339,6 @@ export const events: Record<string, eventData> = {
     max: 3,
     current: () => get("_shatteringPunchUsed"),
     run: () => {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
     },
@@ -411,7 +348,6 @@ export const events: Record<string, eventData> = {
     max: 1,
     current: () => (get("_gingerbreadMobHitUsed") ? 1 : 0),
     run: () => {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
     },
@@ -422,9 +358,62 @@ export const events: Record<string, eventData> = {
     max: 0,
     current: () => 0 - get("shockingLickCharges"),
     run: () => {
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  lecture: {
+    max: 16,
+    current: () => get("_pocketProfessorLectures"),
+    run: () => {
+      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
+      familiar($familiar`Pocket Professor`);
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  backupCamera: {
+    max: 7,
+    current: () =>
+      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 7,
+    run: () => {
+      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
+      equip($slot`acc3`, $item`backup camera`);
+      selectBestFamiliar();
+      adventure(toxicTeacups, MacroList.FreeFight);
+    },
+  },
+
+  backupCameraWine: {
+    max: 11,
+    current: () =>
+      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
+    run: () => {
+      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
+      equip($slot`acc3`, $item`backup camera`);
+      selectBestFamiliar(FamiliarFlag.Wine);
+      adventure(toxicTeacups, MacroList.FreeFightStench);
+    },
+  },
+
+  nep: {
+    max: 10,
+    current: () => get("_neverendingPartyFreeTurns"),
+    run: () => {
+      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
+      equip($slot`acc3`, $item`Beach Comb`);
+      selectBestFamiliar(FamiliarFlag.Wine);
+      const checkQuest = (): boolean => get("_questPartyFair") === "unstarted";
+      if (checkQuest()) {
+        visitUrl(toUrl(neverendingParty));
+        const choice = ["food", "booze"].includes(get("_questPartyFairQuest")) ? 1 : 2;
+        runChoice(choice);
+        if (checkQuest()) throw `Failed to grab Neverending Party Quest`;
+      }
+      // eslint-disable-next-line libram/verify-constants
+      const shouldGetWine = myFamiliar() === $familiar`Vampire Vintner`;
+      adventure(neverendingParty, shouldGetWine ? MacroList.FreeFightStench : MacroList.FreeFight);
     },
   },
 
@@ -495,6 +484,17 @@ export const oneOffEvents = {
       adventure(ghostLoc, MacroList.FreeFight);
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`bag of many confections`);
+    }
+  },
+
+  ninjaCostume: (): void => {
+    if (!have($item`li'l ninja costume`)) {
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      withEquipment(
+        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
+        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
+      );
+      checkAvailable($item`li'l ninja costume`);
     }
   },
 
@@ -604,8 +604,8 @@ function familiar(fam: Familiar) {
 }
 
 function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
-  if (!have($effect`Spit Upon`)) {
-    familiar($familiar`Melodramedary`);
+  if (!have($item`rope`) && !have($item`burning newspaper`) && !have($item`burning paper crane`)) {
+    familiar($familiar`Garbage Fire`);
   } else if (
     flag === FamiliarFlag.Default &&
     !have($item`short stack of pancakes`) &&
@@ -618,15 +618,17 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     !have($effect`Absinthe-Minded`)
   ) {
     familiar($familiar`Green Pixie`);
-  } else if (
-    !have($item`rope`) &&
-    !have($item`burning newspaper`) &&
-    !have($item`burning paper crane`) &&
-    get("garbageFireProgress") + getRemainingFreeFights() >= 30
-  ) {
-    familiar($familiar`Garbage Fire`);
   } else if (flag === FamiliarFlag.ToxicTeacups && get("_hipsterAdv") < 7) {
     familiar($familiar`Artistic Goth Kid`);
+  } else if (
+    flag === FamiliarFlag.Wine &&
+    // eslint-disable-next-line libram/verify-constants
+    !have($item`1950 Vampire Vintner wine`) &&
+    // eslint-disable-next-line libram/verify-constants
+    !have($effect`Wine-Befouled`)
+  ) {
+    // eslint-disable-next-line libram/verify-constants
+    familiar($familiar`Vampire Vinter`);
   } else {
     familiar($familiar`Machine Elf`);
   }

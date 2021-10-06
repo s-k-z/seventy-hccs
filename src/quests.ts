@@ -168,11 +168,7 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.LevelingML.id]: () => {
-    const toAcquire = [
-      $effect`Drescher's Annoying Noise`,
-      $effect`Polka of Plenty`,
-      $effect`Ur-Kel's Aria of Annoyance`,
-    ];
+    const toAcquire = [$effect`Polka of Plenty`, $effect`Ur-Kel's Aria of Annoyance`];
     const toWear = new Map([
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -188,7 +184,7 @@ const questRecords: Record<number, () => QuestData> = {
   [Quest.GarbageNova.id]: () => {
     const toAcquire = [
       $effect`Bendin' Hell`,
-      $effect`Frigidalmatian`,
+      $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
       $effect`Song of Sauce`,
       $effect`Visions of the Deep Dark Deeps`,

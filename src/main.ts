@@ -440,6 +440,7 @@ function preCoilWire() {
   // Fight Protonic Ghost
   oneOffEvents.mimic();
   // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
+  oneOffEvents.ninjaCostume();
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
   // 8316 + 2000 = 10316 meat
