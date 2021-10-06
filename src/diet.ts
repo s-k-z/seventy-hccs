@@ -34,7 +34,10 @@ const recipes = new Map<Item, () => void>([
 
   [$item`hot buttered roll`, () => acquireGumOrHermitItem($item`hot buttered roll`)],
   [$item`perfect dark and stormy`, () => cliExecute(`make ${$item`perfect dark and stormy`}`)],
+  [$item`sprocket assembly`, () => cliExecute(`make ${$item`sprocket assembly`}`)],
   [$item`ravioli hat`, () => acquireGumOrHermitItem($item`ravioli hat`)],
+  [$item`repeating crossbow`, () => cliExecute(`make ${$item`repeating crossbow`}`)],
+  [$item`turtle totem`, () => acquireGumOrHermitItem($item`turtle totem`)],
 
   [
     $item`useless powder`,
@@ -50,9 +53,21 @@ const recipes = new Map<Item, () => void>([
 
 const diabolicPizzas = {
   1: {
-    effect: $effect`Bureaucratized`,
-    equip: $item`none`, // Don't equip the licorice boa
+    effect: $effect`Spit Upon`,
+    equip: undefined, // Don't equip the licorice boa
     familiar: $familiar`Peppermint Rhino`,
+    ingredients: tuple(
+      $item`sprocket assembly`,
+      $item`perfect dark and stormy`,
+      $item`ironic moustache`,
+      $item`turtle totem` // TODO: ensure obtaining a new turtle totem when buffs are needed?
+    ),
+  },
+
+  2: {
+    effect: $effect`Bureaucratized`,
+    equip: $item`Pocket Professor memory chip`,
+    familiar: $familiar`Pocket Professor`,
     ingredients: tuple(
       $item`bugged balaclava`,
       $item`useless powder`,
@@ -61,39 +76,27 @@ const diabolicPizzas = {
     ),
   },
 
-  2: {
+  3: {
     effect: $effect`Chorale of Companionship`,
-    equip: $item`dromedary drinking helmet`,
-    familiar: $familiar`Melodramedary`,
+    equip: $item`cracker`,
+    familiar: $familiar`Exotic Parrot`,
     ingredients: tuple(
-      $item`chiptune guitar`,
+      $item`cog and sprocket assembly`,
       $item`hot buttered roll`,
       $item`ointment of the occult`,
-      $item`ravioli hat`
+      $item`repeating crossbow`
     ),
   },
 
-  3: {
+  4: {
     effect: $effect`Down With Chow`,
-    equip: $item`Pocket Professor memory chip`,
-    familiar: $familiar`Pocket Professor`,
+    equip: undefined,
+    familiar: undefined,
     ingredients: tuple(
       $item`dripping meat crossbow`,
       $item`ointment of the occult`,
       $item`wooden figurine`,
       $item`blood-faced volleyball`
-    ),
-  },
-
-  4: {
-    effect: $effect`Optimist Primal`,
-    equip: $item`cracker`,
-    familiar: $familiar`Exotic Parrot`,
-    ingredients: tuple(
-      $item`oil of expertise`,
-      $item`perfect dark and stormy`,
-      $item`blood-faced volleyball`,
-      $item`cog and sprocket assembly`
     ),
   },
 };
@@ -108,10 +111,10 @@ export function eatPizzas(): void {
           recipe();
         }
       }
-      useFamiliar(pizza.familiar);
+      if (pizza.familiar) useFamiliar(pizza.familiar);
       cookPizza(...pizza.ingredients);
       eat($item`diabolic pizza`);
-      equip($slot`familiar`, pizza.equip);
+      if (pizza.equip) equip($slot`familiar`, pizza.equip);
     }
   }
 }

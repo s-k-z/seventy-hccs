@@ -483,7 +483,6 @@ export const oneOffEvents = {
       );
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`ironic moustache`);
-      cliExecute(`fold ${$item`chiptune guitar`}`);
     }
   },
 
