@@ -31,7 +31,8 @@ export const Quest: Record<string, QuestInfo> = {
   Beginning:       { id: 900, service: "" },
   Leveling:        { id: 901, service: "" },
   LevelingML:      { id: 902, service: "" },
-  DeepDark:        { id: 903, service: "" },
+  GarbageNova:     { id: 903, service: "" },
+  DeepDark:        { id: 904, service: "" },
 } as const;
 
 type QuestData = {
@@ -182,6 +183,24 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc3`, $item`Beach Comb`],
     ]);
     return { acquire: toAcquire, check: [], equipment: toWear };
+  },
+
+  [Quest.GarbageNova.id]: () => {
+    const toAcquire = [
+      $effect`Bendin' Hell`,
+      $effect`Frigidalmatian`,
+      $effect`Sauce Monocle`,
+      $effect`Song of Sauce`,
+      $effect`Visions of the Deep Dark Deeps`,
+    ];
+    const toCheck = [$effect`Bastille Bourgeoisie`, $effect`critical.enh`, $effect`Sparkly!`];
+    const toEquip = new Map([
+      [$slot`off-hand`, $item`meteorb`],
+      [$slot`acc1`, $item`Powerful Glove`],
+      [$slot`acc2`, $item`battle broom`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+    ]);
+    return { acquire: toAcquire, check: toCheck, equipment: toEquip, retrocape: "heck kill" };
   },
 
   [Quest.Muscle.id]: () => {
