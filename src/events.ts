@@ -118,6 +118,7 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  // TODO: outfit here? swap to ML and other things with this step
   tenPercentBonus: {
     max: 0,
     current: () => 0 - availableAmount($item`a ten-percent bonus`),
@@ -413,7 +414,6 @@ export const events: Record<string, eventData> = {
         runChoice(choice);
         if (checkQuest()) throw `Failed to grab Neverending Party Quest`;
       }
-      // eslint-disable-next-line libram/verify-constants
       const shouldGetWine = myFamiliar() === $familiar`Vampire Vintner`;
       adventure(neverendingParty, shouldGetWine ? MacroList.FreeFightStench : MacroList.FreeFight);
     },
@@ -598,9 +598,9 @@ function familiar(fam: Familiar) {
   useFamiliar(fam);
   const costume = new Map([
     [$familiar`Green Pixie`, "mp"],
-    [$familiar`Melodramedary`, "myst"],
+    [$familiar`Machine Elf`, "myst"],
     [$familiar`Pocket Professor`, "hp"],
-    [$familiar`Shorter-Order Cook`, "item"],
+    [$familiar`Vampire Vintner`, "meat"],
   ]).get(fam);
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);
 }
@@ -624,13 +624,10 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     familiar($familiar`Artistic Goth Kid`);
   } else if (
     flag === FamiliarFlag.Wine &&
-    // eslint-disable-next-line libram/verify-constants
     !have($item`1950 Vampire Vintner wine`) &&
-    // eslint-disable-next-line libram/verify-constants
     !have($effect`Wine-Befouled`)
   ) {
-    // eslint-disable-next-line libram/verify-constants
-    familiar($familiar`Vampire Vinter`);
+    familiar($familiar`Vampire Vintner`);
   } else {
     familiar($familiar`Machine Elf`);
   }

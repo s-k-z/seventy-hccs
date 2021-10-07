@@ -57,10 +57,10 @@ const diabolicPizzas = {
     equip: undefined, // Don't equip the licorice boa
     familiar: $familiar`Peppermint Rhino`,
     ingredients: tuple(
-      $item`sprocket assembly`,
+      $item`sprocket assembly`, // 38 meat
       $item`perfect dark and stormy`,
       $item`ironic moustache`,
-      $item`turtle totem` // TODO: ensure obtaining a new turtle totem when buffs are needed?
+      $item`turtle totem`
     ),
   },
 
@@ -70,7 +70,7 @@ const diabolicPizzas = {
     familiar: $familiar`Pocket Professor`,
     ingredients: tuple(
       $item`bugged balaclava`,
-      $item`useless powder`,
+      $item`useless powder`, // 950 + 28 meat
       $item`ravioli hat`,
       $item`eyedrops of the ermine`
     ),
@@ -81,10 +81,10 @@ const diabolicPizzas = {
     equip: $item`cracker`,
     familiar: $familiar`Exotic Parrot`,
     ingredients: tuple(
-      $item`cog and sprocket assembly`,
+      $item`cog and sprocket assembly`, // 77 meat
       $item`hot buttered roll`,
       $item`ointment of the occult`,
-      $item`repeating crossbow`
+      $item`repeating crossbow` // 495 meat
     ),
   },
 
@@ -93,7 +93,7 @@ const diabolicPizzas = {
     equip: undefined,
     familiar: undefined,
     ingredients: tuple(
-      $item`dripping meat crossbow`,
+      $item`dripping meat crossbow`, // 195 meat
       $item`ointment of the occult`,
       $item`wooden figurine`,
       $item`blood-faced volleyball`

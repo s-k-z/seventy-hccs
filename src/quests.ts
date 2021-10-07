@@ -100,7 +100,6 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Broad-Spectrum Vaccine`,
       $effect`Favored by Lyle`,
       $effect`Fidoxene`,
-      $effect`Full Bottle in front of Me`,
       $effect`Grumpy and Ornery`,
       $effect`Hustlin'`,
       $effect`Loyal Tea`,
@@ -111,6 +110,7 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Sigils of Yeg`,
       $effect`Starry-Eyed`,
       $effect`Total Protonic Reversal`,
+      $effect`You Can Really Taste the Dormouse`,
       $effect`Warlock, Warstock, and Warbarrel`,
       // Beach comb
       $effect`Cold as Nice`,
@@ -144,7 +144,6 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Astral Shell`,
       $effect`Elemental Saucesphere`,
       $effect`Empathy`,
-      $effect`Flimsy Shield of the Pastalord`, // Need the non-flimsy effect for PM
       $effect`Ghostly Shell`,
       $effect`Leash of Linguini`,
       $effect`Springy Fusilli`,
@@ -168,7 +167,11 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.LevelingML.id]: () => {
-    const toAcquire = [$effect`Polka of Plenty`, $effect`Ur-Kel's Aria of Annoyance`];
+    const toAcquire = [
+      $effect`Flimsy Shield of the Pastalord`, // Need the non-flimsy effect for PM
+      $effect`Polka of Plenty`,
+      $effect`Ur-Kel's Aria of Annoyance`,
+    ];
     const toWear = new Map([
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],

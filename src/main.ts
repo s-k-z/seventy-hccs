@@ -5,7 +5,6 @@ import {
   changeMcd,
   cliExecute,
   create,
-  drink,
   eat,
   effectModifier,
   equip,
@@ -41,7 +40,6 @@ import {
 import {
   $class,
   $effect,
-  $effects,
   $item,
   $items,
   $skill,
@@ -168,6 +166,7 @@ export function main(): void {
 
 function levelAndDoQuests() {
   Clan.join(MAIN_CLAN);
+  visitUrl("clan_viplounge.php?action=fwshop"); // Enable access to the fireworks shop
   const mainstat = myPrimestat();
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
@@ -314,10 +313,6 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorPleasureDome();
-    if (!have($effect`Smart Drunk`)) {
-      useSkill(2, $skill`The Ode to Booze`);
-      drink($item`vintage smart drink`); // 10 drunk
-    }
     for (const libram of $items`love song of icy revenge, pulled blue taffy`) {
       if (have(libram)) use(Math.min(4, itemAmount(libram)), libram);
     }
@@ -411,15 +406,16 @@ function preCoilWire() {
         equip($slot`off-hand`, $item`weeping willow wand`);
       },
     ],
-    [$item`battery (AAA)`,         () => harvestBatteries()],
-    [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
-    [$item`cop dollar`,            () => cliExecute("Detective Solver")],
-    [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
-    [$item`green mana`,            () => cliExecute(`cheat forest`)],
-    [$item`wrench`,                () => cliExecute(`cheat wrench`)],
-    [$item`occult jelly donut`,    () => create($item`occult jelly donut`)],
-    [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
-    [$skill`Seek out a Bird`,      () => use($item`Bird-a-Day calendar`)],
+    [$item`battery (AAA)`,             () => harvestBatteries()],
+    [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult")],
+    [$item`cop dollar`,                () => cliExecute("Detective Solver")],
+    [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal")],
+    [$item`green mana`,                () => cliExecute(`cheat forest`)],
+    [$item`wrench`,                    () => cliExecute(`cheat wrench`)],
+    [$item`occult jelly donut`,        () => create($item`occult jelly donut`)],
+    [$item`sombrero-mounted sparkler`, () => retrieveItem($item`sombrero-mounted sparkler`)], // 9716 - 475 = 9241 meat
+    [$item`Yeg's Motel hand soap`,     () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
+    [$skill`Seek out a Bird`,          () => use($item`Bird-a-Day calendar`)],
   ] as [Effect | Item | Skill, () => void][]) {
     if (!have(check)) retrieve();
   }
@@ -442,7 +438,7 @@ function preCoilWire() {
   oneOffEvents.ninjaCostume();
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
-  // 9716 + 2000 = 11716 meat
+  // 9241 + 2000 = 11241 meat
   // TODO: handle non-sauceror [1457]Blood Sugar Sauce Magic
   acquireEffect($effect`[1458]Blood Sugar Sauce Magic`);
   spendAllMpOnLibrams();
@@ -468,7 +464,7 @@ function postCoilWire() {
     if (!have(range)) retrieveItem(range);
     use(range);
   }
-  // 11716 - 950 = 10766 meat
+  // 11241 - 950 = 10291 meat
   [
     // Need all of these to craft with
     $skill`Advanced Cocktailcrafting`,
@@ -497,13 +493,15 @@ function postCoilWire() {
 
   retrieveItem($item`toy accordion`);
   acquireEffect($effect`Ode to Booze`);
-  // 10766 - 142 = 10624 meat
+  // 10291 - 142 = 10149 meat
   checkMainClan();
-  $effects`[1701]Hip to the Jive, In a Lather`.forEach((speakeasy) => acquireEffect(speakeasy)); // 5 drunk, 5500 meat
-  // 10624 - 5500 = 5124 meat
+  [$effect`[1701]Hip to the Jive`, $effect`In a Lather`, $effect`On the Trolley`].forEach(
+    (speakeasy) => acquireEffect(speakeasy)
+  ); // 7 drunk, 6000 meat
+  // 10149 - 6000 = 4149 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
-  eatPizzas(); // 5124 - 987 - 950 - 215 - 95 - 28 = 2849 meat
+  eatPizzas(); // 4149 - 987 - 950 - 495 - 215 - 77 - 38 = 1387 meat
   const toSynth = [
     $effect`Synthesis: Collection`,
     $effect`Synthesis: Smart`,

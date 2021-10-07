@@ -59,6 +59,7 @@ const FreeInstaKill = new Macro()
   .trySkill($skill`Chest X-Ray`)
   .trySkill($skill`Shattering Punch`)
   .trySkill($skill`Gingerbread Mob Hit`)
+  .trySkill($skill`Shocking Lick`)
   .abort();
 
 const CigKill = new Macro()
