@@ -77,26 +77,26 @@ const diabolicPizzas = {
   },
 
   3: {
-    effect: $effect`Chorale of Companionship`,
+    effect: $effect`Down With Chow`,
     equip: $item`cracker`,
     familiar: $familiar`Exotic Parrot`,
-    ingredients: tuple(
-      $item`cog and sprocket assembly`, // 77 meat
-      $item`hot buttered roll`,
-      $item`ointment of the occult`,
-      $item`repeating crossbow` // 495 meat
-    ),
-  },
-
-  4: {
-    effect: $effect`Down With Chow`,
-    equip: undefined,
-    familiar: undefined,
     ingredients: tuple(
       $item`dripping meat crossbow`, // 195 meat
       $item`ointment of the occult`,
       $item`wooden figurine`,
       $item`blood-faced volleyball`
+    ),
+  },
+
+  4: {
+    effect: $effect`Chorale of Companionship`,
+    equip: undefined,
+    familiar: undefined,
+    ingredients: tuple(
+      $item`cog and sprocket assembly`, // 77 meat
+      $item`hot buttered roll`,
+      $item`ointment of the occult`,
+      $item`repeating crossbow` // 495 meat
     ),
   },
 };
