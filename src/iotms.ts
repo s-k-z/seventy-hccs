@@ -21,12 +21,14 @@ export function castBestLibram(): void {
     useSkill($skill`Summon BRICKOs`);
   } else if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
     useSkill($skill`Summon Candy Heart`);
-  } else if (!have($item`love song of icy revenge`, 4)) {
+  } else if (!have($item`love song of icy revenge`, 2)) {
     useSkill($skill`Summon Love Song`);
   } else if (get("_resolutionRareSummons") < 3) {
     useSkill($skill`Summon Resolutions`);
   } else if (!have($item`pulled blue taffy`, 4)) {
     useSkill($skill`Summon Taffy`);
+  } else if (!have($item`love song of icy revenge`, 4)) {
+    useSkill($skill`Summon Love Song`);
   } else {
     useSkill($skill`Summon Resolutions`);
   }

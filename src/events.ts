@@ -142,12 +142,15 @@ export const events: Record<string, eventData> = {
     current: () => (have($effect`Whole Latte Love`) ? 1 : availableAmount($item`sprinkles`) - 54),
     run: () => {
       familiar($familiar`Chocolate Lab`);
+      const rope = $item`rope`;
+      const crane = $item`burning paper crane`;
+      const offhand = have(rope) ? rope : have(crane) ? crane : $item`familiar scrapbook`;
       withEquipment(
         () => adventure(upscaleDistrict, MacroList.Sprinkles),
         [
           [$slot`back`, $item`protonic accelerator pack`],
           [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-          [$slot`off-hand`, have($item`rope`) ? $item`rope` : $item`familiar scrapbook`],
+          [$slot`off-hand`, offhand],
           [$slot`acc1`, $item`hewn moon-rune spoon`],
           [$slot`acc2`, $item`Brutal brogues`],
           [$slot`acc3`, $item`Lil' Doctor™ bag`],
@@ -404,6 +407,7 @@ export const events: Record<string, eventData> = {
     max: 10,
     current: () => get("_neverendingPartyFreeTurns"),
     run: () => {
+      equip($slot`back`, $item`LOV Epaulettes`);
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`Beach Comb`);
       selectBestFamiliar(FamiliarFlag.Wine);
@@ -416,6 +420,7 @@ export const events: Record<string, eventData> = {
       }
       const shouldGetWine = myFamiliar() === $familiar`Vampire Vintner`;
       adventure(neverendingParty, shouldGetWine ? MacroList.FreeFightStench : MacroList.FreeFight);
+      if (have($item`1950 Vampire Vintner wine`)) visitUrl("desc_item.php?whichitem=140977937");
     },
   },
 

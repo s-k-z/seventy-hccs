@@ -5,11 +5,14 @@ import {
   changeMcd,
   cliExecute,
   create,
+  drink,
   eat,
   effectModifier,
   equip,
+  familiarWeight,
   gametimeToInt,
   getProperty,
+  haveEffect,
   haveEquipped,
   itemAmount,
   mpCost,
@@ -25,6 +28,7 @@ import {
   myPath,
   myPrimestat,
   mySoulsauce,
+  numericModifier,
   print,
   retrieveItem,
   reverseNumberology,
@@ -40,8 +44,8 @@ import {
 import {
   $class,
   $effect,
+  $familiar,
   $item,
-  $items,
   $skill,
   $slot,
   ascend,
@@ -233,12 +237,12 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      // Save the Garbage shirt for the last 37 fights
+      // Save the Garbage shirt for the 37 fights before switching to the Vintner
       // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
       const crown = $item`Iunion Crown`;
       const garbageShirt = $item`makeshift garbage shirt`;
       const wad = $item`wad of used tape`;
-      if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37) {
+      if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37 + 14) {
         // Turbo used a flag to cast pride
         if (get("garbageShirtCharge") === 3) SourceTerminal.educate($skill`Turbo`);
         if (!have(garbageShirt)) {
@@ -313,8 +317,32 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorPleasureDome();
-    for (const libram of $items`love song of icy revenge, pulled blue taffy`) {
-      if (have(libram)) use(Math.min(4, itemAmount(libram)), libram);
+    const loveSong = $item`love song of icy revenge`;
+    if (itemAmount(loveSong) * 5 + haveEffect($effect`Cold Hearted`) < 20) {
+      while (have(loveSong) && haveEffect($effect`Cold Hearted`) <= 10) {
+        cliExecute("pillkeeper extend");
+        use(loveSong);
+      }
+    } else {
+      use(Math.min(4, itemAmount(loveSong)), loveSong);
+    }
+    const taffy = $item`pulled blue taffy`;
+    if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
+    prep(Quest.FamiliarWeight);
+    const target = 295;
+    const currentWeight = familiarWeight($familiar`Exotic Parrot`);
+    if (!have($effect`Smart Drunk`) && !have($effect`Wine-Befouled`)) {
+      if (currentWeight < target) {
+        const wine = $item`1950 Vampire Vintner wine`;
+        const wineWeight = numericModifier(wine, "familiar weight");
+        if (currentWeight + wineWeight >= target) {
+          useSkill(1, $skill`The Ode to Booze`);
+          drink(wine); // 1 drunk
+        } else if (currentWeight + 20 >= target) {
+          useSkill(2, $skill`The Ode to Booze`);
+          drink($item`vintage smart drink`); // 10 drunk
+        } else throw `Could not find enough familiar weight?`;
+      }
     }
     prepAndDoQuest(Quest.FamiliarWeight);
   }
@@ -495,7 +523,7 @@ function postCoilWire() {
   acquireEffect($effect`Ode to Booze`);
   // 10291 - 142 = 10149 meat
   checkMainClan();
-  [$effect`[1701]Hip to the Jive`, $effect`In a Lather`, $effect`On the Trolley`].forEach(
+  [$effect`[1701]Hip to the Jive`, $effect`In a Lather` /*$effect`On the Trolley`*/].forEach(
     (speakeasy) => acquireEffect(speakeasy)
   ); // 7 drunk, 6000 meat
   // 10149 - 6000 = 4149 meat

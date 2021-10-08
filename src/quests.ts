@@ -31,7 +31,7 @@ export const Quest: Record<string, QuestInfo> = {
   Beginning:       { id: 900, service: "" },
   Leveling:        { id: 901, service: "" },
   LevelingML:      { id: 902, service: "" },
-  GarbageNova:     { id: 903, service: "" },
+  Vintner:         { id: 903, service: "" },
   DeepDark:        { id: 904, service: "" },
 } as const;
 
@@ -184,7 +184,7 @@ const questRecords: Record<number, () => QuestData> = {
     return { acquire: toAcquire, check: [], equipment: toWear };
   },
 
-  [Quest.GarbageNova.id]: () => {
+  [Quest.Vintner.id]: () => {
     const toAcquire = [
       $effect`Bendin' Hell`,
       $effect`Polka of Plenty`,
@@ -389,8 +389,7 @@ const questRecords: Record<number, () => QuestData> = {
         $effect`Down With Chow`,
         $effect`Meteor Showered`,
         $effect`Open Heart Surgery`,
-        $effect`Optimist Primal`,
-        $effect`Smart Drunk`,
+        $effect`You Can Really Taste the Dormouse`,
       ],
       equipment: new Map([
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
