@@ -9,6 +9,7 @@ import {
   myFamiliar,
   myHp,
   myLevel,
+  myMaxhp,
   runChoice,
   toInt,
   toUrl,
@@ -118,7 +119,6 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  // TODO: outfit here? swap to ML and other things with this step
   tenPercentBonus: {
     max: 0,
     current: () => 0 - availableAmount($item`a ten-percent bonus`),
@@ -390,14 +390,27 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  backupCameraWine: {
+  deepDark: {
+    max: 0,
+    current: () => (have($effect`Visions of the Deep Dark Deeps`) ? 0 : -1),
+    run: () => {
+      if (!have($effect`Visions of the Deep Dark Deeps`)) {
+        prep(Quest.DeepDark);
+        if (myHp() < myMaxhp() * 0.5) {
+          // TODO: Optimize Healing
+        }
+        useSkill($skill`Deep Dark Visions`);
+      }
+    },
+  },
+
+  vintnerBackup: {
     max: 11,
     current: () =>
       get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
     run: () => {
       changeMcd(0);
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
-      equip($slot`acc3`, $item`backup camera`);
+      prep(Quest.VintnerBackup);
       selectBestFamiliar(FamiliarFlag.Wine);
       adventure(toxicTeacups, MacroList.FreeFightStench);
     },
@@ -407,9 +420,8 @@ export const events: Record<string, eventData> = {
     max: 10,
     current: () => get("_neverendingPartyFreeTurns"),
     run: () => {
-      equip($slot`back`, $item`LOV Epaulettes`);
-      equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
-      equip($slot`acc3`, $item`Beach Comb`);
+      changeMcd(0);
+      prep(Quest.VintnerNEP);
       selectBestFamiliar(FamiliarFlag.Wine);
       const checkQuest = (): boolean => get("_questPartyFair") === "unstarted";
       if (checkQuest()) {

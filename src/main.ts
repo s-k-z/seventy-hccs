@@ -289,11 +289,6 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.SpellDamage)) {
     oneOffEvents.innerElf();
     oneOffEvents.meteorUngulith();
-    if (!have($effect`Visions of the Deep Dark Deeps`)) {
-      prep(Quest.DeepDark);
-      if (myHp() < myMaxhp() * 0.5) cliExecute("hottub");
-      useSkill($skill`Deep Dark Visions`);
-    }
     if (!have($effect`Cowrruption`)) use($item`corrupted marrow`);
     prepAndDoQuest(Quest.SpellDamage);
   }

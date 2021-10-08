@@ -31,8 +31,9 @@ export const Quest: Record<string, QuestInfo> = {
   Beginning:       { id: 900, service: "" },
   Leveling:        { id: 901, service: "" },
   LevelingML:      { id: 902, service: "" },
-  Vintner:         { id: 903, service: "" },
-  DeepDark:        { id: 904, service: "" },
+  DeepDark:        { id: 903, service: "" },
+  VintnerBackup:  { id: 904, service: "" },
+  VintnerNEP:      { id: 905, service: "" },
 } as const;
 
 type QuestData = {
@@ -184,9 +185,20 @@ const questRecords: Record<number, () => QuestData> = {
     return { acquire: toAcquire, check: [], equipment: toWear };
   },
 
-  [Quest.Vintner.id]: () => {
+  [Quest.DeepDark.id]: () => {
+    const toWear = new Map([
+      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
+      [$slot`pants`, $item`pantogram pants`],
+      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
+    ]);
+    if (have($item`burning paper crane`)) toWear.set($slot`off-hand`, $item`burning paper crane`);
+    return { acquire: [], check: [], equipment: toWear, retrocape: "vampire hold" };
+  },
+
+  [Quest.VintnerBackup.id]: () => {
     const toAcquire = [
       $effect`Bendin' Hell`,
+      $effect`Jackasses' Symphony of Destruction`,
       $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
       $effect`Song of Sauce`,
@@ -194,12 +206,34 @@ const questRecords: Record<number, () => QuestData> = {
     ];
     const toCheck = [$effect`Bastille Bourgeoisie`, $effect`critical.enh`, $effect`Sparkly!`];
     const toEquip = new Map([
+      [$slot`weapon`, $item`weeping willow wand`],
+      [$slot`off-hand`, $item`meteorb`],
+      [$slot`acc1`, $item`Powerful Glove`],
+      [$slot`acc2`, $item`battle broom`],
+      [$slot`acc3`, $item`backup camera`],
+    ]);
+    return { acquire: toAcquire, check: toCheck, equipment: toEquip, retrocape: "heck kill" };
+  },
+
+  [Quest.VintnerNEP.id]: () => {
+    const toAcquire = [
+      $effect`Bendin' Hell`,
+      $effect`Jackasses' Symphony of Destruction`,
+      $effect`Polka of Plenty`,
+      $effect`Sauce Monocle`,
+      $effect`Song of Sauce`,
+      $effect`Visions of the Deep Dark Deeps`,
+    ];
+    const toCheck = [$effect`Bastille Bourgeoisie`, $effect`critical.enh`, $effect`Sparkly!`];
+    const toEquip = new Map([
+      [$slot`weapon`, $item`weeping willow wand`],
+      [$slot`back`, $item`LOV Epaulettes`],
       [$slot`off-hand`, $item`meteorb`],
       [$slot`acc1`, $item`Powerful Glove`],
       [$slot`acc2`, $item`battle broom`],
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
-    return { acquire: toAcquire, check: toCheck, equipment: toEquip, retrocape: "heck kill" };
+    return { acquire: toAcquire, check: toCheck, equipment: toEquip };
   },
 
   [Quest.Muscle.id]: () => {
@@ -251,16 +285,6 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
     };
-  },
-
-  [Quest.DeepDark.id]: () => {
-    const toWear = new Map([
-      [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`pants`, $item`pantogram pants`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
-    ]);
-    if (have($item`burning paper crane`)) toWear.set($slot`off-hand`, $item`burning paper crane`);
-    return { acquire: [], check: [], equipment: toWear, retrocape: "vampire hold" };
   },
 
   [Quest.SpellDamage.id]: () => {
