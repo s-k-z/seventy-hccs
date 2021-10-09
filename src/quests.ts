@@ -192,8 +192,13 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
     if (have($item`burning paper crane`)) toWear.set($slot`off-hand`, $item`burning paper crane`);
-    const toAcquire = [$effect`Polka of Plenty`];
-    return { acquire: toAcquire, check: [], equipment: toWear, retrocape: "vampire hold" };
+    return {
+      acquire: [$effect`Polka of Plenty`],
+      check: [],
+      equipment: toWear,
+      retrocape: "vampire hold",
+      familiar: $familiar`Exotic Parrot`,
+    };
   },
 
   [Quest.VintnerBackup.id]: () => {
