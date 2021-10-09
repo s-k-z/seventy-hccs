@@ -192,7 +192,8 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
     if (have($item`burning paper crane`)) toWear.set($slot`off-hand`, $item`burning paper crane`);
-    return { acquire: [], check: [], equipment: toWear, retrocape: "vampire hold" };
+    const toAcquire = [$effect`Polka of Plenty`];
+    return { acquire: toAcquire, check: [], equipment: toWear, retrocape: "vampire hold" };
   },
 
   [Quest.VintnerBackup.id]: () => {
@@ -202,9 +203,14 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
       $effect`Song of Sauce`,
+      $effect`Wizard Squint`,
+    ];
+    const toCheck = [
+      $effect`Bastille Bourgeoisie`,
+      $effect`critical.enh`,
+      $effect`Sparkly!`,
       $effect`Visions of the Deep Dark Deeps`,
     ];
-    const toCheck = [$effect`Bastille Bourgeoisie`, $effect`critical.enh`, $effect`Sparkly!`];
     const toEquip = new Map([
       [$slot`weapon`, $item`weeping willow wand`],
       [$slot`off-hand`, $item`meteorb`],
@@ -222,13 +228,18 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
       $effect`Song of Sauce`,
+      $effect`Wizard Squint`,
+    ];
+    const toCheck = [
+      $effect`Bastille Bourgeoisie`,
+      $effect`critical.enh`,
+      $effect`Sparkly!`,
       $effect`Visions of the Deep Dark Deeps`,
     ];
-    const toCheck = [$effect`Bastille Bourgeoisie`, $effect`critical.enh`, $effect`Sparkly!`];
     const toEquip = new Map([
       [$slot`weapon`, $item`weeping willow wand`],
       [$slot`back`, $item`LOV Epaulettes`],
-      [$slot`off-hand`, $item`meteorb`],
+      [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
       [$slot`acc1`, $item`Powerful Glove`],
       [$slot`acc2`, $item`battle broom`],
       [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],

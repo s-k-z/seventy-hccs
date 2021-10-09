@@ -398,6 +398,7 @@ export const events: Record<string, eventData> = {
         prep(Quest.DeepDark);
         if (myHp() < myMaxhp() * 0.5) {
           // TODO: Optimize Healing
+          throw `Not yet implemented`;
         }
         useSkill($skill`Deep Dark Visions`);
       }
