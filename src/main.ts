@@ -417,7 +417,7 @@ function preCoilWire() {
       },
     ],
     [$item`battery (AAA)`,             () => harvestBatteries()],
-    [$item`battery (lantern)`,          () => create($item`battery (lantern)`)],
+    [$item`battery (lantern)`,         () => create($item`battery (lantern)`)],
     [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult")],
     [$item`cop dollar`,                () => cliExecute("Detective Solver")],
     [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal")],
