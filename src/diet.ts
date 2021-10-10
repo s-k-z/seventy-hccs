@@ -102,15 +102,17 @@ const diabolicPizzas = {
 };
 
 export function eatPizzas(): void {
+  const followRecipe = (ingredient: Item) => {
+    if (!have(ingredient)) {
+      const recipe = recipes.get(ingredient);
+      if (!recipe) throw `Missing recipe for ${ingredient}`;
+      recipe();
+    }
+  };
   for (const pizza of Object.values(diabolicPizzas)) {
     if (!have(pizza.effect)) {
-      for (const ingredient of pizza.ingredients) {
-        if (!have(ingredient)) {
-          const recipe = recipes.get(ingredient);
-          if (!recipe) throw `Missing recipe for ${ingredient}`;
-          recipe();
-        }
-      }
+      pizza.ingredients.forEach(followRecipe);
+      pizza.ingredients.forEach(followRecipe); // Some recipes can consume previous ones
       if (pizza.familiar) useFamiliar(pizza.familiar);
       cookPizza(...pizza.ingredients);
       eat($item`diabolic pizza`);
