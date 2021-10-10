@@ -204,7 +204,6 @@ const questRecords: Record<number, () => QuestData> = {
 
   [Quest.Vintner.id]: () => {
     const toAcquire = [
-      $effect`Bendin' Hell`,
       $effect`Jackasses' Symphony of Destruction`,
       $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
