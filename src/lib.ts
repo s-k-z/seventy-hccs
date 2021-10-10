@@ -1,38 +1,9 @@
-import {
-  buy,
-  cliExecute,
-  equip,
-  equippedItem,
-  getIngredients,
-  hermit,
-  myMeat,
-  retrieveItem,
-  toInt,
-  totalTurnsPlayed,
-  use,
-} from "kolmafia";
-import { $item, get, have, set } from "libram";
+import { cliExecute, equip, equippedItem, toInt, totalTurnsPlayed, use } from "kolmafia";
+import { get, have, set } from "libram";
 
 export function acquireEffect(e: Effect): void {
   if (!have(e) && e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
   if (!have(e)) cliExecute(e.default);
-}
-
-export function acquireGumOrHermitItem(i: Item): void {
-  const gum = $item`chewing gum on a string`;
-  const source = Object.keys(getIngredients(i));
-  if (source[0] === gum.name) {
-    while (!have(i)) {
-      if (myMeat() < 50) throw "Out of meat for chewing gums!!!";
-      if (!have(gum)) buy(gum, 1);
-      use(gum);
-    }
-  } else if (source[0] === "worthless item") {
-    if (have(i)) return;
-    if (myMeat() < 50) throw "Out of meat for chewing gums!!!";
-    retrieveItem($item`hermit permit`);
-    if (!hermit(i, 1)) throw `Failed to purchase ${i} from Hermit`;
-  } else throw `${i} is not a gum or hermit item`;
 }
 
 export function checkAvailable(i: Item, n = 1): void {

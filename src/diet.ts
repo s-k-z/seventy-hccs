@@ -1,6 +1,6 @@
 import { cliExecute, eat, equip, retrieveItem, toInt, use, useFamiliar, visitUrl } from "kolmafia";
 import { $effect, $familiar, $item, $slot, have } from "libram";
-import { acquireEffect, acquireGumOrHermitItem, checkAvailable, tuple } from "./lib";
+import { acquireEffect, checkAvailable, tuple } from "./lib";
 
 const recipes = new Map<Item, () => void>([
   [
@@ -15,8 +15,8 @@ const recipes = new Map<Item, () => void>([
   [
     $item`blood-faced volleyball`,
     () => {
-      acquireGumOrHermitItem($item`seal tooth`);
-      acquireGumOrHermitItem($item`volleyball`);
+      retrieveItem($item`seal tooth`);
+      retrieveItem($item`volleyball`);
       acquireEffect($effect`Bloody Hand`);
       use($item`volleyball`);
     },
@@ -27,17 +27,17 @@ const recipes = new Map<Item, () => void>([
   [
     $item`dripping meat crossbow`,
     () => {
-      acquireGumOrHermitItem($item`catsup`);
+      retrieveItem($item`catsup`);
       cliExecute(`make ${$item`dripping meat crossbow`}`);
     },
   ],
 
-  [$item`hot buttered roll`, () => acquireGumOrHermitItem($item`hot buttered roll`)],
+  [$item`hot buttered roll`, () => retrieveItem($item`hot buttered roll`)],
   [$item`perfect dark and stormy`, () => cliExecute(`make ${$item`perfect dark and stormy`}`)],
   [$item`sprocket assembly`, () => cliExecute(`make ${$item`sprocket assembly`}`)],
-  [$item`ravioli hat`, () => acquireGumOrHermitItem($item`ravioli hat`)],
+  [$item`ravioli hat`, () => retrieveItem($item`ravioli hat`)],
   [$item`repeating crossbow`, () => cliExecute(`make ${$item`repeating crossbow`}`)],
-  [$item`turtle totem`, () => acquireGumOrHermitItem($item`turtle totem`)],
+  [$item`turtle totem`, () => retrieveItem($item`turtle totem`)],
 
   [
     $item`useless powder`,
@@ -48,7 +48,7 @@ const recipes = new Map<Item, () => void>([
     },
   ],
 
-  [$item`wooden figurine`, () => acquireGumOrHermitItem($item`wooden figurine`)],
+  [$item`wooden figurine`, () => retrieveItem($item`wooden figurine`)],
 ]);
 
 const diabolicPizzas = {

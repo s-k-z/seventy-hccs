@@ -79,14 +79,7 @@ import {
   useDroppedItems,
   vote,
 } from "./iotms";
-import {
-  acquireEffect,
-  acquireGumOrHermitItem,
-  tryUse,
-  wishEffect,
-  withContext,
-  withEquipment,
-} from "./lib";
+import { acquireEffect, tryUse, wishEffect, withContext, withEquipment } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
 import { synthesize } from "./sweetsynthesis";
@@ -544,8 +537,8 @@ function postCoilWire() {
   ].forEach(tryUse);
 
   equip($slot`acc2`, $item`Powerful Glove`);
-  acquireGumOrHermitItem($item`turtle totem`);
-  acquireGumOrHermitItem($item`saucepan`);
+  retrieveItem($item`turtle totem`);
+  retrieveItem($item`saucepan`);
   prep(Quest.Leveling);
   // 316 mp
 }
