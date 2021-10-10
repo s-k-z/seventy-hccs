@@ -401,9 +401,10 @@ export const events: Record<string, eventData> = {
       const maxMultiplier = 4;
       const needed = myMaxhp() * maxMultiplier * resist;
       if (myMaxhp() < 500 || myMaxhp() < needed) throw `Not enough HP for deep dark visions`;
-      if (myMaxhp() - myHp() > needed) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
+      if (myHp() < needed) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
+      if (myHp() < needed) throw `Failed to heal enough for Deep Dark Visions?`;
       useSkill($skill`Deep Dark Visions`);
-      cliExecute("hottub");
+      useSkill($skill`Cannelloni Cocoon`);
     },
   },
 
