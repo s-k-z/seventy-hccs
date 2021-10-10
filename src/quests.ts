@@ -221,6 +221,7 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`weeping willow wand`],
       [$slot`off-hand`, $item`wrench`],
+      [$slot`pants`, $item`pantogram pants`],
       [$slot`acc1`, $item`Powerful Glove`],
       [$slot`acc2`, $item`battle broom`],
       [$slot`acc3`, $item`backup camera`],
