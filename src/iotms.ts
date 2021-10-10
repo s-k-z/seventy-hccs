@@ -105,6 +105,7 @@ export function useDroppedItems(): void {
     if (have(multiUse)) use(itemAmount(multiUse), multiUse);
   }
   for (const singleUse of [
+    // librams
     $item`green candy heart`,
     $item`pulled yellow taffy`,
     $item`resolution: be feistier`,
@@ -113,6 +114,8 @@ export function useDroppedItems(): void {
     $item`resolution: be luckier`,
     $item`resolution: be smarter`,
     $item`resolution: be wealthier`,
+    // other potions
+    $item`power pill`,
     $item`short stack of pancakes`,
   ]) {
     if (have(singleUse) && !have(effectModifier(singleUse, "effect"))) use(singleUse);

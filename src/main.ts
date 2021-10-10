@@ -9,7 +9,6 @@ import {
   eat,
   effectModifier,
   equip,
-  familiarWeight,
   gametimeToInt,
   getProperty,
   haveEffect,
@@ -28,7 +27,6 @@ import {
   myPath,
   myPrimestat,
   mySoulsauce,
-  numericModifier,
   print,
   retrieveItem,
   reverseNumberology,
@@ -44,7 +42,6 @@ import {
 import {
   $class,
   $effect,
-  $familiar,
   $item,
   $skill,
   $slot,
@@ -198,7 +195,7 @@ function levelAndDoQuests() {
       // Do all the leveling combats
       // Then gulp latte for more libram summons
       if (have($effect`Temporary Blindness`)) {
-        if (get("_hotTubSoaks") < 4) cliExecute("hottub");
+        if (get("_hotTubSoaks") < 5) cliExecute("hottub");
         else throw `Can't handle temporary blindness`;
       }
 
@@ -323,21 +320,9 @@ function levelAndDoQuests() {
     }
     const taffy = $item`pulled blue taffy`;
     if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
-    prep(Quest.FamiliarWeight);
-    const target = 295;
-    const currentWeight = familiarWeight($familiar`Exotic Parrot`);
-    if (!have($effect`Smart Drunk`) && !have($effect`Wine-Befouled`)) {
-      if (currentWeight < target) {
-        const wine = $item`1950 Vampire Vintner wine`;
-        const wineWeight = numericModifier(wine, "familiar weight");
-        if (currentWeight + wineWeight >= target) {
-          useSkill(1, $skill`The Ode to Booze`);
-          drink(wine); // 1 drunk
-        } else if (currentWeight + 20 >= target) {
-          useSkill(2, $skill`The Ode to Booze`);
-          drink($item`vintage smart drink`); // 10 drunk
-        } else throw `Could not find enough familiar weight?`;
-      }
+    if (!have($effect`Wine-Befouled`)) {
+      acquireEffect($effect`Ode to Booze`);
+      drink($item`1950 Vampire Vintner wine`); // 1 drunk
     }
     prepAndDoQuest(Quest.FamiliarWeight);
   }
@@ -515,8 +500,9 @@ function postCoilWire() {
   });
 
   retrieveItem($item`toy accordion`);
-  acquireEffect($effect`Ode to Booze`);
   // 10291 - 142 = 10149 meat
+  //useSkill(2, $skill`The Ode to Booze`); // Need more MP at this point somehow...
+  acquireEffect($effect`Ode to Booze`);
   checkMainClan();
   [$effect`[1701]Hip to the Jive`, $effect`In a Lather` /*$effect`On the Trolley`*/].forEach(
     (speakeasy) => acquireEffect(speakeasy)

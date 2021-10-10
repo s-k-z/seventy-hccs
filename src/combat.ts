@@ -91,7 +91,10 @@ const DefaultMacro = new Macro()
 
 export const MacroList = {
   FreeFight: DefaultMacro,
-  FreeFightStench: new Macro().skill($skill`Curse of Weaksauce`).skill($skill`Garbage Nova`),
+  FreeFightStench: new Macro()
+    .skill($skill`Curse of Weaksauce`)
+    .skill($skill`Stuffed Mortar Shell`)
+    .skill($skill`Garbage Nova`),
 
   // Just runaway on its own causes a null pointer exception?
   Runaway: new Macro().trySkill($skill`Saucy Salve`).step("runaway"),

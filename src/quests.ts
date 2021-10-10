@@ -32,8 +32,7 @@ export const Quest: Record<string, QuestInfo> = {
   Leveling:        { id: 901, service: "" },
   LevelingML:      { id: 902, service: "" },
   DeepDark:        { id: 903, service: "" },
-  VintnerBackup:  { id: 904, service: "" },
-  VintnerNEP:      { id: 905, service: "" },
+  Vintner:         { id: 904, service: "" },
 } as const;
 
 type QuestData = {
@@ -201,13 +200,14 @@ const questRecords: Record<number, () => QuestData> = {
     };
   },
 
-  [Quest.VintnerBackup.id]: () => {
+  [Quest.Vintner.id]: () => {
     const toAcquire = [
       $effect`Bendin' Hell`,
       $effect`Jackasses' Symphony of Destruction`,
       $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
       $effect`Song of Sauce`,
+      $effect`Spirit of Bacon Grease`,
       $effect`Wizard Squint`,
     ];
     const toCheck = [
@@ -217,37 +217,12 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Visions of the Deep Dark Deeps`,
     ];
     const toEquip = new Map([
+      [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`weeping willow wand`],
-      [$slot`off-hand`, $item`meteorb`],
+      [$slot`off-hand`, $item`wrench`],
       [$slot`acc1`, $item`Powerful Glove`],
       [$slot`acc2`, $item`battle broom`],
       [$slot`acc3`, $item`backup camera`],
-    ]);
-    return { acquire: toAcquire, check: toCheck, equipment: toEquip, retrocape: "heck kill" };
-  },
-
-  [Quest.VintnerNEP.id]: () => {
-    const toAcquire = [
-      $effect`Bendin' Hell`,
-      $effect`Jackasses' Symphony of Destruction`,
-      $effect`Polka of Plenty`,
-      $effect`Sauce Monocle`,
-      $effect`Song of Sauce`,
-      $effect`Wizard Squint`,
-    ];
-    const toCheck = [
-      $effect`Bastille Bourgeoisie`,
-      $effect`critical.enh`,
-      $effect`Sparkly!`,
-      $effect`Visions of the Deep Dark Deeps`,
-    ];
-    const toEquip = new Map([
-      [$slot`weapon`, $item`weeping willow wand`],
-      [$slot`back`, $item`LOV Epaulettes`],
-      [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
-      [$slot`acc1`, $item`Powerful Glove`],
-      [$slot`acc2`, $item`battle broom`],
-      [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
     ]);
     return { acquire: toAcquire, check: toCheck, equipment: toEquip };
   },

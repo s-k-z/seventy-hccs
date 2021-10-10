@@ -3,10 +3,10 @@ import {
   changeMcd,
   chew,
   cliExecute,
+  elementalResistance,
   equip,
   handlingChoice,
   haveEffect,
-  myFamiliar,
   myHp,
   myLevel,
   myMaxhp,
@@ -20,6 +20,7 @@ import {
 } from "kolmafia";
 import {
   $effect,
+  $element,
   $familiar,
   $item,
   $items,
@@ -392,16 +393,17 @@ export const events: Record<string, eventData> = {
 
   deepDark: {
     max: 0,
-    current: () => (have($effect`Visions of the Deep Dark Deeps`) ? 0 : -1),
+    current: () => haveEffect($effect`Visions of the Deep Dark Deeps`) - 1,
     run: () => {
-      if (!have($effect`Visions of the Deep Dark Deeps`)) {
-        prep(Quest.DeepDark);
-        if (myHp() < myMaxhp() * 0.5) {
-          // TODO: Optimize Healing
-          throw `Not yet implemented`;
-        }
-        useSkill($skill`Deep Dark Visions`);
-      }
+      prep(Quest.DeepDark);
+      const resist = 1 - elementalResistance($element`spooky`) / 100;
+      if (resist <= 0) throw `invalid resist value ${resist} calculated?`;
+      const maxMultiplier = 4;
+      const needed = myMaxhp() * maxMultiplier * resist;
+      if (myMaxhp() < 500 || myMaxhp() < needed) throw `Not enough HP for deep dark visions`;
+      if (myMaxhp() - myHp() > needed) useSkill($skill`Cannelloni Cocoon`);
+      useSkill($skill`Deep Dark Visions`);
+      cliExecute("hottub");
     },
   },
 
@@ -411,7 +413,7 @@ export const events: Record<string, eventData> = {
       get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
     run: () => {
       changeMcd(0);
-      prep(Quest.VintnerBackup);
+      prep(Quest.Vintner);
       selectBestFamiliar(FamiliarFlag.Wine);
       adventure(toxicTeacups, MacroList.FreeFightStench);
     },
@@ -422,7 +424,7 @@ export const events: Record<string, eventData> = {
     current: () => get("_neverendingPartyFreeTurns"),
     run: () => {
       changeMcd(0);
-      prep(Quest.VintnerNEP);
+      prep(Quest.Vintner);
       selectBestFamiliar(FamiliarFlag.Wine);
       const checkQuest = (): boolean => get("_questPartyFair") === "unstarted";
       if (checkQuest()) {
@@ -431,9 +433,7 @@ export const events: Record<string, eventData> = {
         runChoice(choice);
         if (checkQuest()) throw `Failed to grab Neverending Party Quest`;
       }
-      const shouldGetWine = myFamiliar() === $familiar`Vampire Vintner`;
-      adventure(neverendingParty, shouldGetWine ? MacroList.FreeFightStench : MacroList.FreeFight);
-      if (have($item`1950 Vampire Vintner wine`)) visitUrl("desc_item.php?whichitem=140977937");
+      adventure(neverendingParty, MacroList.FreeFightStench);
     },
   },
 
@@ -646,6 +646,8 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     !have($effect`Wine-Befouled`)
   ) {
     familiar($familiar`Vampire Vintner`);
+    /*   } else if (!have($item`power pill`) && !have($effect`Pill Power`)) {
+    familiar($familiar`Ms. Puck Man`); */
   } else {
     familiar($familiar`Machine Elf`);
   }
