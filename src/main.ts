@@ -309,7 +309,6 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorPleasureDome();
-
     const loveSong = $item`love song of icy revenge`;
     const coldHeart = $effect`Cold Hearted`;
     while (have(loveSong) && haveEffect(coldHeart) < 20) {
@@ -322,9 +321,10 @@ function levelAndDoQuests() {
     }
     const taffy = $item`pulled blue taffy`;
     if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
-    if (!have($effect`Wine-Befouled`)) {
+    const wine = $item`1950 Vampire Vintner wine`;
+    if (have(wine)) {
       acquireEffect($effect`Ode to Booze`);
-      drink($item`1950 Vampire Vintner wine`); // 1 drunk
+      drink(wine); // 1 drunk
     }
     prepAndDoQuest(Quest.FamiliarWeight);
   }
@@ -417,7 +417,7 @@ function preCoilWire() {
       },
     ],
     [$item`battery (AAA)`,             () => harvestBatteries()],
-    [$item`battery (9-Volt)`,          () => create($item`battery (9-Volt)`)],
+    [$item`battery (lantern)`,          () => create($item`battery (lantern)`)],
     [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult")],
     [$item`cop dollar`,                () => cliExecute("Detective Solver")],
     [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal")],

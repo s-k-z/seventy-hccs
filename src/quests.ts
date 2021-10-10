@@ -140,8 +140,8 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Singer's Faithful Ocelot`,
       $effect`Triple-Sized`,
       // Batteries
-      $effect`9-Volt-Charged`,
-      $effect`AAA-Charged`,
+      $effect`AAA-Charged`, // +30 MP
+      $effect`Lantern-Charged`, // +70 MP
       // Class skills
       $effect`Astral Shell`,
       $effect`Elemental Saucesphere`,
