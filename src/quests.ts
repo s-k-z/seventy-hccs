@@ -94,7 +94,6 @@ const questRecords: Record<number, () => QuestData> = {
 
   [Quest.Leveling.id]: () => {
     const toAcquire = [
-      $effect`AAA-Charged`,
       $effect`A Girl Named Sue`,
       $effect`Billiards Belligerence`,
       $effect`Broad-Spectrum Vaccine`,
@@ -140,6 +139,9 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Ruthlessly Efficient`,
       $effect`Singer's Faithful Ocelot`,
       $effect`Triple-Sized`,
+      // Batteries
+      $effect`9-Volt-Charged`,
+      $effect`AAA-Charged`,
       // Class skills
       $effect`Astral Shell`,
       $effect`Elemental Saucesphere`,
