@@ -309,14 +309,16 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorPleasureDome();
+
     const loveSong = $item`love song of icy revenge`;
-    if (itemAmount(loveSong) * 5 + haveEffect($effect`Cold Hearted`) < 20) {
-      while (have(loveSong) && haveEffect($effect`Cold Hearted`) <= 10) {
+    const coldHeart = $effect`Cold Hearted`;
+    while (have(loveSong) && haveEffect(coldHeart) < 20) {
+      if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) {
         cliExecute("pillkeeper extend");
         use(loveSong);
+      } else {
+        use(Math.min(4, itemAmount(loveSong)), loveSong);
       }
-    } else {
-      use(Math.min(4, itemAmount(loveSong)), loveSong);
     }
     const taffy = $item`pulled blue taffy`;
     if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
@@ -415,6 +417,7 @@ function preCoilWire() {
       },
     ],
     [$item`battery (AAA)`,             () => harvestBatteries()],
+    [$item`battery (9-Volt)`,          () => create($item`battery (9-Volt)`)],
     [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult")],
     [$item`cop dollar`,                () => cliExecute("Detective Solver")],
     [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal")],
