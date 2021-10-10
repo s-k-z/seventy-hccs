@@ -92,6 +92,8 @@ const DefaultMacro = new Macro()
 export const MacroList = {
   FreeFight: DefaultMacro,
   FreeFightStench: new Macro()
+    .if_(`monsterid ${toxicBeastie}`, Backup)
+    .if_(`monsterid ${toxicBeastie}`, Macro.abort())
     .skill($skill`Curse of Weaksauce`)
     .skill($skill`Stuffed Mortar Shell`)
     .skill($skill`Garbage Nova`),
