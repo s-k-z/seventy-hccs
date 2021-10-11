@@ -74,8 +74,12 @@ const questRecords: Record<number, () => QuestData> = {
 
   // Maximize Myst and MP
   [Quest.CoilWire.id]: () => {
+    const bloodSugar =
+      myClass() === $class`Sauceror`
+        ? $effect`[1458]Blood Sugar Sauce Magic`
+        : $effect`[1457]Blood Sugar Sauce Magic`;
     return {
-      acquire: [],
+      acquire: [bloodSugar],
       check: [],
       equipment: new Map([
         [$slot`hat`, $item`Iunion Crown`],

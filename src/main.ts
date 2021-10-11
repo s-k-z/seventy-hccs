@@ -41,6 +41,7 @@ import {
 import {
   $class,
   $effect,
+  $effects,
   $item,
   $skill,
   $slot,
@@ -173,9 +174,11 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole, sell pork gems, save a baconstone for pantogram
   visitUrl("tutorial.php?action=toot");
+  while (get("_deluxKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
     $item`letter from King Ralph XI`,
     $item`pork elf goodies sack`,
+    $item`pack of KWE trading card`,
     $item`banana candle`,
     $item`ear candle`,
     $item`natural magick candle`,
@@ -269,8 +272,6 @@ function preCoilWire() {
   // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
   oneOffEvents.tropicalSkeleton();
   // 9241 + 2000 = 11241 meat
-  // TODO: handle non-sauceror [1457]Blood Sugar Sauce Magic
-  acquireEffect($effect`[1458]Blood Sugar Sauce Magic`);
   spendAllMpOnLibrams();
 }
 
@@ -286,7 +287,7 @@ function postCoilWire() {
     visitUrl("main.php?action=may4");
     runChoice(4);
   }
-  [$effect`All Is Forgiven`, $effect`Sparkly!`, $effect`Witch Breaded`].forEach(wishEffect);
+  $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
   useDroppedItems(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
   if (!get("hasRange")) {
@@ -326,13 +327,11 @@ function postCoilWire() {
   //useSkill(2, $skill`The Ode to Booze`);
   acquireEffect($effect`Ode to Booze`);
   checkMainClan();
-  [$effect`[1701]Hip to the Jive`, $effect`In a Lather` /*$effect`On the Trolley`*/].forEach(
-    (speakeasy) => acquireEffect(speakeasy)
-  ); // 7 drunk, 6000 meat
-  // 10149 - 6000 = 4149 meat
+  $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, 5500 meat
+  // 10149 - 5500 = 4649 meat
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
-  eatPizzas(); // 4149 - 987 - 950 - 495 - 215 - 77 - 38 = 1387 meat
+  eatPizzas(); // 4649 - 987 - 950 - 495 - 215 - 77 - 38 = 1887 meat
   const toSynth = [
     $effect`Synthesis: Collection`,
     $effect`Synthesis: Smart`,
