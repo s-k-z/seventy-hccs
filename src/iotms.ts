@@ -15,11 +15,14 @@ import { $class, $effect, $item, $skill, $stat, get, have } from "libram";
 import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
 
 export function castBestLibram(): void {
+  const wantGreenCandy = !have($item`green candy heart`) && !have($effect`Heart of Green`);
   const brickosOwned = itemAmount(BRICKO_TARGET_ITEM);
   const brickosNeeded = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + brickosOwned));
-  if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, brickosNeeded)) {
+  if (wantGreenCandy && get("libramSummons") < 10) {
+    useSkill($skill`Summon Candy Heart`);
+  } else if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, brickosNeeded)) {
     useSkill($skill`Summon BRICKOs`);
-  } else if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
+  } else if (wantGreenCandy) {
     useSkill($skill`Summon Candy Heart`);
   } else if (!have($item`love song of icy revenge`, 2)) {
     useSkill($skill`Summon Love Song`);

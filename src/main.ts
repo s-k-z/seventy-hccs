@@ -12,7 +12,6 @@ import {
   gametimeToInt,
   getProperty,
   haveEffect,
-  haveEquipped,
   itemAmount,
   mpCost,
   myBasestat,
@@ -156,179 +155,6 @@ export function main(): void {
   const endTime = gametimeToInt();
   const duration = endTime - startTime;
   print(`Community Service completed in ${duration} miliseconds`, "green");
-}
-
-function levelAndDoQuests() {
-  Clan.join(MAIN_CLAN);
-  visitUrl("clan_viplounge.php?action=fwshop"); // Enable access to the fireworks shop
-  const mainstat = myPrimestat();
-  if (haveQuest(Quest.CoilWire)) {
-    preCoilWire();
-    print(`Coil Wire start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
-    print(`\tand ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}.`);
-    prepAndDoQuest(Quest.CoilWire);
-    print(`Coil Wire done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
-  }
-
-  if (getRemainingFreeFights() > 0) {
-    postCoilWire();
-    print(`Leveling start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
-
-    const chateauNapReady = (): boolean => {
-      return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
-    };
-
-    // eslint-disable-next-line no-constant-condition
-    leveling: while (true) {
-      // Spend excess MP on librams
-      // Use free rests on stats at configured level
-      // Swap equipment as needed between combats
-      // Get Inner Elf at level 13
-      // Free run for some items
-      // Do all the leveling combats
-      // Then gulp latte for more libram summons
-      if (have($effect`Temporary Blindness`)) {
-        if (get("_hotTubSoaks") < 5) cliExecute("hottub");
-        else throw `Can't handle temporary blindness`;
-      }
-
-      if (chateauNapReady()) {
-        withEquipment(() => {
-          while (chateauNapReady()) {
-            visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
-          }
-        }, [[$slot`off-hand`, $item`familiar scrapbook`]]);
-      }
-
-      const maxMPGains = (myMaxmp() - myMp()) / 15;
-      const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
-      const soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
-      if (soulFoodCasts > 0) useSkill(soulFoodCasts, $skill`Soul Food`);
-
-      while (
-        have($item`magical sausage casing`) &&
-        (get("_sausagesMade") + 1) * 111 < myMeat() - MEAT_SAFE_LIMIT &&
-        myMaxmp() - myMp() > 1000 &&
-        myMaxmp() - mpCost($skill`Summon BRICKOs`) > MP_SAFE_LIMIT &&
-        get("_sausagesEaten") < 23
-      ) {
-        create($item`magical sausage`);
-        eat($item`magical sausage`);
-      }
-
-      while (myMp() - mpCost($skill`Summon BRICKOs`) > MP_SAFE_LIMIT) {
-        castBestLibram();
-        continue leveling; // get more MP and make more librams before adventuring on
-      }
-      useDroppedItems();
-
-      while (have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKOS_PER_FIGHT)) {
-        create(BRICKO_TARGET_ITEM);
-      }
-
-      if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      // Save the Garbage shirt for the 37 fights before switching to the Vintner
-      // Swap from Iunion Crown to Wad of Used Tape once Myst is high enough
-      const crown = $item`Iunion Crown`;
-      const garbageShirt = $item`makeshift garbage shirt`;
-      const wad = $item`wad of used tape`;
-      if (haveEquipped(garbageShirt) || getRemainingFreeFights() <= 37 + 14) {
-        // Turbo used a flag to cast pride
-        if (get("garbageShirtCharge") === 3) SourceTerminal.educate($skill`Turbo`);
-        if (!have(garbageShirt)) {
-          cliExecute(`fold ${garbageShirt}`);
-          equip($slot`shirt`, garbageShirt);
-          equip($slot`hat`, crown);
-        }
-      } else if (myBasestat(mainstat) > 100) {
-        if (!have(wad)) cliExecute(`fold ${wad}`);
-        equip($slot`hat`, wad);
-      } else {
-        equip($slot`hat`, crown);
-      }
-      oneOffEvents.innerElf();
-      // This is where all the leveling happens
-      // Loop through the list of events until an unfinished one is found
-      // After doing an event, go back to the top of the outer loop to
-      // handle librams, sausages, garbage shirt, etc.
-      for (const event of Object.values(events)) {
-        if (event.current() < event.max) {
-          event.run();
-          continue leveling;
-        }
-      }
-
-      break;
-    }
-
-    print(
-      `Leveling done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP at level ${myLevel()}.`
-    );
-    print(`\twith ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}.`);
-  }
-
-  // Leveling done
-  checkMainClan();
-  cliExecute("shower hot");
-  changeMcd(0);
-
-  prepAndDoQuest(Quest.Muscle);
-  prepAndDoQuest(Quest.Moxie);
-  prepAndDoQuest(Quest.HP);
-
-  if (haveQuest(Quest.SpellDamage)) {
-    oneOffEvents.innerElf();
-    oneOffEvents.meteorUngulith();
-    if (!have($effect`Cowrruption`)) use($item`corrupted marrow`);
-    prepAndDoQuest(Quest.SpellDamage);
-  }
-
-  if (haveQuest(Quest.WeaponDamage)) {
-    tuneMoon(MoonSign.Platypus);
-    oneOffEvents.innerElf();
-    oneOffEvents.meteorPleasureDome();
-    prepAndDoQuest(Quest.WeaponDamage);
-  }
-
-  if (haveQuest(Quest.CombatFrequency)) {
-    equip($slot`acc2`, $item`Powerful Glove`);
-    prepAndDoQuest(Quest.CombatFrequency);
-  }
-
-  if (haveQuest(Quest.HotResist)) {
-    oneOffEvents.foamYourself();
-    prepAndDoQuest(Quest.HotResist);
-  }
-
-  if (haveQuest(Quest.FamiliarWeight)) {
-    oneOffEvents.meteorPleasureDome();
-    const loveSong = $item`love song of icy revenge`;
-    const coldHeart = $effect`Cold Hearted`;
-    while (have(loveSong) && haveEffect(coldHeart) < 20) {
-      if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) {
-        cliExecute("pillkeeper extend");
-        use(loveSong);
-      } else {
-        use(Math.min(4, itemAmount(loveSong)), loveSong);
-      }
-    }
-    const taffy = $item`pulled blue taffy`;
-    if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
-    const wine = $item`1950 Vampire Vintner wine`;
-    if (have(wine)) {
-      acquireEffect($effect`Ode to Booze`);
-      drink(wine); // 1 drunk
-    }
-    prepAndDoQuest(Quest.FamiliarWeight);
-  }
-
-  if (haveQuest(Quest.ItemDrop)) {
-    oneOffEvents.batform();
-    prepAndDoQuest(Quest.ItemDrop);
-  }
-
-  prepAndDoQuest(Quest.Mysticality);
-  prepAndDoQuest(Quest.Donate);
 }
 
 function openQuestZones() {
@@ -497,7 +323,7 @@ function postCoilWire() {
 
   retrieveItem($item`toy accordion`);
   // 10291 - 142 = 10149 meat
-  //useSkill(2, $skill`The Ode to Booze`); // Need more MP at this point somehow...
+  //useSkill(2, $skill`The Ode to Booze`);
   acquireEffect($effect`Ode to Booze`);
   checkMainClan();
   [$effect`[1701]Hip to the Jive`, $effect`In a Lather` /*$effect`On the Trolley`*/].forEach(
@@ -541,4 +367,161 @@ function postCoilWire() {
   retrieveItem($item`saucepan`);
   prep(Quest.Leveling);
   // 316 mp
+  if (have($item`LOV Epaulettes`)) prep(Quest.LevelingML);
+}
+
+function levelAndDoQuests() {
+  Clan.join(MAIN_CLAN);
+  visitUrl("clan_viplounge.php?action=fwshop"); // Enable access to the fireworks shop
+  const mainstat = myPrimestat();
+  if (haveQuest(Quest.CoilWire)) {
+    preCoilWire();
+    print(`Coil Wire start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
+    print(`\tand ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}.`);
+    prepAndDoQuest(Quest.CoilWire);
+    print(`Coil Wire done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
+  }
+
+  if (getRemainingFreeFights() > 0) {
+    postCoilWire();
+    print(`Leveling start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
+
+    const chateauNapReady = (): boolean => {
+      return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
+    };
+
+    // eslint-disable-next-line no-constant-condition
+    leveling: while (true) {
+      // Spend excess MP on librams
+      // Use free rests on stats at configured level
+      // Swap equipment as needed between combats
+      // Get Inner Elf at level 13
+      // Free run for some items
+      // Do all the leveling combats
+      // Then gulp latte for more libram summons
+      if (have($effect`Temporary Blindness`)) {
+        if (get("_hotTubSoaks") < 5) cliExecute("hottub");
+        else throw `Can't handle temporary blindness`;
+      }
+
+      if (chateauNapReady()) {
+        withEquipment(() => {
+          while (chateauNapReady()) {
+            visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+          }
+        }, [[$slot`off-hand`, $item`familiar scrapbook`]]);
+      }
+
+      const maxMPGains = (myMaxmp() - myMp()) / 15;
+      const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
+      const soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
+      if (soulFoodCasts > 0) useSkill(soulFoodCasts, $skill`Soul Food`);
+
+      while (
+        have($item`magical sausage casing`) &&
+        (get("_sausagesMade") + 1) * 111 < myMeat() - MEAT_SAFE_LIMIT &&
+        myMaxmp() - myMp() > 1000 &&
+        myMaxmp() - mpCost($skill`Summon BRICKOs`) > MP_SAFE_LIMIT &&
+        get("_sausagesEaten") < 23
+      ) {
+        create($item`magical sausage`);
+        eat($item`magical sausage`);
+      }
+
+      while (myMp() - mpCost($skill`Summon BRICKOs`) > MP_SAFE_LIMIT) {
+        castBestLibram();
+        continue leveling; // get more MP and make more librams before adventuring on
+      }
+      useDroppedItems();
+
+      while (have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKOS_PER_FIGHT)) {
+        create(BRICKO_TARGET_ITEM);
+      }
+
+      if (have($item`burning newspaper`)) create($item`burning paper crane`);
+      // Turbo used a flag to cast pride
+      if (get("garbageShirtCharge") === 3) SourceTerminal.educate($skill`Turbo`);
+      oneOffEvents.innerElf();
+      // This is where all the leveling happens
+      // Loop through the list of events until an unfinished one is found
+      // After doing an event, go back to the top of the outer loop to
+      // handle librams, sausages, garbage shirt, etc.
+      for (const event of Object.values(events)) {
+        if (event.current() < event.max) {
+          event.run();
+          continue leveling;
+        }
+      }
+
+      break;
+    }
+
+    print(
+      `Leveling done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP at level ${myLevel()}.`
+    );
+    print(`\twith ${myBuffedstat(mainstat)} (${myBasestat(mainstat)}) ${mainstat}.`);
+  }
+
+  // Leveling done
+  checkMainClan();
+  cliExecute("shower hot");
+  changeMcd(0);
+
+  prepAndDoQuest(Quest.Muscle);
+  prepAndDoQuest(Quest.Moxie);
+  prepAndDoQuest(Quest.HP);
+
+  if (haveQuest(Quest.SpellDamage)) {
+    oneOffEvents.innerElf();
+    oneOffEvents.meteorUngulith();
+    if (!have($effect`Cowrruption`)) use($item`corrupted marrow`);
+    prepAndDoQuest(Quest.SpellDamage);
+  }
+
+  if (haveQuest(Quest.WeaponDamage)) {
+    tuneMoon(MoonSign.Platypus);
+    oneOffEvents.innerElf();
+    oneOffEvents.meteorPleasureDome();
+    prepAndDoQuest(Quest.WeaponDamage);
+  }
+
+  if (haveQuest(Quest.CombatFrequency)) {
+    equip($slot`acc2`, $item`Powerful Glove`);
+    prepAndDoQuest(Quest.CombatFrequency);
+  }
+
+  if (haveQuest(Quest.HotResist)) {
+    oneOffEvents.foamYourself();
+    prepAndDoQuest(Quest.HotResist);
+  }
+
+  if (haveQuest(Quest.FamiliarWeight)) {
+    oneOffEvents.meteorPleasureDome();
+    const loveSong = $item`love song of icy revenge`;
+    const coldHeart = $effect`Cold Hearted`;
+    while (have(loveSong) && haveEffect(coldHeart) < 20) {
+      if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) {
+        cliExecute("pillkeeper extend");
+        use(loveSong);
+      } else {
+        use(Math.min(4, itemAmount(loveSong)), loveSong);
+      }
+    }
+    const taffy = $item`pulled blue taffy`;
+    if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
+    const wine = $item`1950 Vampire Vintner wine`;
+    if (have(wine)) {
+      acquireEffect($effect`Ode to Booze`);
+      drink(wine); // 1 drunk
+    }
+    prepAndDoQuest(Quest.FamiliarWeight);
+  }
+
+  if (haveQuest(Quest.ItemDrop)) {
+    oneOffEvents.batform();
+    prepAndDoQuest(Quest.ItemDrop);
+  }
+
+  prepAndDoQuest(Quest.Mysticality);
+  prepAndDoQuest(Quest.Donate);
 }

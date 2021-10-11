@@ -138,6 +138,18 @@ export const events: Record<string, eventData> = {
     },
   },
 
+  witchessRook: {
+    max: 0,
+    current: () => haveEffect($effect`Sweetbreads Flambé`) - 1,
+    run: () => {
+      prep(Quest.LevelingML);
+      selectBestFamiliar();
+      fightWitchess($monster`Witchess Rook`, MacroList.FreeFight);
+      checkAvailable($item`Greek fire`);
+      use($item`Greek fire`);
+    },
+  },
+
   upscaleDistrictKill: {
     max: 1,
     current: () => (have($effect`Whole Latte Love`) ? 1 : availableAmount($item`sprinkles`) - 54),
@@ -198,7 +210,6 @@ export const events: Record<string, eventData> = {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
         runChoice(1);
       }
-      prep(Quest.LevelingML);
       selectBestFamiliar();
       adventure(snojo, MacroList.FreeFight);
     },
@@ -283,6 +294,9 @@ export const events: Record<string, eventData> = {
     max: 1,
     current: () => get("_sourceTerminalDigitizeMonsterCount"),
     run: () => {
+      const shirt = $item`makeshift garbage shirt`;
+      if (!have(shirt)) cliExecute(`fold ${shirt}`);
+      equip($slot`shirt`, shirt);
       equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
       selectBestFamiliar();
       adventure(toxicTeacups, MacroList.FreeFight);
@@ -359,10 +373,9 @@ export const events: Record<string, eventData> = {
     },
   },
 
-  // TODO: Get a shocking lick charge, maybe?
   shockingLick: {
-    max: 0,
-    current: () => 0 - get("shockingLickCharges"),
+    max: 1,
+    current: () => 1 - get("shockingLickCharges"),
     run: () => {
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
@@ -404,7 +417,7 @@ export const events: Record<string, eventData> = {
       if (myHp() < needed) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
       if (myHp() < needed) throw `Failed to heal enough for Deep Dark Visions?`;
       useSkill($skill`Deep Dark Visions`);
-      useSkill($skill`Cannelloni Cocoon`);
+      while (myHp() < myMaxhp() * 0.9) useSkill($skill`Cannelloni Cocoon`);
     },
   },
 
@@ -616,17 +629,25 @@ export const oneOffEvents = {
 function familiar(fam: Familiar) {
   useFamiliar(fam);
   const costume = new Map([
-    [$familiar`Green Pixie`, "mp"],
-    [$familiar`Machine Elf`, "myst"],
+    [$familiar`Machine Elf`, "mp"],
     [$familiar`Pocket Professor`, "hp"],
+    [$familiar`Rockin' Robin`, "myst"],
     [$familiar`Vampire Vintner`, "meat"],
   ]).get(fam);
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);
 }
 
 function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
-  if (!have($item`rope`) && !have($item`burning newspaper`) && !have($item`burning paper crane`)) {
-    familiar($familiar`Garbage Fire`);
+  if (
+    flag === FamiliarFlag.Wine &&
+    !have($item`1950 Vampire Vintner wine`) &&
+    !have($effect`Wine-Befouled`)
+  ) {
+    familiar($familiar`Vampire Vintner`);
+  } else if (flag === FamiliarFlag.ToxicTeacups && get("_hipsterAdv") < 7) {
+    familiar($familiar`Artistic Goth Kid`);
+  } else if (!have($item`robin's egg`)) {
+    familiar($familiar`Rockin' Robin`);
   } else if (
     flag === FamiliarFlag.Default &&
     !have($item`short stack of pancakes`) &&
@@ -639,16 +660,12 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     !have($effect`Absinthe-Minded`)
   ) {
     familiar($familiar`Green Pixie`);
-  } else if (flag === FamiliarFlag.ToxicTeacups && get("_hipsterAdv") < 7) {
-    familiar($familiar`Artistic Goth Kid`);
   } else if (
-    flag === FamiliarFlag.Wine &&
-    !have($item`1950 Vampire Vintner wine`) &&
-    !have($effect`Wine-Befouled`)
+    !have($item`rope`) &&
+    !have($item`burning newspaper`) &&
+    !have($item`burning paper crane`)
   ) {
-    familiar($familiar`Vampire Vintner`);
-    /*   } else if (!have($item`power pill`) && !have($effect`Pill Power`)) {
-    familiar($familiar`Ms. Puck Man`); */
+    familiar($familiar`Garbage Fire`);
   } else {
     familiar($familiar`Machine Elf`);
   }

@@ -3,13 +3,14 @@ import {
   equip,
   getIngredients,
   getRelated,
+  myClass,
   myEffects,
   numericModifier,
   toEffect,
   useFamiliar,
   visitUrl,
 } from "kolmafia";
-import { $effect, $effects, $familiar, $item, $slot, get, have, isSong } from "libram";
+import { $class, $effect, $effects, $familiar, $item, $slot, get, have, isSong } from "libram";
 import { acquireEffect, checkEffect, shrugEffect } from "./lib";
 
 type QuestInfo = { id: number; service: string };
@@ -169,9 +170,15 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.LevelingML.id]: () => {
+    const pastalordShield =
+      myClass() === $class`Pastamancer`
+        ? $effect`Shield of the Pastalord`
+        : $effect`Flimsy Shield of the Pastalord`;
     const toAcquire = [
-      $effect`Flimsy Shield of the Pastalord`, // Need the non-flimsy effect for PM
+      pastalordShield,
+      $effect`Drescher's Annoying Noise`,
       $effect`Polka of Plenty`,
+      $effect`Pride of the Puffin`,
       $effect`Ur-Kel's Aria of Annoyance`,
     ];
     const toWear = new Map([
