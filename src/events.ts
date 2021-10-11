@@ -7,6 +7,7 @@ import {
   equip,
   handlingChoice,
   haveEffect,
+  myFamiliar,
   myHp,
   myLevel,
   myMaxhp,
@@ -211,7 +212,7 @@ export const events: Record<string, eventData> = {
         runChoice(1);
       }
       selectBestFamiliar();
-      adventure(snojo, MacroList.FreeFight);
+      adventure(snojo, myFamiliar().combat ? MacroList.FastFreeFight : MacroList.FreeFight);
     },
   },
 
@@ -220,7 +221,7 @@ export const events: Record<string, eventData> = {
     current: () => (!have(BRICKO_TARGET_ITEM) ? 3 : get("_brickoFights")),
     run: () => {
       selectBestFamiliar();
-      MacroList.FreeFight.setAutoAttack();
+      (myFamiliar().combat ? MacroList.FastFreeFight : MacroList.FreeFight).setAutoAttack();
       use(BRICKO_TARGET_ITEM);
     },
   },
@@ -429,7 +430,7 @@ export const events: Record<string, eventData> = {
       changeMcd(0);
       prep(Quest.Vintner);
       selectBestFamiliar(FamiliarFlag.Wine);
-      adventure(toxicTeacups, MacroList.FreeFightStench);
+      adventure(toxicTeacups, MacroList.StenchFreeFight);
     },
   },
 
@@ -447,7 +448,7 @@ export const events: Record<string, eventData> = {
         runChoice(choice);
         if (checkQuest()) throw `Failed to grab Neverending Party Quest`;
       }
-      adventure(neverendingParty, MacroList.FreeFightStench);
+      adventure(neverendingParty, MacroList.StenchFreeFight);
     },
   },
 

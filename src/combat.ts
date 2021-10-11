@@ -68,6 +68,12 @@ const CigKill = new Macro()
   .tryItem($item`gingerbread cigarette`)
   .abort();
 
+const SingAndKill = new Macro()
+  .skill($skill`Sing Along`)
+  .step(Pride)
+  .while_(`!mpbelow ${mpCost($skill`Candyblast`)}`, Macro.skill($skill`Candyblast`))
+  .attack()
+  .repeat();
 const DefaultMacro = new Macro()
   .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
   .if_(`monsterid ${toxicBeastie}`, Backup)
@@ -83,15 +89,12 @@ const DefaultMacro = new Macro()
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
-  .skill($skill`Sing Along`)
-  .step(Pride)
-  .while_(`!mpbelow ${mpCost($skill`Candyblast`)}`, Macro.skill($skill`Candyblast`))
-  .attack()
-  .repeat();
+  .step(SingAndKill);
 
 export const MacroList = {
   FreeFight: DefaultMacro,
-  FreeFightStench: new Macro()
+  FastFreeFight: SingAndKill,
+  StenchFreeFight: new Macro()
     .if_(`monsterid ${toxicBeastie}`, Backup)
     .if_(`monsterid ${toxicBeastie}`, Macro.abort())
     .if_(`monsterhpabove 250`, Macro.skill($skill`Curse of Weaksauce`))
