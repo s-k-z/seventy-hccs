@@ -12,6 +12,7 @@ import {
   gametimeToInt,
   getProperty,
   haveEffect,
+  haveEquipped,
   itemAmount,
   mpCost,
   myBasestat,
@@ -174,7 +175,7 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole, sell pork gems, save a baconstone for pantogram
   visitUrl("tutorial.php?action=toot");
-  while (get("_deluxKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
+  while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
     $item`letter from King Ralph XI`,
     $item`pork elf goodies sack`,
@@ -439,7 +440,7 @@ function levelAndDoQuests() {
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
       // Turbo used a flag to cast pride
-      if (get("garbageShirtCharge") === 3) SourceTerminal.educate($skill`Turbo`);
+      if (haveEquipped($item`makeshift garbage shirt`)) SourceTerminal.educate($skill`Turbo`);
       oneOffEvents.innerElf();
       // This is where all the leveling happens
       // Loop through the list of events until an unfinished one is found
