@@ -67,7 +67,7 @@ import {
   MP_SAFE_LIMIT,
 } from "./config";
 import { eatPizzas } from "./diet";
-import { events, getRemainingFreeFights, oneOffEvents } from "./events";
+import { events, hasRemainingFreeFights, oneOffEvents } from "./events";
 import {
   castBestLibram,
   gazeAtTheStars,
@@ -382,7 +382,7 @@ function levelAndDoQuests() {
     print(`Coil Wire done: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
   }
 
-  if (getRemainingFreeFights() > 0) {
+  if (hasRemainingFreeFights()) {
     postCoilWire();
     print(`Leveling start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
 
@@ -447,7 +447,7 @@ function levelAndDoQuests() {
       // After doing an event, go back to the top of the outer loop to
       // handle librams, sausages, garbage shirt, etc.
       for (const event of Object.values(events)) {
-        if (event.current() < event.max) {
+        if (event.ready()) {
           event.run();
           continue leveling;
         }

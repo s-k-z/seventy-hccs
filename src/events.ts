@@ -1,12 +1,10 @@
 import {
-  availableAmount,
   changeMcd,
   chew,
   cliExecute,
   elementalResistance,
   equip,
   handlingChoice,
-  haveEffect,
   myFamiliar,
   myHp,
   myLevel,
@@ -67,15 +65,13 @@ const upscaleDistrict = $location`Gingerbread Upscale Retail District`;
 // Structure events in the form of: [ if(check()<max) run(); ]
 // Events are prioritized in order from top to bottom
 interface eventData {
-  max: number;
-  current: () => number;
+  ready(): boolean;
   run(): void;
 }
 
 export const events: Record<string, eventData> = {
   protonicGhost: {
-    max: 1,
-    current: () => (get("ghostLocation") ? 0 : 1),
+    ready: () => get("ghostLocation") !== undefined,
     run: () => {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
@@ -86,15 +82,14 @@ export const events: Record<string, eventData> = {
   },
 
   ghostCarol: {
-    max: 0,
-    current: () =>
-      [
+    ready: () =>
+      ![
         $effect`All I Want For Crimbo Is Stuff`,
         $effect`Crimbo Wrapping`,
         $effect`Do You Crush What I Crush?`,
         $effect`Holiday Yoked`,
         $effect`Let It Snow/Boil/Stink/Frighten/Grease`,
-      ].reduce((sum, carol) => sum + haveEffect(carol), 0) - 1,
+      ].some((carol) => have(carol)),
     run: () => {
       familiar($familiar`Ghost of Crimbo Carols`);
       withEquipment(
@@ -106,8 +101,7 @@ export const events: Record<string, eventData> = {
   },
 
   loveTunnel: {
-    max: 3,
-    current: () => (get("_loveTunnelUsed") ? 3 : 0),
+    ready: () => !get("_loveTunnelUsed"),
     run: () => {
       spendAllMpOnLibrams();
       selectBestFamiliar(FamiliarFlag.NoAttack);
@@ -122,8 +116,7 @@ export const events: Record<string, eventData> = {
   },
 
   tenPercentBonus: {
-    max: 0,
-    current: () => 0 - availableAmount($item`a ten-percent bonus`),
+    ready: () => have($item`a ten-percent bonus`),
     run: () => {
       [
         $effect`That's Just Cloud-Talk, Man`,
@@ -140,8 +133,7 @@ export const events: Record<string, eventData> = {
   },
 
   witchessRook: {
-    max: 0,
-    current: () => haveEffect($effect`Sweetbreads Flambé`) - 1,
+    ready: () => !have($effect`Sweetbreads Flambé`),
     run: () => {
       prep(Quest.LevelingML);
       selectBestFamiliar();
@@ -152,8 +144,7 @@ export const events: Record<string, eventData> = {
   },
 
   upscaleDistrictKill: {
-    max: 1,
-    current: () => (have($effect`Whole Latte Love`) ? 1 : availableAmount($item`sprinkles`) - 54),
+    ready: () => !have($effect`Whole Latte Love`) && !have($item`sprinkles`, 55),
     run: () => {
       familiar($familiar`Chocolate Lab`);
       const rope = $item`rope`;
@@ -175,8 +166,7 @@ export const events: Record<string, eventData> = {
   },
 
   upscaleDistrictRunaway: {
-    max: 0,
-    current: () => haveEffect($effect`Whole Latte Love`) - 1,
+    ready: () => !have($effect`Whole Latte Love`),
     run: () => {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
@@ -192,8 +182,7 @@ export const events: Record<string, eventData> = {
   },
 
   civicCenterRunaway: {
-    max: 0,
-    current: () => get("_gingerbreadCityTurns") - 15,
+    ready: () => get("_gingerbreadCityTurns") < 15,
     run() {
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
@@ -204,8 +193,7 @@ export const events: Record<string, eventData> = {
   },
 
   snojo: {
-    max: 10,
-    current: () => get("_snojoFreeFights"),
+    ready: () => get("_snojoFreeFights") < 10,
     run: () => {
       if (!get("snojoSetting") !== $stat`Muscle`) {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
@@ -217,8 +205,7 @@ export const events: Record<string, eventData> = {
   },
 
   bricko: {
-    max: 3,
-    current: () => (!have(BRICKO_TARGET_ITEM) ? 3 : get("_brickoFights")),
+    ready: () => have(BRICKO_TARGET_ITEM) && get("_brickoFights") < 3,
     run: () => {
       selectBestFamiliar();
       (myFamiliar().combat ? MacroList.FastFreeFight : MacroList.FreeFight).setAutoAttack();
@@ -227,8 +214,7 @@ export const events: Record<string, eventData> = {
   },
 
   witchessWitch: {
-    max: 0,
-    current: () => availableAmount($item`battle broom`) - 1,
+    ready: () => !have($item`battle broom`),
     run: () => {
       selectBestFamiliar();
       fightWitchess($monster`Witchess Witch`, MacroList.WitchessWitch);
@@ -237,8 +223,7 @@ export const events: Record<string, eventData> = {
   },
 
   eldritch: {
-    max: 1,
-    current: () => (get("_eldritchHorrorEvoked") ? 1 : 0),
+    ready: () => !get("_eldritchHorrorEvoked"),
     run: () => {
       selectBestFamiliar();
       MacroList.FreeFight.setAutoAttack();
@@ -249,8 +234,7 @@ export const events: Record<string, eventData> = {
   },
 
   gingerbreadCig: {
-    max: 5,
-    current: () => 5 - availableAmount($item`gingerbread cigarette`),
+    ready: () => have($item`gingerbread cigarette`),
     run: () => {
       selectBestFamiliar(FamiliarFlag.NoAttack);
       adventure(upscaleDistrict, MacroList.FreeFight);
@@ -258,8 +242,7 @@ export const events: Record<string, eventData> = {
   },
 
   godLobster: {
-    max: 3,
-    current: () => get("_godLobsterFights"),
+    ready: () => get("_godLobsterFights") < 3,
     run: () => {
       familiar($familiar`God Lobster`);
       MacroList.FreeFight.setAutoAttack();
@@ -274,8 +257,7 @@ export const events: Record<string, eventData> = {
   },
 
   witchessKing: {
-    max: 0,
-    current: () => availableAmount($item`dented scepter`) - 1,
+    ready: () => !have($item`dented scepter`),
     run: () => {
       selectBestFamiliar();
       fightWitchess($monster`Witchess King`, MacroList.FreeFight);
@@ -283,8 +265,7 @@ export const events: Record<string, eventData> = {
   },
 
   witchess: {
-    max: 5,
-    current: () => get("_witchessFights"),
+    ready: () => get("_witchessFights") < 5,
     run: () => {
       selectBestFamiliar();
       fightWitchess($monster`Witchess Queen`, MacroList.WitchessQueen);
@@ -292,8 +273,7 @@ export const events: Record<string, eventData> = {
   },
 
   digitize: {
-    max: 1,
-    current: () => get("_sourceTerminalDigitizeMonsterCount"),
+    ready: () => get("_sourceTerminalDigitizeMonsterCount") < 1,
     run: () => {
       const shirt = $item`makeshift garbage shirt`;
       if (!have(shirt)) cliExecute(`fold ${shirt}`);
@@ -305,8 +285,7 @@ export const events: Record<string, eventData> = {
   },
 
   vote: {
-    max: 1,
-    current: () => (voterMonsterNow() ? get("_voteFreeFights") : 1),
+    ready: () => voterMonsterNow() && get("_voteFreeFights") < 1,
     run: () => {
       selectBestFamiliar();
       withEquipment(
@@ -317,8 +296,7 @@ export const events: Record<string, eventData> = {
   },
 
   dmtSquare: {
-    max: 0,
-    current: () => haveEffect($effect`Joy`) + availableAmount($item`abstraction: action`) - 1,
+    ready: () => !have($effect`Joy`) && !have($item`abstraction: action`),
     run: () => {
       familiar($familiar`Machine Elf`);
       adventure(deepMachineTunnels, MacroList.DMTSquare);
@@ -327,8 +305,7 @@ export const events: Record<string, eventData> = {
   },
 
   dmtCircle: {
-    max: 0,
-    current: () => haveEffect($effect`Joy`) - 1,
+    ready: () => !have($effect`Joy`),
     run: () => {
       familiar($familiar`Machine Elf`);
       adventure(deepMachineTunnels, MacroList.DMTCircle);
@@ -338,8 +315,7 @@ export const events: Record<string, eventData> = {
   },
 
   dmt: {
-    max: 5,
-    current: () => get("_machineTunnelsAdv"),
+    ready: () => get("_machineTunnelsAdv") < 5,
     run: () => {
       familiar($familiar`Machine Elf`);
       adventure(deepMachineTunnels, MacroList.FreeFight);
@@ -347,8 +323,7 @@ export const events: Record<string, eventData> = {
   },
 
   chestXRay: {
-    max: 3,
-    current: () => get("_chestXRayUsed"),
+    ready: () => get("_chestXRayUsed") < 3,
     run: () => {
       equip($slot`acc1`, $item`Lil' Doctor™ bag`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
@@ -357,8 +332,7 @@ export const events: Record<string, eventData> = {
   },
 
   shatterPunch: {
-    max: 3,
-    current: () => get("_shatteringPunchUsed"),
+    ready: () => get("_shatteringPunchUsed") < 3,
     run: () => {
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
@@ -366,8 +340,7 @@ export const events: Record<string, eventData> = {
   },
 
   mobHit: {
-    max: 1,
-    current: () => (get("_gingerbreadMobHitUsed") ? 1 : 0),
+    ready: () => !get("_gingerbreadMobHitUsed"),
     run: () => {
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
@@ -375,8 +348,7 @@ export const events: Record<string, eventData> = {
   },
 
   shockingLick: {
-    max: 1,
-    current: () => 1 - get("shockingLickCharges"),
+    ready: () => get("shockingLickCharges") > 0,
     run: () => {
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
@@ -384,8 +356,7 @@ export const events: Record<string, eventData> = {
   },
 
   lecture: {
-    max: 16,
-    current: () => get("_pocketProfessorLectures"),
+    ready: () => get("_pocketProfessorLectures") < 1,
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       familiar($familiar`Pocket Professor`);
@@ -394,9 +365,7 @@ export const events: Record<string, eventData> = {
   },
 
   backupCamera: {
-    max: 7,
-    current: () =>
-      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 7,
+    ready: () => get("lastCopyableMonster") === $monster`sausage goblin` && get("_backUpUses") < 7,
     run: () => {
       equip($slot`off-hand`, $item`Kramco Sausage-o-Matic™`);
       equip($slot`acc3`, $item`backup camera`);
@@ -406,8 +375,7 @@ export const events: Record<string, eventData> = {
   },
 
   deepDark: {
-    max: 0,
-    current: () => haveEffect($effect`Visions of the Deep Dark Deeps`) - 1,
+    ready: () => !have($effect`Visions of the Deep Dark Deeps`),
     run: () => {
       prep(Quest.DeepDark);
       const resist = 1 - elementalResistance($element`spooky`) / 100;
@@ -423,9 +391,7 @@ export const events: Record<string, eventData> = {
   },
 
   vintnerBackup: {
-    max: 11,
-    current: () =>
-      get("lastCopyableMonster") === $monster`sausage goblin` ? get("_backUpUses") : 11,
+    ready: () => get("lastCopyableMonster") === $monster`sausage goblin` && get("_backUpUses") < 11,
     run: () => {
       changeMcd(0);
       prep(Quest.Vintner);
@@ -435,8 +401,7 @@ export const events: Record<string, eventData> = {
   },
 
   nep: {
-    max: 10,
-    current: () => get("_neverendingPartyFreeTurns"),
+    ready: () => get("_neverendingPartyFreeTurns") < 10,
     run: () => {
       changeMcd(0);
       prep(Quest.Vintner);
@@ -453,8 +418,7 @@ export const events: Record<string, eventData> = {
   },
 
   latteRefills: {
-    max: 0,
-    current: () => get("_latteRefillsUsed") - 2,
+    ready: () => get("_latteRefillsUsed") < 1,
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
@@ -465,8 +429,7 @@ export const events: Record<string, eventData> = {
   },
 
   latteCarrot: {
-    max: 0,
-    current: () => (get("latteUnlocks").includes("carrot") ? 0 : -1),
+    ready: () => !get("latteUnlocks").includes("carrot"),
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       checkEffect($effect`Ode to Booze`);
@@ -476,8 +439,7 @@ export const events: Record<string, eventData> = {
   },
 
   lastLatteRefill: {
-    max: 0,
-    current: () => get("_latteRefillsUsed") - 3,
+    ready: () => get("_latteRefillsUsed") < 3,
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon carrot");
@@ -488,11 +450,8 @@ export const events: Record<string, eventData> = {
   },
 } as const;
 
-export function getRemainingFreeFights(): number {
-  return Object.values(events).reduce(
-    (sum, { max, current }) => sum + Math.max(max - Math.max(current(), 0), 0),
-    0
-  );
+export function hasRemainingFreeFights(): boolean {
+  return Object.values(events).some((event) => event.ready());
 }
 
 // Not all of the combats are going to occur while leveling, the rest can go here
