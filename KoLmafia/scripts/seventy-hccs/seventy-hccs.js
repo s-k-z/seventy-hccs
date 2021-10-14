@@ -18307,7 +18307,7 @@ var upscaleDistrict = (0,dist.$location)(events_templateObject13 || (events_temp
 
 var events = {
   protonicGhost: {
-    ready: () => (0,dist.get)("ghostLocation") !== undefined,
+    ready: () => (0,dist.get)("ghostLocation") !== null,
     run: () => {
       (0,external_kolmafia_.equip)((0,dist.$slot)(events_templateObject14 || (events_templateObject14 = events_taggedTemplateLiteral(["back"]))), (0,dist.$item)(events_templateObject15 || (events_templateObject15 = events_taggedTemplateLiteral(["protonic accelerator pack"]))));
       selectBestFamiliar(FamiliarFlag.NoAttack);

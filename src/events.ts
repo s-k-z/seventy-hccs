@@ -71,7 +71,7 @@ interface eventData {
 
 export const events: Record<string, eventData> = {
   protonicGhost: {
-    ready: () => get("ghostLocation") !== undefined,
+    ready: () => get("ghostLocation") !== null,
     run: () => {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
