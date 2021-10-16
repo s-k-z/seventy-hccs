@@ -440,7 +440,11 @@ function levelAndDoQuests() {
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
       // Turbo used a flag to cast pride
-      if (haveEquipped($item`makeshift garbage shirt`)) SourceTerminal.educate($skill`Turbo`);
+      if (
+        haveEquipped($item`makeshift garbage shirt`) &&
+        !SourceTerminal.isCurrentSkill($skill`Turbo`)
+      )
+        SourceTerminal.educate($skill`Turbo`);
       oneOffEvents.innerElf();
       // This is where all the leveling happens
       // Loop through the list of events until an unfinished one is found
