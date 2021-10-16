@@ -62,7 +62,6 @@ const statelyPleasureDome = $location`The Stately Pleasure Dome`;
 const toxicTeacups = $location`The Toxic Teacups`;
 const upscaleDistrict = $location`Gingerbread Upscale Retail District`;
 
-// Structure events in the form of: [ if(check()<max) run(); ]
 // Events are prioritized in order from top to bottom
 interface eventData {
   ready(): boolean;
@@ -421,6 +420,7 @@ export const events: Record<string, eventData> = {
     ready: () => get("_latteRefillsUsed") < 1,
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
+      equip($slot`pants`, $item`Cargo Cultist Shorts`);
       if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
@@ -432,6 +432,7 @@ export const events: Record<string, eventData> = {
     ready: () => !get("latteUnlocks").includes("carrot"),
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
+      equip($slot`pants`, $item`Cargo Cultist Shorts`);
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.Runaway);
@@ -442,6 +443,7 @@ export const events: Record<string, eventData> = {
     ready: () => get("_latteRefillsUsed") < 3,
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
+      equip($slot`pants`, $item`Cargo Cultist Shorts`);
       if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon carrot");
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
