@@ -9,6 +9,7 @@ import {
   eat,
   effectModifier,
   equip,
+  familiarWeight,
   gametimeToInt,
   getProperty,
   haveEffect,
@@ -18,6 +19,7 @@ import {
   myBasestat,
   myBuffedstat,
   myClass,
+  myFamiliar,
   myHp,
   myLevel,
   myMaxhp,
@@ -38,6 +40,7 @@ import {
   userConfirm,
   useSkill,
   visitUrl,
+  weightAdjustment,
 } from "kolmafia";
 import {
   $class,
@@ -501,22 +504,28 @@ function levelAndDoQuests() {
 
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorPleasureDome();
+    prep(Quest.FamiliarWeight);
     const loveSong = $item`love song of icy revenge`;
-    const coldHeart = $effect`Cold Hearted`;
-    while (have(loveSong) && haveEffect(coldHeart) < 20) {
-      if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) {
-        cliExecute("pillkeeper extend");
-        use(loveSong);
-      } else {
-        use(Math.min(4, itemAmount(loveSong)), loveSong);
-      }
-    }
     const taffy = $item`pulled blue taffy`;
-    if (have(taffy)) use(Math.min(4, itemAmount(taffy)), taffy);
+    const coldHeart = effectModifier(loveSong, "effect");
+    const swayed = effectModifier(taffy, "effect");
     const wine = $item`1950 Vampire Vintner wine`;
-    if (have(wine)) {
+    const needWeight = () => Math.floor(familiarWeight(myFamiliar()) + weightAdjustment()) < 295;
+    if (needWeight() && have(taffy) && !have(swayed)) cliExecute(`use * ${taffy}`);
+    if (needWeight() && have(loveSong, 4) && !have(coldHeart)) use(4, loveSong);
+    if (needWeight() && have(wine)) {
       acquireEffect($effect`Ode to Booze`);
       drink(wine); // 1 drunk
+    }
+    if (needWeight()) {
+      while (have(loveSong) && haveEffect(coldHeart) < 20) {
+        if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) {
+          cliExecute("pillkeeper extend");
+          use(loveSong);
+        } else {
+          use(loveSong);
+        }
+      }
     }
     prepAndDoQuest(Quest.FamiliarWeight);
   }
