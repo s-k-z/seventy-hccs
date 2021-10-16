@@ -219,7 +219,6 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Polka of Plenty`,
       $effect`Sauce Monocle`,
       $effect`Song of Sauce`,
-      $effect`Spirit of Bacon Grease`,
       $effect`Wizard Squint`,
     ];
     const toCheck = [
