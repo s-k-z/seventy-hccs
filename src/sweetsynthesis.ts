@@ -2,8 +2,10 @@ import {
   create,
   getIngredients,
   getInventory,
+  print,
   sweetSynthesis,
   sweetSynthesisResult,
+  toInt,
   toItem,
   useSkill,
 } from "kolmafia";
@@ -57,6 +59,36 @@ const transforms = new Map<Item, candySet>([
   [$item`peppermint sprout`, peppermintGroup],
   [$item`sugar sheet`, sugarGroup],
 ]); // Cyclical references will break searching, no keys allowed in the candySets!
+
+export function testSynthesize(): void {
+  print("Testing sweet synthesis");
+  // Generate sets of candies to test with
+  const candies = {
+    [candyType.complex]: <candySet>[],
+    [candyType.simple]: <candySet>[],
+  };
+  candies.complex = [
+    { candy: $item`bag of many confections`, count: 1 },
+    { candy: $item`licorice boa`, count: 1 },
+    { candy: $item`sugar sheet`, count: 1 },
+    { candy: $item`Crimbo candied pecan`, count: 3 },
+    { candy: $item`peppermint sprout`, count: 3 },
+  ];
+  candies.simple = [{ candy: $item`Chubby and Plump bar`, count: 1 }];
+  const targetEffects = [
+    $effect`Synthesis: Collection`,
+    $effect`Synthesis: Learning`,
+    $effect`Synthesis: Smart`,
+  ];
+  print("Searching for effects:");
+  for (const target of targetEffects) print(`${target}`);
+  const reserved = new Map<Item, number>([[$item`Ultra Mega Sour Ball`, 999999]]);
+  const solution = simulate(targetEffects, candies, reserved);
+  if (!solution.result) throw `Could not find solution for sweet synthesis test`;
+  for (const pair of solution.pairs) {
+    print(`Synthesis: ${pair[0]}:${toInt(pair[0]) % 5} and ${pair[1]}:${toInt(pair[1]) % 5}`);
+  }
+}
 
 /**
  * Search for candy pairs that satisfy all chosen Sweet Synthesis effects and then cast them all.

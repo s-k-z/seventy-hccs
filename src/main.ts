@@ -86,7 +86,7 @@ import {
 import { acquireEffect, tryUse, wishEffect, withContext, withEquipment } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
-import { synthesize } from "./sweetsynthesis";
+import { synthesize, testSynthesize } from "./sweetsynthesis";
 
 const choiceAdventures = [
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
@@ -114,7 +114,14 @@ function checkMainClan() {
   if (Clan.get().name !== MAIN_CLAN) throw `Not in main clan?`;
 }
 
-export function main(): void {
+export function main(argString = ""): void {
+  const args = argString.split(" ");
+  for (const arg of args) {
+    if (arg.match(/test/)) {
+      testSynthesize();
+      return;
+    }
+  }
   sinceKolmafiaRevision(25702);
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
