@@ -594,7 +594,6 @@ function familiar(fam: Familiar) {
     [$familiar`Machine Elf`, "mp"],
     [$familiar`Pocket Professor`, "hp"],
     [$familiar`Rockin' Robin`, "myst"],
-    [$familiar`Vampire Vintner`, "meat"],
   ]).get(fam);
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);
 }
