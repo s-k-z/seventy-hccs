@@ -86,7 +86,7 @@ import {
 import { acquireEffect, tryUse, wishEffect, withContext, withEquipment } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
-import { synthesize, testSynthesize } from "./sweetsynthesis";
+import { synthesize } from "./sweetsynthesis";
 
 const choiceAdventures = [
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
@@ -118,7 +118,11 @@ export function main(argString = ""): void {
   const args = argString.split(" ");
   for (const arg of args) {
     if (arg.match(/test/)) {
-      testSynthesize();
+      synthesize(
+        [$effect`Synthesis: Collection`, $effect`Synthesis: Learning`, $effect`Synthesis: Greed`],
+        new Set<Item>(),
+        true
+      );
       return;
     }
   }
