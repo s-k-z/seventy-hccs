@@ -352,12 +352,12 @@ function postCoilWire() {
     cliExecute("garden pick");
     cliExecute("refresh inventory");
     // Sweet synthesis with reserved candies omitted, add them back individually until a solution is found
-    const toKeep = [$item`Chubby and Plump bar`, $item`sugar sheet`];
-    for (let tries = 0; tries <= toKeep.length; tries++) {
-      if (synthesize(toSynth, new Set(toKeep.slice(tries)), true)) break;
-      else if (tries === toKeep.length) {
-        throw `Unable to find a combination for all synthesis targets`;
-      }
+    const wantToKeep = [$item`Chubby and Plump bar`, $item`sugar sheet`];
+    for (let tries = 0; tries <= wantToKeep.length; tries++) {
+      const toKeep = new Set(wantToKeep.slice(tries));
+      if (!toKeep.has($item`sugar sheet`)) useSkill($skill`Summon Sugar Sheets`);
+      if (synthesize(toSynth, toKeep)) break;
+      else if (toKeep.size === 0) throw `Unable to find a combination for all synthesis targets`;
     }
   }
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water

@@ -7,9 +7,8 @@ import {
   sweetSynthesisResult,
   toInt,
   toItem,
-  useSkill,
 } from "kolmafia";
-import { $effect, $item, $skill, get, have } from "libram";
+import { $effect, $item, have } from "libram";
 
 const enum candyType {
   complex = "complex",
@@ -98,13 +97,8 @@ export function testSynthesize(): void {
  * Return false if not all effects can be obtained before casting.
  * @param targetEffects Array of effects to search for and cast.
  * @param reserveCandies Set of candies that will not be used. Always includes Ultra Mega Sour Ball.
- * @param allowTomeUse Allow casting summon sugar sheet tome.
  */
-export function synthesize(
-  targetEffects: Effect[],
-  reserveCandies: Set<Item>,
-  allowTomeUse: boolean
-): boolean {
+export function synthesize(targetEffects: Effect[], reserveCandies: Set<Item>): boolean {
   if (targetEffects.length === 0) return true;
   const candies = {
     [candyType.complex]: <candySet>[],
@@ -115,14 +109,6 @@ export function synthesize(
     const item = Item.get(name);
     candies[item.candyType as candyType]?.push({ candy: item, count: count });
   });
-  // Pretend summon sugar sheets if tome summons available
-  if (allowTomeUse && get("tomeSummons") < 3) {
-    const owned = inv["sugar sheet"] ?? 0;
-    candies.complex.push({
-      candy: $item`sugar sheet`,
-      count: owned + 3 - get("tomeSummons"),
-    });
-  }
   const reserved = new Map<Item, number>(
     [...reserveCandies, $item`Ultra Mega Sour Ball`].map((r) => [r, 999999])
   );
@@ -133,11 +119,7 @@ export function synthesize(
     for (const creatable of pair) {
       // source will be $item`none` if no ingredients
       const source = toItem(Object.keys(getIngredients(creatable))[0]);
-      if (!have(creatable) && transforms.has(source)) {
-        // only cast summon sugar sheets if needed
-        if (allowTomeUse && source === $item`sugar sheet`) useSkill($skill`Summon Sugar Sheets`);
-        create(creatable);
-      }
+      if (!have(creatable) && transforms.has(source)) create(creatable);
     }
     sweetSynthesis(pair[0], pair[1]);
   }
