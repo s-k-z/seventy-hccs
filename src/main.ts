@@ -13,7 +13,6 @@ import {
   gametimeToInt,
   getProperty,
   haveEffect,
-  haveEquipped,
   itemAmount,
   mpCost,
   myBasestat,
@@ -57,7 +56,6 @@ import {
   Paths,
   sinceKolmafiaRevision,
   SongBoom,
-  SourceTerminal,
 } from "libram";
 import {
   BRICKO_TARGET_ITEM,
@@ -70,7 +68,7 @@ import {
   MP_SAFE_LIMIT,
 } from "./config";
 import { eatPizzas } from "./diet";
-import { events, hasRemainingFreeFights, oneOffEvents } from "./events";
+import { hasRemainingFreeFights, levelingEvents, oneOffEvents, preCoilEvents } from "./events";
 import {
   castBestLibram,
   gazeAtTheStars,
@@ -201,9 +199,9 @@ function preCoilWire() {
     $item`votive of confidence`,
   ].forEach(tryUse);
   // Only need one consult for a candy
-  if (get("_clanFortuneConsultUses") < 3 && FORTUNE_TELLER_FRIEND.length > 0) {
+  if (get("_clanFortuneConsultUses") < 1 && FORTUNE_TELLER_FRIEND.length > 0) {
     checkMainClan();
-    cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage garbage thick`);
+    cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage batman thick`);
   }
   const calculation = "69";
   const canCalculate = () => get("_universeCalculated") < get("skillLevel144");
@@ -274,18 +272,7 @@ function preCoilWire() {
     use($item`borrowed time`);
   }
   if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
-  if (get("_sourceTerminalDigitizeUses") < 1) SourceTerminal.educate($skill`Digitize`);
-  oneOffEvents.hipster();
-  if (get("_sourceTerminalDigitizeUses") > 0) {
-    SourceTerminal.educate($skill`Compress`);
-    SourceTerminal.educate($skill`Extract`);
-  }
-  // Fight Protonic Ghost
-  oneOffEvents.mimic();
-  // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
-  oneOffEvents.ninjaCostume();
-  // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
-  oneOffEvents.tropicalSkeleton();
+  for (const event of Object.values(preCoilEvents)) if (event.ready()) event.run();
   // 9241 + 2000 = 11241 meat
   spendAllMpOnLibrams();
 }
@@ -453,18 +440,12 @@ function levelAndDoQuests() {
       }
 
       if (have($item`burning newspaper`)) create($item`burning paper crane`);
-      // Turbo used a flag to cast pride
-      if (
-        haveEquipped($item`makeshift garbage shirt`) &&
-        !SourceTerminal.isCurrentSkill($skill`Turbo`)
-      )
-        SourceTerminal.educate($skill`Turbo`);
       oneOffEvents.innerElf();
       // This is where all the leveling happens
       // Loop through the list of events until an unfinished one is found
       // After doing an event, go back to the top of the outer loop to
       // handle librams, sausages, garbage shirt, etc.
-      for (const event of Object.values(events)) {
+      for (const event of Object.values(levelingEvents)) {
         if (event.ready()) {
           event.run();
           continue leveling;

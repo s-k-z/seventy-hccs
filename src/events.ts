@@ -33,6 +33,7 @@ import {
   have,
   Macro,
   set,
+  SourceTerminal,
 } from "libram";
 import { adventure, adventureUrl, fightWitchess, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
@@ -68,7 +69,72 @@ interface eventData {
   run(): void;
 }
 
-export const events: Record<string, eventData> = {
+export const preCoilEvents: Record<string, eventData> = {
+  hipster: {
+    ready: () => !get("_ironicMoustache"),
+    run: (): void => {
+      familiar($familiar`Mini-Hipster`);
+      equip($slot`familiar`, $item`none`);
+      if (get("_sourceTerminalDigitizeUses") < 1) SourceTerminal.educate($skill`Digitize`);
+      withEquipment(
+        () => adventure(noobCave, MacroList.FreeFight),
+        [[$slot`off-hand`, $item`Kramco Sausage-o-Matic™`]]
+      );
+      if (get("_sourceTerminalDigitizeUses") > 0) {
+        SourceTerminal.educate($skill`Compress`);
+        SourceTerminal.educate($skill`Extract`);
+      }
+      equip($slot`familiar`, $item`none`);
+      checkAvailable($item`ironic moustache`);
+    },
+  },
+
+  mimic: {
+    ready: () => !get("_bagOfCandy"),
+    run: (): void => {
+      familiar($familiar`Stocking Mimic`);
+      equip($slot`familiar`, $item`none`);
+      const ghostLoc = get("ghostLocation");
+      if (!ghostLoc) throw `Failed to get protonic ghost notice`;
+      adventure(ghostLoc, MacroList.FreeFight);
+      equip($slot`familiar`, $item`none`);
+      checkAvailable($item`bag of many confections`);
+    },
+  },
+
+  ninjaCostume: {
+    ready: () => !have($item`li'l ninja costume`),
+    run: (): void => {
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
+      withEquipment(
+        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
+        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
+      );
+      checkAvailable($item`li'l ninja costume`);
+    },
+  },
+
+  tropicalSkeleton: {
+    ready: () => !have($effect`Everything Looks Red`),
+    run: (): void => {
+      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+      familiar($familiar`Crimbo Shrub`);
+      // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
+      if (!get("_shrubDecorated")) {
+        visitUrl(
+          `inv_use.php?pwd=&which=99&whichitem=${toInt($item`box of old Crimbo decorations`)}`
+        );
+        visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
+      }
+      mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
+      checkEffect($effect`Everything Looks Red`);
+      $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
+    },
+  },
+};
+
+export const levelingEvents: Record<string, eventData> = {
   protonicGhost: {
     ready: () => get("ghostLocation") !== null,
     run: () => {
@@ -274,6 +340,8 @@ export const events: Record<string, eventData> = {
   digitize: {
     ready: () => get("_sourceTerminalDigitizeMonsterCount") < 1,
     run: () => {
+      // Turbo used a flag to cast pride
+      SourceTerminal.educate($skill`Turbo`);
       const shirt = $item`makeshift garbage shirt`;
       if (!have(shirt)) cliExecute(`fold ${shirt}`);
       equip($slot`shirt`, shirt);
@@ -453,63 +521,11 @@ export const events: Record<string, eventData> = {
 } as const;
 
 export function hasRemainingFreeFights(): boolean {
-  return Object.values(events).some((event) => event.ready());
+  return Object.values(levelingEvents).some((event) => event.ready());
 }
 
 // Not all of the combats are going to occur while leveling, the rest can go here
 export const oneOffEvents = {
-  hipster: (): void => {
-    if (!get("_ironicMoustache")) {
-      familiar($familiar`Mini-Hipster`);
-      equip($slot`familiar`, $item`none`);
-      withEquipment(
-        () => adventure(noobCave, MacroList.FreeFight),
-        [[$slot`off-hand`, $item`Kramco Sausage-o-Matic™`]]
-      );
-      equip($slot`familiar`, $item`none`);
-      checkAvailable($item`ironic moustache`);
-    }
-  },
-
-  mimic: (): void => {
-    if (!get("_bagOfCandy")) {
-      familiar($familiar`Stocking Mimic`);
-      equip($slot`familiar`, $item`none`);
-      const ghostLoc = get("ghostLocation");
-      if (!ghostLoc) throw `Failed to get protonic ghost notice`;
-      adventure(ghostLoc, MacroList.FreeFight);
-      equip($slot`familiar`, $item`none`);
-      checkAvailable($item`bag of many confections`);
-    }
-  },
-
-  ninjaCostume: (): void => {
-    if (!have($item`li'l ninja costume`)) {
-      selectBestFamiliar(FamiliarFlag.NoAttack);
-      withEquipment(
-        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
-        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
-      );
-      checkAvailable($item`li'l ninja costume`);
-    }
-  },
-
-  tropicalSkeleton: (): void => {
-    if (!have($effect`Everything Looks Red`)) {
-      equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-      familiar($familiar`Crimbo Shrub`);
-      if (!get("_shrubDecorated")) {
-        visitUrl(
-          `inv_use.php?pwd=&which=99&whichitem=${toInt($item`box of old Crimbo decorations`)}`
-        );
-        visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
-      }
-      mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
-      checkEffect($effect`Everything Looks Red`);
-      $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
-    }
-  },
-
   nanobrainy: (): void => {
     if (!get("_gingerbreadClockAdvanced")) adventure(civicCenter, Macro.abort());
     if (!have($effect`Nanobrainy`) && get("_nanorhinoCharge") > 99) {
