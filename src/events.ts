@@ -122,9 +122,8 @@ export const preCoilEvents: Record<string, eventData> = {
       familiar($familiar`Crimbo Shrub`);
       // Decorate Crimbo Shrub with LED Mandala, Jack-O-Lantern Lights, Popcorn Strands, and Big Red-Wrapped Presents
       if (!get("_shrubDecorated")) {
-        visitUrl(
-          `inv_use.php?pwd=&which=99&whichitem=${toInt($item`box of old Crimbo decorations`)}`
-        );
+        const decorations = toInt($item`box of old Crimbo decorations`);
+        visitUrl(`inv_use.php?pwd=&which=99&whichitem=${decorations}`);
         visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
       }
       mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);

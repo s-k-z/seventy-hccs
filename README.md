@@ -47,15 +47,14 @@ The script can be run either in Aftercore, or in Community Service provided that
 ## To run the script
 
 1. Ensure you have KoLMafia r25702 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
-2. Ensure you have Java Runtime Environment 11 or later [available here](https://adoptopenjdk.net/). (Oracle JRE 8 was not sufficient in my testing)
-3. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
-4. Set properties in kolmafia to appropriate values:
+2. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
+3. Set properties in kolmafia to appropriate values:
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
    - seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
 
-5. Run the script file named **seventy-hccs.js** using KoLMafia
+4. Run the script file named **seventy-hccs.js** using KoLMafia
 
 ## Building from source
 
