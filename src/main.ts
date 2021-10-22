@@ -34,7 +34,6 @@ import {
   runChoice,
   soulsauceCost,
   toInt,
-  totalFreeRests,
   use,
   userConfirm,
   useSkill,
@@ -60,7 +59,6 @@ import {
 import {
   BRICKO_TARGET_ITEM,
   BRICKOS_PER_FIGHT,
-  CHATEAU_REST_LEVEL,
   FAX_AND_SLIME_CLAN,
   FORTUNE_TELLER_FRIEND,
   MAIN_CLAN,
@@ -81,7 +79,7 @@ import {
   useDroppedItems,
   vote,
 } from "./iotms";
-import { acquireEffect, tryUse, wishEffect, withContext, withEquipment } from "./lib";
+import { acquireEffect, tryUse, wishEffect, withContext } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
 import { synthesize } from "./sweetsynthesis";
@@ -387,10 +385,6 @@ function levelAndDoQuests() {
     postCoilWire();
     print(`Leveling start: have ${myHp()}/${myMaxhp()} HP and ${myMp()}/${myMaxmp()} MP.`);
 
-    const chateauNapReady = (): boolean => {
-      return myLevel() >= CHATEAU_REST_LEVEL && get("timesRested") < totalFreeRests();
-    };
-
     // eslint-disable-next-line no-constant-condition
     leveling: while (true) {
       // Spend excess MP on librams
@@ -403,14 +397,6 @@ function levelAndDoQuests() {
       if (have($effect`Temporary Blindness`)) {
         if (get("_hotTubSoaks") < 5) cliExecute("hottub");
         else throw `Can't handle temporary blindness`;
-      }
-
-      if (chateauNapReady()) {
-        withEquipment(() => {
-          while (chateauNapReady()) {
-            visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
-          }
-        }, [[$slot`off-hand`, $item`familiar scrapbook`]]);
       }
 
       const maxMPGains = (myMaxmp() - myMp()) / 15;

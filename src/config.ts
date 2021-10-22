@@ -18,8 +18,6 @@ export const BRICKOS_PER_FIGHT =
     [$item`BRICKO octopus`, 37],
     [$item`BRICKO python`, 69],
   ]).get(BRICKO_TARGET_ITEM) ?? 9999;
-// Perhaps optimal to level at Chateau sooner rather than later
-export const CHATEAU_REST_LEVEL = 8;
 // Don't spend meat on sausages below this value
 export const MEAT_SAFE_LIMIT = 2000;
 // Don't spend MP on librams below this value unless right before a full MP refill

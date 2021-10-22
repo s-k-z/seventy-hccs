@@ -11,6 +11,7 @@ import {
   myMaxhp,
   runChoice,
   toInt,
+  totalFreeRests,
   toUrl,
   use,
   useFamiliar,
@@ -189,10 +190,19 @@ export const levelingEvents: Record<string, eventData> = {
       ].forEach(checkEffect);
       checkAvailable($item`LOV Epaulettes`);
       equip($slot`back`, $item`LOV Epaulettes`);
-      withEquipment(
-        () => use($item`a ten-percent bonus`),
-        [[$slot`off-hand`, $item`familiar scrapbook`]]
-      );
+      equip($slot`off-hand`, $item`familiar scrapbook`);
+      use($item`a ten-percent bonus`);
+    },
+  },
+
+  chateau: {
+    ready: () => myLevel() >= 8 && get("timesRested") < totalFreeRests(),
+    run: () => {
+      equip($slot`back`, $item`LOV Epaulettes`);
+      equip($slot`off-hand`, $item`familiar scrapbook`);
+      while (get("timesRested") < totalFreeRests()) {
+        visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree");
+      }
     },
   },
 
