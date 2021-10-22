@@ -2,6 +2,7 @@ import {
   create,
   getIngredients,
   getInventory,
+  itemAmount,
   print,
   sweetSynthesis,
   sweetSynthesisResult,
@@ -83,6 +84,12 @@ export function synthesize(
     const item = Item.get(name);
     candies[item.candyType as candyType]?.push({ candy: item, count: count });
   });
+  const check = (pair: { candy: Item; count: number }) => {
+    const count = itemAmount(pair.candy);
+    if (count !== pair.count) throw `Expected ${pair.count} ${pair.candy}, but found ${count}`;
+  };
+  candies.complex.forEach(check);
+  candies.simple.forEach(check);
   if (test) {
     candies.complex = [
       { candy: $item`bag of many confections`, count: 1 },
