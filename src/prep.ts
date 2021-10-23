@@ -1,4 +1,4 @@
-import { holiday, totalTurnsPlayed, visitUrl } from "kolmafia";
+import { holiday, pvpAttacksLeft, totalTurnsPlayed, visitUrl } from "kolmafia";
 import { $item, $monster, get, prepareAscension } from "libram";
 
 export function checkReadyToAscend(): void {
@@ -16,6 +16,8 @@ export function checkReadyToAscend(): void {
   const notFound = () => !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
   if (notFound()) visitUrl("museum.php?action=icehouse");
   if (notFound()) throw `Need to ice house ${banish}`;
+
+  if (pvpAttacksLeft() > 0) throw `Spend your pvp fites`;
 
   if ((totalTurnsPlayed() + 60) % 11 !== 1) {
     const targetTurnBaseline = totalTurnsPlayed() + 60;
