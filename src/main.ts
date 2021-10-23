@@ -484,13 +484,15 @@ function levelAndDoQuests() {
     oneOffEvents.meteorPleasureDome();
     prep(Quest.FamiliarWeight);
     const loveSong = $item`love song of icy revenge`;
-    const taffy = $item`pulled blue taffy`;
     const coldHeart = effectModifier(loveSong, "effect");
+    const icyWeight = Math.ceil(2.5 * Math.min(4, itemAmount(loveSong)));
+    const loveSongSufficient = familiarWeight(myFamiliar()) + weightAdjustment() + icyWeight >= 295;
+    const taffy = $item`pulled blue taffy`;
     const swayed = effectModifier(taffy, "effect");
     const wine = $item`1950 Vampire Vintner wine`;
-    const needWeight = () => Math.floor(familiarWeight(myFamiliar()) + weightAdjustment()) < 295;
-    if (needWeight() && have(taffy) && !have(swayed)) cliExecute(`use * ${taffy}`);
-    if (needWeight() && have(loveSong, 4) && !have(coldHeart)) use(4, loveSong);
+    const needWeight = () => familiarWeight(myFamiliar()) + weightAdjustment() < 295;
+    if (needWeight() && !have(swayed) && have(taffy)) cliExecute(`use * ${taffy}`);
+    if (needWeight() && !have(coldHeart) && loveSongSufficient) cliExecute(`use * ${loveSong}`);
     if (needWeight() && have(wine)) {
       acquireEffect($effect`Ode to Booze`);
       drink(wine); // 1 drunk
