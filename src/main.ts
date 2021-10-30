@@ -7,7 +7,6 @@ import {
   create,
   drink,
   eat,
-  effectModifier,
   equip,
   familiarWeight,
   gametimeToInt,
@@ -79,7 +78,7 @@ import {
   useDroppedItems,
   vote,
 } from "./iotms";
-import { acquireEffect, tryUse, wishEffect, withContext } from "./lib";
+import { acquireEffect, itemToEffect, tryUse, wishEffect, withContext } from "./lib";
 import { checkReadyToAscend } from "./prep";
 import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
 import { synthesize } from "./sweetsynthesis";
@@ -126,8 +125,7 @@ export function main(argString = ""): void {
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
-  if (FORTUNE_TELLER_FRIEND.length < 1)
-    print("Maybe set seventyhccs_fortune_friend property?", "orange");
+  if (FORTUNE_TELLER_FRIEND.length < 1) throw `seventyhccs_fortune_friend not set`;
 
   const startTime = gametimeToInt();
 
@@ -197,7 +195,7 @@ function preCoilWire() {
     $item`votive of confidence`,
   ].forEach(tryUse);
   // Only need one consult for a candy
-  if (get("_clanFortuneConsultUses") < 1 && FORTUNE_TELLER_FRIEND.length > 0) {
+  if (get("_clanFortuneConsultUses") < 1) {
     checkMainClan();
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage batman thick`);
   }
@@ -222,44 +220,23 @@ function preCoilWire() {
   prep(Quest.Beginning);
   //prettier-ignore
   for (const [check, retrieve] of [
-    [
-      $effect`That's Just Cloud-Talk, Man`,
-      () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
-    ],
-    [
-      $item`"DRINK ME" potion`,
-      () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
-    ],
-    [
-      $item`your cowboy boots`,
-      () => visitUrl("place.php?whichplace=town_right&action=townright_ltt"),
-    ],
-    [
-      $item`detuned radio`,
-      () => {
-        retrieveItem($item`detuned radio`); // 10001 - 285 = 9716 meat
-        changeMcd(10);
-      },
-    ],
-    [$item`flimsy hardwood scraps`, () => visitUrl("shop.php?whichshop=lathe")],
-    [
-      $item`weeping willow wand`,
-      () => {
-        create($item`weeping willow wand`);
-        equip($slot`off-hand`, $item`weeping willow wand`);
-      },
-    ],
-    [$item`battery (AAA)`,             () => harvestBatteries()],
-    [$item`battery (lantern)`,         () => create($item`battery (lantern)`)],
-    [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult")],
-    [$item`cop dollar`,                () => cliExecute("Detective Solver")],
-    [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal")],
-    [$item`green mana`,                () => cliExecute(`cheat forest`)],
-    [$item`wrench`,                    () => cliExecute(`cheat wrench`)],
-    [$item`occult jelly donut`,        () => create($item`occult jelly donut`)],
-    [$item`sombrero-mounted sparkler`, () => retrieveItem($item`sombrero-mounted sparkler`)], // 9716 - 475 = 9241 meat
-    [$item`Yeg's Motel hand soap`,     () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
-    [$skill`Seek out a Bird`,          () => use($item`Bird-a-Day calendar`)],
+    [$effect`That's Just Cloud-Talk, Man`, () => visitUrl("place.php?whichplace=campaway&action=campaway_sky")],
+    [$item`"DRINK ME" potion`,             () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2")],
+    [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)], // 10001 - 285 = 9716 meat
+    [$item`battery (AAA)`,                 () => harvestBatteries()],
+    [$item`battery (lantern)`,             () => create($item`battery (lantern)`)],
+    [$item`Brutal brogues`,                () => cliExecute("bastille bbq brutalist catapult")],
+    [$item`cop dollar`,                    () => cliExecute("Detective Solver")],
+    [$item`cuppa Loyal tea`,               () => cliExecute("teatree loyal")],
+    [$item`flimsy hardwood scraps`,        () => visitUrl("shop.php?whichshop=lathe")],
+    [$item`weeping willow wand`,           () => create($item`weeping willow wand`)],
+    [$item`green mana`,                    () => cliExecute(`cheat forest`)],
+    [$item`wrench`,                        () => cliExecute(`cheat wrench`)],
+    [$item`occult jelly donut`,            () => create($item`occult jelly donut`)],
+    [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // 9716 - 475 = 9241 meat
+    [$item`Yeg's Motel hand soap`,         () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
+    [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
+    [$skill`Seek out a Bird`,              () => use($item`Bird-a-Day calendar`)],
   ] as [Effect | Item | Skill, () => void][]) {
     if (!have(check)) retrieve();
   }
@@ -269,6 +246,7 @@ function preCoilWire() {
     if (!have($item`borrowed time`)) create($item`borrowed time`);
     use($item`borrowed time`);
   }
+  changeMcd(10);
   if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
   for (const event of Object.values(preCoilEvents)) if (event.ready()) event.run();
   // 9241 + 2000 = 11241 meat
@@ -316,7 +294,7 @@ function postCoilWire() {
     $item`ointment of the occult`,
     $item`eyedrops of the ermine`,
   ].forEach((saucePotion) => {
-    if (!have(saucePotion) && !have(effectModifier(saucePotion, "effect"))) create(saucePotion);
+    if (!have(saucePotion) && !have(itemToEffect(saucePotion))) create(saucePotion);
   });
 
   retrieveItem($item`toy accordion`);
@@ -348,7 +326,7 @@ function postCoilWire() {
   }
   // If we didn't use a sugar sheet for synthesis we can make a cold-filtered water
   const water = $item`cold-filtered water`;
-  if (get("tomeSummons") < 3 && !have(water) && !have($effect`Purity of Spirit`)) create(water);
+  if (get("tomeSummons") < 3 && !have(water) && !have(itemToEffect(water))) create(water);
   tryUse(water);
   // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
   [
@@ -385,16 +363,14 @@ function levelAndDoQuests() {
     // eslint-disable-next-line no-constant-condition
     leveling: while (true) {
       // Spend excess MP on librams
-      // Use free rests on stats at configured level
-      // Swap equipment as needed between combats
+      // Free run for items
+      // Free rest for stats at level 8
       // Get Inner Elf at level 13
-      // Free run for some items
       // Do all the leveling combats
       // Then gulp latte for more libram summons
-      if (have($effect`Temporary Blindness`)) {
-        if (get("_hotTubSoaks") < 5) cliExecute("hottub");
-        else throw `Can't handle temporary blindness`;
-      }
+      const blindness = $effect`Temporary Blindness`;
+      if (have(blindness) && get("_hotTubSoaks") < 5) cliExecute("hottub");
+      if (have(blindness)) throw `Can't handle ${blindness}`;
 
       const maxMPGains = (myMaxmp() - myMp()) / 15;
       const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
@@ -481,11 +457,11 @@ function levelAndDoQuests() {
     oneOffEvents.meteorPleasureDome();
     prep(Quest.FamiliarWeight);
     const loveSong = $item`love song of icy revenge`;
-    const coldHeart = effectModifier(loveSong, "effect");
+    const coldHeart = itemToEffect(loveSong);
     const icyWeight = Math.ceil(2.5 * Math.min(4, itemAmount(loveSong)));
     const loveSongSufficient = familiarWeight(myFamiliar()) + weightAdjustment() + icyWeight >= 295;
     const taffy = $item`pulled blue taffy`;
-    const swayed = effectModifier(taffy, "effect");
+    const swayed = itemToEffect(taffy);
     const wine = $item`1950 Vampire Vintner wine`;
     const needWeight = () => familiarWeight(myFamiliar()) + weightAdjustment() < 295;
     if (needWeight() && !have(swayed) && have(taffy)) cliExecute(`use * ${taffy}`);

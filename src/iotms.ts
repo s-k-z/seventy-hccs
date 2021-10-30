@@ -1,5 +1,4 @@
 import {
-  effectModifier,
   itemAmount,
   mpCost,
   myClass,
@@ -13,6 +12,7 @@ import {
 } from "kolmafia";
 import { $class, $effect, $item, $skill, $stat, get, have } from "libram";
 import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
+import { itemToEffect } from "./lib";
 
 export function castBestLibram(): void {
   const wantGreenCandy = !have($item`green candy heart`) && !have($effect`Heart of Green`);
@@ -121,7 +121,7 @@ export function useDroppedItems(): void {
     $item`power pill`,
     $item`short stack of pancakes`,
   ]) {
-    if (have(singleUse) && !have(effectModifier(singleUse, "effect"))) use(singleUse);
+    if (have(singleUse) && !have(itemToEffect(singleUse))) use(singleUse);
   }
 }
 

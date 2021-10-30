@@ -1,4 +1,12 @@
-import { cliExecute, equip, equippedItem, toInt, totalTurnsPlayed, use } from "kolmafia";
+import {
+  cliExecute,
+  effectModifier,
+  equip,
+  equippedItem,
+  toInt,
+  totalTurnsPlayed,
+  use,
+} from "kolmafia";
 import { get, have, set } from "libram";
 
 export function acquireEffect(e: Effect): void {
@@ -14,6 +22,10 @@ export function checkAvailable(i: Item, n = 1): void {
 
 export function checkEffect(e: Effect): void {
   if (!have(e)) throw `Missing effect ${e}`;
+}
+
+export function itemToEffect(i: Item): Effect {
+  return effectModifier(i, "effect");
 }
 
 export function shrugEffect(effect: Effect): void {
