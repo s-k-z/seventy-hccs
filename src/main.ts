@@ -122,7 +122,7 @@ export function main(argString = ""): void {
       return;
     }
   }
-  sinceKolmafiaRevision(25702);
+  sinceKolmafiaRevision(25824);
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
@@ -282,11 +282,8 @@ function postCoilWire() {
   // Visit Gingerbread Civic Center & fast forward clock
   // Then use nanorhino for nanobrainy and increment the gingerbread city counter
   oneOffEvents.nanobrainy();
-  // Upgrade Cosplay Saber and start buffing familiar weight now that we're done with Nanorhino
-  if (get("_saberMod") < 1) {
-    visitUrl("main.php?action=may4");
-    runChoice(4);
-  }
+  // Start buffing familiar weight now that we're done with Nanorhino
+  if (get("_saberMod") < 1) cliExecute("saber familiar");
   $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
   useDroppedItems(); // In case we obtained a green candy heart already, don't want to synthesize it later
 
