@@ -1,13 +1,8 @@
 import { holiday, pvpAttacksLeft, totalTurnsPlayed, visitUrl } from "kolmafia";
 import { $item, $monster, get, prepareAscension } from "libram";
 
-export function checkReadyToAscend(): void {
-  const badDays = [
-    "el dia de los muertos borrachos",
-    "feast of boris",
-    "april fool's day",
-    "talk like a pirate day",
-  ];
+export function checkReadyToAscend(checkVoteReady: boolean): void {
+  const badDays = ["april fool's day"];
   const today = holiday().split("/");
   const badDayToday = today.some((day) => badDays.includes(day.toLowerCase()));
   if (badDayToday) throw `Don't want to ascend during ${holiday()}`;
@@ -19,7 +14,7 @@ export function checkReadyToAscend(): void {
 
   if (pvpAttacksLeft() > 0) throw `Spend your pvp fites`;
 
-  if ((totalTurnsPlayed() + 60) % 11 !== 1) {
+  if (checkVoteReady && (totalTurnsPlayed() + 60) % 11 !== 1) {
     const targetTurnBaseline = totalTurnsPlayed() + 60;
     const m = Math.floor((targetTurnBaseline - 1) / 11);
     const turns = 11 * (m + 1) + 1 - (totalTurnsPlayed() + 60);

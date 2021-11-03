@@ -59,7 +59,7 @@ const questRecords: Record<number, () => QuestData> = {
       ],
       check: [],
       equipment: new Map([
-        [$slot`hat`, $item`Iunion Crown`],
+        [$slot`hat`, $item`Daylight Shavings Helmet`],
         [$slot`back`, $item`protonic accelerator pack`],
         //[$slot`shirt`, $item`fresh coat of paint`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
@@ -160,6 +160,7 @@ const questRecords: Record<number, () => QuestData> = {
     ];
     const mpSavings = numericModifier($item`pantogram pants`, "mana cost") !== 0;
     const toWear = new Map([
+      [$slot`hat`, $item`Daylight Shavings Helmet`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`off-hand`, $item`weeping willow wand`],
       [$slot`pants`, mpSavings ? $item`pantogram pants` : $item`Cargo Cultist Shorts`],
@@ -186,6 +187,7 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Ur-Kel's Aria of Annoyance`,
     ];
     const toWear = new Map([
+      [$slot`hat`, $item`Daylight Shavings Helmet`],
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
       [$slot`off-hand`, $item`weeping willow wand`],
@@ -383,6 +385,7 @@ const questRecords: Record<number, () => QuestData> = {
       acquire: [$effect`Astral Shell`, $effect`Elemental Saucesphere`, $effect`Empathy`],
       check: [$effect`Fireproof Foam Suit`],
       equipment: new Map([
+        [$slot`hat`, $item`Daylight Shavings Helmet`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, $item`industrial fire extinguisher`],
         [$slot`acc1`, $item`Brutal brogues`],
@@ -419,6 +422,7 @@ const questRecords: Record<number, () => QuestData> = {
         $effect`You Can Really Taste the Dormouse`,
       ],
       equipment: new Map([
+        [$slot`hat`, $item`Daylight Shavings Helmet`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, offhand],
         [$slot`acc1`, $item`Brutal brogues`],

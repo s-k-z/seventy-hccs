@@ -71,10 +71,10 @@ import {
   gazeAtTheStars,
   getPantogramPants,
   harvestBatteries,
-  MoonSign,
+  //MoonSign,
   scavengeDaycare,
   spendAllMpOnLibrams,
-  tuneMoon,
+  //tuneMoon,
   useDroppedItems,
   vote,
 } from "./iotms";
@@ -86,6 +86,7 @@ import { synthesize } from "./sweetsynthesis";
 const choiceAdventures = [
   [297, 3], // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
   [326, 1], // Showdown: (1) fight mother slime (2) leave
+  [1119, ""], // Shining Mauve Backwards In Time (1) abstractions (2) comprehension (3) picture frame (4) duplicate (6) leave
   [1203, 4], // Midnight in the Civic Center: (1) 500 myst stats (2) counterfeit city for 300 sprinkles (3) N/A (4) 5 gingerbread cigarettes for 5 sprinkles (5) N/A
   [1204, 1], // Noon at the Train Station: (1) get a bunch of candy (2) increase size of sewer gators (3) 250 myst stats
   [1208, 3], // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
@@ -111,7 +112,9 @@ function checkMainClan() {
 
 export function main(argString = ""): void {
   const args = argString.split(" ");
+  let checkVote = true;
   for (const arg of args) {
+    if (arg.match(/novote/)) checkVote = false;
     if (arg.match(/test/)) {
       synthesize(
         [$effect`Synthesis: Collection`, $effect`Synthesis: Learning`, $effect`Synthesis: Greed`],
@@ -130,7 +133,7 @@ export function main(argString = ""): void {
   const startTime = gametimeToInt();
 
   if (myPath() !== "Community Service") {
-    checkReadyToAscend();
+    checkReadyToAscend(checkVote);
     if (canInteract() && userConfirm(`Ready to Ascend into Community Service?`)) {
       ascend(
         Paths.CommunityService,
@@ -437,7 +440,7 @@ function levelAndDoQuests() {
   }
 
   if (haveQuest(Quest.WeaponDamage)) {
-    tuneMoon(MoonSign.Platypus);
+    //tuneMoon(MoonSign.Platypus);
     oneOffEvents.innerElf();
     oneOffEvents.meteorPleasureDome();
     prepAndDoQuest(Quest.WeaponDamage);

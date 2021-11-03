@@ -17,14 +17,87 @@ import {
 import { $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
+const noveltySkeleton = $monster`novelty tropical skeleton`.id;
+const mastiff = $monster`toothless mastiff bitch`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
 const toxicBeastie = $monster`toxic beastie`.id;
 const LOVEnforcer = $monster`LOV Enforcer`.id;
 const LOVEngineer = $monster`LOV Engineer`.id;
-const DMTSquareMon = $monster`Performer of Actions`.id;
-const DMTCircleMon = $monster`Thinker of Thoughts`.id;
+const DMTSquare = $monster`Performer of Actions`.id;
+const DMTCircle = $monster`Thinker of Thoughts`.id;
 
 const retailDistrict = $location`Gingerbread Upscale Retail District`.id;
+
+const notAllowList = [
+  $monster`sausage goblin`,
+  // protonic ghosts
+  $monster`boneless blobghost`,
+  $monster`Emily Koops, a spooky lime`,
+  $monster`The ghost of Ebenoozer Screege`,
+  $monster`The ghost of Jim Unfortunato`,
+  $monster`The ghost of Lord Montague Spookyraven`,
+  $monster`the ghost of Monsieur Baguelle`,
+  $monster`the ghost of Oily McBindle`,
+  $monster`The ghost of Richard Cockingham`,
+  $monster`The ghost of Sam McGee`,
+  $monster`The ghost of Vanillica "Trashblossom" Gorton`,
+  $monster`The ghost of Waldo the Carpathian`,
+  $monster`The Headless Horseman`,
+  $monster`The Icewoman`,
+  // mapped monsters
+  $monster`amateur ninja`,
+  $monster`novelty tropical skeleton`,
+  $monster`toothless mastiff bitch`,
+  // gingerbread city
+  $monster`gingerbread finance bro`,
+  $monster`gingerbread gentrifier`,
+  $monster`gingerbread tech bro`,
+  // witchess
+  $monster`Witchess Pawn`,
+  $monster`Witchess Knight`,
+  $monster`Witchess Bishop`,
+  $monster`Witchess Rook`,
+  $monster`Witchess Ox`,
+  $monster`Witchess King`,
+  $monster`Witchess Witch`,
+  $monster`Witchess Queen`,
+  // snojo
+  $monster`X-32-F Combat Training Snowman`,
+  // BRICKOS
+  $monster`BRICKO ooze`,
+  $monster`BRICKO bat`,
+  $monster`BRICKO oyster`,
+  $monster`BRICKO turtle`,
+  $monster`BRICKO elephant`,
+  $monster`BRICKO octopus`,
+  $monster`BRICKO python`,
+  // eldritch
+  $monster`Eldritch Tentacle`,
+  // god lobster
+  $monster`God Lobster`,
+  // voter monsters
+  $monster`angry ghost`,
+  $monster`annoyed snake`,
+  $monster`government bureaucrat`,
+  $monster`slime blob`,
+  $monster`terrible mutant`,
+  // dmt monsters
+  $monster`Performer of Actions`,
+  $monster`Thinker of Thoughts`,
+  // neverending partygoers
+  $monster`biker`,
+  $monster`burnout`,
+  $monster`jock`,
+  $monster`party girl`,
+  $monster`"plain" girl`,
+  // a boss
+  $monster`Mother Slime`,
+  // toxic teacups
+  $monster`toxic beastie`,
+  $monster`Black Crayon Slime`,
+]
+  .map((m: Monster): string => `!monsterid ${m.id}`)
+  .join(` && `);
 
 const Ghost = new Macro()
   .skill($skill`Summon Love Gnats`)
@@ -79,7 +152,13 @@ const DefaultMacro = new Macro()
   .if_(`monsterid ${toxicBeastie}`, Backup)
   .if_(`monsterid ${toxicBeastie}`, Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill))
   .if_(`monsterid ${amateurNinja}`, FreeInstaKill)
+  .if_(
+    `monsterid ${noveltySkeleton}`,
+    Macro.trySkill($skill`Open a Big Red Present`).skill($skill`Use the Force`)
+  )
+  .if_(`monsterid ${mastiff}`, Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`))
   .if_(`snarfblat ${retailDistrict}`, CigKill)
+  .if_(notAllowList, TryBanish)
   .trySkill($skill`Digitize`)
   .trySkill($skill`%fn, spit on me!`)
   .skill($skill`Curse of Weaksauce`)
@@ -116,10 +195,6 @@ export const MacroList = {
     .skill($skill`Meteor Shower`)
     .step(FreeInstaKill),
 
-  TropicalSkeleton: new Macro()
-    .trySkill($skill`Open a Big Red Present`)
-    .skill($skill`Use the Force`),
-
   TunnelOfLOV: new Macro()
     .if_(`monsterid ${LOVEnforcer}`, Macro.attack().repeat())
     .if_(`monsterid ${LOVEngineer}`, Macro.skill($skill`Candyblast`).repeat())
@@ -136,15 +211,20 @@ export const MacroList = {
     .repeat(),
 
   DMTSquare: new Macro()
-    .if_(`!monsterid ${DMTSquareMon}`, Replace)
+    .if_(notAllowList, Macro.abort())
+    .if_(`!monsterid ${DMTSquare}`, Replace)
     .skill($skill`Feel Envy`)
     .step(DefaultMacro),
   DMTCircle: new Macro()
-    .if_(`!monsterid ${DMTCircleMon}`, Replace)
+    .if_(notAllowList, Macro.abort())
+    .if_(`!monsterid ${DMTCircle}`, Replace)
     .tryItem($item`abstraction: action`)
     .step(DefaultMacro),
 
-  MotherSlime: new Macro().trySkill($skill`KGB tranquilizer dart`).skill($skill`Snokebomb`),
+  MotherSlime: new Macro()
+    .if_(notAllowList, Macro.abort())
+    .trySkill($skill`KGB tranquilizer dart`)
+    .skill($skill`Snokebomb`),
 
   BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).step("runaway"),
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
@@ -180,6 +260,7 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro): 
   let mapPage = "";
   while (!mapPage.includes("Leading Yourself Right to Them")) {
     mapPage = visitUrl(toUrl(location));
+    if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat(macro.toString());
     if (myTurncount() > expectedTurnCount) throw "Wasted a turn somehow mapping monsters?";
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);

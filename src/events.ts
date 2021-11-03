@@ -39,7 +39,14 @@ import {
 import { adventure, adventureUrl, fightWitchess, MacroList, mapMonster } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
 import { spendAllMpOnLibrams } from "./iotms";
-import { checkAvailable, checkEffect, tryUse, voterMonsterNow, withEquipment } from "./lib";
+import {
+  checkAvailable,
+  checkEffect,
+  isHolidayWandererDay,
+  tryUse,
+  voterMonsterNow,
+  withEquipment,
+} from "./lib";
 import { prep, Quest } from "./quests";
 
 export const enum FamiliarFlag {
@@ -71,6 +78,14 @@ interface eventData {
 }
 
 export const preCoilEvents: Record<string, eventData> = {
+  holidayCheck: {
+    ready: () => isHolidayWandererDay() && get("_banderRunaways") < 1,
+    run: (): void => {
+      familiar($familiar`Pair of Stomping Boots`);
+      adventure(noobCave, MacroList.Runaway);
+    },
+  },
+
   hipster: {
     ready: () => !get("_ironicMoustache"),
     run: (): void => {
@@ -127,7 +142,7 @@ export const preCoilEvents: Record<string, eventData> = {
         visitUrl(`inv_use.php?pwd=&which=99&whichitem=${decorations}`);
         visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
       }
-      mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.TropicalSkeleton);
+      mapMonster(skeletonStore, $monster`novelty tropical skeleton`, MacroList.FreeFight);
       checkEffect($effect`Everything Looks Red`);
       $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
     },
@@ -592,7 +607,7 @@ export const oneOffEvents = {
         !have($item`disintegrating spiky collar`) &&
         !have($effect`Man's Worst Enemy`)
       ) {
-        mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.MeteorForce);
+        mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.FreeFight);
         checkAvailable($item`disintegrating spiky collar`);
         use($item`disintegrating spiky collar`);
       } else {

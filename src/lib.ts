@@ -3,6 +3,7 @@ import {
   effectModifier,
   equip,
   equippedItem,
+  holiday,
   toInt,
   totalTurnsPlayed,
   use,
@@ -22,6 +23,13 @@ export function checkAvailable(i: Item, n = 1): void {
 
 export function checkEffect(e: Effect): void {
   if (!have(e)) throw `Missing effect ${e}`;
+}
+
+export function isHolidayWandererDay(): boolean {
+  const holidays = ["el dia de los muertos borrachos", "feast of boris", "talk like a pirate day"];
+  const today = holiday().split("/");
+  const wandererToday = today.some((day) => holidays.includes(day.toLowerCase()));
+  return wandererToday;
 }
 
 export function itemToEffect(i: Item): Effect {
