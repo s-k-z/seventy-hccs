@@ -47,7 +47,6 @@ const notAllowList = [
   // mapped monsters
   $monster`amateur ninja`,
   $monster`novelty tropical skeleton`,
-  $monster`toothless mastiff bitch`,
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,

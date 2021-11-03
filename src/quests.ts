@@ -293,6 +293,7 @@ const questRecords: Record<number, () => QuestData> = {
   },
 
   [Quest.SpellDamage.id]: () => {
+    const candle = $item`Abracandalabra`;
     return {
       acquire: [
         $effect`Arched Eyebrow of the Archmage`,
@@ -313,8 +314,6 @@ const questRecords: Record<number, () => QuestData> = {
         $effect`Toxic Vengeance`,
         $effect`Visions of the Deep Dark Deeps`,
       ],
-      // TODO: handle spell damage candle
-      //const candle = [$slot`off-hand`, $item`Abracandalabra`];
       equipment: new Map([
         [$slot`weapon`, $item`wrench`],
         [$slot`off-hand`, $item`weeping willow wand`],
@@ -322,7 +321,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc1`, $item`battle broom`],
         [$slot`acc2`, $item`Powerful Glove`],
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
-        [$slot`familiar`, $item`astral statuette`],
+        [$slot`familiar`, have(candle) ? candle : $item`astral statuette`],
       ]),
       familiar: $familiar`Left-Hand Man`,
     };
@@ -360,10 +359,10 @@ const questRecords: Record<number, () => QuestData> = {
   [Quest.CombatFrequency.id]: () => {
     return {
       acquire: [
-        $effect`Become Superficially interested`,
         $effect`Feeling Lonely`,
         $effect`Gummed Shoes`,
         $effect`Invisible Avatar`,
+        $effect`Shortly Buttered`,
         $effect`Silent Running`,
         $effect`Smooth Movements`,
         $effect`The Sonata of Sneakiness`,

@@ -59,7 +59,7 @@ export function getPantogramPants(): void {
   }
   const e = element.spooky;
   // -3 mp to use skills or +20 mp
-  const s1 = have($item`baconstone`) ? `${toInt($item`baconstone`)},1` : "-2,0";
+  const s1 = "-2,0";
   const s2 = "-2,0"; // Spell Damage +20%
   const s3 = "-1,0"; // Monsters will be less attracted to you
   visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`portable pantogram`)}`);

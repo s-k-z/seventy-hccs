@@ -43,7 +43,6 @@ import {
   checkAvailable,
   checkEffect,
   isHolidayWandererDay,
-  tryUse,
   voterMonsterNow,
   withEquipment,
 } from "./lib";
@@ -68,7 +67,6 @@ const noobCave = $location`Noob Cave`;
 const skeletonStore = $location`The Skeleton Store`;
 const slimeTube = $location`The Slime Tube`;
 const snojo = $location`The X-32-F Combat Training Snowman`;
-const statelyPleasureDome = $location`The Stately Pleasure Dome`;
 const toxicTeacups = $location`The Toxic Teacups`;
 const upscaleDistrict = $location`Gingerbread Upscale Retail District`;
 
@@ -606,22 +604,11 @@ export const oneOffEvents = {
     }
   },
 
-  meteorPleasureDome: (): void => {
+  meteorShower: (): void => {
     if (!have($effect`Meteor Showered`)) {
-      tryUse($item`tiny bottle of absinthe`);
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       useFamiliar($familiar`Machine Elf`);
-      if (
-        have($effect`Absinthe-Minded`) &&
-        !have($item`disintegrating spiky collar`) &&
-        !have($effect`Man's Worst Enemy`)
-      ) {
-        mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.FreeFight);
-        checkAvailable($item`disintegrating spiky collar`);
-        use($item`disintegrating spiky collar`);
-      } else {
-        adventure(direWarren, MacroList.MeteorForce);
-      }
+      adventure(direWarren, MacroList.MeteorForce);
       checkEffect($effect`Meteor Showered`);
     }
   },
@@ -658,18 +645,8 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     familiar($familiar`Artistic Goth Kid`);
   } else if (!have($item`robin's egg`)) {
     familiar($familiar`Rockin' Robin`);
-  } else if (
-    flag === FamiliarFlag.Default &&
-    !have($item`short stack of pancakes`) &&
-    !have($effect`Shortly Stacked`)
-  ) {
+  } else if (flag === FamiliarFlag.Default && !have($item`short stick of butter`)) {
     familiar($familiar`Shorter-Order Cook`);
-  } else if (
-    flag === FamiliarFlag.Default &&
-    !have($item`tiny bottle of absinthe`) &&
-    !have($effect`Absinthe-Minded`)
-  ) {
-    familiar($familiar`Green Pixie`);
   } else if (
     !have($item`rope`) &&
     !have($item`burning newspaper`) &&

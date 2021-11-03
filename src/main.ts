@@ -310,11 +310,9 @@ function postCoilWire() {
 
   // Eat pizza before synthesizing, generate a licorice boa from pizza
   eatPizzas(); // 4649 - 987 - 950 - 495 - 215 - 77 - 38 = 1887 meat
-  const toSynth = [
-    $effect`Synthesis: Collection`,
-    $effect`Synthesis: Smart`,
-    $effect`Synthesis: Learning`,
-  ].filter((effect) => !have(effect));
+  const toSynth = [$effect`Synthesis: Smart`, $effect`Synthesis: Learning`].filter(
+    (effect) => !have(effect)
+  );
   if (toSynth.length > 0) {
     cliExecute("garden pick");
     cliExecute("refresh inventory");
@@ -442,7 +440,7 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.WeaponDamage)) {
     tuneMoon(MoonSign.Platypus);
     oneOffEvents.innerElf();
-    oneOffEvents.meteorPleasureDome();
+    oneOffEvents.meteorShower();
     prepAndDoQuest(Quest.WeaponDamage);
   }
 
@@ -457,7 +455,7 @@ function levelAndDoQuests() {
   }
 
   if (haveQuest(Quest.FamiliarWeight)) {
-    oneOffEvents.meteorPleasureDome();
+    oneOffEvents.meteorShower();
     prep(Quest.FamiliarWeight);
     const loveSong = $item`love song of icy revenge`;
     const coldHeart = itemToEffect(loveSong);

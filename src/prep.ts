@@ -25,7 +25,7 @@ export function checkReadyToAscend(checkVoteReady: boolean): void {
     {
       workshed: $item`diabolic pizza cube`,
       garden: $item`Peppermint Pip Packet`,
-      eudora: $item`New-You Club Membership Form`,
+      eudora: $item`Our Daily Candles™ order form`,
     },
     {
       desk: $item`Swiss piggy bank`,
