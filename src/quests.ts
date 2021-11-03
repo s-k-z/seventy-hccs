@@ -53,7 +53,7 @@ const questRecords: Record<number, () => QuestData> = {
         $effect`Spirit of Peppermint`,
         $effect`Triple-Sized`,
         $effect`Uncucumbered`,
-        $effect`critical.enh`,
+        $effect`substats.enh`,
         $effect`items.enh`,
         $effect`meat.enh`,
       ],
@@ -63,8 +63,8 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`back`, $item`protonic accelerator pack`],
         //[$slot`shirt`, $item`fresh coat of paint`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-        [$slot`off-hand`, $item`Kramco Sausage-o-Matic™`],
-        [$slot`pants`, $item`pantogram pants`],
+        [$slot`off-hand`, $item`familiar scrapbook`],
+        [$slot`pants`, $item`Cargo Cultist Shorts`],
         [$slot`acc1`, $item`hewn moon-rune spoon`],
         [$slot`acc2`, $item`Powerful Glove`],
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
@@ -225,7 +225,7 @@ const questRecords: Record<number, () => QuestData> = {
     ];
     const toCheck = [
       $effect`Bastille Bourgeoisie`,
-      $effect`critical.enh`,
+      $effect`Pointy Wizard Beard`,
       $effect`Sparkly!`,
       $effect`Visions of the Deep Dark Deeps`,
     ];
@@ -444,7 +444,7 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Steely-Eyed Squint`,
       $effect`The Spirit of Taking`,
     ];
-    const toCheck = [$effect`Bat-Adjacent Form`, $effect`Synthesis: Collection`];
+    const toCheck = [$effect`Bat-Adjacent Form`];
     const carrot = numericModifier($item`latte lovers member's mug`, "item drop") > 0;
     const candles = [
       $item`extra-large utility candle`,

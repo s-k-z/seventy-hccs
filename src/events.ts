@@ -5,6 +5,7 @@ import {
   elementalResistance,
   equip,
   handlingChoice,
+  haveEquipped,
   myFamiliar,
   myHp,
   myLevel,
@@ -43,6 +44,8 @@ import {
   checkAvailable,
   checkEffect,
   isHolidayWandererDay,
+  itemToEffect,
+  tryUse,
   voterMonsterNow,
   withEquipment,
 } from "./lib";
@@ -67,6 +70,7 @@ const noobCave = $location`Noob Cave`;
 const skeletonStore = $location`The Skeleton Store`;
 const slimeTube = $location`The Slime Tube`;
 const snojo = $location`The X-32-F Combat Training Snowman`;
+const statelyPleasureDome = $location`The Stately Pleasure Dome`;
 const toxicTeacups = $location`The Toxic Teacups`;
 const upscaleDistrict = $location`Gingerbread Upscale Retail District`;
 
@@ -81,6 +85,7 @@ export const preCoilEvents: Record<string, eventData> = {
     ready: () => isHolidayWandererDay() && get("_banderRunaways") < 1,
     run: (): void => {
       familiar($familiar`Pair of Stomping Boots`);
+      if (haveEquipped($item`Kramco Sausage-o-Matic™`)) throw `Should not have Kramco equipped yet`;
       adventure(noobCave, MacroList.Runaway);
     },
   },
@@ -606,9 +611,17 @@ export const oneOffEvents = {
 
   meteorShower: (): void => {
     if (!have($effect`Meteor Showered`)) {
+      tryUse($item`tiny bottle of absinthe`);
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       useFamiliar($familiar`Machine Elf`);
-      adventure(direWarren, MacroList.MeteorForce);
+      const collar = $item`disintegrating spiky collar`;
+      if (have($effect`Absinthe-Minded`) && !have(collar) && !have(itemToEffect(collar))) {
+        mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.FreeFight);
+        checkAvailable(collar);
+        use(collar);
+      } else {
+        adventure(direWarren, MacroList.MeteorForce);
+      }
       checkEffect($effect`Meteor Showered`);
     }
   },
@@ -647,6 +660,12 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     familiar($familiar`Rockin' Robin`);
   } else if (flag === FamiliarFlag.Default && !have($item`short stick of butter`)) {
     familiar($familiar`Shorter-Order Cook`);
+  } else if (
+    flag === FamiliarFlag.Default &&
+    !have($item`tiny bottle of absinthe`) &&
+    !have($effect`Absinthe-Minded`)
+  ) {
+    familiar($familiar`Green Pixie`);
   } else if (
     !have($item`rope`) &&
     !have($item`burning newspaper`) &&
