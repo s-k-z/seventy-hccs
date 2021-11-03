@@ -71,10 +71,10 @@ import {
   gazeAtTheStars,
   getPantogramPants,
   harvestBatteries,
-  //MoonSign,
+  MoonSign,
   scavengeDaycare,
   spendAllMpOnLibrams,
-  //tuneMoon,
+  tuneMoon,
   useDroppedItems,
   vote,
 } from "./iotms";
@@ -440,7 +440,7 @@ function levelAndDoQuests() {
   }
 
   if (haveQuest(Quest.WeaponDamage)) {
-    //tuneMoon(MoonSign.Platypus);
+    tuneMoon(MoonSign.Platypus);
     oneOffEvents.innerElf();
     oneOffEvents.meteorPleasureDome();
     prepAndDoQuest(Quest.WeaponDamage);

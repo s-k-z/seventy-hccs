@@ -60,6 +60,7 @@ export const enum FamiliarFlag {
 const civicCenter = $location`Gingerbread Civic Center`;
 const deepMachineTunnels = $location`The Deep Machine Tunnels`;
 const direWarren = $location`The Dire Warren`;
+const deepDarkJungle = $location`The Deep Dark Jungle`;
 const haikuDungeon = $location`The Haiku Dungeon`;
 const loveTunnel = $location`The Tunnel of L.O.V.E.`;
 const neverendingParty = $location`The Neverending Party`;
@@ -383,6 +384,14 @@ export const levelingEvents: Record<string, eventData> = {
         () => adventure(toxicTeacups, MacroList.FreeFight),
         [[$slot`acc3`, $item`"I Voted!" sticker`]]
       );
+    },
+  },
+
+  holidayWanderer: {
+    ready: () => isHolidayWandererDay() && deepDarkJungle.combatQueue.length < 1,
+    run: () => {
+      familiar($familiar`Frumious Bandersnatch`);
+      adventure(deepDarkJungle, MacroList.Runaway);
     },
   },
 
