@@ -184,7 +184,7 @@ function openQuestZones() {
 }
 
 function preCoilWire() {
-  // Visit Toot Oriole, sell pork gems, save a baconstone for pantogram
+  // Visit Toot Oriole just because
   visitUrl("tutorial.php?action=toot");
   while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
