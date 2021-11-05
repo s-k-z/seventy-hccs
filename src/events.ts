@@ -6,10 +6,13 @@ import {
   equip,
   handlingChoice,
   haveEquipped,
+  itemAmount,
   myFamiliar,
   myHp,
   myLevel,
   myMaxhp,
+  myMaxmp,
+  myMp,
   runChoice,
   toInt,
   totalFreeRests,
@@ -90,9 +93,40 @@ export const preCoilEvents: Record<string, eventData> = {
     },
   },
 
+  ninjaCostume: {
+    ready: () => !have($item`li'l ninja costume`),
+    run: (): void => {
+      equip($slot`back`, $item`protonic accelerator pack`);
+      selectBestFamiliar(FamiliarFlag.NoAttack);
+      // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
+      withEquipment(
+        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
+        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
+      );
+      checkAvailable($item`li'l ninja costume`);
+    },
+  },
+
+  mimic: {
+    ready: () => !get("_bagOfCandy"),
+    run: (): void => {
+      equip($slot`back`, $item`protonic accelerator pack`);
+      familiar($familiar`Stocking Mimic`);
+      equip($slot`familiar`, $item`none`);
+      const ghostLoc = get("ghostLocation");
+      if (!ghostLoc) throw `Failed to get protonic ghost notice`;
+      adventure(ghostLoc, MacroList.FreeFight);
+      equip($slot`familiar`, $item`none`);
+      checkAvailable($item`bag of many confections`);
+      const blob = $item`psychokinetic energy blob`;
+      use(Math.min(itemAmount(blob), Math.floor(myMaxmp() - myMp()) / 30), blob);
+    },
+  },
+
   hipster: {
     ready: () => !get("_ironicMoustache"),
     run: (): void => {
+      cliExecute("retrocape heck thrill");
       familiar($familiar`Mini-Hipster`);
       equip($slot`familiar`, $item`none`);
       if (get("_sourceTerminalDigitizeUses") < 1) SourceTerminal.educate($skill`Digitize`);
@@ -106,32 +140,6 @@ export const preCoilEvents: Record<string, eventData> = {
       }
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`ironic moustache`);
-    },
-  },
-
-  mimic: {
-    ready: () => !get("_bagOfCandy"),
-    run: (): void => {
-      familiar($familiar`Stocking Mimic`);
-      equip($slot`familiar`, $item`none`);
-      const ghostLoc = get("ghostLocation");
-      if (!ghostLoc) throw `Failed to get protonic ghost notice`;
-      adventure(ghostLoc, MacroList.FreeFight);
-      equip($slot`familiar`, $item`none`);
-      checkAvailable($item`bag of many confections`);
-    },
-  },
-
-  ninjaCostume: {
-    ready: () => !have($item`li'l ninja costume`),
-    run: (): void => {
-      selectBestFamiliar(FamiliarFlag.NoAttack);
-      // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
-      withEquipment(
-        () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
-        [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
-      );
-      checkAvailable($item`li'l ninja costume`);
     },
   },
 

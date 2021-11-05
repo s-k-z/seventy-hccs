@@ -405,7 +405,6 @@ const questRecords: Record<number, () => QuestData> = {
       acquire: [
         $effect`Empathy`,
         $effect`Joy`,
-        $effect`Man's Worst Enemy`,
         $effect`Robot Friends`,
         $effect`Shortly Stacked`,
         $effect`Whole Latte Love`,
@@ -446,12 +445,6 @@ const questRecords: Record<number, () => QuestData> = {
     ];
     const toCheck = [$effect`Bat-Adjacent Form`];
     const carrot = numericModifier($item`latte lovers member's mug`, "item drop") > 0;
-    const candles = [
-      $item`extra-large utility candle`,
-      $item`novelty sparkling candle`,
-      $item`runed taper candle`,
-    ];
-    const sparkler = $item`oversized sparkler`;
     const toWear = new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`back`, $item`vampyric cloake`],
@@ -461,6 +454,12 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`acc3`, $item`your cowboy boots`],
       [$slot`familiar`, $item`li'l ninja costume`],
     ]);
+    const candles = [
+      $item`extra-large utility candle`,
+      $item`novelty sparkling candle`,
+      $item`runed taper candle`,
+    ];
+    const sparkler = $item`oversized sparkler`;
     if (!candles.some(have) && have(sparkler)) toWear.set($slot`weapon`, sparkler);
     // can only have one candle
     for (const c of candles) if (have(c)) toWear.set($slot`weapon`, c);

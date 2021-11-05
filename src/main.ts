@@ -117,7 +117,7 @@ export function main(argString = ""): void {
     if (arg.match(/novote/)) checkVote = false;
     if (arg.match(/test/)) {
       synthesize(
-        [$effect`Synthesis: Collection`, $effect`Synthesis: Learning`, $effect`Synthesis: Greed`],
+        $effects`Synthesis: Collection, Synthesis: Learning, Synthesis: Greed`,
         new Set<Item>(),
         true
       );
