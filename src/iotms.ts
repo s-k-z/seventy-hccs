@@ -58,7 +58,6 @@ export function getPantogramPants(): void {
     stench = 5,
   }
   const e = element.spooky;
-  // -3 mp to use skills or +20 mp
   const s1 = "-2,0";
   const s2 = "-2,0"; // Spell Damage +20%
   const s3 = "-1,0"; // Monsters will be less attracted to you
