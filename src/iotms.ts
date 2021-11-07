@@ -37,12 +37,6 @@ export function castBestLibram(): void {
   }
 }
 
-export function gazeAtTheStars(): void {
-  while (get("_campAwaySmileBuffs") < 3) {
-    visitUrl("place.php?whichplace=campaway&action=campaway_sky");
-  }
-}
-
 export function getPantogramPants(): void {
   if (!have($item`portable pantogram`) || have($item`pantogram pants`)) return;
   const m = new Map([
@@ -103,10 +97,10 @@ export function tuneMoon(moon: MoonSign): void {
 }
 
 export function useDroppedItems(): void {
-  for (const multiUse of [$item`pulled violet taffy`]) {
-    if (have(multiUse)) use(itemAmount(multiUse), multiUse);
-  }
-  for (const singleUse of [
+  new Map([[$item`pulled violet taffy`, 50]]).forEach((limit, multiUse) => {
+    if (have(multiUse) && !have(itemToEffect(multiUse), limit)) use(itemAmount(multiUse), multiUse);
+  });
+  [
     // librams
     $item`green candy heart`,
     $item`pulled yellow taffy`,
@@ -119,9 +113,9 @@ export function useDroppedItems(): void {
     // other potions
     $item`power pill`,
     $item`short stack of pancakes`,
-  ]) {
+  ].forEach((singleUse) => {
     if (have(singleUse) && !have(itemToEffect(singleUse))) use(singleUse);
-  }
+  });
 }
 
 export function vote(): void {

@@ -143,7 +143,7 @@ const CigKill = new Macro()
 const SingAndKill = new Macro()
   .skill($skill`Sing Along`)
   .step(Pride)
-  .while_(`!mpbelow ${mpCost($skill`Candyblast`)}`, Macro.skill($skill`Candyblast`))
+  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
   .attack()
   .repeat();
 const DefaultMacro = new Macro()

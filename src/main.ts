@@ -68,7 +68,6 @@ import { eatPizzas } from "./diet";
 import { hasRemainingFreeFights, levelingEvents, oneOffEvents, preCoilEvents } from "./events";
 import {
   castBestLibram,
-  gazeAtTheStars,
   getPantogramPants,
   harvestBatteries,
   MoonSign,
@@ -257,7 +256,6 @@ function preCoilWire() {
 }
 
 function postCoilWire() {
-  gazeAtTheStars();
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
   cliExecute("Briefcase e spell spooky -combat");
   // Visit Gingerbread Civic Center & fast forward clock
