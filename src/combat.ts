@@ -47,6 +47,7 @@ const notAllowList = [
   // mapped monsters
   $monster`amateur ninja`,
   $monster`novelty tropical skeleton`,
+  $monster`toothless mastiff bitch`,
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
@@ -60,7 +61,9 @@ const notAllowList = [
   $monster`Witchess King`,
   $monster`Witchess Witch`,
   $monster`Witchess Queen`,
-  // snojo
+  // more free combats
+  $monster`Eldritch Tentacle`,
+  $monster`God Lobster`,
   $monster`X-32-F Combat Training Snowman`,
   // BRICKOS
   $monster`BRICKO ooze`,
@@ -70,26 +73,22 @@ const notAllowList = [
   $monster`BRICKO elephant`,
   $monster`BRICKO octopus`,
   $monster`BRICKO python`,
-  // eldritch
-  $monster`Eldritch Tentacle`,
-  // god lobster
-  $monster`God Lobster`,
   // voter monsters
   $monster`angry ghost`,
   $monster`annoyed snake`,
   $monster`government bureaucrat`,
   $monster`slime blob`,
   $monster`terrible mutant`,
-  // dmt monsters
+  // deep machine tunnels
   $monster`Performer of Actions`,
   $monster`Thinker of Thoughts`,
-  // neverending partygoers
+  // neverending party
   $monster`biker`,
   $monster`burnout`,
   $monster`jock`,
   $monster`party girl`,
   $monster`"plain" girl`,
-  // a boss
+  // boss(es)
   $monster`Mother Slime`,
   // toxic teacups
   $monster`toxic beastie`,

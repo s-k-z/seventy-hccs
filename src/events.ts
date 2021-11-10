@@ -113,6 +113,7 @@ export const preCoilEvents: Record<string, eventData> = {
       equip($slot`back`, $item`protonic accelerator pack`);
       familiar($familiar`Stocking Mimic`);
       equip($slot`familiar`, $item`none`);
+      visitUrl("questlog.php?which=1"); // check quest log protonic ghost location
       const ghostLoc = get("ghostLocation");
       if (!ghostLoc) throw `Failed to get protonic ghost notice`;
       adventure(ghostLoc, MacroList.FreeFight);
@@ -401,6 +402,7 @@ export const levelingEvents: Record<string, eventData> = {
   holidayWanderer: {
     ready: () => isHolidayWandererDay() && deepDarkJungle.combatQueue.length < 1,
     run: () => {
+      checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(deepDarkJungle, MacroList.Runaway);
     },
