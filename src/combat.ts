@@ -174,7 +174,8 @@ export const MacroList = {
   StenchFreeFight: new Macro()
     .if_(`monsterid ${toxicBeastie}`, Backup)
     .if_(`monsterid ${toxicBeastie}`, Macro.abort())
-    .if_(`monsterhpabove 250`, Macro.skill($skill`Curse of Weaksauce`))
+    .if_(`monsterhpabove 300`, Macro.skill($skill`Curse of Weaksauce`))
+    .if_(`monsterhpabove 300`, Macro.skill($skill`Sing Along`))
     .skill($skill`Garbage Nova`),
 
   // Just runaway on its own causes a null pointer exception?
