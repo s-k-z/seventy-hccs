@@ -63,6 +63,7 @@ const notAllowList = [
   $monster`Witchess Queen`,
   // more free combats
   $monster`Eldritch Tentacle`,
+  $monster`Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl`,
   $monster`God Lobster`,
   $monster`X-32-F Combat Training Snowman`,
   // BRICKOS
