@@ -90,6 +90,7 @@ export const preCoilEvents: Record<string, eventData> = {
       familiar($familiar`Pair of Stomping Boots`);
       if (haveEquipped($item`Kramco Sausage-o-Matic™`)) throw `Should not have Kramco equipped yet`;
       adventure(noobCave, MacroList.Runaway);
+      if (get("_banderRunaways") < 1) throw `Failed to increment _banderRunaways`;
     },
   },
 
@@ -98,7 +99,6 @@ export const preCoilEvents: Record<string, eventData> = {
     run: (): void => {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
-      // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
       withEquipment(
         () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
         [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
