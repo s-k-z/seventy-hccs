@@ -41,7 +41,7 @@ import {
   SourceTerminal,
 } from "libram";
 import { adventure, adventureUrl, fightWitchess, MacroList, mapMonster } from "./combat";
-import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
+import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN, MP_SAFE_LIMIT } from "./config";
 import { spendAllMpOnLibrams } from "./iotms";
 import {
   checkAvailable,
@@ -331,7 +331,7 @@ export const levelingEvents: Record<string, eventData> = {
       MacroList.FreeFight.setAutoAttack();
       useSkill($skill`Evoke Eldritch Horror`);
       // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
-      if (myHp() < 30) cliExecute("hottub");
+      if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
     },
   },
 
@@ -604,7 +604,7 @@ export const oneOffEvents = {
       throw `Failed to retrieve fax of ${faxMon}`;
     }
     equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-    useFamiliar($familiar`Machine Elf`);
+    familiar($familiar`Machine Elf`);
     adventureUrl(`inv_use.php?pwd=&whichitem=${toInt(fax)}`, MacroList.MeteorForce);
     checkAvailable($item`corrupted marrow`);
   },
@@ -613,7 +613,7 @@ export const oneOffEvents = {
     if (!have($effect`Fireproof Foam Suit`)) {
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
       equip($slot`off-hand`, $item`industrial fire extinguisher`);
-      useFamiliar($familiar`Machine Elf`);
+      familiar($familiar`Machine Elf`);
       adventure(direWarren, MacroList.FoamForce);
       checkEffect($effect`Fireproof Foam Suit`);
     }
@@ -623,7 +623,7 @@ export const oneOffEvents = {
     if (!have($effect`Meteor Showered`)) {
       tryUse($item`tiny bottle of absinthe`);
       equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-      useFamiliar($familiar`Machine Elf`);
+      familiar($familiar`Machine Elf`);
       const collar = $item`disintegrating spiky collar`;
       if (have($effect`Absinthe-Minded`) && !have(collar) && !have(itemToEffect(collar))) {
         mapMonster(statelyPleasureDome, $monster`toothless mastiff bitch`, MacroList.FreeFight);
@@ -654,6 +654,9 @@ function familiar(fam: Familiar) {
     [$familiar`Pocket Professor`, "hp"],
     [$familiar`Rockin' Robin`, "myst"],
   ]).get(fam);
+  if (fam === $familiar`Machine Elf`) {
+    while (myHp() < myMaxhp() && myMp() > MP_SAFE_LIMIT) useSkill($skill`Cannelloni Cocoon`);
+  }
   if (costume && !get("_mummeryMods").includes(`${fam}`)) cliExecute(`mummery ${costume}`);
 }
 
