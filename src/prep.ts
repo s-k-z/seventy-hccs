@@ -14,11 +14,12 @@ export function checkReadyToAscend(checkVoteReady: boolean): void {
 
   if (pvpAttacksLeft() > 0) throw `Spend your pvp fites`;
 
-  if (checkVoteReady && (totalTurnsPlayed() + 60) % 11 !== 1) {
-    const targetTurnBaseline = totalTurnsPlayed() + 60;
-    const m = Math.floor((targetTurnBaseline - 1) / 11);
-    const turns = 11 * (m + 1) + 1 - (totalTurnsPlayed() + 60);
-    throw `Spend more ${turns} turns for voter monster`;
+  const voterPreCoilNotReady = totalTurnsPlayed() % 11 !== 1;
+  const voterPostCoilNotReady = (totalTurnsPlayed() + 60) % 11 !== 1;
+  if (checkVoteReady && voterPreCoilNotReady && voterPostCoilNotReady) {
+    const turnsA = 11 - (((totalTurnsPlayed() % 11) + 10) % 11);
+    const turnsB = 11 - ((((totalTurnsPlayed() + 60) % 11) + 10) % 11);
+    throw `Spend more ${turnsA} or ${turnsB} turns for voter monster`;
   }
 
   prepareAscension(

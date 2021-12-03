@@ -144,6 +144,17 @@ export const preCoilEvents: Record<string, eventData> = {
     },
   },
 
+  vote: {
+    ready: () => voterMonsterNow() && get("_voteFreeFights") < 1,
+    run: () => {
+      selectBestFamiliar();
+      withEquipment(
+        () => adventure(noobCave, MacroList.FreeFight),
+        [[$slot`acc3`, $item`"I Voted!" sticker`]]
+      );
+    },
+  },
+
   tropicalSkeleton: {
     ready: () => !have($effect`Everything Looks Red`),
     run: (): void => {
