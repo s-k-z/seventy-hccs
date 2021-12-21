@@ -52,6 +52,10 @@ const notAllowList = [
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
   $monster`gingerbread tech bro`,
+  // tunnel of L.O.V.E.
+  $monster`LOV Enforcer`,
+  $monster`LOV Engineer`,
+  $monster`LOV Equivocator`,
   // witchess
   $monster`Witchess Pawn`,
   $monster`Witchess Knight`,
