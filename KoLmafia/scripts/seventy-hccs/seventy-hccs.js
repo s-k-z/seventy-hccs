@@ -18866,14 +18866,6 @@ function synthesize(targetEffects, reserveCandies) {
     });
   });
 
-  var check = pair => {
-    var count = (0,external_kolmafia_.itemAmount)(pair.candy);
-    if (count !== pair.count) throw "Expected ".concat(pair.count, " ").concat(pair.candy, ", but found ").concat(count);
-  };
-
-  candies.complex.forEach(check);
-  candies.simple.forEach(check);
-
   if (test) {
     candies.complex = [{
       candy: (0,dist.$item)(sweetsynthesis_templateObject26 || (sweetsynthesis_templateObject26 = sweetsynthesis_taggedTemplateLiteral(["bag of many confections"]))),
