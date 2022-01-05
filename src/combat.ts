@@ -115,6 +115,7 @@ const TryBanish = new Macro() // Reserve Snokebomb for Mother Slime
   .trySkill($skill`Throw Latte on Opponent`)
   .trySkill($skill`KGB tranquilizer dart`)
   .trySkill($skill`Reflex Hammer`)
+  .trySkill($skill`Bowl a Curveball`)
   .trySkill($skill`Feel Hatred`)
   .abort();
 
@@ -163,7 +164,6 @@ const DefaultMacro = new Macro()
   .if_(`snarfblat ${retailDistrict}`, CigKill)
   .if_(notAllowList, TryBanish)
   .trySkill($skill`Digitize`)
-  .trySkill($skill`%fn, spit on me!`)
   .skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
@@ -171,6 +171,7 @@ const DefaultMacro = new Macro()
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
+  .trySkill($skill`Bowl Straight Up`)
   .step(SingAndKill);
 
 export const MacroList = {

@@ -138,7 +138,7 @@ export const preCoilEvents: Record<string, eventData> = {
       if (get("_sourceTerminalDigitizeUses") > 0) {
         SourceTerminal.educate($skill`Compress`);
         SourceTerminal.educate($skill`Extract`);
-      }
+      } else throw `Failed to cast digitize?`;
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`ironic moustache`);
     },
