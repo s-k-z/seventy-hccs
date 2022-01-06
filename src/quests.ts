@@ -54,8 +54,6 @@ const questRecords: Record<number, () => QuestData> = {
         $effect`Triple-Sized`,
         $effect`Uncucumbered`,
         $effect`substats.enh`,
-        $effect`items.enh`,
-        $effect`meat.enh`,
       ],
       check: [],
       equipment: new Map([
@@ -116,6 +114,8 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Total Protonic Reversal`,
       $effect`You Can Really Taste the Dormouse`,
       $effect`Warlock, Warstock, and Warbarrel`,
+      $effect`items.enh`,
+      $effect`meat.enh`,
       // Beach comb
       $effect`Cold as Nice`,
       $effect`A Brush with Grossness`,
