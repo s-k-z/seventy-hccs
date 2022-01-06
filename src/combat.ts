@@ -14,7 +14,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
+import { $effect, $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const noveltySkeleton = $monster`novelty tropical skeleton`.id;
@@ -171,7 +171,12 @@ const DefaultMacro = new Macro()
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
-  .trySkill($skill`Bowl Straight Up`)
+  .if_(
+    `hasskill ${toInt($skill`Bowl Straight Up`)} && !haseffect ${toInt(
+      $effect`Cosmic Ball in the Air`
+    )}`,
+    Macro.skill($skill`Bowl Straight Up`)
+  )
   .step(SingAndKill);
 
 export const MacroList = {
