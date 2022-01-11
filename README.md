@@ -46,7 +46,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## To run the script
 
-1. Ensure you have KoLMafia r25824 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
+1. Ensure you have KoLMafia r26092 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
 2. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
 3. Set properties in kolmafia to appropriate values:
 
