@@ -10,7 +10,6 @@ import {
   equip,
   familiarWeight,
   gametimeToInt,
-  getProperty,
   haveEffect,
   itemAmount,
   mpCost,
@@ -175,10 +174,9 @@ function openQuestZones() {
     ["questM24Doc", "doc"],
     ["questM25Armorer", "armory"],
   ].forEach(([prop, id]) => {
-    if (getProperty(prop).toLowerCase() === "unstarted") {
-      visitUrl(`shop.php?whichshop=${id}&action=talk`);
-      runChoice(1);
-    }
+    if (get<string>(prop).toLowerCase() !== "unstarted") return;
+    visitUrl(`shop.php?whichshop=${id}&action=talk`);
+    runChoice(1);
   });
 }
 
