@@ -144,7 +144,7 @@ export const preCoilEvents: Record<string, eventData> = {
   crimboShrub: {
     ready: () => !have($effect`Everything Looks Red`),
     run: (): void => {
-      prep(Quest.Caldera);
+      equip($slot`Weapon`, $item`Fourth of May Cosplay Saber`);
       familiar($familiar`Crimbo Shrub`);
       // Decorate Crimbo Shrub with LED Mandala, Actual Candles, Popcorn Strands, and Big Red-Wrapped Presents
       if (!get("_shrubDecorated")) {
