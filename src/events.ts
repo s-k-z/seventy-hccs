@@ -41,7 +41,7 @@ import {
   set,
   SourceTerminal,
 } from "libram";
-import { adventure, adventureUrl, fightWitchess, MacroList, mapMonster } from "./combat";
+import { adventure, adventureUrl, fightWitchess, MacroList, mapMonster, reminisce } from "./combat";
 import { BRICKO_TARGET_ITEM, FAX_AND_SLIME_CLAN } from "./config";
 import { spendAllMpOnLibrams } from "./iotms";
 import {
@@ -63,7 +63,6 @@ export const enum FamiliarFlag {
 }
 
 // Locations
-const caldera = $location`The Bubblin' Caldera`;
 const civicCenter = $location`Gingerbread Civic Center`;
 const deepMachineTunnels = $location`The Deep Machine Tunnels`;
 const direWarren = $location`The Dire Warren`;
@@ -153,7 +152,7 @@ export const preCoilEvents: Record<string, eventData> = {
         visitUrl(`inv_use.php?pwd=&which=99&whichitem=${decorations}`);
         visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=2&garland=3&gift=2`);
       }
-      mapMonster(caldera, $monster`lava lamprey`, MacroList.FreeFight);
+      reminisce($monster`cocktail shrimp`, MacroList.FreeFight);
       checkEffect($effect`Everything Looks Red`);
       if (get("dnaSyringe") !== `${$phylum`fish`}`) throw `Failed to obtain fish DNA?`;
       cliExecute("camp dnainject");

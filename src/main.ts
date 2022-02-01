@@ -275,13 +275,9 @@ function postCoilWire() {
   }
   // 7241 - 950 = 6291 meat
   [
-    // Need all of these to craft with
-    $skill`Advanced Cocktailcrafting`,
     $skill`Advanced Saucecrafting`,
     $skill`Chubby and Plump`,
-    $skill`Perfect Freeze`,
     $skill`Prevent Scurvy and Sobriety`,
-
     // Only need Alice's Army and Crimbo Candy for now
     $skill`Summon Alice's Army Cards`,
     //$skill`Summon Confiscated Things`,
@@ -301,9 +297,7 @@ function postCoilWire() {
   checkMainClan();
   $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, 5500 meat
   // 6149 - 5500 = 649 meat
-  const toSynth = [$effect`Synthesis: Smart`, $effect`Synthesis: Learning`].filter(
-    (effect) => !have(effect)
-  );
+  const toSynth = $effects`Synthesis: Smart, Synthesis: Learning`.filter((e) => !have(e));
   if (toSynth.length > 0) {
     cliExecute("garden pick");
     cliExecute("refresh inventory");
