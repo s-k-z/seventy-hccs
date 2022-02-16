@@ -143,6 +143,10 @@ const CigKill = new Macro()
   .abort();
 
 const SingAndKill = new Macro()
+  .if_(
+    `monsterid ${snowman} && !haseffect ${$effect`Human-Machine Hybrid`}`,
+    Macro.tryItem($item`DNA extraction syringe`)
+  )
   .skill($skill`Sing Along`)
   .step(Pride)
   .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
@@ -234,7 +238,10 @@ export const MacroList = {
     .trySkill($skill`KGB tranquilizer dart`)
     .skill($skill`Snokebomb`),
 
-  BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).step("runaway"),
+  PirateRunaway: new Macro()
+    .trySkill($skill`Become a Bat`)
+    .tryItem($item`DNA extraction syringe`)
+    .step("runaway"),
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
 
   MeteorForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),

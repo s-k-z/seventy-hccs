@@ -67,6 +67,7 @@ const civicCenter = $location`Gingerbread Civic Center`;
 const deepMachineTunnels = $location`The Deep Machine Tunnels`;
 const direWarren = $location`The Dire Warren`;
 const deepDarkJungle = $location`The Deep Dark Jungle`;
+const garbageBarges = $location`Pirates of the Garbage Barges`;
 const haikuDungeon = $location`The Haiku Dungeon`;
 const loveTunnel = $location`The Tunnel of L.O.V.E.`;
 const neverendingParty = $location`The Neverending Party`;
@@ -98,7 +99,6 @@ export const preCoilEvents: Record<string, eventData> = {
     run: (): void => {
       equip($slot`back`, $item`protonic accelerator pack`);
       selectBestFamiliar(FamiliarFlag.NoAttack);
-      // Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat
       withEquipment(
         () => mapMonster(haikuDungeon, $monster`amateur ninja`, MacroList.FreeFight),
         [[$slot`acc3`, $item`Lil' Doctor™ bag`]]
@@ -138,6 +138,7 @@ export const preCoilEvents: Record<string, eventData> = {
         SourceTerminal.educate($skill`Compress`);
         SourceTerminal.educate($skill`Extract`);
       } else throw `Failed to cast digitize?`;
+      throw `Start the digitize counter by going to a wanderer-friendly zone and encountering a normal combat`;
     },
   },
 
@@ -150,7 +151,12 @@ export const preCoilEvents: Record<string, eventData> = {
       if (!get("_shrubDecorated")) {
         const decorations = toInt($item`box of old Crimbo decorations`);
         visitUrl(`inv_use.php?pwd=&which=99&whichitem=${decorations}`);
-        visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=2&garland=3&gift=2`);
+        const enum shrubElements {
+          spooky = 2,
+          sleaze = 6,
+        }
+        const e = shrubElements.sleaze;
+        visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=${e}&garland=3&gift=2`);
       }
       reminisce($monster`cocktail shrimp`, MacroList.FreeFight);
       checkEffect($effect`Everything Looks Red`);
@@ -301,7 +307,8 @@ export const levelingEvents: Record<string, eventData> = {
       }
       selectBestFamiliar();
       adventure(snojo, myFamiliar().combat ? MacroList.FastFreeFight : MacroList.FreeFight);
-      if (get("dnaSyringe") === `${$phylum`construct`}`) cliExecute("camp potion 1");
+      if (get("dnaSyringe") === `${$phylum`construct`}`) cliExecute("camp dnapotion 1");
+      tryUse($item`Gene Tonic: Construct`);
       checkEffect($effect`Human-Machine Hybrid`);
     },
   },
@@ -641,7 +648,9 @@ export const oneOffEvents = {
       equip($slot`back`, $item`vampyric cloake`);
       useSkill($skill`The Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
-      adventure(direWarren, MacroList.BatFormRunaway);
+      adventure(garbageBarges, MacroList.PirateRunaway);
+      if (get("dnaSyringe") === `${$phylum`pirate`}`) cliExecute("camp dnapotion 1");
+      checkEffect($effect`Human-Machine Hybrid`);
       checkEffect($effect`Bat-Adjacent Form`);
     }
   },
