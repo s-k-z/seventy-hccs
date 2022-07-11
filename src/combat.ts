@@ -48,6 +48,10 @@ const notAllowList = [
   $monster`amateur ninja`,
   $monster`novelty tropical skeleton`,
   $monster`toothless mastiff bitch`,
+  // reminisced monsters
+  $monster`cocktail shrimp`,
+  $monster`mutant circuit-soldering elf`,
+  $monster`pterodactyl`,
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
@@ -278,6 +282,15 @@ export function mapMonster(location: Location, monster: Monster, macro: Macro): 
   if (choiceFollowsFight()) visitUrl("choice.php");
   if (handlingChoice()) runChoice(-1);
   if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
+}
+
+export function reminisce(monster: Monster, macro: Macro): void {
+  if (getAutoAttack() !== 0) setAutoAttack(0);
+  visitUrl(`inventory.php?reminisce=1`);
+  visitUrl(`choice.php?pwd=&whichchoice=1463&option=1&mid=${monster.id}`);
+  runCombat(macro.toString());
+  if (choiceFollowsFight()) visitUrl("choice.php");
+  if (handlingChoice()) runChoice(-1);
 }
 
 export function fightWitchess(piece: Monster, macro: Macro): void {
