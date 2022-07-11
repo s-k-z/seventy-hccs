@@ -1,4 +1,14 @@
-import { cliExecute, eat, equip, retrieveItem, toInt, use, useFamiliar, visitUrl } from "kolmafia";
+import {
+  cliExecute,
+  eat,
+  equip,
+  Item,
+  retrieveItem,
+  toInt,
+  use,
+  useFamiliar,
+  visitUrl,
+} from "kolmafia";
 import { $effect, $familiar, $item, $slot, have } from "libram";
 import { acquireEffect, checkAvailable, tuple } from "./lib";
 

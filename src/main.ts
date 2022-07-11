@@ -7,10 +7,12 @@ import {
   create,
   drink,
   eat,
+  Effect,
   equip,
   familiarWeight,
   gametimeToInt,
   haveEffect,
+  Item,
   itemAmount,
   mpCost,
   myBasestat,
@@ -30,6 +32,7 @@ import {
   retrieveItem,
   reverseNumberology,
   runChoice,
+  Skill,
   soulsauceCost,
   toInt,
   use,
@@ -174,7 +177,7 @@ function openQuestZones() {
     ["questM24Doc", "doc"],
     ["questM25Armorer", "armory"],
   ].forEach(([prop, id]) => {
-    if (get<string>(prop).toLowerCase() !== "unstarted") return;
+    if (get(prop).toLowerCase() !== "unstarted") return;
     visitUrl(`shop.php?whichshop=${id}&action=talk`);
     runChoice(1);
   });

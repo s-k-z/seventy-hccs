@@ -4,6 +4,7 @@ import {
   cliExecute,
   elementalResistance,
   equip,
+  Familiar,
   handlingChoice,
   haveEquipped,
   itemAmount,

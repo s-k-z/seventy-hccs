@@ -4,6 +4,8 @@ import {
   getAutoAttack,
   handlingChoice,
   inMultiFight,
+  Location,
+  Monster,
   mpCost,
   myTurncount,
   runChoice,
