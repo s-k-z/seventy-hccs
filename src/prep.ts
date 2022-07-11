@@ -1,5 +1,5 @@
 import { holiday, pvpAttacksLeft, totalTurnsPlayed, visitUrl } from "kolmafia";
-import { $item, $monster, get, prepareAscension } from "libram";
+import { $monster, get, prepareAscension } from "libram";
 
 export function checkReadyToAscend(checkVoteReady: boolean): void {
   const badDays = ["april fool's day"];
@@ -22,17 +22,15 @@ export function checkReadyToAscend(checkVoteReady: boolean): void {
     throw `Spend more ${turnsA} or ${turnsB} turns for voter monster`;
   }
 
-  prepareAscension(
-    {
-      workshed: $item`diabolic pizza cube`,
-      garden: $item`Peppermint Pip Packet`,
-      eudora: $item`Our Daily Candles™ order form`,
+  prepareAscension({
+    workshed: "diabolic pizza cube",
+    garden: "Peppermint Pip Packet",
+    eudora: "Our Daily Candles™ order form",
+    chateau: {
+      desk: "Swiss piggy bank",
+      ceiling: "ceiling fan",
+      nightstand: "foreign language tapes",
     },
-    {
-      desk: $item`Swiss piggy bank`,
-      ceiling: $item`ceiling fan`,
-      nightstand: $item`foreign language tapes`,
-    },
-    true
-  );
+    throwOnFail: true,
+  });
 }

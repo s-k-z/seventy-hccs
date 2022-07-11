@@ -1,9 +1,12 @@
 import {
   cliExecute,
+  Effect,
   effectModifier,
   equip,
   equippedItem,
   holiday,
+  Item,
+  Slot,
   toInt,
   totalTurnsPlayed,
   use,

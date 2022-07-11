@@ -1,7 +1,9 @@
 import {
   create,
+  Effect,
   getIngredients,
   getInventory,
+  Item,
   print,
   sweetSynthesis,
   sweetSynthesisResult,
