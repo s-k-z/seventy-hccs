@@ -207,7 +207,6 @@ function preCoilWire() {
   const hasSolution = () => Object.keys(reverseNumberology()).includes(calculation);
   while (canCalculate() && hasSolution()) cliExecute(`numberology ${calculation}`);
   getPantogramPants();
-
   //
   // Let's get a buncha meat!
   //
@@ -217,15 +216,19 @@ function preCoilWire() {
   if (!get("_chateauDeskHarvested")) visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
   if (!get("_horsery")) cliExecute("horsery dark");
   SongBoom.setSong("Total Eclipse of Your Meat");
-  // 11001 meat
+  // +11001 meat
   openQuestZones();
   equip($slot`acc2`, $item`Powerful Glove`); // Optimize away equipping & unequipping to buff up
   prep(Quest.Beginning);
+  visitUrl("clan_viplounge.php?action=fwshop"); // Enable access to the fireworks shop
   //prettier-ignore
   for (const [check, retrieve] of [
     [$effect`That's Just Cloud-Talk, Man`, () => visitUrl("place.php?whichplace=campaway&action=campaway_sky")],
     [$item`"DRINK ME" potion`,             () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2")],
-    [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)], // 11001 - 285 = 10716 meat
+    [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)], // -270 meat
+    [$item`toy accordion`,                 () => retrieveItem($item`toy accordion`)], // -135 meat
+    [$item`turtle totem`,                  () => retrieveItem($item`turtle totem`)], // -[45-720] meat
+    [$item`saucepan`,                      () => retrieveItem($item`saucepan`)], // -[45-720] meat
     [$item`battery (AAA)`,                 () => harvestBatteries()],
     [$item`battery (lantern)`,             () => create($item`battery (lantern)`)],
     [$item`Brutal brogues`,                () => cliExecute("bastille bbq brutalist catapult")],
@@ -236,12 +239,17 @@ function preCoilWire() {
     [$item`green mana`,                    () => cliExecute(`cheat forest`)],
     [$item`wrench`,                        () => cliExecute(`cheat wrench`)],
     [$item`occult jelly donut`,            () => create($item`occult jelly donut`)],
-    [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // 10716 - 475 = 10241 meat
+    [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // -450 meat
     [$item`Yeg's Motel hand soap`,         () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
     [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
     [$skill`Seek out a Bird`,              () => use($item`Bird-a-Day calendar`)],
   ] as [Effect | Item | Skill, () => void][]) {
     if (!have(check)) retrieve();
+  }
+  if (!get("hasRange")) {
+    const range = $item`Dramatic™ range`;
+    if (!have(range)) retrieveItem(range); // -900 meat
+    use(range);
   }
   vote();
   scavengeDaycare();
@@ -252,27 +260,13 @@ function preCoilWire() {
   changeMcd(10);
   if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
   for (const event of Object.values(preCoilEvents)) if (event.ready()) event.run();
-  // 10241 + 2000 = 12241 meat
+  // +2000 meat
   spendAllMpOnLibrams();
 }
 
 function postCoilWire() {
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
   cliExecute("Briefcase e spell spooky -combat");
-  // Visit Gingerbread Civic Center & fast forward clock
-  // Then use nanorhino for nanobrainy and increment the gingerbread city counter
-  oneOffEvents.nanobrainy();
-  // Start buffing familiar weight now that we're done with Nanorhino
-  if (get("_saberMod") < 1) cliExecute("saber familiar");
-  $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
-  useDroppedItems(); // In case we obtained a green candy heart already, don't want to synthesize it later
-
-  if (!get("hasRange")) {
-    const range = $item`Dramatic™ range`;
-    if (!have(range)) retrieveItem(range);
-    use(range);
-  }
-  // 12241 - 950 = 11291 meat
   [
     // Need all of these to craft with
     $skill`Advanced Cocktailcrafting`,
@@ -280,16 +274,23 @@ function postCoilWire() {
     $skill`Chubby and Plump`,
     $skill`Perfect Freeze`,
     $skill`Prevent Scurvy and Sobriety`,
-
     // Only need Alice's Army and Crimbo Candy for now
     $skill`Summon Alice's Army Cards`,
     //$skill`Summon Confiscated Things`,
     $skill`Summon Crimbo Candy`,
     //$skill`Summon Geeky Gifts`,
     //$skill`Summon Tasteful Items`,
-  ].forEach((skill) => useSkill(skill));
-  // 143 mp
-
+  ].forEach((skill) => useSkill(skill)); // 143 mp
+  acquireEffect($effect`Ode to Booze`); // 50 mp
+  // Visit Gingerbread Civic Center & fast forward clock
+  // Then use nanorhino for nanobrainy and increment the gingerbread city counter
+  print(`Nanorhino start: have ${myMp()}/${myMaxmp()} MP.`);
+  oneOffEvents.nanobrainy();
+  print(`Nanorhino end: have ${myMp()}/${myMaxmp()} MP.`);
+  // Start buffing familiar weight now that we're done with Nanorhino
+  if (get("_saberMod") < 1) cliExecute("saber familiar");
+  $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
+  useDroppedItems(); // In case we obtained a green candy heart already, don't want to synthesize it later
   [
     $item`oil of expertise`,
     $item`philter of phorce`,
@@ -298,17 +299,12 @@ function postCoilWire() {
   ].forEach((saucePotion) => {
     if (!have(saucePotion) && !have(itemToEffect(saucePotion))) create(saucePotion);
   });
-
-  retrieveItem($item`toy accordion`);
-  // 11291 - 142 = 11149 meat
-  //useSkill(2, $skill`The Ode to Booze`);
-  acquireEffect($effect`Ode to Booze`);
   checkMainClan();
-  $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, 5500 meat
-  // 11149 - 5500 = 5649 meat
-
+  $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect); // 5 drunk, -5500 meat
   // Eat pizza before synthesizing, generate a licorice boa from pizza
-  eatPizzas(); // 5649 - 987 - 950 - 495 - 215 - 77 - 38 = 2887 meat
+  print(`Pizza start: have ${myMp()}/${myMaxmp()} MP.`);
+  eatPizzas(); // 987 + 950 + 495 + 215 + 77 + 38 => -2762 meat
+  print(`Pizza end: have ${myMp()}/${myMaxmp()} MP.`);
   const toSynth = [$effect`Synthesis: Smart`, $effect`Synthesis: Learning`].filter(
     (effect) => !have(effect)
   );
@@ -328,25 +324,19 @@ function postCoilWire() {
   const water = $item`cold-filtered water`;
   if (get("tomeSummons") < 3 && !have(water) && !have(itemToEffect(water))) create(water);
   tryUse(water);
-  // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
   [
-    $item`Chubby and Plump bar`,
+    $item`Chubby and Plump bar`, // If we didn't use a chubby and plump bar for synthesis we can use it for more HP and MP
     $item`Napalm In The Morning™ candle`,
     $item`Salsa Caliente™ candle`,
     $item`Smoldering Clover™ candle`,
   ].forEach(tryUse);
-
   equip($slot`acc2`, $item`Powerful Glove`);
-  retrieveItem($item`turtle totem`);
-  retrieveItem($item`saucepan`);
   prep(Quest.Leveling);
-  // 316 mp
   if (have($item`LOV Epaulettes`)) prep(Quest.LevelingML);
 }
 
 function levelAndDoQuests() {
   Clan.join(MAIN_CLAN);
-  visitUrl("clan_viplounge.php?action=fwshop"); // Enable access to the fireworks shop
   const mainstat = myPrimestat();
   if (haveQuest(Quest.CoilWire)) {
     preCoilWire();
