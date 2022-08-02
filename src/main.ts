@@ -190,7 +190,7 @@ function preCoilWire() {
   // Visit Toot Oriole just because
   visitUrl("tutorial.php?action=toot");
   const stillSuitFam = toFamiliar(STILLSUIT_FAMILIAR);
-  if (stillSuitFam === $familiar`none`) throw `STILLSUIT_FAMILIAR not set`;
+  if (stillSuitFam === $familiar`none`) throw `seventyhccs_stillsuit_target not set`;
   const stillSuitId = toInt(stillSuitFam);
   visitUrl(`familiar.php?action=equip&pwd&whichfam=${stillSuitId}&whichitem=10932`);
   while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
