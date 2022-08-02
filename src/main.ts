@@ -45,6 +45,7 @@ import {
   $class,
   $effect,
   $effects,
+  $familiar,
   $item,
   $skill,
   $slot,
@@ -186,6 +187,8 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole just because
   visitUrl("tutorial.php?action=toot");
+  const stillFam = $familiar`Scary Death Orb`;
+  visitUrl(`familiar.php?action=equip&pwd&whichfam=${toInt(stillFam)}&whichitem=10932`);
   while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
     $item`letter from King Ralph XI`,
