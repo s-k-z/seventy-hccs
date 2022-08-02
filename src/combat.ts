@@ -196,7 +196,7 @@ export const MacroList = {
     .skill($skill`Garbage Nova`),
 
   // Just runaway on its own causes a null pointer exception?
-  Runaway: new Macro().trySkill($skill`Saucy Salve`).step("runaway"),
+  Runaway: new Macro().trySkill($skill`Saucy Salve`).runaway(),
 
   Banish: TryBanish,
 
@@ -242,8 +242,8 @@ export const MacroList = {
     .trySkill($skill`KGB tranquilizer dart`)
     .skill($skill`Snokebomb`),
 
-  BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).step("runaway"),
-  LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).step("runaway"),
+  BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).runaway(),
+  LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).runaway(),
 
   MeteorForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
   FoamForce: new Macro()
