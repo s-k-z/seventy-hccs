@@ -187,7 +187,7 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole just because
   visitUrl("tutorial.php?action=toot");
-  const stillFam = $familiar`Scary Death Orb`;
+  const stillFam = $familiar`Ninja Snowflake`;
   visitUrl(`familiar.php?action=equip&pwd&whichfam=${toInt(stillFam)}&whichitem=10932`);
   while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
@@ -264,13 +264,13 @@ function preCoilWire() {
   if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
   for (const event of Object.values(preCoilEvents)) if (event.ready()) event.run();
   // +2000 meat
-  tryUse($item`MayDay™ supply package`);
-  if (have($item`space blanket`)) autosell(1, $item`space blanket`);
-  // +5000 meat
   spendAllMpOnLibrams();
 }
 
 function postCoilWire() {
+  tryUse($item`MayDay™ supply package`);
+  if (have($item`space blanket`)) autosell(1, $item`space blanket`);
+  // +5000 meat
   if (have($item`occult jelly donut`)) eat($item`occult jelly donut`);
   cliExecute("Briefcase e spell spooky -combat");
   [
