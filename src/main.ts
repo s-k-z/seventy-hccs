@@ -34,6 +34,7 @@ import {
   runChoice,
   Skill,
   soulsauceCost,
+  toFamiliar,
   toInt,
   use,
   userConfirm,
@@ -66,6 +67,7 @@ import {
   MAIN_CLAN,
   MEAT_SAFE_LIMIT,
   MP_SAFE_LIMIT,
+  STILLSUIT_FAMILIAR,
 } from "./config";
 import { eatPizzas } from "./diet";
 import { hasRemainingFreeFights, levelingEvents, oneOffEvents, preCoilEvents } from "./events";
@@ -187,8 +189,10 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole just because
   visitUrl("tutorial.php?action=toot");
-  const stillFam = $familiar`Ninja Snowflake`;
-  visitUrl(`familiar.php?action=equip&pwd&whichfam=${toInt(stillFam)}&whichitem=10932`);
+  const stillSuitFam = toFamiliar(STILLSUIT_FAMILIAR);
+  if (stillSuitFam === $familiar`none`) throw `STILLSUIT_FAMILIAR not set`;
+  const stillSuitId = toInt(stillSuitFam);
+  visitUrl(`familiar.php?action=equip&pwd&whichfam=${stillSuitId}&whichitem=10932`);
   while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
     $item`letter from King Ralph XI`,

@@ -6,6 +6,7 @@ import { $item } from "libram";
 export const MAIN_CLAN = getProperty("seventyhccs_main_clan");
 export const FAX_AND_SLIME_CLAN = getProperty("seventyhccs_side_clan");
 export const FORTUNE_TELLER_FRIEND = getProperty("seventyhccs_fortune_friend");
+export const STILLSUIT_FAMILIAR = getProperty("seventyhccs_stillsuit_target");
 // Define which BRICKO fight to use by changing BRICKO_TARGET_ITEM
 export const BRICKO_TARGET_ITEM = $item`BRICKO bat`;
 export const BRICKOS_PER_FIGHT =
