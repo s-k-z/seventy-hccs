@@ -261,6 +261,9 @@ function preCoilWire() {
   if (myHp() < myMaxhp() * 0.9) cliExecute("hottub");
   for (const event of Object.values(preCoilEvents)) if (event.ready()) event.run();
   // +2000 meat
+  tryUse($item`MayDay™ supply package`);
+  if (have($item`space blanket`)) autosell(1, $item`space blanket`);
+  // +5000 meat
   spendAllMpOnLibrams();
 }
 
