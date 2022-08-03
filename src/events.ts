@@ -683,7 +683,7 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     familiar($familiar`Artistic Goth Kid`);
   } else if (!have($item`robin's egg`)) {
     familiar($familiar`Rockin' Robin`);
-  } else if (flag === FamiliarFlag.Default && !have($item`short stick of butter`)) {
+  } else if (flag === FamiliarFlag.Default && !have($item`short stack of pancakes`)) {
     familiar($familiar`Shorter-Order Cook`);
   } else if (
     flag === FamiliarFlag.Default &&
