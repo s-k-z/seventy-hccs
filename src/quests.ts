@@ -349,10 +349,10 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Spit Upon`,
     ];
     const toWear = new Map([
-      [$slot`weapon`, $item`broken champagne bottle`],
+      [$slot`weapon`, $item`dented scepter`],
       [$slot`acc1`, $item`Brutal brogues`],
       [$slot`acc2`, $item`Powerful Glove`],
-      [$slot`familiar`, $item`dented scepter`],
+      [$slot`familiar`, $item`broken champagne bottle`],
     ]);
     const candle = $item`extra-wide head candle`;
     if (have(candle)) toWear.set($slot`hat`, candle);
