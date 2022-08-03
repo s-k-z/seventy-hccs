@@ -131,15 +131,10 @@ export const preCoilEvents: Record<string, eventData> = {
       cliExecute("retrocape heck thrill");
       familiar($familiar`Mini-Hipster`);
       equip($slot`familiar`, $item`none`);
-      if (get("_sourceTerminalDigitizeUses") < 1) SourceTerminal.educate($skill`Digitize`);
       withEquipment(
         () => adventure(noobCave, MacroList.FreeFight),
         [[$slot`off-hand`, $item`Kramco Sausage-o-Matic™`]]
       );
-      if (get("_sourceTerminalDigitizeUses") > 0) {
-        SourceTerminal.educate($skill`Compress`);
-        SourceTerminal.educate($skill`Extract`);
-      } else throw `Failed to cast digitize?`;
       equip($slot`familiar`, $item`none`);
       checkAvailable($item`ironic moustache`);
     },
@@ -386,20 +381,6 @@ export const levelingEvents: Record<string, eventData> = {
     },
   },
 
-  digitize: {
-    ready: () => get("_sourceTerminalDigitizeMonsterCount") < 1,
-    run: () => {
-      // Turbo used a flag to cast pride
-      SourceTerminal.educate($skill`Turbo`);
-      const shirt = $item`makeshift garbage shirt`;
-      if (!have(shirt)) cliExecute(`fold ${shirt}`);
-      equip($slot`shirt`, shirt);
-      equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
-      selectBestFamiliar();
-      adventure(toxicTeacups, MacroList.FreeFight);
-    },
-  },
-
   vote: {
     ready: () => voterMonsterNow() && get("_voteFreeFights") < 1,
     run: () => {
@@ -450,6 +431,11 @@ export const levelingEvents: Record<string, eventData> = {
   chestXRay: {
     ready: () => get("_chestXRayUsed") < 3,
     run: () => {
+      // Turbo used a flag to cast pride
+      SourceTerminal.educate($skill`Turbo`);
+      const shirt = $item`makeshift garbage shirt`;
+      if (!have(shirt)) cliExecute(`fold ${shirt}`);
+      equip($slot`shirt`, shirt);
       equip($slot`acc1`, $item`Lil' Doctor™ bag`);
       selectBestFamiliar(FamiliarFlag.ToxicTeacups);
       adventure(toxicTeacups, MacroList.FreeFight);
