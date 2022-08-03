@@ -528,35 +528,12 @@ export const levelingEvents: Record<string, eventData> = {
     },
   },
 
-  latteRefills: {
-    ready: () => get("_latteRefillsUsed") < 1,
-    run: () => {
-      equip($slot`off-hand`, $item`latte lovers member's mug`);
-      equip($slot`pants`, $item`Cargo Cultist Shorts`);
-      if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
-      checkEffect($effect`Ode to Booze`);
-      familiar($familiar`Frumious Bandersnatch`);
-      adventure(direWarren, MacroList.LatteGulpRunaway);
-    },
-  },
-
-  latteCarrot: {
-    ready: () => !get("latteUnlocks").includes("carrot"),
-    run: () => {
-      equip($slot`off-hand`, $item`latte lovers member's mug`);
-      equip($slot`pants`, $item`Cargo Cultist Shorts`);
-      checkEffect($effect`Ode to Booze`);
-      familiar($familiar`Frumious Bandersnatch`);
-      adventure(direWarren, MacroList.Runaway);
-    },
-  },
-
   lastLatteRefill: {
     ready: () => get("_latteRefillsUsed") < 3,
     run: () => {
       equip($slot`off-hand`, $item`latte lovers member's mug`);
       equip($slot`pants`, $item`Cargo Cultist Shorts`);
-      if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon carrot");
+      if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
       checkEffect($effect`Ode to Booze`);
       familiar($familiar`Frumious Bandersnatch`);
       adventure(direWarren, MacroList.LatteGulpRunaway);

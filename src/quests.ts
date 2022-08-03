@@ -44,8 +44,9 @@ type QuestData = {
   acquire: Effect[];
   check: Effect[];
   equipment: Map<Slot, Item>;
-  retrocape?: string;
   familiar?: Familiar;
+  retrocapeMode?: string;
+  umbrellaMode?: string;
 };
 const questRecords: Record<number, () => QuestData> = {
   [Quest.Beginning.id]: () => {
@@ -95,7 +96,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc2`, $item`Retrospecs`],
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
       ]),
-      retrocape: "heck thrill",
+      retrocapeMode: "heck thrill",
     };
   },
 
@@ -175,7 +176,7 @@ const questRecords: Record<number, () => QuestData> = {
     ]);
     const toCape = !have($item`LOV Epaulettes`) ? "heck thrill" : undefined;
     if (have($item`LOV Epaulettes`)) toWear.set($slot`back`, $item`LOV Epaulettes`);
-    return { acquire: toAcquire, check: [], equipment: toWear, retrocape: toCape };
+    return { acquire: toAcquire, check: [], equipment: toWear, retrocapeMode: toCape };
   },
 
   [Quest.LevelingML.id]: () => {
@@ -194,13 +195,12 @@ const questRecords: Record<number, () => QuestData> = {
       [$slot`hat`, $item`Daylight Shavings Helmet`],
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
-      [$slot`off-hand`, $item`weeping willow wand`],
       [$slot`pants`, $item`Cargo Cultist Shorts`],
       [$slot`acc1`, $item`hewn moon-rune spoon`],
       [$slot`acc2`, have($item`battle broom`) ? $item`battle broom` : $item`gold detective badge`],
       [$slot`acc3`, $item`Beach Comb`],
     ]);
-    return { acquire: toAcquire, check: [], equipment: toWear };
+    return { acquire: toAcquire, check: [], equipment: toWear, umbrellaMode: "ml" };
   },
 
   [Quest.DeepDark.id]: () => {
@@ -214,7 +214,7 @@ const questRecords: Record<number, () => QuestData> = {
       acquire: [$effect`Polka of Plenty`],
       check: [],
       equipment: toWear,
-      retrocape: "vampire hold",
+      retrocapeMode: "vampire hold",
       familiar: $familiar`Exotic Parrot`,
     };
   },
@@ -261,7 +261,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc1`, $item`Brutal brogues`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
-      retrocape: "muscle",
+      retrocapeMode: "muscle",
     };
   },
 
@@ -277,7 +277,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc2`, $item`Beach Comb`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
-      retrocape: "moxie",
+      retrocapeMode: "moxie",
     };
   },
 
@@ -351,13 +351,19 @@ const questRecords: Record<number, () => QuestData> = {
     ];
     const toWear = new Map([
       [$slot`weapon`, $item`broken champagne bottle`],
-      [$slot`off-hand`, $item`dented scepter`],
       [$slot`acc1`, $item`Brutal brogues`],
       [$slot`acc2`, $item`Powerful Glove`],
+      [$slot`familiar`, $item`dented scepter`],
     ]);
     const candle = $item`extra-wide head candle`;
     if (have(candle)) toWear.set($slot`hat`, candle);
-    return { acquire: toAcquire, check: toCheck, equipment: toWear };
+    return {
+      acquire: toAcquire,
+      check: toCheck,
+      equipment: toWear,
+      umbrellaMode: "weapon",
+      familiar: $familiar`Disembodied Hand`,
+    };
   },
 
   [Quest.CombatFrequency.id]: () => {
@@ -365,7 +371,6 @@ const questRecords: Record<number, () => QuestData> = {
       acquire: [
         $effect`Feeling Lonely`,
         $effect`Gummed Shoes`,
-        $effect`Invisible Avatar`,
         $effect`Silent Running`,
         $effect`Smooth Movements`,
         $effect`The Sonata of Sneakiness`,
@@ -380,6 +385,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
       ]),
       familiar: $familiar`Disgeist`,
+      umbrellaMode: "nc",
     };
   },
 
@@ -396,7 +402,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc3`, $item`Beach Comb`],
         [$slot`familiar`, $item`cracker`],
       ]),
-      retrocape: "vampire hold",
+      retrocapeMode: "vampire hold",
       familiar: $familiar`Exotic Parrot`,
     };
   },
@@ -448,11 +454,9 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`The Spirit of Taking`,
     ];
     const toCheck = [$effect`Bat-Adjacent Form`];
-    const carrot = numericModifier($item`latte lovers member's mug`, "item drop") > 0;
     const toWear = new Map([
       [$slot`hat`, $item`wad of used tape`],
       [$slot`back`, $item`vampyric cloake`],
-      [$slot`off-hand`, carrot ? $item`latte lovers member's mug` : $item`Kramco Sausage-o-Matic™`],
       [$slot`acc1`, $item`Guzzlr tablet`],
       [$slot`acc2`, $item`gold detective badge`],
       [$slot`acc3`, $item`your cowboy boots`],
@@ -472,6 +476,7 @@ const questRecords: Record<number, () => QuestData> = {
       check: toCheck,
       equipment: toWear,
       familiar: $familiar`Trick-or-Treating Tot`,
+      umbrellaMode: "item",
     };
   },
 
@@ -485,7 +490,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`acc1`, $item`battle broom`],
         [$slot`acc3`, $item`"I Voted!" sticker`],
       ]),
-      retrocape: "mysticality",
+      retrocapeMode: "mysticality",
     };
   },
 
@@ -497,12 +502,23 @@ const questRecords: Record<number, () => QuestData> = {
 export function prep(quest: QuestInfo): void {
   const record = questRecords[quest.id]();
   const back = record.equipment.get($slot`back`);
-  if (back && record.retrocape) throw `Multiple back items for ${quest.id}`;
+  const retrocape = $item`unwrapped knock-off retro superhero cape`;
+  if (back && record.retrocapeMode) throw `Multiple back items for ${quest.id}`;
+  const offhand = record.equipment.get($slot`off-hand`);
+  const umbrella = $item`unbreakable umbrella`;
+  if (offhand && record.umbrellaMode) throw `Multiple off-hands for ${quest.id}`;
   shrugExtraSongs(record.acquire);
   record.acquire.forEach(acquireEffect);
   record.check.forEach(checkEffect);
   if (record.familiar) useFamiliar(record.familiar);
-  if (record.retrocape) cliExecute(`retrocape ${record.retrocape}`);
+  if (record.retrocapeMode) {
+    cliExecute(`retrocape ${record.retrocapeMode}`);
+    equip($slot`back`, retrocape);
+  }
+  if (record.umbrellaMode) {
+    cliExecute(`umbrella ${record.umbrellaMode}`);
+    equip($slot`off-hand`, umbrella);
+  }
   record.equipment.forEach((item, slot) => {
     if (!have(item)) {
       const ingredients = Object.keys(getIngredients(item));
