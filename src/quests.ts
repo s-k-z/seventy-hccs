@@ -1,4 +1,5 @@
 import {
+  canEquip,
   cliExecute,
   Effect,
   equip,
@@ -8,6 +9,7 @@ import {
   Item,
   myClass,
   myEffects,
+  myFamiliar,
   numericModifier,
   Slot,
   toEffect,
@@ -510,6 +512,10 @@ export function prep(quest: QuestInfo): void {
   record.acquire.forEach(acquireEffect);
   record.check.forEach(checkEffect);
   if (record.familiar) useFamiliar(record.familiar);
+  const famEquip = record.equipment.get($slot`familiar`);
+  if (famEquip && !canEquip(myFamiliar(), famEquip)) {
+    throw `Cannot equip ${famEquip} on ${myFamiliar()}`;
+  }
   if (record.retrocapeMode) {
     cliExecute(`retrocape ${record.retrocapeMode}`);
     equip($slot`back`, retrocape);
