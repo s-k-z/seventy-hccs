@@ -67,7 +67,7 @@ const questRecords: Record<number, () => QuestData> = {
         //[$slot`shirt`, $item`fresh coat of paint`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, $item`familiar scrapbook`],
-        [$slot`pants`, $item`Cargo Cultist Shorts`],
+        [$slot`pants`, $item`designer sweatpants`],
         [$slot`acc1`, $item`hewn moon-rune spoon`],
         [$slot`acc2`, $item`Powerful Glove`],
         [$slot`acc3`, $item`Kremlin's Greatest Briefcase`],
