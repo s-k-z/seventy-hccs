@@ -304,7 +304,7 @@ export const levelingEvents: Record<string, eventData> = {
   snojo: {
     ready: () => get("_snojoFreeFights") < 10,
     run: () => {
-      if (!get("snojoSetting") !== $stat`Muscle`) {
+      if (get("snojoSetting") !== $stat`Muscle`) {
         visitUrl("place.php?whichplace=snojo&action=snojo_controller");
         runChoice(1);
       }
