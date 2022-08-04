@@ -46,6 +46,7 @@ jobs:
           if [ -d "ccs/" ]; then rm -r ccs/; fi
           mv KoLmafia/scripts scripts
           mv temp/ccs ccs
+          mv temp/dependencies.txt dependencies.txt
       - name: Commit Release
         run: |
           git add scripts/
