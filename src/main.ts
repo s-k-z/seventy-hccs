@@ -128,7 +128,7 @@ export function main(argString = ""): void {
       return;
     }
   }
-  sinceKolmafiaRevision(26092);
+  sinceKolmafiaRevision(26624);
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;

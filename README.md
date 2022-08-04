@@ -9,7 +9,7 @@ This script requires a large swath of Mr. Store items and permed skills which ar
 Run this command in the graphical CLI:
 
 ```
-svn checkout https://github.com/s-k-z/seventy-hccs/branches/master/KoLmafia
+git checkout https://github.com/s-k-z/seventy-hccs.git release
 ```
 
 ## Requirements before Ascending
@@ -46,7 +46,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## To run the script
 
-1. Ensure you have KoLMafia r26092 or later [available here](https://ci.kolmafia.us/view/all/job/Kolmafia/lastSuccessfulBuild/)
+1. Ensure you have KoLMafia r26624 or later [available here](https://github.com/kolmafia/kolmafia/releases)
 2. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
 3. Set properties in kolmafia to appropriate values:
 
