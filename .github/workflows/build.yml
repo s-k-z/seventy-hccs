@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  lint:
+  build:
+    name: lint and build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,15 +20,6 @@ jobs:
       - name: Lint
         run: yarn run lint
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Build
         run: yarn run build
 
@@ -38,23 +30,19 @@ jobs:
 
   push:
     runs-on: ubuntu-latest
-    needs: [build, lint]
+    needs: build
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/download-artifact@v3
         with:
           path: KoLmafia
 
-      - name: Check Downloaded Artifacts
-        run: ls -R
-        working-directory: KoLmafia
-
       - name: Commit & Push
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
           BRANCH: release
-          FOLDER: KoLmafia
+          FOLDER: KoLmafia/artifact
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: ({sha}) {msg}"
           SKIP_EMPTY_COMMITS: true
