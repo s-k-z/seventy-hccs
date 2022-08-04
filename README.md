@@ -53,6 +53,7 @@ The script can be run either in Aftercore, or in Community Service provided that
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
    - seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
+   - seventyhccs_stillsuit_target - Optional familiar name to be equipped with the tiny stillsuit
 
 4. Run the script file named **seventy-hccs.js** using KoLMafia
 
