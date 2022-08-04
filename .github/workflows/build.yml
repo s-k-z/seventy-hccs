@@ -32,6 +32,8 @@ jobs:
       - run: |
           git config user.name "O.A.F."
           git config user.email "<>"
+      - name: Copy files
+        run: cp -R KoLmafia temp
       - name: Install Modules
         run: yarn install --frozen-lockfile
       - name: Build
@@ -41,9 +43,9 @@ jobs:
           git fetch --all
           if git branch | grep -e '^release$'; then git switch release; else git switch --orphan release; fi
           if [ -d "scripts/" ]; then rm -r scripts/; fi
-          if [ -d "ccs/" ]; then rm -rf ccs/; fi
+          if [ -d "ccs/" ]; then rm -r ccs/; fi
           mv KoLmafia/scripts scripts
-          mv KoLmafia/ccs ccs
+          mv temp/ccs ccs
       - name: Commit Release
         run: |
           git add scripts/
