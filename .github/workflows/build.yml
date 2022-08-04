@@ -8,51 +8,35 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Modules
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile
+
       - name: Lint
         run: yarn run lint
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install Modules
-        run: yarn install --frozen-lockfile
-      - name: Test Build
-        run: yarn run build
-
   build:
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    needs: [lint]
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          git config user.name "O.A.F."
-          git config user.email "<>"
-      - name: Copy files
-        run: cp -R KoLmafia temp
-      - name: Install Modules
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile
+
       - name: Build
         run: yarn run build
-      - name: Setup Release
-        run: |
-          git fetch --all
-          if git branch | grep -e '^release$'; then git switch release; else git switch --orphan release; fi
-          if [ -d "scripts/" ]; then rm -r scripts/; fi
-          if [ -d "ccs/" ]; then rm -r ccs/; fi
-          mv KoLmafia/scripts scripts
-          mv temp/ccs ccs
-          mv temp/dependencies.txt dependencies.txt
-      - name: Commit Release
-        run: |
-          git add scripts/
-          git add ccs/
-          git add dependencies.txt
-          {
-            git commit -m "${{github.event.commits[0].message}}"
-            git push origin release
-          } || exit 0
+
+      - name: Commit & Push
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: release
+          FOLDER: KoLmafia
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build: ({sha}) {msg}"
+          SKIP_EMPTY_COMMITS: true
