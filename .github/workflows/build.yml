@@ -13,7 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      - name: Get Cached Dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+          cache: "yarn"
+
+      - name: Install New Dependencies
         run: yarn install --frozen-lockfile
 
       - name: Lint
