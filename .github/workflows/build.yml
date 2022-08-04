@@ -43,7 +43,7 @@ jobs:
           if [ -d "scripts/" ]; then rm -r scripts/; fi
           if [ -d "ccs/" ]; then rm -rf ccs/; fi
           mv KoLmafia/scripts scripts
-          mv KoLmafia/ccs ./ccs
+          mv KoLmafia/ccs ccs
       - name: Commit Release
         run: |
           git add scripts/
