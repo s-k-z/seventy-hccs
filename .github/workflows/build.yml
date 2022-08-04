@@ -39,7 +39,7 @@ jobs:
       - name: Setup Release
         run: |
           git fetch --all
-          git switch release
+          if git branch | grep -e '^release$'; then git switch release; else git switch --orphan release; fi
           rm -r scripts/
           rm -r ccs/
           mv KoLmafia/scripts scripts
