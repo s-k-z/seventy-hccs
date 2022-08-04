@@ -237,13 +237,12 @@ const questRecords: Record<number, () => QuestData> = {
     const toEquip = new Map([
       [$slot`back`, $item`LOV Epaulettes`],
       [$slot`weapon`, $item`weeping willow wand`],
-      [$slot`off-hand`, $item`wrench`],
       [$slot`pants`, $item`pantogram pants`],
       [$slot`acc1`, $item`Powerful Glove`],
       [$slot`acc2`, $item`battle broom`],
       [$slot`acc3`, $item`backup camera`],
     ]);
-    return { acquire: toAcquire, check: toCheck, equipment: toEquip };
+    return { acquire: toAcquire, check: toCheck, equipment: toEquip, umbrellaMode: "ml" };
   },
 
   [Quest.Muscle.id]: () => {
@@ -398,6 +397,7 @@ const questRecords: Record<number, () => QuestData> = {
         [$slot`hat`, $item`Daylight Shavings Helmet`],
         [$slot`weapon`, $item`Fourth of May Cosplay Saber`],
         [$slot`off-hand`, $item`industrial fire extinguisher`],
+        [$slot`pants`, $item`designer sweatpants`],
         [$slot`acc1`, $item`Brutal brogues`],
         [$slot`acc2`, $item`hewn moon-rune spoon`],
         [$slot`acc3`, $item`Beach Comb`],
