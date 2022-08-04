@@ -17,8 +17,9 @@ jobs:
       - name: Lint
         run: yarn run lint
 
-  build and push:
+  build:
     runs-on: ubuntu-latest
+    name: Build and Push
     needs: [lint]
     if: github.ref == 'refs/heads/main'
     steps:
