@@ -8453,8 +8453,6 @@ var _templateObject2193;
 var _templateObject2203;
 var _templateObject2213;
 var _templateObject2223;
-var _templateObject2233;
-var _templateObject2243;
 function _taggedTemplateLiteral13(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -9074,16 +9072,14 @@ function selectBestFamiliar() {
     familiar($familiar(_templateObject2103 || (_templateObject2103 = _taggedTemplateLiteral13(["Vampire Vintner"]))));
   } else if (flag === FamiliarFlag.ToxicTeacups && get("_hipsterAdv") < 7) {
     familiar($familiar(_templateObject2114 || (_templateObject2114 = _taggedTemplateLiteral13(["Artistic Goth Kid"]))));
-  } else if (!have($item(_templateObject2123 || (_templateObject2123 = _taggedTemplateLiteral13(["robin's egg"]))))) {
-    familiar($familiar(_templateObject2133 || (_templateObject2133 = _taggedTemplateLiteral13(["Rockin' Robin"]))));
-  } else if (flag === FamiliarFlag.Default && !have($item(_templateObject2143 || (_templateObject2143 = _taggedTemplateLiteral13(["short stack of pancakes"])))) && !have($effect(_templateObject2153 || (_templateObject2153 = _taggedTemplateLiteral13(["Shortly Stacked"]))))) {
-    familiar($familiar(_templateObject2163 || (_templateObject2163 = _taggedTemplateLiteral13(["Shorter-Order Cook"]))));
-  } else if (flag === FamiliarFlag.Default && !have($item(_templateObject2173 || (_templateObject2173 = _taggedTemplateLiteral13(["tiny bottle of absinthe"])))) && !have($effect(_templateObject2183 || (_templateObject2183 = _taggedTemplateLiteral13(["Absinthe-Minded"]))))) {
-    familiar($familiar(_templateObject2193 || (_templateObject2193 = _taggedTemplateLiteral13(["Green Pixie"]))));
-  } else if (!have($item(_templateObject2203 || (_templateObject2203 = _taggedTemplateLiteral13(["rope"])))) && !have($item(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral13(["burning newspaper"])))) && !have($item(_templateObject2223 || (_templateObject2223 = _taggedTemplateLiteral13(["burning paper crane"]))))) {
-    familiar($familiar(_templateObject2233 || (_templateObject2233 = _taggedTemplateLiteral13(["Garbage Fire"]))));
+  } else if (flag === FamiliarFlag.Default && !have($item(_templateObject2123 || (_templateObject2123 = _taggedTemplateLiteral13(["short stack of pancakes"])))) && !have($effect(_templateObject2133 || (_templateObject2133 = _taggedTemplateLiteral13(["Shortly Stacked"]))))) {
+    familiar($familiar(_templateObject2143 || (_templateObject2143 = _taggedTemplateLiteral13(["Shorter-Order Cook"]))));
+  } else if (flag === FamiliarFlag.Default && !have($item(_templateObject2153 || (_templateObject2153 = _taggedTemplateLiteral13(["tiny bottle of absinthe"])))) && !have($effect(_templateObject2163 || (_templateObject2163 = _taggedTemplateLiteral13(["Absinthe-Minded"]))))) {
+    familiar($familiar(_templateObject2173 || (_templateObject2173 = _taggedTemplateLiteral13(["Green Pixie"]))));
+  } else if (!have($item(_templateObject2183 || (_templateObject2183 = _taggedTemplateLiteral13(["rope"])))) && !have($item(_templateObject2193 || (_templateObject2193 = _taggedTemplateLiteral13(["burning newspaper"])))) && !have($item(_templateObject2203 || (_templateObject2203 = _taggedTemplateLiteral13(["burning paper crane"]))))) {
+    familiar($familiar(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral13(["Garbage Fire"]))));
   } else {
-    familiar($familiar(_templateObject2243 || (_templateObject2243 = _taggedTemplateLiteral13(["Machine Elf"]))));
+    familiar($familiar(_templateObject2223 || (_templateObject2223 = _taggedTemplateLiteral13(["Baby Sandworm"]))));
   }
 }
 
