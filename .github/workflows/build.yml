@@ -31,6 +31,9 @@ jobs:
       - name: Lint
         run: yarn run lint
 
+      - name: Prettier
+        run: yarn run format
+
   build:
     runs-on: ubuntu-latest
     steps:
