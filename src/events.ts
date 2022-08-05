@@ -358,10 +358,9 @@ export const levelingEvents: Record<string, eventData> = {
       visitUrl("main.php?fightgodlobster=1");
       visitUrl("choice.php");
       if (handlingChoice()) runChoice(get("_godLobsterFights") < 3 ? 1 : 2);
-      const ring = $item`God Lobster's Ring`;
-      const scepter = $item`God Lobster's Scepter`;
-      if (have(ring)) equip($slot`familiar`, ring);
-      else if (have(scepter)) equip($slot`familiar`, scepter);
+      const equips = $items`God Lobster's Ring, God Lobster's Scepter`;
+      const toEquip = equips.find((equip) => have(equip));
+      if (toEquip) equip($familiar`God Lobster`, toEquip);
     },
   },
 
