@@ -7784,32 +7784,36 @@ var questRecords = (_questRecords = {}, _defineProperty7(_questRecords, Quest.Be
     equipment: /* @__PURE__ */ new Map()
   };
 }), _questRecords);
+function validateQuestRecords() {
+  for (var _i2 = 0, _Object$values = Object.values(Quest); _i2 < _Object$values.length; _i2++) {
+    var quest = _Object$values[_i2];
+    var record = questRecords[quest.id]();
+    var back = record.equipment.get($slot(_templateObject3832 || (_templateObject3832 = _taggedTemplateLiteral12(["back"]))));
+    if (back && record.retrocapeMode)
+      throw "Multiple back items for ".concat(quest.id);
+    var offhand = record.equipment.get($slot(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral12(["off-hand"]))));
+    if (offhand && record.umbrellaMode)
+      throw "Multiple off-hands for ".concat(quest.id);
+  }
+}
 function prep(quest) {
   var record = questRecords[quest.id]();
-  var back = record.equipment.get($slot(_templateObject3832 || (_templateObject3832 = _taggedTemplateLiteral12(["back"]))));
-  var retrocape = $item(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral12(["unwrapped knock-off retro superhero cape"])));
-  if (back && record.retrocapeMode)
-    throw "Multiple back items for ".concat(quest.id);
-  var offhand = record.equipment.get($slot(_templateObject385 || (_templateObject385 = _taggedTemplateLiteral12(["off-hand"]))));
-  var umbrella = $item(_templateObject386 || (_templateObject386 = _taggedTemplateLiteral12(["unbreakable umbrella"])));
-  if (offhand && record.umbrellaMode)
-    throw "Multiple off-hands for ".concat(quest.id);
   shrugExtraSongs(record.acquire);
   record.acquire.forEach(acquireEffect);
   record.check.forEach(checkEffect);
   if (record.familiar)
     (0, import_kolmafia18.useFamiliar)(record.familiar);
-  var famEquip = record.equipment.get($slot(_templateObject387 || (_templateObject387 = _taggedTemplateLiteral12(["familiar"]))));
+  var famEquip = record.equipment.get($slot(_templateObject385 || (_templateObject385 = _taggedTemplateLiteral12(["familiar"]))));
   if (famEquip && !(0, import_kolmafia18.canEquip)((0, import_kolmafia18.myFamiliar)(), famEquip)) {
     throw "Cannot equip ".concat(famEquip, " on ").concat((0, import_kolmafia18.myFamiliar)());
   }
   if (record.retrocapeMode) {
     (0, import_kolmafia18.cliExecute)("retrocape ".concat(record.retrocapeMode));
-    (0, import_kolmafia18.equip)($slot(_templateObject388 || (_templateObject388 = _taggedTemplateLiteral12(["back"]))), retrocape);
+    (0, import_kolmafia18.equip)($slot(_templateObject386 || (_templateObject386 = _taggedTemplateLiteral12(["back"]))), $item(_templateObject387 || (_templateObject387 = _taggedTemplateLiteral12(["unwrapped knock-off retro superhero cape"]))));
   }
   if (record.umbrellaMode) {
     (0, import_kolmafia18.cliExecute)("umbrella ".concat(record.umbrellaMode));
-    (0, import_kolmafia18.equip)($slot(_templateObject389 || (_templateObject389 = _taggedTemplateLiteral12(["off-hand"]))), umbrella);
+    (0, import_kolmafia18.equip)($slot(_templateObject388 || (_templateObject388 = _taggedTemplateLiteral12(["off-hand"]))), $item(_templateObject389 || (_templateObject389 = _taggedTemplateLiteral12(["unbreakable umbrella"]))));
   }
   record.equipment.forEach((item4, slot) => {
     if (!have(item4)) {
@@ -9301,6 +9305,7 @@ function main() {
       if (arg.match(/novote/))
         checkVote = false;
       if (arg.match(/test/)) {
+        validateQuestRecords();
         synthesize($effects(_templateObject616 || (_templateObject616 = _taggedTemplateLiteral16(["Synthesis: Collection, Synthesis: Learning, Synthesis: Greed"]))), /* @__PURE__ */ new Set(), true);
         return;
       }
