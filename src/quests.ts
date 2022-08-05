@@ -500,14 +500,18 @@ const questRecords: Record<number, () => QuestData> = {
   },
 } as const;
 
+export function validateQuestRecords(): void {
+  for (const quest of Object.values(Quest)) {
+    const record = questRecords[quest.id]();
+    const back = record.equipment.get($slot`back`);
+    if (back && record.retrocapeMode) throw `Multiple back items for ${quest.id}`;
+    const offhand = record.equipment.get($slot`off-hand`);
+    if (offhand && record.umbrellaMode) throw `Multiple off-hands for ${quest.id}`;
+  }
+}
+
 export function prep(quest: QuestInfo): void {
   const record = questRecords[quest.id]();
-  const back = record.equipment.get($slot`back`);
-  const retrocape = $item`unwrapped knock-off retro superhero cape`;
-  if (back && record.retrocapeMode) throw `Multiple back items for ${quest.id}`;
-  const offhand = record.equipment.get($slot`off-hand`);
-  const umbrella = $item`unbreakable umbrella`;
-  if (offhand && record.umbrellaMode) throw `Multiple off-hands for ${quest.id}`;
   shrugExtraSongs(record.acquire);
   record.acquire.forEach(acquireEffect);
   record.check.forEach(checkEffect);
@@ -518,11 +522,11 @@ export function prep(quest: QuestInfo): void {
   }
   if (record.retrocapeMode) {
     cliExecute(`retrocape ${record.retrocapeMode}`);
-    equip($slot`back`, retrocape);
+    equip($slot`back`, $item`unwrapped knock-off retro superhero cape`);
   }
   if (record.umbrellaMode) {
     cliExecute(`umbrella ${record.umbrellaMode}`);
-    equip($slot`off-hand`, umbrella);
+    equip($slot`off-hand`, $item`unbreakable umbrella`);
   }
   record.equipment.forEach((item, slot) => {
     if (!have(item)) {

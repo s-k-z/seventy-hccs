@@ -84,7 +84,7 @@ import {
 } from "./iotms";
 import { acquireEffect, itemToEffect, tryUse, wishEffect, withContext } from "./lib";
 import { checkReadyToAscend } from "./prep";
-import { haveQuest, prep, prepAndDoQuest, Quest } from "./quests";
+import { haveQuest, prep, prepAndDoQuest, Quest, validateQuestRecords } from "./quests";
 import { synthesize } from "./sweetsynthesis";
 
 const choiceAdventures = [
@@ -120,6 +120,7 @@ export function main(argString = ""): void {
   for (const arg of args) {
     if (arg.match(/novote/)) checkVote = false;
     if (arg.match(/test/)) {
+      validateQuestRecords();
       synthesize(
         $effects`Synthesis: Collection, Synthesis: Learning, Synthesis: Greed`,
         new Set<Item>(),
