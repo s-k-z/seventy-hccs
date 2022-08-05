@@ -132,7 +132,6 @@ export function main(argString = ""): void {
 
   if (MAIN_CLAN.length < 1) throw `seventyhccs_main_clan property not set`;
   if (FAX_AND_SLIME_CLAN.length < 1) throw `seventyhccs_side_clan not set`;
-  if (FORTUNE_TELLER_FRIEND.length < 1) throw `seventyhccs_fortune_friend not set`;
 
   const startTime = gametimeToInt();
 
@@ -203,7 +202,7 @@ function preCoilWire() {
     $item`votive of confidence`,
   ].forEach(tryUse);
   // Only need one consult for a candy
-  if (get("_clanFortuneConsultUses") < 1) {
+  if (FORTUNE_TELLER_FRIEND.length > 0 && get("_clanFortuneConsultUses") < 1) {
     checkMainClan();
     cliExecute(`fortune ${FORTUNE_TELLER_FRIEND} garbage batman thick`);
   }
