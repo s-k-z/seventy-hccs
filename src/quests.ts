@@ -11,6 +11,7 @@ import {
   myEffects,
   myFamiliar,
   numericModifier,
+  print,
   Slot,
   toEffect,
   useFamiliar,
@@ -500,7 +501,7 @@ const questRecords: Record<number, () => QuestData> = {
   },
 } as const;
 
-export function validateQuestRecords(): void {
+export function validateQuestOutfits(): void {
   for (const quest of Object.values(Quest)) {
     const record = questRecords[quest.id]();
     const back = record.equipment.get($slot`back`);
@@ -508,6 +509,7 @@ export function validateQuestRecords(): void {
     const offhand = record.equipment.get($slot`off-hand`);
     if (offhand && record.umbrellaMode) throw `Multiple off-hands for ${quest.id}`;
   }
+  print("Validated quest outfits");
 }
 
 export function prep(quest: QuestInfo): void {
