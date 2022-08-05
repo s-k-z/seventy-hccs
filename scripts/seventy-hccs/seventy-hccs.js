@@ -8341,7 +8341,7 @@ var levelingEvents = {
       var equips = $items(_templateObject1214 || (_templateObject1214 = _taggedTemplateLiteral13(["God Lobster's Ring, God Lobster's Scepter"])));
       var toEquip = equips.find((equip6) => have(equip6));
       if (toEquip)
-        (0, import_kolmafia19.equip)($familiar(_templateObject1224 || (_templateObject1224 = _taggedTemplateLiteral13(["God Lobster"]))), toEquip);
+        (0, import_kolmafia19.equip)($slot(_templateObject1224 || (_templateObject1224 = _taggedTemplateLiteral13(["familiar"]))), toEquip);
     }
   },
   witchessKing: {
