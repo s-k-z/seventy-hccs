@@ -68,5 +68,5 @@ jobs:
           BRANCH: release
           FOLDER: ${{ env.path }}/artifact
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "Build: ({sha}) {msg}"
+          MESSAGE: "Build: ${GITHUB_SHA::7}"
           SKIP_EMPTY_COMMITS: true
