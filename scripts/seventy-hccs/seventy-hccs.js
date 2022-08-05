@@ -9315,8 +9315,6 @@ function main() {
     throw "seventyhccs_main_clan property not set";
   if (FAX_AND_SLIME_CLAN.length < 1)
     throw "seventyhccs_side_clan not set";
-  if (FORTUNE_TELLER_FRIEND.length < 1)
-    throw "seventyhccs_fortune_friend not set";
   var startTime = (0, import_kolmafia22.gametimeToInt)();
   if ((0, import_kolmafia22.myPath)() !== "Community Service") {
     checkReadyToAscend(checkVote);
@@ -9357,7 +9355,7 @@ function preCoilWire() {
     (0, import_kolmafia22.visitUrl)("clan_viplounge.php?action=klaw");
   }
   [$item(_templateObject816 || (_templateObject816 = _taggedTemplateLiteral16(["letter from King Ralph XI"]))), $item(_templateObject916 || (_templateObject916 = _taggedTemplateLiteral16(["pork elf goodies sack"]))), $item(_templateObject1016 || (_templateObject1016 = _taggedTemplateLiteral16(["pack of KWE trading card"]))), $item(_templateObject1116 || (_templateObject1116 = _taggedTemplateLiteral16(["banana candle"]))), $item(_templateObject1216 || (_templateObject1216 = _taggedTemplateLiteral16(["ear candle"]))), $item(_templateObject1314 || (_templateObject1314 = _taggedTemplateLiteral16(["natural magick candle"]))), $item(_templateObject1413 || (_templateObject1413 = _taggedTemplateLiteral16(["rainbow glitter candle"]))), $item(_templateObject1513 || (_templateObject1513 = _taggedTemplateLiteral16(["votive of confidence"])))].forEach(tryUse);
-  if (get("_clanFortuneConsultUses") < 1) {
+  if (FORTUNE_TELLER_FRIEND.length > 0 && get("_clanFortuneConsultUses") < 1) {
     checkMainClan();
     (0, import_kolmafia22.cliExecute)("fortune ".concat(FORTUNE_TELLER_FRIEND, " garbage batman thick"));
   }
