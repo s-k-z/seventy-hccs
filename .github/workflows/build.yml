@@ -76,4 +76,4 @@ jobs:
           FOLDER: ${{ env.path }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: (${{ github.sha }}) ${{github.event.commits[0].message}}"
-          SKIP_EMPTY_COMMITS: true
+          SKIP_EMPTY_COMMITS: false
