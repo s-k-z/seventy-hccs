@@ -9324,11 +9324,9 @@ function main() {
   var startTime = (0, import_kolmafia22.gametimeToInt)();
   if ((0, import_kolmafia22.myPath)() !== "Community Service") {
     checkReadyToAscend(checkVote);
-    if ((0, import_kolmafia22.canInteract)() && (0, import_kolmafia22.userConfirm)("Ready to Ascend into Community Service?")) {
-      ascend(Paths.CommunityService, $class(_templateObject399 || (_templateObject399 = _taggedTemplateLiteral16(["Sauceror"]))), Lifestyle.hardcore, "wallaby", $item(_templateObject2104 || (_templateObject2104 = _taggedTemplateLiteral16(["astral six-pack"]))), $item(_templateObject3100 || (_templateObject3100 = _taggedTemplateLiteral16(["astral statuette"]))));
-    } else {
+    if (!(0, import_kolmafia22.canInteract)() || !(0, import_kolmafia22.userConfirm)("Ready to Ascend into Community Service?"))
       (0, import_kolmafia22.abort)();
-    }
+    ascend(Paths.CommunityService, $class(_templateObject399 || (_templateObject399 = _taggedTemplateLiteral16(["Sauceror"]))), Lifestyle.hardcore, "wallaby", $item(_templateObject2104 || (_templateObject2104 = _taggedTemplateLiteral16(["astral six-pack"]))), $item(_templateObject3100 || (_templateObject3100 = _taggedTemplateLiteral16(["astral statuette"]))));
   }
   if ((0, import_kolmafia22.myClass)() !== $class(_templateObject418 || (_templateObject418 = _taggedTemplateLiteral16(["Sauceror"]))))
     throw "Don't yet know how to run this as ".concat((0, import_kolmafia22.myClass)());
@@ -9607,12 +9605,9 @@ function levelAndDoQuests() {
     }
     if (needWeight()) {
       while (have(loveSong) && (0, import_kolmafia22.haveEffect)(coldHeart) < 20) {
-        if ((0, import_kolmafia22.itemAmount)(loveSong) * 5 + (0, import_kolmafia22.haveEffect)(coldHeart) < 20) {
+        if ((0, import_kolmafia22.itemAmount)(loveSong) * 5 + (0, import_kolmafia22.haveEffect)(coldHeart) < 20)
           (0, import_kolmafia22.cliExecute)("pillkeeper extend");
-          (0, import_kolmafia22.use)(loveSong);
-        } else {
-          (0, import_kolmafia22.use)(loveSong);
-        }
+        (0, import_kolmafia22.use)(loveSong);
       }
     }
     prepAndDoQuest(Quest.FamiliarWeight);
