@@ -138,18 +138,15 @@ export function main(argString = ""): void {
 
   if (myPath() !== "Community Service") {
     checkReadyToAscend(checkVote);
-    if (canInteract() && userConfirm(`Ready to Ascend into Community Service?`)) {
-      ascend(
-        Paths.CommunityService,
-        $class`Sauceror`,
-        Lifestyle.hardcore,
-        "wallaby",
-        $item`astral six-pack`,
-        $item`astral statuette`
-      );
-    } else {
-      abort();
-    }
+    if (!canInteract() || !userConfirm(`Ready to Ascend into Community Service?`)) abort();
+    ascend(
+      Paths.CommunityService,
+      $class`Sauceror`,
+      Lifestyle.hardcore,
+      "wallaby",
+      $item`astral six-pack`,
+      $item`astral statuette`
+    );
   }
 
   if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as ${myClass()}`;
@@ -473,12 +470,8 @@ function levelAndDoQuests() {
     }
     if (needWeight()) {
       while (have(loveSong) && haveEffect(coldHeart) < 20) {
-        if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) {
-          cliExecute("pillkeeper extend");
-          use(loveSong);
-        } else {
-          use(loveSong);
-        }
+        if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20) cliExecute("pillkeeper extend");
+        use(loveSong);
       }
     }
     prepAndDoQuest(Quest.FamiliarWeight);
