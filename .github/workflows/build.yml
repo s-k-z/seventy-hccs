@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 env:
   node-version: "18"
@@ -76,4 +77,4 @@ jobs:
           FOLDER: ${{ env.path }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build: (${{ github.sha }}) ${{github.event.commits[0].message}}"
-          SKIP_EMPTY_COMMITS: false
+          SKIP_EMPTY_COMMITS: true
