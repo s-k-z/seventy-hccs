@@ -8,6 +8,7 @@ on:
 
 env:
   node-version: "18"
+  name: "dist"
   path: "KoLmafia"
 
 jobs:
@@ -50,6 +51,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: ${{ env.name }}
           path: ${{ env.path }}
 
   push:
@@ -59,6 +61,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
+          name: ${{ env.name }}
           path: ${{ env.path }}
 
       - name: Commit & Push
@@ -66,7 +69,7 @@ jobs:
         env:
           REPO: self
           BRANCH: release
-          FOLDER: ${{ env.path }}/artifact
+          FOLDER: ${{ env.path }}/${{ env.name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "Build: (${{github.event.commits[0].sha}}) ${{github.event.commits[0].message}}"
+          MESSAGE: "Build: ({sha}) {msg}"
           SKIP_EMPTY_COMMITS: true
