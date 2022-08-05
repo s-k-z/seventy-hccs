@@ -75,5 +75,5 @@ jobs:
           BRANCH: release
           FOLDER: ${{ env.path }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: "Build: (${{github.event.commits[0][sha]}}) ${{github.event.commits[0].message}}"
+          MESSAGE: "Build: (${{GITHUB_SHA}}) ${{github.event.commits[0].message}}"
           SKIP_EMPTY_COMMITS: true
