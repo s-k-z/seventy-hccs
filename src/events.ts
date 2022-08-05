@@ -643,8 +643,6 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     familiar($familiar`Vampire Vintner`);
   } else if (flag === FamiliarFlag.ToxicTeacups && get("_hipsterAdv") < 7) {
     familiar($familiar`Artistic Goth Kid`);
-  } else if (!have($item`robin's egg`)) {
-    familiar($familiar`Rockin' Robin`);
   } else if (
     flag === FamiliarFlag.Default &&
     !have($item`short stack of pancakes`) &&
@@ -664,6 +662,6 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
   ) {
     familiar($familiar`Garbage Fire`);
   } else {
-    familiar($familiar`Machine Elf`);
+    familiar($familiar`Baby Sandworm`);
   }
 }
