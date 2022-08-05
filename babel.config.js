@@ -6,14 +6,13 @@ module.exports = function (api) {
       [
         "@babel/preset-env",
         {
-          targets: { rhino: "1.7.14" },
+          targets: { rhino: "1.7.13" },
         },
       ],
     ],
     plugins: [
       "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread",
-      "@babel/plugin-transform-shorthand-properties",
     ],
   };
 };
