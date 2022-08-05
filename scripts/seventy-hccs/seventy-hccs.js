@@ -7784,7 +7784,7 @@ var questRecords = (_questRecords = {}, _defineProperty7(_questRecords, Quest.Be
     equipment: /* @__PURE__ */ new Map()
   };
 }), _questRecords);
-function validateQuestRecords() {
+function validateQuestOutfits() {
   for (var _i2 = 0, _Object$values = Object.values(Quest); _i2 < _Object$values.length; _i2++) {
     var quest = _Object$values[_i2];
     var record = questRecords[quest.id]();
@@ -7795,6 +7795,7 @@ function validateQuestRecords() {
     if (offhand && record.umbrellaMode)
       throw "Multiple off-hands for ".concat(quest.id);
   }
+  (0, import_kolmafia18.print)("Validated quest outfits");
 }
 function prep(quest) {
   var record = questRecords[quest.id]();
@@ -9305,7 +9306,7 @@ function main() {
       if (arg.match(/novote/))
         checkVote = false;
       if (arg.match(/test/)) {
-        validateQuestRecords();
+        validateQuestOutfits();
         synthesize($effects(_templateObject616 || (_templateObject616 = _taggedTemplateLiteral16(["Synthesis: Collection, Synthesis: Learning, Synthesis: Greed"]))), /* @__PURE__ */ new Set(), true);
         return;
       }
