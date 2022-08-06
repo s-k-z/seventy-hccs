@@ -9345,6 +9345,10 @@ function main() {
         synthesize($effects(_templateObject618 || (_templateObject618 = _taggedTemplateLiteral17(["Synthesis: Collection, Synthesis: Learning, Synthesis: Greed"]))), /* @__PURE__ */ new Set(), true);
         return;
       }
+      if (arg.match(/batfellow/)) {
+        batfellow();
+        return;
+      }
     }
   } catch (err) {
     _iterator.e(err);
