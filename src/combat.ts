@@ -250,7 +250,6 @@ export const MacroList = {
     .skill($skill`Use the Force`),
 };
 
-// Replace Libram's adventureMacro functionality for now with kolmafia-js 1.0.11
 export function adventure(loc: Location, macro: Macro): void {
   if (getAutoAttack() !== 0) setAutoAttack(0);
   adv1(loc, 0, macro.toString());
