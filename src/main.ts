@@ -36,7 +36,6 @@ import {
   runChoice,
   Skill,
   soulsauceCost,
-  toFamiliar,
   toInt,
   use,
   useFamiliar,
@@ -194,10 +193,8 @@ function openQuestZones() {
 function preCoilWire() {
   // Visit Toot Oriole just because
   visitUrl("tutorial.php?action=toot");
-  const stillSuitFam = toFamiliar(STILLSUIT_FAMILIAR);
-  if (stillSuitFam !== $familiar`none`) {
-    const stillSuitId = toInt(stillSuitFam);
-    visitUrl(`familiar.php?action=equip&pwd&whichfam=${stillSuitId}&whichitem=10932`);
+  if (STILLSUIT_FAMILIAR !== $familiar`none`) {
+    visitUrl(`familiar.php?action=equip&pwd&whichfam=${toInt(STILLSUIT_FAMILIAR)}&whichitem=10932`);
   }
   while (get("_deluxeKlawSummons") < 3) visitUrl("clan_viplounge.php?action=klaw");
   [
@@ -494,7 +491,9 @@ function levelAndDoQuests() {
 
   const comic = $item`Batfellow comic`;
   if (itemAmount(comic) < 1) {
-    const myFams = Familiar.all().filter((f) => haveFamiliar(f));
+    const myFams = Familiar.all().filter(
+      (f) => !f.attributes.includes("pokefam") && haveFamiliar(f) && f !== STILLSUIT_FAMILIAR
+    );
     const randomFam = myFams[Math.floor(Math.random() * myFams.length)];
     if (!randomFam || randomFam === $familiar`none` || !haveFamiliar(randomFam)) {
       throw "Failed to select a valid familiar?";
