@@ -132,6 +132,10 @@ export function main(argString = ""): void {
       );
       return;
     }
+    if (arg.match(/batfellow/)) {
+      batfellow();
+      return;
+    }
   }
   sinceKolmafiaRevision(26624);
 
