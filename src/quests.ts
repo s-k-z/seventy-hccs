@@ -192,6 +192,7 @@ const questRecords: Record<number, () => QuestData> = {
       $effect`Drescher's Annoying Noise`,
       $effect`Polka of Plenty`,
       $effect`Pride of the Puffin`,
+      $effect`Ur-Kel's Aria of Annoyance`,
     ];
     const toWear = new Map([
       [$slot`hat`, $item`Daylight Shavings Helmet`],
