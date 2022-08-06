@@ -6692,7 +6692,7 @@ function _taggedTemplateLiteral10(strings, raw) {
 var MAIN_CLAN = (0, import_kolmafia16.getProperty)("seventyhccs_main_clan");
 var FAX_AND_SLIME_CLAN = (0, import_kolmafia16.getProperty)("seventyhccs_side_clan");
 var FORTUNE_TELLER_FRIEND = (0, import_kolmafia16.getProperty)("seventyhccs_fortune_friend");
-var STILLSUIT_FAMILIAR = (0, import_kolmafia16.getProperty)("seventyhccs_stillsuit_target");
+var STILLSUIT_FAMILIAR = (0, import_kolmafia16.toFamiliar)((0, import_kolmafia16.getProperty)("seventyhccs_stillsuit_target"));
 var BRICKO_TARGET_ITEM = $item(_templateObject137 || (_templateObject137 = _taggedTemplateLiteral10(["BRICKO bat"])));
 var BRICKOS_PER_FIGHT = (_Map$get = (/* @__PURE__ */ new Map([[$item(_templateObject214 || (_templateObject214 = _taggedTemplateLiteral10(["BRICKO ooze"]))), 2], [$item(_templateObject311 || (_templateObject311 = _taggedTemplateLiteral10(["BRICKO bat"]))), 5], [$item(_templateObject410 || (_templateObject410 = _taggedTemplateLiteral10(["BRICKO oyster"]))), 8], [$item(_templateObject510 || (_templateObject510 = _taggedTemplateLiteral10(["BRICKO turtle"]))), 11], [$item(_templateObject610 || (_templateObject610 = _taggedTemplateLiteral10(["BRICKO elephant"]))), 23], [$item(_templateObject710 || (_templateObject710 = _taggedTemplateLiteral10(["BRICKO octopus"]))), 37], [$item(_templateObject810 || (_templateObject810 = _taggedTemplateLiteral10(["BRICKO python"]))), 69]])).get(BRICKO_TARGET_ITEM)) !== null && _Map$get !== void 0 ? _Map$get : 9999;
 var MEAT_SAFE_LIMIT = 2e3;
@@ -9459,10 +9459,8 @@ function openQuestZones() {
 }
 function preCoilWire() {
   (0, import_kolmafia23.visitUrl)("tutorial.php?action=toot");
-  var stillSuitFam = (0, import_kolmafia23.toFamiliar)(STILLSUIT_FAMILIAR);
-  if (stillSuitFam !== $familiar(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral17(["none"])))) {
-    var stillSuitId = (0, import_kolmafia23.toInt)(stillSuitFam);
-    (0, import_kolmafia23.visitUrl)("familiar.php?action=equip&pwd&whichfam=".concat(stillSuitId, "&whichitem=10932"));
+  if (STILLSUIT_FAMILIAR !== $familiar(_templateObject718 || (_templateObject718 = _taggedTemplateLiteral17(["none"])))) {
+    (0, import_kolmafia23.visitUrl)("familiar.php?action=equip&pwd&whichfam=".concat((0, import_kolmafia23.toInt)(STILLSUIT_FAMILIAR), "&whichitem=10932"));
   }
   while (get("_deluxeKlawSummons") < 3) {
     (0, import_kolmafia23.visitUrl)("clan_viplounge.php?action=klaw");
@@ -9726,7 +9724,7 @@ function levelAndDoQuests() {
   prepAndDoQuest(Quest.Mysticality);
   var comic = $item(_templateObject1084 || (_templateObject1084 = _taggedTemplateLiteral17(["Batfellow comic"])));
   if ((0, import_kolmafia23.itemAmount)(comic) < 1) {
-    var myFams = import_kolmafia23.Familiar.all().filter((f) => (0, import_kolmafia23.haveFamiliar)(f));
+    var myFams = import_kolmafia23.Familiar.all().filter((f) => !f.attributes.includes("pokefam") && (0, import_kolmafia23.haveFamiliar)(f) && f !== STILLSUIT_FAMILIAR);
     var randomFam = myFams[Math.floor(Math.random() * myFams.length)];
     if (!randomFam || randomFam === $familiar(_templateObject1094 || (_templateObject1094 = _taggedTemplateLiteral17(["none"]))) || !(0, import_kolmafia23.haveFamiliar)(randomFam)) {
       throw "Failed to select a valid familiar?";
