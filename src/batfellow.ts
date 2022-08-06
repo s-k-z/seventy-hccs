@@ -1,13 +1,26 @@
-import { itemAmount, myHp, print, runChoice, takeStorage, use, visitUrl } from "kolmafia";
-import { $item, $location, $skill, get, have, Macro } from "libram";
+import { itemAmount, myHp, runChoice, takeStorage, use, visitUrl } from "kolmafia";
+import { $item, $location, $skill, get, Macro } from "libram";
 import { adventure } from "./combat";
+import { withContext } from "./lib";
+
+const choiceAdventures = [
+  [1133, 1], // Batfellow Begins
+  [1134, 1], // Batfellow Ends
+  [1135, 0], // The Bat-Sedan
+  [1136, 0], // Bat-Research and Bat-Development
+  [1137, 0], // Bat-Suit Upgrades
+  [1138, 0], // Bat-Sedan Upgrades
+  [1139, 0], // Bat-Cavern Upgrades
+].map(([id, value]): [string, string | number] => [`choiceAdventure${id}`, value]);
 
 export function batfellow() {
+  withContext(runBatfellow, choiceAdventures);
+}
+
+function runBatfellow() {
   const comic = $item`Batfellow comic`;
-  if (!have(comic)) print("No comics found in inventory or storage?");
   if (itemAmount(comic) < 1 && !takeStorage(1, comic)) throw `Missing batfellow comic?`;
-  use(comic); // Batfellow Begins
-  runChoice(1); // Read the comic
+  use(1, comic); // Batfellow Begins
   visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
   /*
     1: Bat-Suit upgrades
@@ -26,5 +39,4 @@ export function batfellow() {
   }
   visitUrl("place.php?whichplace=batman_park&action=batman_park_car");
   runChoice(9); // EJECT
-  runChoice(1); // Batfellow Ends
 }
