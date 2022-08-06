@@ -9654,7 +9654,7 @@ function levelAndDoQuests() {
   prepAndDoQuest(Quest.Mysticality);
   var comic = $item(_templateObject1084 || (_templateObject1084 = _taggedTemplateLiteral17(["Batfellow comic"])));
   if ((0, import_kolmafia23.itemAmount)(comic) < 1) {
-    var myFams = import_kolmafia23.Familiar.all().filter(import_kolmafia23.haveFamiliar);
+    var myFams = import_kolmafia23.Familiar.all().filter((f) => (0, import_kolmafia23.haveFamiliar)(f));
     var randomFam = myFams[Math.floor(Math.random() * myFams.length)];
     if (!randomFam || randomFam === $familiar(_templateObject1094 || (_templateObject1094 = _taggedTemplateLiteral17(["none"]))) || !(0, import_kolmafia23.haveFamiliar)(randomFam)) {
       throw "Failed to select a valid familiar?";
