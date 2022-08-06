@@ -9,9 +9,11 @@ import {
   eat,
   Effect,
   equip,
+  Familiar,
   familiarWeight,
   gametimeToInt,
   haveEffect,
+  haveFamiliar,
   Item,
   itemAmount,
   mpCost,
@@ -37,6 +39,7 @@ import {
   toFamiliar,
   toInt,
   use,
+  useFamiliar,
   userConfirm,
   useSkill,
   visitUrl,
@@ -59,6 +62,7 @@ import {
   sinceKolmafiaRevision,
   SongBoom,
 } from "libram";
+import { batfellow } from "./batfellow";
 import {
   BRICKO_TARGET_ITEM,
   BRICKOS_PER_FIGHT,
@@ -483,5 +487,17 @@ function levelAndDoQuests() {
   }
 
   prepAndDoQuest(Quest.Mysticality);
+
+  const comic = $item`Batfellow comic`;
+  if (itemAmount(comic) < 1) {
+    const myFams = Familiar.all().filter(haveFamiliar);
+    const randomFam = myFams[Math.floor(Math.random() * myFams.length)];
+    if (!randomFam || randomFam === $familiar`none` || !haveFamiliar(randomFam)) {
+      throw "Failed to select a valid familiar?";
+    }
+    useFamiliar(randomFam);
+    batfellow();
+  }
+
   prepAndDoQuest(Quest.Donate);
 }
