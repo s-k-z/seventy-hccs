@@ -490,7 +490,7 @@ function levelAndDoQuests() {
 
   const comic = $item`Batfellow comic`;
   if (itemAmount(comic) < 1) {
-    const myFams = Familiar.all().filter(haveFamiliar);
+    const myFams = Familiar.all().filter((f) => haveFamiliar(f));
     const randomFam = myFams[Math.floor(Math.random() * myFams.length)];
     if (!randomFam || randomFam === $familiar`none` || !haveFamiliar(randomFam)) {
       throw "Failed to select a valid familiar?";
