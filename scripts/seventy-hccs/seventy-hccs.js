@@ -4079,7 +4079,7 @@ var Macro = /* @__PURE__ */ function() {
     }
   }, {
     key: "setAutoAttack",
-    value: function setAutoAttack3() {
+    value: function setAutoAttack4() {
       var id = Macro2.cachedMacroIds.get(this.name);
       if (id === void 0) {
         id = getMacroId(this.name);
@@ -6371,6 +6371,7 @@ function runBatfellow() {
   }
   (0, import_kolmafia14.visitUrl)("place.php?whichplace=batman_park&action=batman_park_car");
   (0, import_kolmafia14.runChoice)(9);
+  (0, import_kolmafia14.setAutoAttack)(0);
 }
 
 // src/config.ts
