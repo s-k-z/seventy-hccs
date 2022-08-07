@@ -1,4 +1,4 @@
-import { itemAmount, myHp, runChoice, takeStorage, use, visitUrl } from "kolmafia";
+import { itemAmount, myHp, runChoice, setAutoAttack, takeStorage, use, visitUrl } from "kolmafia";
 import { $item, $skill, get, Macro } from "libram";
 import { withContext } from "./lib";
 
@@ -43,4 +43,5 @@ function runBatfellow() {
   while (myHp() > 0 && get("batmanTimeLeft") >= 4) visitUrl("adventure.php?snarfblat=461");
   visitUrl("place.php?whichplace=batman_park&action=batman_park_car");
   runChoice(9); // EJECT
+  setAutoAttack(0);
 }
