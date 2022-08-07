@@ -375,6 +375,8 @@ function levelAndDoQuests() {
       if (have(blindness) && get("_hotTubSoaks") < 5) cliExecute("hottub");
       if (have(blindness)) throw `Can't handle ${blindness}`;
 
+      if (myHp() / myMaxhp() < 0.3) useSkill($skill`Cannelloni Cocoon`);
+
       const maxMPGains = (myMaxmp() - myMp()) / 15;
       const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
       const soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
