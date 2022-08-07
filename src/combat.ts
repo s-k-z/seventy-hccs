@@ -146,7 +146,6 @@ const FreeInstaKill = new Macro()
   .abort();
 
 const CigKill = new Macro()
-  .skill($skill`Sing Along`)
   .step(Pride)
   .tryItem($item`gingerbread cigarette`)
   .abort();
