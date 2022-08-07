@@ -59,4 +59,4 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## Building from source
 
-Please refer to [kol-js-starter](https://github.com/docrostov/kol-js-starter) on how to get started.
+Please refer to [kol-ts-starter](https://github.com/docrostov/kol-ts-starter) on how to get started.
