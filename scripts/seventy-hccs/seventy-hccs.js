@@ -8189,6 +8189,7 @@ var _templateObject2193;
 var _templateObject2202;
 var _templateObject2212;
 var _templateObject2223;
+var _templateObject2233;
 function _taggedTemplateLiteral14(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -8199,8 +8200,9 @@ var FamiliarFlag;
 (function(FamiliarFlag2) {
   FamiliarFlag2[FamiliarFlag2["Default"] = 0] = "Default";
   FamiliarFlag2[FamiliarFlag2["NoAttack"] = 1] = "NoAttack";
-  FamiliarFlag2[FamiliarFlag2["ToxicTeacups"] = 2] = "ToxicTeacups";
-  FamiliarFlag2[FamiliarFlag2["Wine"] = 3] = "Wine";
+  FamiliarFlag2[FamiliarFlag2["NoAttackOrStats"] = 2] = "NoAttackOrStats";
+  FamiliarFlag2[FamiliarFlag2["ToxicTeacups"] = 3] = "ToxicTeacups";
+  FamiliarFlag2[FamiliarFlag2["Wine"] = 4] = "Wine";
 })(FamiliarFlag || (FamiliarFlag = {}));
 var civicCenter = $location(_templateObject395 || (_templateObject395 = _taggedTemplateLiteral14(["Gingerbread Civic Center"])));
 var deepMachineTunnels = $location(_templateObject2100 || (_templateObject2100 = _taggedTemplateLiteral14(["The Deep Machine Tunnels"])));
@@ -8430,7 +8432,7 @@ var levelingEvents = {
   gingerbreadCig: {
     ready: () => have($item(_templateObject1193 || (_templateObject1193 = _taggedTemplateLiteral14(["gingerbread cigarette"])))),
     run: () => {
-      selectBestFamiliar(FamiliarFlag.NoAttack);
+      selectBestFamiliar(FamiliarFlag.NoAttackOrStats);
       adventure(upscaleDistrict, MacroList.FreeFight);
     }
   },
@@ -8710,8 +8712,10 @@ function selectBestFamiliar() {
     familiar($familiar(_templateObject2173 || (_templateObject2173 = _taggedTemplateLiteral14(["Green Pixie"]))));
   } else if (!have($item(_templateObject2183 || (_templateObject2183 = _taggedTemplateLiteral14(["rope"])))) && !have($item(_templateObject2193 || (_templateObject2193 = _taggedTemplateLiteral14(["burning newspaper"])))) && !have($item(_templateObject2202 || (_templateObject2202 = _taggedTemplateLiteral14(["burning paper crane"]))))) {
     familiar($familiar(_templateObject2212 || (_templateObject2212 = _taggedTemplateLiteral14(["Garbage Fire"]))));
-  } else {
+  } else if (flag !== FamiliarFlag.NoAttackOrStats) {
     familiar($familiar(_templateObject2223 || (_templateObject2223 = _taggedTemplateLiteral14(["Baby Sandworm"]))));
+  } else {
+    familiar($familiar(_templateObject2233 || (_templateObject2233 = _taggedTemplateLiteral14(["Machine Elf"]))));
   }
 }
 
