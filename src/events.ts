@@ -58,7 +58,6 @@ import { prep, Quest } from "./quests";
 export const enum FamiliarFlag {
   Default,
   NoAttack,
-  NoAttackOrStats,
   ToxicTeacups,
   Wine,
 }
@@ -291,17 +290,6 @@ export const levelingEvents: Record<string, eventData> = {
     },
   },
 
-  civicCenterRunaway: {
-    ready: () => get("_gingerbreadCityTurns") < 15,
-    run() {
-      checkEffect($effect`Ode to Booze`);
-      familiar($familiar`Frumious Bandersnatch`);
-      adventure(civicCenter, MacroList.Runaway);
-      const cig = $item`gingerbread cigarette`;
-      if (get("_gingerbreadCityTurns") === 15 && !have(cig)) throw `Failed to obtain ${cig}`;
-    },
-  },
-
   snojo: {
     ready: () => get("_snojoFreeFights") < 10,
     run: () => {
@@ -340,14 +328,6 @@ export const levelingEvents: Record<string, eventData> = {
       useSkill($skill`Evoke Eldritch Horror`);
       // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
       if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
-    },
-  },
-
-  gingerbreadCig: {
-    ready: () => have($item`gingerbread cigarette`),
-    run: () => {
-      selectBestFamiliar(FamiliarFlag.NoAttackOrStats);
-      adventure(upscaleDistrict, MacroList.FreeFight);
     },
   },
 
@@ -662,9 +642,5 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     !have($item`burning paper crane`)
   ) {
     familiar($familiar`Garbage Fire`);
-  } else if (flag !== FamiliarFlag.NoAttackOrStats) {
-    familiar($familiar`Baby Sandworm`);
-  } else {
-    familiar($familiar`Machine Elf`);
-  }
+  } else familiar($familiar`Baby Sandworm`);
 }

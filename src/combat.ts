@@ -16,7 +16,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $location, $monster, $skill, get, Macro, Witchess } from "libram";
+import { $effect, $item, $monster, $skill, get, Macro, Witchess } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const noveltySkeleton = $monster`novelty tropical skeleton`.id;
@@ -27,8 +27,6 @@ const LOVEnforcer = $monster`LOV Enforcer`.id;
 const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquare = $monster`Performer of Actions`.id;
 const DMTCircle = $monster`Thinker of Thoughts`.id;
-
-const retailDistrict = $location`Gingerbread Upscale Retail District`.id;
 
 const notAllowList = [
   $monster`sausage goblin`,
@@ -145,11 +143,6 @@ const FreeInstaKill = new Macro()
   .trySkill($skill`Shocking Lick`)
   .abort();
 
-const CigKill = new Macro()
-  .step(Pride)
-  .tryItem($item`gingerbread cigarette`)
-  .abort();
-
 const SingAndKill = new Macro()
   .skill($skill`Sing Along`)
   .step(Pride)
@@ -166,7 +159,6 @@ const DefaultMacro = new Macro()
     Macro.trySkill($skill`Open a Big Red Present`).skill($skill`Use the Force`)
   )
   .if_(`monsterid ${mastiff}`, Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`))
-  .if_(`snarfblat ${retailDistrict}`, CigKill)
   .if_(notAllowList, TryBanish)
   .skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
