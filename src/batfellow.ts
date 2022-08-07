@@ -10,7 +10,7 @@ const choiceAdventures = [
   [1137, 0], // Bat-Suit Upgrades
   [1138, 0], // Bat-Sedan Upgrades
   [1139, 0], // Bat-Cavern Upgrades
-].map(([id, value]): [string, string | number] => [`choiceAdventure${id}`, value]);
+].map(([id, value]): [string, number] => [`choiceAdventure${id}`, value]);
 
 export function batfellow() {
   withContext(runBatfellow, choiceAdventures);
