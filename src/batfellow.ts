@@ -1,5 +1,5 @@
-import { itemAmount, myHp, runChoice, setAutoAttack, takeStorage, use, visitUrl } from "kolmafia";
-import { $item, $skill, get, Macro } from "libram";
+import { itemAmount, runChoice, setAutoAttack, takeStorage, toUrl, use, visitUrl } from "kolmafia";
+import { $item, $location, $skill, get, Macro } from "libram";
 import { withContext } from "./lib";
 
 const choiceAdventures = [
@@ -19,10 +19,7 @@ export function batfellow() {
 function runBatfellow() {
   const comic = $item`Batfellow comic`;
   if (itemAmount(comic) < 1 && !takeStorage(1, comic)) throw `Missing batfellow comic?`;
-  new Macro()
-    .skill($skill`Bat-Kick`)
-    .repeat()
-    .setAutoAttack();
+  new Macro().skill($skill`Bat-Kick`).setAutoAttack();
   use(1, comic); // Batfellow Begins
   visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
   /*
@@ -40,7 +37,7 @@ function runBatfellow() {
   for (const c of [1, 3, 11, 2, 1, 11, 3, 4, 11, 6]) runChoice(c);
   visitUrl("place.php?whichplace=batman_cave&action=batman_cave_car");
   runChoice(5); // Center Park
-  while (myHp() > 0 && get("batmanTimeLeft") >= 4) visitUrl("adventure.php?snarfblat=461");
+  while (get("batmanTimeLeft") >= 4) visitUrl(toUrl($location`Center Park After Dark`));
   visitUrl("place.php?whichplace=batman_park&action=batman_park_car");
   runChoice(9); // EJECT
   setAutoAttack(0);
