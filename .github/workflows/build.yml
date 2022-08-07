@@ -28,11 +28,8 @@ jobs:
       - name: Install New Dependencies
         run: yarn install --immutable
 
-      - name: Lint
+      - name: ESLint & Prettier
         run: yarn run lint
-
-      - name: Prettier
-        run: yarn run format
 
   build:
     runs-on: ubuntu-latest

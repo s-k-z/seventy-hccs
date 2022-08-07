@@ -4,9 +4,9 @@
   "description": "A 70-turn Community Service project for Kingdom of Loathing",
   "main": "KoLmafia/scripts/seventy-hccs/seventy-hccs.js",
   "scripts": {
-    "build": "tsc && yarn node ./build.mjs",
-    "format": "yarn run prettier --write src/**/*",
-    "lint": "yarn run eslint src --ext .ts"
+    "build": "tsc && node ./build.mjs",
+    "format": "eslint src --fix --ext .ts && prettier --write src/**/*.ts",
+    "lint": "eslint src --ext .ts && prettier --check src/**/*.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
