@@ -58,6 +58,7 @@ import { prep, Quest } from "./quests";
 export const enum FamiliarFlag {
   Default,
   NoAttack,
+  NoAttackOrStats,
   ToxicTeacups,
   Wine,
 }
@@ -345,7 +346,7 @@ export const levelingEvents: Record<string, eventData> = {
   gingerbreadCig: {
     ready: () => have($item`gingerbread cigarette`),
     run: () => {
-      selectBestFamiliar(FamiliarFlag.NoAttack);
+      selectBestFamiliar(FamiliarFlag.NoAttackOrStats);
       adventure(upscaleDistrict, MacroList.FreeFight);
     },
   },
@@ -661,7 +662,9 @@ function selectBestFamiliar(flag: FamiliarFlag = FamiliarFlag.Default) {
     !have($item`burning paper crane`)
   ) {
     familiar($familiar`Garbage Fire`);
-  } else {
+  } else if (flag !== FamiliarFlag.NoAttackOrStats) {
     familiar($familiar`Baby Sandworm`);
+  } else {
+    familiar($familiar`Machine Elf`);
   }
 }
