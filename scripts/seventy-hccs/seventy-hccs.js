@@ -9225,6 +9225,7 @@ var _templateObject1064;
 var _templateObject1074;
 var _templateObject1084;
 var _templateObject1094;
+var _templateObject1104;
 function _toConsumableArray6(arr) {
   return _arrayWithoutHoles6(arr) || _iterableToArray6(arr) || _unsupportedIterableToArray12(arr) || _nonIterableSpread6();
 }
@@ -9604,25 +9605,27 @@ function levelAndDoQuests() {
           (0, import_kolmafia23.cliExecute)("hottub");
         if (have(blindness))
           throw "Can't handle ".concat(blindness);
+        if ((0, import_kolmafia23.myHp)() / (0, import_kolmafia23.myMaxhp)() < 0.3)
+          (0, import_kolmafia23.useSkill)($skill(_templateObject894 || (_templateObject894 = _taggedTemplateLiteral17(["Cannelloni Cocoon"]))));
         var maxMPGains = ((0, import_kolmafia23.myMaxmp)() - (0, import_kolmafia23.myMp)()) / 15;
-        var maxSoulFoodCasts = (0, import_kolmafia23.mySoulsauce)() / (0, import_kolmafia23.soulsauceCost)($skill(_templateObject894 || (_templateObject894 = _taggedTemplateLiteral17(["Soul Food"]))));
+        var maxSoulFoodCasts = (0, import_kolmafia23.mySoulsauce)() / (0, import_kolmafia23.soulsauceCost)($skill(_templateObject904 || (_templateObject904 = _taggedTemplateLiteral17(["Soul Food"]))));
         var soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
         if (soulFoodCasts > 0)
-          (0, import_kolmafia23.useSkill)(soulFoodCasts, $skill(_templateObject904 || (_templateObject904 = _taggedTemplateLiteral17(["Soul Food"]))));
-        while (have($item(_templateObject917 || (_templateObject917 = _taggedTemplateLiteral17(["magical sausage casing"])))) && (get("_sausagesMade") + 1) * 111 < (0, import_kolmafia23.myMeat)() - MEAT_SAFE_LIMIT && (0, import_kolmafia23.myMaxmp)() - (0, import_kolmafia23.myMp)() > 1e3 && (0, import_kolmafia23.myMaxmp)() - (0, import_kolmafia23.mpCost)($skill(_templateObject925 || (_templateObject925 = _taggedTemplateLiteral17(["Summon BRICKOs"])))) > MP_SAFE_LIMIT && get("_sausagesEaten") < 23) {
-          (0, import_kolmafia23.create)($item(_templateObject935 || (_templateObject935 = _taggedTemplateLiteral17(["magical sausage"]))));
-          (0, import_kolmafia23.eat)($item(_templateObject945 || (_templateObject945 = _taggedTemplateLiteral17(["magical sausage"]))));
+          (0, import_kolmafia23.useSkill)(soulFoodCasts, $skill(_templateObject917 || (_templateObject917 = _taggedTemplateLiteral17(["Soul Food"]))));
+        while (have($item(_templateObject925 || (_templateObject925 = _taggedTemplateLiteral17(["magical sausage casing"])))) && (get("_sausagesMade") + 1) * 111 < (0, import_kolmafia23.myMeat)() - MEAT_SAFE_LIMIT && (0, import_kolmafia23.myMaxmp)() - (0, import_kolmafia23.myMp)() > 1e3 && (0, import_kolmafia23.myMaxmp)() - (0, import_kolmafia23.mpCost)($skill(_templateObject935 || (_templateObject935 = _taggedTemplateLiteral17(["Summon BRICKOs"])))) > MP_SAFE_LIMIT && get("_sausagesEaten") < 23) {
+          (0, import_kolmafia23.create)($item(_templateObject945 || (_templateObject945 = _taggedTemplateLiteral17(["magical sausage"]))));
+          (0, import_kolmafia23.eat)($item(_templateObject954 || (_templateObject954 = _taggedTemplateLiteral17(["magical sausage"]))));
         }
-        while ((0, import_kolmafia23.myMp)() - (0, import_kolmafia23.mpCost)($skill(_templateObject954 || (_templateObject954 = _taggedTemplateLiteral17(["Summon BRICKOs"])))) > MP_SAFE_LIMIT) {
+        while ((0, import_kolmafia23.myMp)() - (0, import_kolmafia23.mpCost)($skill(_templateObject964 || (_templateObject964 = _taggedTemplateLiteral17(["Summon BRICKOs"])))) > MP_SAFE_LIMIT) {
           castBestLibram();
           continue leveling;
         }
         useDroppedItems();
-        while (have($item(_templateObject964 || (_templateObject964 = _taggedTemplateLiteral17(["BRICKO eye brick"])))) && have($item(_templateObject974 || (_templateObject974 = _taggedTemplateLiteral17(["BRICKO brick"]))), BRICKOS_PER_FIGHT)) {
+        while (have($item(_templateObject974 || (_templateObject974 = _taggedTemplateLiteral17(["BRICKO eye brick"])))) && have($item(_templateObject984 || (_templateObject984 = _taggedTemplateLiteral17(["BRICKO brick"]))), BRICKOS_PER_FIGHT)) {
           (0, import_kolmafia23.create)(BRICKO_TARGET_ITEM);
         }
-        if (have($item(_templateObject984 || (_templateObject984 = _taggedTemplateLiteral17(["burning newspaper"])))))
-          (0, import_kolmafia23.create)($item(_templateObject994 || (_templateObject994 = _taggedTemplateLiteral17(["burning paper crane"]))));
+        if (have($item(_templateObject994 || (_templateObject994 = _taggedTemplateLiteral17(["burning newspaper"])))))
+          (0, import_kolmafia23.create)($item(_templateObject1004 || (_templateObject1004 = _taggedTemplateLiteral17(["burning paper crane"]))));
         oneOffEvents.innerElf();
         for (var _i3 = 0, _Object$values2 = Object.values(levelingEvents); _i3 < _Object$values2.length; _i3++) {
           var event = _Object$values2[_i3];
@@ -9645,8 +9648,8 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.SpellDamage)) {
     oneOffEvents.innerElf();
     oneOffEvents.meteorUngulith();
-    if (!have($effect(_templateObject1004 || (_templateObject1004 = _taggedTemplateLiteral17(["Cowrruption"])))))
-      (0, import_kolmafia23.use)($item(_templateObject1017 || (_templateObject1017 = _taggedTemplateLiteral17(["corrupted marrow"]))));
+    if (!have($effect(_templateObject1017 || (_templateObject1017 = _taggedTemplateLiteral17(["Cowrruption"])))))
+      (0, import_kolmafia23.use)($item(_templateObject1025 || (_templateObject1025 = _taggedTemplateLiteral17(["corrupted marrow"]))));
     prepAndDoQuest(Quest.SpellDamage);
   }
   if (haveQuest(Quest.WeaponDamage)) {
@@ -9656,7 +9659,7 @@ function levelAndDoQuests() {
     prepAndDoQuest(Quest.WeaponDamage);
   }
   if (haveQuest(Quest.CombatFrequency)) {
-    (0, import_kolmafia23.equip)($slot(_templateObject1025 || (_templateObject1025 = _taggedTemplateLiteral17(["acc2"]))), $item(_templateObject1035 || (_templateObject1035 = _taggedTemplateLiteral17(["Powerful Glove"]))));
+    (0, import_kolmafia23.equip)($slot(_templateObject1035 || (_templateObject1035 = _taggedTemplateLiteral17(["acc2"]))), $item(_templateObject1045 || (_templateObject1045 = _taggedTemplateLiteral17(["Powerful Glove"]))));
     prepAndDoQuest(Quest.CombatFrequency);
   }
   if (haveQuest(Quest.HotResist)) {
@@ -9666,20 +9669,20 @@ function levelAndDoQuests() {
   if (haveQuest(Quest.FamiliarWeight)) {
     oneOffEvents.meteorShower();
     prep(Quest.FamiliarWeight);
-    var loveSong = $item(_templateObject1045 || (_templateObject1045 = _taggedTemplateLiteral17(["love song of icy revenge"])));
+    var loveSong = $item(_templateObject1054 || (_templateObject1054 = _taggedTemplateLiteral17(["love song of icy revenge"])));
     var coldHeart = itemToEffect(loveSong);
     var icyWeight = Math.ceil(2.5 * Math.min(4, (0, import_kolmafia23.itemAmount)(loveSong)));
     var loveSongSufficient = (0, import_kolmafia23.familiarWeight)((0, import_kolmafia23.myFamiliar)()) + (0, import_kolmafia23.weightAdjustment)() + icyWeight >= 295;
-    var taffy = $item(_templateObject1054 || (_templateObject1054 = _taggedTemplateLiteral17(["pulled blue taffy"])));
+    var taffy = $item(_templateObject1064 || (_templateObject1064 = _taggedTemplateLiteral17(["pulled blue taffy"])));
     var swayed = itemToEffect(taffy);
-    var wine = $item(_templateObject1064 || (_templateObject1064 = _taggedTemplateLiteral17(["1950 Vampire Vintner wine"])));
+    var wine = $item(_templateObject1074 || (_templateObject1074 = _taggedTemplateLiteral17(["1950 Vampire Vintner wine"])));
     var needWeight = () => (0, import_kolmafia23.familiarWeight)((0, import_kolmafia23.myFamiliar)()) + (0, import_kolmafia23.weightAdjustment)() < 295;
     if (needWeight() && !have(swayed) && have(taffy))
       (0, import_kolmafia23.cliExecute)("use * ".concat(taffy));
     if (needWeight() && !have(coldHeart) && loveSongSufficient)
       (0, import_kolmafia23.cliExecute)("use * ".concat(loveSong));
     if (needWeight() && have(wine)) {
-      acquireEffect($effect(_templateObject1074 || (_templateObject1074 = _taggedTemplateLiteral17(["Ode to Booze"]))));
+      acquireEffect($effect(_templateObject1084 || (_templateObject1084 = _taggedTemplateLiteral17(["Ode to Booze"]))));
       (0, import_kolmafia23.drink)(wine);
     }
     if (needWeight()) {
@@ -9696,11 +9699,11 @@ function levelAndDoQuests() {
     prepAndDoQuest(Quest.ItemDrop);
   }
   prepAndDoQuest(Quest.Mysticality);
-  var comic = $item(_templateObject1084 || (_templateObject1084 = _taggedTemplateLiteral17(["Batfellow comic"])));
+  var comic = $item(_templateObject1094 || (_templateObject1094 = _taggedTemplateLiteral17(["Batfellow comic"])));
   if ((0, import_kolmafia23.itemAmount)(comic) < 1) {
     var myFams = import_kolmafia23.Familiar.all().filter((f) => !f.attributes.includes("pokefam") && (0, import_kolmafia23.haveFamiliar)(f) && f !== STILLSUIT_FAMILIAR);
     var randomFam = myFams[Math.floor(Math.random() * myFams.length)];
-    if (!randomFam || randomFam === $familiar(_templateObject1094 || (_templateObject1094 = _taggedTemplateLiteral17(["none"]))) || !(0, import_kolmafia23.haveFamiliar)(randomFam)) {
+    if (!randomFam || randomFam === $familiar(_templateObject1104 || (_templateObject1104 = _taggedTemplateLiteral17(["none"]))) || !(0, import_kolmafia23.haveFamiliar)(randomFam)) {
       throw "Failed to select a valid familiar?";
     }
     (0, import_kolmafia23.useFamiliar)(randomFam);
