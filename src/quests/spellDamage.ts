@@ -1,13 +1,12 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, elementalResistance, myHp, myMaxhp, use, useSkill, visitUrl } from "kolmafia";
+import { cliExecute, equip, use, visitUrl } from "kolmafia";
 import {
   $effect,
-  $element,
   $familiar,
   $item,
   $items,
   $monster,
-  $skill,
+  $slot,
   Clan,
   CommunityService,
   have,
@@ -15,7 +14,7 @@ import {
 import { MacroList } from "../combat";
 import { config } from "../config";
 import { checkAvailable } from "../lib";
-import { innerElf, runTest } from "./shared";
+import { deepDarkVisions, innerElf, runTest } from "./shared";
 
 export const SpellDamageQuest: Quest<Task> = {
   name: "Make Sausage",
@@ -42,37 +41,14 @@ export const SpellDamageQuest: Quest<Task> = {
       },
       combat: new CombatStrategy().macro(MacroList.MeteorForce),
     },
-    {
-      name: "Deep Dark Visions",
-      completed: () => have($effect`Visions of the Deep Dark Deeps`),
-      prepare: () => cliExecute("retrocape vampire hold"),
-      do: () => {
-        const resist = 1 - elementalResistance($element`spooky`) / 100;
-        if (resist <= 0) throw `invalid resist value ${resist} calculated?`;
-        const maxMultiplier = 4;
-        const needed = myMaxhp() * maxMultiplier * resist;
-        if (myMaxhp() < 500 || myMaxhp() < needed) throw `Not enough HP for deep dark visions`;
-        if (myHp() < needed) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
-        if (myHp() < needed) throw `Failed to heal enough for Deep Dark Visions?`;
-        useSkill($skill`Deep Dark Visions`);
-      },
-      post: () => cliExecute("hottub"),
-      outfit: {
-        back: $item`unwrapped knock-off retro superhero cape`,
-        weapon: $item`Fourth of May Cosplay Saber`,
-        offhand: $items`burning paper crane, unbreakable umbrella`,
-        pants: $item`pantogram pants`,
-        acc3: $item`Kremlin's Greatest Briefcase`,
-        famequip: $item`cracker`,
-        familiar: $familiar`Exotic Parrot`,
-      },
-    },
+    deepDarkVisions,
     {
       name: "Spell Damage Test",
       after: ["Inner Elf", "Cowrruption"],
       completed: () => CommunityService.SpellDamage.isDone(),
       prepare: () => cliExecute("umbrella spell"),
       do: () => runTest(CommunityService.SpellDamage),
+      post: () => equip($slot`familiar`, $item`none`),
       effects: [
         $effect`AAA-Charged`,
         $effect`Arched Eyebrow of the Archmage`,

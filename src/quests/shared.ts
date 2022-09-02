@@ -1,11 +1,21 @@
 import { CombatStrategy, Task } from "grimoire-kolmafia";
-import { cliExecute, Familiar, myLevel } from "kolmafia";
+import {
+  cliExecute,
+  elementalResistance,
+  Familiar,
+  myHp,
+  myLevel,
+  myMaxhp,
+  useSkill,
+} from "kolmafia";
 import {
   $effect,
+  $element,
   $familiar,
   $item,
   $items,
   $location,
+  $skill,
   Clan,
   CommunityService,
   get,
@@ -56,6 +66,41 @@ export const darkHorse: Task = {
   name: "Dark Horse",
   completed: () => get("_horsery").toLowerCase() === "dark horse",
   do: () => cliExecute("horsery dark"),
+};
+
+function safeHpLimit(): number {
+  const resist = 1 - elementalResistance($element`spooky`) / 100;
+  if (resist <= 0) throw `invalid resist value ${resist} calculated?`;
+  const maxMultiplier = 4;
+  return myMaxhp() * maxMultiplier * resist;
+}
+
+export const deepDarkVisions: Task = {
+  name: "Deep Dark Visions",
+  ready: () => myMaxhp() > 500,
+  completed: () => have($effect`Visions of the Deep Dark Deeps`),
+  prepare: () => {
+    cliExecute("parka ghostasaurus");
+    cliExecute("retrocape vampire hold");
+  },
+  do: () => {
+    if (myMaxhp() < safeHpLimit()) throw `Not enough HP for deep dark visions`;
+    if (myHp() < safeHpLimit()) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
+    if (myHp() < safeHpLimit()) throw `Failed to heal enough for Deep Dark Visions?`;
+    useSkill($skill`Deep Dark Visions`);
+  },
+  post: () => cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`),
+  outfit: {
+    back: $item`unwrapped knock-off retro superhero cape`,
+    // eslint-disable-next-line libram/verify-constants
+    shirt: $item`Jurassic Parka`,
+    weapon: $item`Fourth of May Cosplay Saber`,
+    offhand: $items`burning paper crane, unbreakable umbrella`,
+    pants: $item`pantogram pants`,
+    acc3: $item`Kremlin's Greatest Briefcase`,
+    famequip: $item`cracker`,
+    familiar: $familiar`Exotic Parrot`,
+  },
 };
 
 export const innerElf: Task = {

@@ -42,7 +42,7 @@ import { MacroList } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import { acquireEffect, checkAvailable, checkEffect, voterMonsterNow } from "../lib";
-import { AdvReq, innerElf, selectBestFamiliar } from "./shared";
+import { AdvReq, deepDarkVisions, innerElf, selectBestFamiliar } from "./shared";
 
 const monsterLevel = [
   myClass() === $class`Pastamancer`
@@ -436,6 +436,7 @@ export const Leveling: Quest<Task> = {
       outfit: { offhand: $item`Kramco Sausage-o-Matic™`, familiar: $familiar`Pocket Professor` },
       combat: new CombatStrategy().macro(MacroList.Default),
     },
+    deepDarkVisions,
     {
       name: "Backup Camera Fights",
       after: ["Lectures on Relativity"],
