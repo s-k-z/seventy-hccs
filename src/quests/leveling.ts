@@ -165,7 +165,7 @@ export const Leveling: Quest<Task> = {
       name: "Buff ML",
       after: ["Tunnel of L.O.V.E."],
       completed: () => monsterLevel.every((m) => have(m)),
-      do: () => monsterLevel.every((m) => acquireEffect(m)),
+      do: () => monsterLevel.forEach((m) => acquireEffect(m)),
     },
     {
       name: "Ten-percent Bonus",
