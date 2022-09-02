@@ -38,7 +38,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## Requirements in Valhalla
 
-1. Astral Statuette from Pet Heaven
+1. Astral Trousers from Pet Heaven
 2. Sauceror class
 3. Wallaby moon sign
 
@@ -47,15 +47,13 @@ The script can be run either in Aftercore, or in Community Service provided that
 ## To run the script
 
 1. Ensure you have KoLMafia r26624 or later [available here](https://github.com/kolmafia/kolmafia/releases)
-2. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
-3. Set properties in kolmafia to appropriate values:
+2. Set properties in kolmafia to appropriate values:
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
-   - seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
    - seventyhccs_stillsuit_target - Optional familiar name to be equipped with the tiny stillsuit
 
-4. Run the script file named **seventy-hccs.js** using KoLMafia
+3. Run the script file named **seventy-hccs.js** using KoLMafia
 
 ## Building from source
 

@@ -39,6 +39,10 @@ export function itemToEffect(i: Item): Effect {
   return effectModifier(i, "effect");
 }
 
+export function haveItemOrEffect(i: Item): boolean {
+  return have(i) || have(itemToEffect(i));
+}
+
 export function shrugEffect(effect: Effect): void {
   if (have(effect)) cliExecute(`shrug ${effect}`);
 }

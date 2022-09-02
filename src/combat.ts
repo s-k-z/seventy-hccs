@@ -1,22 +1,15 @@
 import {
-  adv1,
-  choiceFollowsFight,
-  getAutoAttack,
-  handlingChoice,
-  inMultiFight,
   Location,
   Monster,
   mpCost,
   myTurncount,
-  runChoice,
   runCombat,
-  setAutoAttack,
   toInt,
   toUrl,
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $monster, $skill, get, Macro, Witchess } from "libram";
+import { $effect, $item, $monster, $skill, get, Macro } from "libram";
 
 const amateurNinja = $monster`amateur ninja`.id;
 const noveltySkeleton = $monster`novelty tropical skeleton`.id;
@@ -27,6 +20,7 @@ const LOVEnforcer = $monster`LOV Enforcer`.id;
 const LOVEngineer = $monster`LOV Engineer`.id;
 const DMTSquare = $monster`Performer of Actions`.id;
 const DMTCircle = $monster`Thinker of Thoughts`.id;
+const motherSlime = $monster`Mother Slime`.id;
 
 const notAllowList = [
   $monster`sausage goblin`,
@@ -97,8 +91,6 @@ const notAllowList = [
   $monster`jock`,
   $monster`party girl`,
   $monster`"plain" girl`,
-  // boss(es)
-  $monster`Mother Slime`,
   // toxic teacups
   $monster`toxic beastie`,
   $monster`Black Crayon Slime`,
@@ -116,6 +108,10 @@ const Ghost = new Macro()
   .abort();
 
 const TryBanish = new Macro() // Reserve Snokebomb for Mother Slime
+  .if_(
+    `monsterid ${motherSlime}`,
+    Macro.trySkill($skill`KGB tranquilizer dart`).skill($skill`Snokebomb`)
+  )
   .trySkill($skill`Throw Latte on Opponent`)
   .trySkill($skill`KGB tranquilizer dart`)
   .trySkill($skill`Reflex Hammer`)
@@ -137,6 +133,8 @@ const Pride = new Macro().if_(
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
   .step(Pride)
+  // eslint-disable-next-line libram/verify-constants
+  .if_(`!haseffect ${$effect`Everything Looks Yellow`}`, Macro.trySkill($skill`Spit jurassic acid`))
   .trySkill($skill`Chest X-Ray`)
   .trySkill($skill`Shattering Punch`)
   .trySkill($skill`Gingerbread Mob Hit`)
@@ -150,7 +148,6 @@ const SingAndKill = new Macro()
   .attack()
   .repeat();
 const DefaultMacro = new Macro()
-  .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
   .if_(`monsterid ${toxicBeastie}`, Backup)
   .if_(`monsterid ${toxicBeastie}`, Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill))
   .if_(`monsterid ${amateurNinja}`, FreeInstaKill)
@@ -160,6 +157,7 @@ const DefaultMacro = new Macro()
   )
   .if_(`monsterid ${mastiff}`, Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`))
   .if_(notAllowList, TryBanish)
+  .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
   .skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
@@ -176,8 +174,8 @@ const DefaultMacro = new Macro()
   .step(SingAndKill);
 
 export const MacroList = {
-  FreeFight: DefaultMacro,
-  FastFreeFight: SingAndKill,
+  Default: DefaultMacro,
+  Fast: SingAndKill,
   StenchFreeFight: new Macro()
     .if_(`monsterid ${toxicBeastie}`, Backup)
     .if_(`monsterid ${toxicBeastie}`, Macro.abort())
@@ -185,8 +183,12 @@ export const MacroList = {
     .if_(`monsterhpabove 300`, Macro.skill($skill`Sing Along`))
     .skill($skill`Garbage Nova`),
 
-  // Just runaway on its own causes a null pointer exception?
-  Runaway: new Macro().trySkill($skill`Saucy Salve`).runaway(),
+  EnvyNostalgia: new Macro()
+    .skill($skill`Feel Envy`)
+    .skill($skill`Feel Nostalgic`)
+    .step(DefaultMacro),
+
+  Runaway: new Macro().runaway().abort(),
 
   Banish: TryBanish,
 
@@ -227,11 +229,6 @@ export const MacroList = {
     .tryItem($item`abstraction: action`)
     .step(DefaultMacro),
 
-  MotherSlime: new Macro()
-    .if_(notAllowList, Macro.abort())
-    .trySkill($skill`KGB tranquilizer dart`)
-    .skill($skill`Snokebomb`),
-
   BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).runaway(),
   LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).runaway(),
 
@@ -241,52 +238,17 @@ export const MacroList = {
     .skill($skill`Use the Force`),
 };
 
-export function adventure(loc: Location, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
-  adv1(loc, 0, macro.toString());
-  while (inMultiFight()) runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
-}
-
-export function adventureUrl(url: string, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
-  visitUrl(url);
-  runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
-}
-
-export function mapMonster(location: Location, monster: Monster, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
+export function mapMonster(location: Location, monster: Monster): void {
   if (get("_monstersMapped") >= 3) throw "Trying to map too many monsters";
   if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
   const expectedTurnCount = myTurncount();
   let mapPage = "";
   while (!mapPage.includes("Leading Yourself Right to Them")) {
     mapPage = visitUrl(toUrl(location));
-    if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat(macro.toString());
+    if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat();
     if (myTurncount() > expectedTurnCount) throw "Wasted a turn somehow mapping monsters?";
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
-  runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
+  runCombat();
   if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
-}
-
-export function reminisce(monster: Monster, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
-  visitUrl(`inventory.php?reminisce=1`);
-  visitUrl(`choice.php?pwd=&whichchoice=1463&option=1&mid=${monster.id}`);
-  runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
-}
-
-export function fightWitchess(piece: Monster, macro: Macro): void {
-  macro.setAutoAttack();
-  Witchess.fightPiece(piece);
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
 }

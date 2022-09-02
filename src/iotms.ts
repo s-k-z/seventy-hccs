@@ -5,35 +5,36 @@ import {
   myMp,
   myPrimestat,
   runChoice,
+  Skill,
   toInt,
   use,
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $class, $effect, $item, $skill, $stat, get, have } from "libram";
-import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
-import { itemToEffect } from "./lib";
+import { $class, $item, $skill, $stat, get, have } from "libram";
+import { BRICKO_COST, BRICKO_DROP, BRICKO_TARGET_ITEM } from "./config";
+import { haveItemOrEffect, itemToEffect } from "./lib";
 
 export function castBestLibram(): void {
-  const wantGreenCandy = !have($item`green candy heart`) && !have($effect`Heart of Green`);
-  const brickosOwned = itemAmount(BRICKO_TARGET_ITEM);
-  const brickosNeeded = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + brickosOwned));
-  if (wantGreenCandy && get("libramSummons") < 10) {
-    useSkill($skill`Summon Candy Heart`);
-  } else if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, brickosNeeded)) {
-    useSkill($skill`Summon BRICKOs`);
-  } else if (wantGreenCandy) {
-    useSkill($skill`Summon Candy Heart`);
-  } else if (!have($item`love song of icy revenge`, 2)) {
-    useSkill($skill`Summon Love Song`);
-  } else if (get("_resolutionRareSummons") < 3) {
-    useSkill($skill`Summon Resolutions`);
-  } else if (!have($item`pulled blue taffy`, 4)) {
-    useSkill($skill`Summon Taffy`);
-  } else if (!have($item`love song of icy revenge`, 4)) {
-    useSkill($skill`Summon Love Song`);
-  } else {
-    useSkill($skill`Summon Resolutions`);
+  const owned = itemAmount(BRICKO_TARGET_ITEM);
+  const remainingFights = Math.max(0, 3 - get("_brickoFights"));
+  const remainingDrops = Math.max(0, 2 - get("_brickoFights"));
+  const need = BRICKO_COST * remainingFights - BRICKO_DROP * remainingDrops - owned;
+  const wantBrickos = get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, need);
+  // prettier-ignore
+  for (const [check, summon] of new Map<boolean, Skill>([
+    [wantBrickos,                                 $skill`Summon BRICKOs`],
+    [!haveItemOrEffect($item`green candy heart`), $skill`Summon Candy Heart`],
+    [!have($item`love song of icy revenge`, 2),   $skill`Summon Love Song`],
+    [get("_resolutionRareSummons") < 3,           $skill`Summon Resolutions`],
+    [!have($item`pulled blue taffy`, 4),          $skill`Summon Taffy`],
+    [!have($item`love song of icy revenge`, 4),   $skill`Summon Love Song`],
+    [true,                                        $skill`Summon Taffy`],
+  ])) {
+    if (check) {
+      useSkill(summon);
+      break;
+    }
   }
 }
 
