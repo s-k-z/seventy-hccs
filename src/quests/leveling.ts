@@ -8,7 +8,6 @@ import {
   handlingChoice,
   mpCost,
   myClass,
-  myFamiliar,
   myHp,
   myLevel,
   myMaxhp,
@@ -253,12 +252,11 @@ export const Leveling: Quest<Task> = {
         if (handlingChoice()) throw `Can't set choice adventure to automate this one?`;
       },
       choices: { 1118: 1 },
-      // myFamiliar().combat ? MacroList.FastFreeFight : MacroList.FreeFight
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(myFamiliar().combat ? MacroList.Fast : MacroList.Default),
+      combat: new CombatStrategy().macro(MacroList.Default),
     },
     {
       name: "BRICKOS",
@@ -269,7 +267,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(myFamiliar().combat ? MacroList.Fast : MacroList.Default),
+      combat: new CombatStrategy().macro(MacroList.Default),
     },
     {
       name: "Witchess Witch",
