@@ -23,7 +23,10 @@ export const HotResistQuest: Quest<Task> = {
       name: "Hot Resist Test",
       after: ["Fireproof Foam Suit"],
       completed: () => CommunityService.HotRes.isDone(),
-      prepare: () => cliExecute("retrocape vampire hold"),
+      prepare: () => {
+        cliExecute("parka pterodactyl");
+        cliExecute("retrocape vampire hold");
+      },
       do: () => runTest(CommunityService.HotRes),
       effects: [
         $effect`Astral Shell`,
@@ -34,6 +37,7 @@ export const HotResistQuest: Quest<Task> = {
       outfit: {
         hat: $item`Daylight Shavings Helmet`,
         back: $item`unwrapped knock-off retro superhero cape`,
+        shirt: $item`Jurassic Parka`,
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $item`industrial fire extinguisher`,
         pants: $item`designer sweatpants`,
