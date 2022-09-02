@@ -169,15 +169,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Ten-percent Bonus",
-      after: ["Tunnel of L.O.V.E."],
+      ready: () => have($item`LOV Epaulettes`),
       completed: () => !have($item`a ten-percent bonus`),
-      prepare: () => {
-        [
-          $effect`That's Just Cloud-Talk, Man`,
-          $effect`Inscrutable Gaze`,
-          $effect`Synthesis: Learning`,
-        ].forEach(checkEffect);
-      },
       do: () => use($item`a ten-percent bonus`),
       effects: $effects`Inscrutable Gaze, That's Just Cloud-Talk\, Man, Synthesis: Learning`,
       outfit: {
@@ -187,8 +180,7 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Chateau Rest",
-      after: ["Tunnel of L.O.V.E."],
-      ready: () => myLevel() >= 8,
+      ready: () => have($item`LOV Epaulettes`) && myLevel() >= 8,
       completed: () => get("timesRested") > totalFreeRests(),
       do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
       effects: $effects`Inscrutable Gaze, That's Just Cloud-Talk\, Man, Synthesis: Learning`,
