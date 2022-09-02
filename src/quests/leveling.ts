@@ -40,7 +40,7 @@ import {
 import { MacroList } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
-import { acquireEffect, checkAvailable, checkEffect, voterMonsterNow } from "../lib";
+import { acquireEffect, checkAvailable, checkEffect, tryUse, voterMonsterNow } from "../lib";
 import { AdvReq, deepDarkVisions, innerElf, selectBestFamiliar } from "./shared";
 
 const monsterLevel = [
@@ -212,8 +212,6 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Sprinkles",
       completed: () => have($effect`Whole Latte Love`) || have($item`sprinkles`, 50),
-      choices: { 1208: 3 }, // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
-      // combat: MacroList.Sprinkles
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkAvailable($item`sprinkles`, 50),
       outfit: {
@@ -229,15 +227,11 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Get Gingerbread Spice Latte",
-      after: ["Get Sprinkles"],
-      ready: () => get("_gingerbreadCityTurns") < 5 && have($item`sprinkles`, 50),
-      completed: () => have($effect`Whole Latte Love`),
+      ready: () => have($item`sprinkles`, 50),
+      completed: () => have($effect`Whole Latte Love`) || get("_gingerbreadCityTurns") >= 5,
+      choices: { 1208: 3 }, // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
       do: $location`Gingerbread Upscale Retail District`,
-      post: () => {
-        const latte = $item`gingerbread spice latte`;
-        if (have(latte)) use(latte);
-        else if (get("_gingerbreadCityTurns") > 5) throw `Failed to obtain ${latte}`;
-      },
+      post: () => tryUse($item`gingerbread spice latte`),
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: new CombatStrategy().macro(MacroList.Runaway),
