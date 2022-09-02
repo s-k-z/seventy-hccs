@@ -53,6 +53,7 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`AAA-Charged`,
         $effect`Arched Eyebrow of the Archmage`,
         $effect`Carol of the Hells`,
+        $effect`Concentration`,
         $effect`Cowrruption`,
         $effect`Do You Crush What I Crush?`,
         $effect`Filled with Magic`,
