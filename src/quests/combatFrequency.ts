@@ -28,7 +28,6 @@ export const CombatFrequencyQuest: Quest<Task> = {
       outfit: {
         hat: $item`very pointy crown`,
         back: $item`protonic accelerator pack`,
-        // eslint-disable-next-line libram/verify-constants
         shirt: $item`Jurassic Parka`,
         offhand: $item`unbreakable umbrella`,
         pants: $item`pantogram pants`,

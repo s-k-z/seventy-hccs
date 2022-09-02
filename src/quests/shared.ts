@@ -92,7 +92,6 @@ export const deepDarkVisions: Task = {
   post: () => cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`),
   outfit: {
     back: $item`unwrapped knock-off retro superhero cape`,
-    // eslint-disable-next-line libram/verify-constants
     shirt: $item`Jurassic Parka`,
     weapon: $item`Fourth of May Cosplay Saber`,
     offhand: $items`burning paper crane, unbreakable umbrella`,

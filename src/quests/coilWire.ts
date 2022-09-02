@@ -166,7 +166,6 @@ export const PreCoilWire: Quest<Task> = {
 const defaultOutfit = {
   hat: $item`Daylight Shavings Helmet`,
   back: $item`protonic accelerator pack`,
-  // eslint-disable-next-line libram/verify-constants
   shirt: $item`Jurassic Parka`,
   weapon: $item`Fourth of May Cosplay Saber`,
   offhand: $item`familiar scrapbook`,
@@ -314,7 +313,6 @@ export const CoilWire: Quest<Task> = {
       outfit: {
         hat: $item`Iunion Crown`,
         back: $item`unwrapped knock-off retro superhero cape`,
-        // eslint-disable-next-line libram/verify-constants
         shirt: $item`Jurassic Parka`,
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $items`wrench, industrial fire extinguisher`,

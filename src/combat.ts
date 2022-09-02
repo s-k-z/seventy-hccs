@@ -133,7 +133,6 @@ const Pride = new Macro().if_(
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
   .step(Pride)
-  // eslint-disable-next-line libram/verify-constants
   .if_(`!haseffect ${$effect`Everything Looks Yellow`}`, Macro.trySkill($skill`Spit jurassic acid`))
   .trySkill($skill`Chest X-Ray`)
   .trySkill($skill`Shattering Punch`)
