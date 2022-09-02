@@ -92,11 +92,6 @@ export const Leveling: Quest<Task> = {
       ready: () => get("_hotTubSoaks") < 5,
       completed: () => !have($effect`Temporary Blindness`),
       do: () => cliExecute("hottub"),
-      post: () => {
-        if (have($effect`Temporary Blindness`)) {
-          throw `Can't handle ${$effect`Temporary Blindness`}`;
-        }
-      },
     },
     {
       name: "Protonic Ghost",
