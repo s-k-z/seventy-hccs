@@ -223,6 +223,9 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Sprinkles",
       completed: () => have($effect`Whole Latte Love`) || have($item`sprinkles`, 50),
+      prepare: () => {
+        if (get("_gingerbreadCityTurns") >= 5) throw `Failed to get gingerbread spice latte?`;
+      },
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkAvailable($item`sprinkles`, 50),
       outfit: {
