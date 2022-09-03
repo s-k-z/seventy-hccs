@@ -86,7 +86,6 @@ export const PreCoilWire: Quest<Task> = {
       ready: () => Object.keys(reverseNumberology()).includes("69"),
       completed: () => get("_universeCalculated") >= 3,
       do: () => cliExecute(`numberology 69`),
-      limit: { tries: 3 },
     },
     {
       name: "Equip Stillsuit",
