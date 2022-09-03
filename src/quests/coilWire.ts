@@ -181,7 +181,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Setup & Heal",
       completed: () => get("_hotTubSoaks") > 0,
-      prepare: () => cliExecute("parka kachungasaur"),
+      prepare: () => cliExecute("parka dilophosaur"),
       do: () => cliExecute("hottub"),
       effects: [
         $effect`Feeling Excited`,
@@ -211,16 +211,23 @@ export const CoilWire: Quest<Task> = {
       name: "Ninja Costume",
       after: ["Reminisce 1"],
       completed: () => have($item`li'l ninja costume`),
+      prepare: () => cliExecute("parka dilophosaur"),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
       outfit: () => {
         return {
           back: $item`protonic accelerator pack`,
-          acc3: $item`Lil' Doctor™ bag`,
+          shirt: $item`Jurassic Parka`,
           familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.EnvyNostalgia),
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .skill($skill`Feel Nostalgic`)
+          .skill($skill`Sing Along`)
+          .skill($skill`Spit jurassic acid`)
+          .abort()
+      ),
     },
     {
       name: "Stocking Mimic Candy",
@@ -235,7 +242,6 @@ export const CoilWire: Quest<Task> = {
       post: () => equip($slot`familiar`, $item`none`),
       outfit: {
         back: $item`protonic accelerator pack`,
-        acc3: defaultOutfit.acc3,
         famequip: $item`none`,
         familiar: $familiar`Stocking Mimic`,
       },
