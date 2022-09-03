@@ -4,11 +4,13 @@ import {
   changeMcd,
   cliExecute,
   create,
-  currentMcd,
   equip,
+  Item,
   itemAmount,
   myClass,
+  retrieveItem,
   reverseNumberology,
+  Skill,
   toFamiliar,
   toInt,
   use,
@@ -45,6 +47,29 @@ import {
 } from "../iotms";
 import { checkAvailable, checkEffect, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, selectBestFamiliar } from "./shared";
+
+// prettier-ignore
+const toAcquire = new Map<Item | Skill, () => void>([
+  [$skill`Seek out a Bird`,          () => use($item`Bird-a-Day calendar`) ],
+  [$item`"I Voted!" sticker`,        () => vote() ],
+  [$item`pantogram pants`,           () => getPantogramPants() ],
+  [$item`battery (AAA)`,             () => harvestBatteries() ],
+  [$item`battery (lantern)`,         () => create($item`battery (lantern)`) ],
+  [$item`occult jelly donut`,        () => create($item`occult jelly donut`) ],
+  [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult") ],
+  [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal") ],
+  [$item`green mana`,                () => cliExecute("cheat forest") ],
+  [$item`wrench`,                    () => cliExecute("cheat wrench") ],
+  [$item`Yeg's Motel hand soap`,     () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`) ],
+  [$item`"DRINK ME" potion`,         () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2") ],
+  [$item`gold detective badge`,      () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct") ],
+  [$item`your cowboy boots`,         () => visitUrl("place.php?whichplace=town_right&action=townright_ltt") ],
+  [$item`flimsy hardwood scraps`,    () => visitUrl("shop.php?whichshop=lathe") ],
+  [$item`weeping willow wand`,       () => create($item`weeping willow wand`) ],
+  [$item`detuned radio`,             () => retrieveItem($item`detuned radio`) ],             // -270 meat
+  [$item`sombrero-mounted sparkler`, () => retrieveItem($item`sombrero-mounted sparkler`) ], // -450 meat
+  [$item`toy accordion`,             () => retrieveItem($item`toy accordion`) ],             // -135 meat
+]);
 
 export const PreCoilWire: Quest<Task> = {
   name: "Pre-Coil Setup",
@@ -116,39 +141,12 @@ export const PreCoilWire: Quest<Task> = {
     },
     {
       name: "Acquire Necessary Items",
-      completed: () => currentMcd() > 0,
-      // prettier-ignore
-      acquire: [
-        { item: $item`pantogram pants`,         get: () => getPantogramPants() },
-        { item: $item`battery (AAA)`,           get: () => harvestBatteries() },
-        { item: $item`battery (lantern)`,       get: () => create($item`battery (lantern)`) },
-        { item: $item`occult jelly donut`,      get: () => create($item`occult jelly donut`) },
-        { item: $item`Brutal brogues`,          get: () => cliExecute("bastille bbq brutalist catapult") },
-        { item: $item`cuppa Loyal tea`,         get: () => cliExecute("teatree loyal") },
-        { item: $item`green mana`,              get: () => cliExecute("cheat forest") },
-        { item: $item`wrench`,                  get: () => cliExecute("cheat wrench") },
-        { item: $item`Yeg's Motel hand soap`,   get: () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`) },
-        { item: $item`"DRINK ME" potion`,       get: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2") },
-        { item: $item`gold detective badge`,    get: () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct") },
-        { item: $item`your cowboy boots`,       get: () => visitUrl("place.php?whichplace=town_right&action=townright_ltt") },
-        { item: $item`flimsy hardwood scraps`,  get: () => visitUrl("shop.php?whichshop=lathe") },
-        { item: $item`weeping willow wand`,     get: () => create($item`weeping willow wand`) },
-        { item: $item`detuned radio` },             // -270 meat
-        { item: $item`sombrero-mounted sparkler` }, // -450 meat
-        { item: $item`toy accordion` },             // -135 meat
-      ],
-      do: () => changeMcd(10),
-      post: () => checkAvailable($item`sombrero-mounted sparkler`),
-    },
-    {
-      name: "Use Bird-a-Day calendar",
-      completed: () => have($skill`Seek out a Bird`),
-      do: () => use($item`Bird-a-Day calendar`),
-    },
-    {
-      name: "Vote",
-      completed: () => have($item`"I Voted!" sticker`),
-      do: () => vote(),
+      completed: () => Array.from(toAcquire).every(([a]) => have(a)),
+      do: () => {
+        for (const [want, acquire] of toAcquire) if (!have(want)) acquire();
+        checkAvailable($item`sombrero-mounted sparkler`);
+        changeMcd(10);
+      },
     },
     {
       name: "Scavenge Daycare",
