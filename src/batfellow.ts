@@ -19,7 +19,7 @@ export function batfellow() {
 function runBatfellow() {
   const comic = $item`Batfellow comic`;
   if (itemAmount(comic) < 1 && !takeStorage(1, comic)) throw `Missing batfellow comic?`;
-  new Macro().skill($skill`Bat-Kick`).setAutoAttack();
+  Macro.skill($skill`Bat-Kick`).setAutoAttack();
   use(1, comic); // Batfellow Begins
   visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
   /*

@@ -177,12 +177,7 @@ export const PostCoilWire: Quest<Task> = {
       post: () => DNALab.makeTonic(),
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(
-        new Macro()
-          .item($item`DNA extraction syringe`)
-          .runaway()
-          .abort()
-      ),
+      combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
     },
     {
       name: "Advance Clock",

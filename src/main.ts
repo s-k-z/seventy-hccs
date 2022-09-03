@@ -17,8 +17,6 @@ import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/sta
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 // TODO:
-// Combat macros
-// Use updated adv/map/locket functions
 // Double check crit for vintner
 // Check missed effects/outfits/tasks
 

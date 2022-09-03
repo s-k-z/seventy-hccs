@@ -111,19 +111,18 @@ const notAllowList = [
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
 
-const Backup = new Macro().if_(
+const Backup = Macro.if_(
   `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
   Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
 );
 
-const Pride = new Macro().if_(
+const Pride = Macro.if_(
   // Turbo used a flag to cast pride
   `hasskill ${toInt($skill`Turbo`)}`,
   Macro.trySkill($skill`Feel Pride`)
 );
 
-const FreeInstaKill = new Macro()
-  .skill($skill`Sing Along`)
+const FreeInstaKill = Macro.skill($skill`Sing Along`)
   .step(Pride)
   .trySkill($skill`Chest X-Ray`)
   .trySkill($skill`Shattering Punch`)
@@ -131,15 +130,13 @@ const FreeInstaKill = new Macro()
   .trySkill($skill`Shocking Lick`)
   .abort();
 
-const SingAndKill = new Macro()
-  .skill($skill`Sing Along`)
+const SingAndKill = Macro.skill($skill`Sing Along`)
   .step(Pride)
   .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
   .attack()
   .repeat();
 
-const DefaultMacro = new Macro()
-  .skill($skill`Curse of Weaksauce`)
+const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
   .if_(
@@ -270,7 +267,7 @@ export const StenchCombat = new CombatStrategy().macro(
     .skill($skill`Garbage Nova`)
 );
 
-export const RunawayCombat = new CombatStrategy().macro(Macro.runaway().abort());
+export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 
 export function mapMonster(location: Location, monster: Monster): void {
   if (get("_monstersMapped") >= 3) throw "Trying to map too many monsters";

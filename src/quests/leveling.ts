@@ -468,12 +468,7 @@ export const Leveling: Quest<Task> = {
         pants: $item`Cargo Cultist Shorts`,
         familiar: $familiar`Frumious Bandersnatch`,
       },
-      combat: new CombatStrategy().macro(
-        new Macro()
-          .trySkill($skill`Gulp Latte`)
-          .runaway()
-          .abort()
-      ),
+      combat: new CombatStrategy().macro(Macro.trySkill($skill`Gulp Latte`).runaway()),
     },
   ],
 };

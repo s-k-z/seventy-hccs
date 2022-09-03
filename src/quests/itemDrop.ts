@@ -26,12 +26,7 @@ export const ItemDropQuest: Quest<Task> = {
         back: $item`vampyric cloake`,
         familiar: $familiar`Frumious Bandersnatch`,
       },
-      combat: new CombatStrategy().macro(
-        new Macro()
-          .trySkill($skill`Become a Bat`)
-          .runaway()
-          .abort()
-      ),
+      combat: new CombatStrategy().macro(Macro.trySkill($skill`Become a Bat`).runaway()),
     },
     {
       name: "Booze & Item Drop Test",

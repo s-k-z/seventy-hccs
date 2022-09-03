@@ -247,12 +247,7 @@ export const CoilWire: Quest<Task> = {
       do: () => reminisce($monster`cocktail shrimp`),
       post: () => DNALab.hybridize(),
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: new CombatStrategy().macro(
-        new Macro()
-          .item($item`DNA extraction syringe`)
-          .runaway()
-          .abort()
-      ),
+      combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
     },
     {
       name: "Sausage Goblin",
@@ -268,8 +263,7 @@ export const CoilWire: Quest<Task> = {
         };
       },
       combat: new CombatStrategy().macro(
-        new Macro()
-          .skill($skill`Curse of Weaksauce`)
+        Macro.skill($skill`Curse of Weaksauce`)
           .item($item`Time-Spinner`)
           .skill($skill`Feel Envy`)
           .skill($skill`Feel Nostalgic`)
