@@ -18,12 +18,31 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 // TODO:
 // Combat macros
 // Use updated adv/map/locket functions
-// Check missed effects/outfits/tasks
 // Double check crit for vintner
-// Swap to DNA Lab
-// Reminisce & Nostalgia
-// Freed up 1 deck cheat by carefully balancing meat
-// Use box of familiar jacks for cracker?
+// Check missed effects/outfits/tasks
+
+/* Resources:
+    Deck Cards:
+      Wrench
+      Green Mana
+      Christmas Card (Elf) *
+    DNA:
+      Construct
+      Elf
+      Fish
+      Pirate or... ? *
+    Locket Reminiscences:
+      Pterodactyl
+      Cocktail Shrimp
+    Tome Summons:
+      Borrowed Time
+      Occult Jelly Donut
+      Box of Familiar Jacks *
+    Wishes:
+      All is Forgiven
+      Sparkly!
+      Witch Breaded
+*/
 
 export function main(command = ""): void {
   sinceKolmafiaRevision(26718);
