@@ -28,12 +28,12 @@ const notAllowList = [
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
   // mapped monsters
-  $monster`amateur ninja`,
-  $monster`novelty tropical skeleton`,
-  $monster`toothless mastiff bitch`,
+  // $monster`amateur ninja`,
+  // $monster`novelty tropical skeleton`,
+  // $monster`toothless mastiff bitch`,
   // reminisced monsters
-  $monster`cocktail shrimp`,
-  $monster`pterodactyl`,
+  // $monster`cocktail shrimp`,
+  // $monster`pterodactyl`,
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
@@ -116,11 +116,8 @@ const Backup = Macro.if_(
   Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
 );
 
-const Pride = Macro.if_(
-  // Turbo used a flag to cast pride
-  `hasskill ${toInt($skill`Turbo`)}`,
-  Macro.trySkill($skill`Feel Pride`)
-);
+// Turbo used a flag to cast pride
+const Pride = Macro.if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`));
 
 const FreeInstaKill = Macro.skill($skill`Sing Along`)
   .step(Pride)
@@ -153,20 +150,6 @@ const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
 
 export const DefaultCombat = new CombatStrategy()
   .startingMacro(Macro.if_(notAllowList, Macro.abort()))
-  .macro(
-    Macro.skill($skill`Feel Nostalgic`)
-      .skill($skill`Sing Along`)
-      .skill($skill`Spit jurassic acid`),
-    $monster`amateur ninja`
-  )
-  .macro(
-    Macro.skill($skill`Open a Big Red Present`).skill($skill`Use the Force`),
-    $monster`novelty tropical skeleton`
-  )
-  .macro(
-    Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`),
-    $monster`toothless mastiff bitch`
-  )
   .macro(
     Macro.if_(
       `hasskill ${toInt($skill`Shoot Ghost`)}`,

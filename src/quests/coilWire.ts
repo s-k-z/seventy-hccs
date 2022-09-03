@@ -221,7 +221,14 @@ export const CoilWire: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Feel Nostalgic`)
+            .skill($skill`Sing Along`)
+            .skill($skill`Spit jurassic acid`),
+          $monster`amateur ninja`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Stocking Mimic Candy",
@@ -285,7 +292,14 @@ export const CoilWire: Quest<Task> = {
           familiar: selectBestFamiliar(),
         };
       },
-      combat: DefaultCombat,
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Curse of Weaksauce`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: "Novelty Tropical Skeleton",
@@ -306,7 +320,12 @@ export const CoilWire: Quest<Task> = {
         acc3: defaultOutfit.acc3,
         familiar: $familiar`Crimbo Shrub`,
       },
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Open a Big Red Present`).skill($skill`Use the Force`),
+          $monster`novelty tropical skeleton`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Coil Wire",

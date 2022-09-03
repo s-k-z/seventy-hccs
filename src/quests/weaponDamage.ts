@@ -1,4 +1,4 @@
-import { Quest, Task } from "grimoire-kolmafia";
+import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, use } from "kolmafia";
 import {
   $effect,
@@ -7,10 +7,12 @@ import {
   $items,
   $location,
   $monster,
+  $skill,
   CommunityService,
   have,
+  Macro,
 } from "libram";
-import { DefaultCombat, mapMonster } from "../combat";
+import { mapMonster } from "../combat";
 import { innerElf, runTest, tuneMoonPlatypus } from "./shared";
 
 export const WeaponDamageQuest: Quest<Task> = {
@@ -30,7 +32,12 @@ export const WeaponDamageQuest: Quest<Task> = {
         weapon: $item`Fourth of May Cosplay Saber`,
         familiar: $familiar`Machine Elf`,
       },
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`),
+          $monster`toothless mastiff bitch`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Weapon Damage Test",
