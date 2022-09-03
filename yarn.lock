@@ -1811,14 +1811,12 @@ globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
-grimoire-kolmafia@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.0.tgz#70389a41643e40da28ed471e018e1ac40fd8cddf"
-  integrity sha512-vhVc6vO1F3oDrkg7fX7A4E9E8hDzNlbUsd9Vi4kjayPzUjplFphuuPoJOb4UA844h4BlFYNUZJ61Yf3TDHD7/A==
+grimoire-kolmafia@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.2.tgz#d0e16197e56478924bac36262cb2b9edbcf1c6db"
+  integrity sha512-sUD0jrDxB8wMFbL3a7VjUPLOav7AehIJ7hN3QmXOoIt0O+tGBxejOMriWePezAY1d9QaweCqStZBxpaYlPoUww==
   dependencies:
     core-js "^3.16.4"
-    kolmafia "^3.2.0"
-    libram "^0.6.23"
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -1967,11 +1965,6 @@ json5@^2.2.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
   integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
 
-kolmafia@^3.0.3, kolmafia@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-3.2.0.tgz#2178d202ee521016fc396ea41bb4025ab3c1638a"
-  integrity sha512-CogD/3pKMFvbZ+IPDEE6yJrYcJKLrY6M8evgTbLExjyb6SwxlbtTIsNykL0iH6wvec1fD7sztPvL1hDeGsUEFA==
-
 kolmafia@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-4.0.1.tgz#361b2cea9bf668a7dc4a4c2339a009d2e1e1cd00"
@@ -1984,16 +1977,6 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
-
-libram@^0.6.23:
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.6.23.tgz#2f1211e009af9b9fdeb9f32b7040cc1d141702a6"
-  integrity sha512-/s7F3Qh0gHTlODN8EqoYWOnvW56PQ4WJDYyLyABq9PGFTEzmJ4SF67sSRYOA3HGhLfKzLZjVkCqE0s1EJ1urkQ==
-  dependencies:
-    "@babel/runtime-corejs3" "^7.17.2"
-    core-js "^3.21.0"
-    kolmafia "^3.0.3"
-    lodash "^4.17.21"
 
 libram@^0.6.24:
   version "0.6.24"

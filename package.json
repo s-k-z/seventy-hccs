@@ -23,7 +23,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "grimoire-kolmafia": "^0.3.0",
+    "grimoire-kolmafia": "^0.3.2",
     "kolmafia": "^4.0.1",
     "libram": "^0.6.24",
     "yarn": "^1.22.19"
