@@ -309,14 +309,10 @@ export const CoilWire: Quest<Task> = {
       combat: new CombatStrategy().macro(MacroList.Default),
     },
     {
-      name: "Mana Burn",
-      completed: () => get("libramSummons") > 0,
-      do: () => spendAllMpOnLibrams(),
-    },
-    {
       name: "Coil Wire",
       completed: () => CommunityService.CoilWire.isDone(),
       prepare: () => {
+        spendAllMpOnLibrams();
         cliExecute("parka ghostasaurus");
         cliExecute("retrocape heck thrill");
       },
