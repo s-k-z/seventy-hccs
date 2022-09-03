@@ -1,6 +1,7 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
+  changeMcd,
   chew,
   cliExecute,
   create,
@@ -52,6 +53,17 @@ const monsterLevel = [
   // Song(s)
   $effect`Ur-Kel's Aria of Annoyance`,
 ];
+
+const levelingOutfit = {
+  hat: $item`Daylight Shavings Helmet`,
+  back: $item`LOV Epaulettes`,
+  weapon: $item`Fourth of May Cosplay Saber`,
+  offhand: $item`unbreakable umbrella`,
+  pants: $item`Cargo Cultist Shorts`,
+  acc1: $item`hewn moon-rune spoon`,
+  acc2: $items`battle broom, gold detective badge`,
+  acc3: $item`Beach Comb`,
+};
 
 export const Leveling: Quest<Task> = {
   name: "Leveling",
@@ -190,17 +202,7 @@ export const Leveling: Quest<Task> = {
       do: () => Witchess.fightPiece($monster`Witchess Rook`),
       post: () => use($item`Greek fire`),
       outfit: () => {
-        return {
-          hat: $item`Daylight Shavings Helmet`,
-          back: $item`LOV Epaulettes`,
-          weapon: $item`Fourth of May Cosplay Saber`,
-          offhand: $item`unbreakable umbrella`,
-          pants: $item`Cargo Cultist Shorts`,
-          acc1: $item`hewn moon-rune spoon`,
-          acc2: $items`battle broom, gold detective badge`,
-          acc3: $item`Beach Comb`,
-          familiar: selectBestFamiliar(),
-        };
+        return { ...levelingOutfit, familiar: selectBestFamiliar() };
       },
       combat: new CombatStrategy().macro(MacroList.Default),
     },
@@ -242,7 +244,7 @@ export const Leveling: Quest<Task> = {
       },
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: () => {
-        return { familiar: selectBestFamiliar() };
+        return { ...levelingOutfit, familiar: selectBestFamiliar() };
       },
       combat: new CombatStrategy().macro(MacroList.Default),
     },
@@ -350,7 +352,7 @@ export const Leveling: Quest<Task> = {
       combat: new CombatStrategy().macro(MacroList.Default),
     },
     {
-      name: "Remaining Chest X-ray Fights",
+      name: "Chest X-ray Fights",
       completed: () => get("_chestXRayUsed") >= 3,
       prepare: () => SourceTerminal.educate($skill`Turbo`), // Turbo used a flag to cast pride
       do: $location`The Toxic Teacups`,
@@ -441,6 +443,7 @@ export const Leveling: Quest<Task> = {
       name: "Drink Lattes",
       completed: () => get("_latteRefillsUsed") >= 3,
       prepare: () => {
+        changeMcd(0);
         if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
       },
       do: $location`The Dire Warren`,
