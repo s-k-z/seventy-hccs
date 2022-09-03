@@ -5,7 +5,6 @@ import {
   cliExecute,
   create,
   eat,
-  handlingChoice,
   mpCost,
   myClass,
   myHp,
@@ -15,6 +14,7 @@ import {
   myMeat,
   myMp,
   mySoulsauce,
+  runChoice,
   soulsauceCost,
   totalFreeRests,
   use,
@@ -237,10 +237,9 @@ export const Leveling: Quest<Task> = {
       prepare: () => {
         if (get("snojoSetting") !== $stat`Muscle`) {
           visitUrl("place.php?whichplace=snojo&action=snojo_controller");
+          runChoice(1);
         }
-        if (handlingChoice()) throw `Can't set choice adventure to automate this one?`;
       },
-      choices: { 1118: 1 },
       do: $location`The X-32-F Combat Training Snowman`,
       outfit: () => {
         return { familiar: selectBestFamiliar() };
@@ -251,7 +250,7 @@ export const Leveling: Quest<Task> = {
       name: "BRICKOS",
       ready: () => have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKO_COST),
       completed: () => get("_brickoFights") >= 3,
-      prepare: () => create(BRICKO_TARGET_ITEM),
+      acquire: [{ item: BRICKO_TARGET_ITEM }],
       do: () => use(BRICKO_TARGET_ITEM),
       outfit: () => {
         return { familiar: selectBestFamiliar() };
@@ -282,7 +281,7 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "God Lobster",
-      completed: () => get("_godLobsterFights") > 3,
+      completed: () => get("_godLobsterFights") >= 3,
       choices: { 1310: have($item`God Lobster's Ring`) ? 2 : 1 }, // Granted a Boon: (1) equipment (2) blessing (3) experience
       do: () => visitUrl("main.php?fightgodlobster=1"),
       outfit: {

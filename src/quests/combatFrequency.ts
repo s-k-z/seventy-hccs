@@ -18,7 +18,6 @@ export const CombatFrequencyQuest: Quest<Task> = {
       do: () => runTest(CommunityService.Noncombat),
       effects: [
         $effect`Feeling Lonely`,
-        // $effect`Gummed Shoes`,
         $effect`Silence of the God Lobster`,
         $effect`Silent Running`,
         $effect`Smooth Movements`,
