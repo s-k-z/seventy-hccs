@@ -27,8 +27,10 @@ import {
   $skill,
   $slot,
   CommunityService,
+  DNALab,
   get,
   have,
+  Macro,
   SongBoom,
 } from "libram";
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
@@ -243,7 +245,21 @@ export const CoilWire: Quest<Task> = {
       combat: new CombatStrategy().macro(MacroList.Default),
     },
     {
+      name: "Reminisce 2",
+      completed: () => monstersReminisced().includes($monster`cocktail shrimp`),
+      do: () => reminisce($monster`cocktail shrimp`),
+      post: () => DNALab.hybridize(),
+      outfit: { familiar: $familiar`Pair of Stomping Boots` },
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .item($item`DNA extraction syringe`)
+          .runaway()
+          .abort()
+      ),
+    },
+    {
       name: "Sausage Goblin",
+      after: ["Reminisce 2"],
       completed: () => get("_sausageFights") > 0,
       prepare: () => cliExecute("retrocape heck thrill"),
       do: $location`Noob Cave`,
@@ -251,10 +267,10 @@ export const CoilWire: Quest<Task> = {
         return {
           back: $item`unwrapped knock-off retro superhero cape`,
           offhand: $item`Kramco Sausage-o-Matic™`,
-          familiar: selectBestFamiliar(),
+          familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: new CombatStrategy().macro(MacroList.EnvyNostalgia),
     },
     {
       name: "Voter Monster",

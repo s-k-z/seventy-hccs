@@ -320,14 +320,6 @@ export const Leveling: Quest<Task> = {
       combat: new CombatStrategy().macro(MacroList.Default),
     },
     {
-      name: "Holiday Wandering Monster",
-      completed: () => $location`The Deep Dark Jungle`.combatQueue.length > 0,
-      do: $location`The Deep Dark Jungle`,
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(MacroList.Runaway),
-    },
-    {
       name: "Get Abstraction: Action",
       completed: () =>
         have($effect`Joy`) || have($item`abstraction: joy`) || have($item`abstraction: action`),

@@ -18,6 +18,7 @@ import {
   $location,
   $skill,
   Clan,
+  DNALab,
   get,
   have,
   Macro,
@@ -25,7 +26,14 @@ import {
 import { MacroList } from "../combat";
 import { config } from "../config";
 import { useDroppedItems } from "../iotms";
-import { acquireEffect, checkEffect, itemToEffect, tuple, wishEffect } from "../lib";
+import {
+  acquireEffect,
+  checkEffect,
+  haveItemOrEffect,
+  itemToEffect,
+  tuple,
+  wishEffect,
+} from "../lib";
 
 const buffs = [
   $effect`Broad-Spectrum Vaccine`,
@@ -83,6 +91,8 @@ const famWeight = [
   $effect`A Girl Named Sue`,
   $effect`Billiards Belligerence`,
   $effect`Fidoxene`,
+  $effect`Human-Fish Hybrid`,
+  $effect`Human-Machine Hybrid`,
   $effect`Hustlin'`,
   $effect`Loyal Tea`,
   $effect`Mental A-cue-ity`,
@@ -104,6 +114,11 @@ export const PostCoilWire: Quest<Task> = {
       do: () => buffs.every((b) => acquireEffect(b)),
     },
     {
+      name: "Eat a donut",
+      completed: () => !have($item`occult jelly donut`),
+      do: () => eat($item`occult jelly donut`),
+    },
+    {
       name: "Open MayDay package",
       completed: () => !have($item`MayDay™ supply package`),
       do: () => {
@@ -112,21 +127,16 @@ export const PostCoilWire: Quest<Task> = {
       },
     },
     {
-      name: "Eat a donut",
-      completed: () => !have($item`occult jelly donut`),
-      do: () => eat($item`occult jelly donut`),
-    },
-    {
       name: "Configure KGB",
       completed: () => get("_kgbClicksUsed") > 0,
       do: () => cliExecute("Briefcase e spell spooky -combat"),
     },
     {
-      name: "Dynamic Range",
+      name: "Install Dynamic Range",
       completed: () => get("hasRange"),
       do: () => {
         const range = $item`Dramatic™ range`;
-        if (!have(range)) retrieveItem(range); // -900 meat
+        retrieveItem(range); // -900 meat
         use(range);
       },
     },
@@ -162,6 +172,20 @@ export const PostCoilWire: Quest<Task> = {
       },
     },
     {
+      name: "Wanderer Sweep",
+      completed: () => haveItemOrEffect($item`Gene Tonic: Construct`),
+      do: $location`Noob Cave`,
+      post: () => DNALab.makeTonic(),
+      effects: $effects`Ode to Booze`,
+      outfit: { familiar: $familiar`Frumious Bandersnatch` },
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .item($item`DNA extraction syringe`)
+          .runaway()
+          .abort()
+      ),
+    },
+    {
       name: "Advance Clock",
       completed: () => get("_gingerbreadClockAdvanced"),
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
@@ -174,7 +198,7 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Nanobrainy",
-      after: ["Eat a donut", "Advance Clock"],
+      after: ["Advance Clock"],
       completed: () => have($effect`Nanobrainy`),
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkEffect($effect`Nanobrainy`),
@@ -196,7 +220,7 @@ export const PostCoilWire: Quest<Task> = {
       after: ["Nanobrainy", "DRINK ME"],
       completed: () => famWeight.every((f) => have(f)),
       do: () => {
-        $effects`All Is Forgiven, Spit Upon, Witch Breaded`.forEach(wishEffect);
+        $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
         useDroppedItems();
         cliExecute("saber familiar");
         famWeight.every((f) => acquireEffect(f));

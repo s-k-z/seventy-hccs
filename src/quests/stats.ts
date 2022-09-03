@@ -31,7 +31,7 @@ export const MoxieQuest: Quest<Task> = {
       completed: () => CommunityService.Moxie.isDone(),
       prepare: () => cliExecute("retrocape moxie"),
       do: () => runTest(CommunityService.Moxie),
-      effects: $effects`Disco Fever, Expert Oiliness, Quiet Desperation, Sparkly!, Spit Upon`,
+      effects: $effects`Disco Fever, Expert Oiliness, Quiet Desperation, Sparkly!`,
       outfit: {
         hat: $item`very pointy crown`,
         back: $item`unwrapped knock-off retro superhero cape`,
@@ -60,7 +60,6 @@ export const MuscleQuest: Quest<Task> = {
         $effect`Phorcefullness`,
         $effect`Quiet Determination`,
         $effect`Rage of the Reindeer`,
-        $effect`Spit Upon`,
       ],
       outfit: {
         hat: $item`wad of used tape`,
@@ -83,7 +82,7 @@ export const MysticalityQuest: Quest<Task> = {
       completed: () => CommunityService.Mysticality.isDone(),
       prepare: () => cliExecute("retrocape myst"),
       do: () => runTest(CommunityService.Mysticality),
-      effects: $effects`Nanobrainy, Quiet Judgement, Spit Upon, Witch Breaded`,
+      effects: $effects`Nanobrainy, Quiet Judgement, Witch Breaded`,
       outfit: {
         hat: $item`wad of used tape`,
         back: $item`unwrapped knock-off retro superhero cape`,

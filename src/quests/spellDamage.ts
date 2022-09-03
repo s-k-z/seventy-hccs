@@ -72,6 +72,7 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Sigils of Yeg`,
         $effect`Song of Sauce`,
         $effect`Sparkly!`,
+        $effect`Spirit of Peppermint`,
         $effect`The Magic of LOV`,
         $effect`Toxic Vengeance`,
         $effect`Visions of the Deep Dark Deeps`,
