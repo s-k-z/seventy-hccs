@@ -11,8 +11,6 @@ import {
 } from "kolmafia";
 import { $effect, $item, $monster, $skill, get, Macro } from "libram";
 
-const amateurNinja = $monster`amateur ninja`.id;
-const noveltySkeleton = $monster`novelty tropical skeleton`.id;
 const mastiff = $monster`toothless mastiff bitch`.id;
 const gentrifier = $monster`gingerbread gentrifier`.id;
 const toxicBeastie = $monster`toxic beastie`.id;
@@ -39,8 +37,6 @@ const notAllowList = [
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
   // mapped monsters
-  $monster`amateur ninja`,
-  $monster`novelty tropical skeleton`,
   $monster`toothless mastiff bitch`,
   // reminisced monsters
   $monster`cocktail shrimp`,
@@ -133,7 +129,6 @@ const Pride = new Macro().if_(
 const FreeInstaKill = new Macro()
   .skill($skill`Sing Along`)
   .step(Pride)
-  .if_(`!haseffect ${$effect`Everything Looks Yellow`}`, Macro.trySkill($skill`Spit jurassic acid`))
   .trySkill($skill`Chest X-Ray`)
   .trySkill($skill`Shattering Punch`)
   .trySkill($skill`Gingerbread Mob Hit`)
@@ -149,11 +144,6 @@ const SingAndKill = new Macro()
 const DefaultMacro = new Macro()
   .if_(`monsterid ${toxicBeastie}`, Backup)
   .if_(`monsterid ${toxicBeastie}`, Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill))
-  .if_(`monsterid ${amateurNinja}`, FreeInstaKill)
-  .if_(
-    `monsterid ${noveltySkeleton}`,
-    Macro.trySkill($skill`Open a Big Red Present`).skill($skill`Use the Force`)
-  )
   .if_(`monsterid ${mastiff}`, Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`))
   .if_(notAllowList, TryBanish)
   .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)

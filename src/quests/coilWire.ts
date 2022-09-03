@@ -14,7 +14,6 @@ import {
   toFamiliar,
   toInt,
   use,
-  useFamiliar,
   useSkill,
   visitUrl,
 } from "kolmafia";
@@ -223,9 +222,12 @@ export const CoilWire: Quest<Task> = {
       },
       combat: new CombatStrategy().macro(
         new Macro()
-          .skill($skill`Feel Nostalgic`)
-          .skill($skill`Sing Along`)
-          .skill($skill`Spit jurassic acid`)
+          .if_(
+            `monsterid ${$monster`amateur ninja`.id}`,
+            Macro.skill($skill`Feel Nostalgic`)
+              .skill($skill`Sing Along`)
+              .skill($skill`Spit jurassic acid`)
+          )
           .abort()
       ),
     },
@@ -293,7 +295,6 @@ export const CoilWire: Quest<Task> = {
       name: "Novelty Tropical Skeleton",
       completed: () => get("_saberForceUses") > 0,
       prepare: () => {
-        useFamiliar($familiar`Crimbo Shrub`);
         if (!get("_shrubDecorated")) {
           visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`box of old Crimbo decorations`)}`);
           visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
@@ -309,7 +310,14 @@ export const CoilWire: Quest<Task> = {
         acc3: defaultOutfit.acc3,
         familiar: $familiar`Crimbo Shrub`,
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .if_(
+            `monsterid ${$monster`novelty tropical skeleton`.id}`,
+            Macro.skill($skill`Open a Big Red Present`).skill($skill`Use the Force`)
+          )
+          .abort()
+      ),
     },
     {
       name: "Coil Wire",
