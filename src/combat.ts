@@ -211,6 +211,19 @@ export const DefaultCombat = new CombatStrategy()
   .macro(Macro.attack().repeat(), $monster`LOV Enforcer`)
   .macro(Macro.skill($skill`Candyblast`).repeat(), $monster`LOV Engineer`)
   .macro(
+    Macro.trySkill($skill`KGB tranquilizer dart`)
+      .skill($skill`Snokebomb`)
+      .abort(),
+    $monster`Mother Slime`
+  )
+  .macro(
+    Backup.if_(
+      `monsterid ${$monster`toxic beastie`.id}`,
+      Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill)
+    ),
+    $monster`toxic beastie`
+  )
+  .macro(
     Macro.item($item`Time-Spinner`)
       .attack()
       .repeat(),
@@ -222,19 +235,6 @@ export const DefaultCombat = new CombatStrategy()
       .attack()
       .repeat(),
     $monster`Witchess Witch`
-  )
-  .macro(
-    Backup.if_(
-      `monsterid ${$monster`toxic beastie`.id}`,
-      Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill)
-    ),
-    $monster`toxic beastie`
-  )
-  .macro(
-    Macro.trySkill($skill`KGB tranquilizer dart`)
-      .skill($skill`Snokebomb`)
-      .abort(),
-    $monster`Mother Slime`
   )
   .macro(DefaultMacro);
 
