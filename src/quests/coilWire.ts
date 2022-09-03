@@ -7,6 +7,7 @@ import {
   equip,
   Item,
   itemAmount,
+  mpCost,
   myClass,
   retrieveItem,
   reverseNumberology,
@@ -35,7 +36,7 @@ import {
   SongBoom,
 } from "libram";
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
-import { MacroList, mapMonster } from "../combat";
+import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
 import { config } from "../config";
 import {
   getPantogramPants,
@@ -197,14 +198,14 @@ export const CoilWire: Quest<Task> = {
       completed: () => get("_banderRunaways") > 0,
       do: $location`Noob Cave`,
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: new CombatStrategy().macro(MacroList.Runaway),
+      combat: RunawayCombat,
     },
     {
       name: "Reminisce 1",
       completed: () => monstersReminisced().includes($monster`pterodactyl`),
       do: () => reminisce($monster`pterodactyl`),
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: new CombatStrategy().macro(MacroList.Runaway),
+      combat: RunawayCombat,
     },
     {
       name: "Ninja Costume",
@@ -220,16 +221,7 @@ export const CoilWire: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: new CombatStrategy().macro(
-        new Macro()
-          .if_(
-            `monsterid ${$monster`amateur ninja`.id}`,
-            Macro.skill($skill`Feel Nostalgic`)
-              .skill($skill`Sing Along`)
-              .skill($skill`Spit jurassic acid`)
-          )
-          .abort()
-      ),
+      combat: DefaultCombat,
     },
     {
       name: "Stocking Mimic Candy",
@@ -247,7 +239,7 @@ export const CoilWire: Quest<Task> = {
         famequip: $item`none`,
         familiar: $familiar`Stocking Mimic`,
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Reminisce 2",
@@ -275,7 +267,17 @@ export const CoilWire: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.EnvyNostalgia),
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .skill($skill`Curse of Weaksauce`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Feel Envy`)
+          .skill($skill`Feel Nostalgic`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: "Voter Monster",
@@ -289,7 +291,7 @@ export const CoilWire: Quest<Task> = {
           familiar: selectBestFamiliar(),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Novelty Tropical Skeleton",
@@ -310,14 +312,7 @@ export const CoilWire: Quest<Task> = {
         acc3: defaultOutfit.acc3,
         familiar: $familiar`Crimbo Shrub`,
       },
-      combat: new CombatStrategy().macro(
-        new Macro()
-          .if_(
-            `monsterid ${$monster`novelty tropical skeleton`.id}`,
-            Macro.skill($skill`Open a Big Red Present`).skill($skill`Use the Force`)
-          )
-          .abort()
-      ),
+      combat: DefaultCombat,
     },
     {
       name: "Coil Wire",

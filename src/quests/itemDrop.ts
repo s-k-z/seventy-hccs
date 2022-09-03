@@ -1,7 +1,16 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import { cliExecute } from "kolmafia";
-import { $effect, $effects, $familiar, $item, $location, CommunityService, have } from "libram";
-import { MacroList } from "../combat";
+import {
+  $effect,
+  $effects,
+  $familiar,
+  $item,
+  $location,
+  $skill,
+  CommunityService,
+  have,
+  Macro,
+} from "libram";
 import { runTest } from "./shared";
 
 export const ItemDropQuest: Quest<Task> = {
@@ -17,7 +26,12 @@ export const ItemDropQuest: Quest<Task> = {
         back: $item`vampyric cloake`,
         familiar: $familiar`Frumious Bandersnatch`,
       },
-      combat: new CombatStrategy().macro(MacroList.BatFormRunaway),
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .trySkill($skill`Become a Bat`)
+          .runaway()
+          .abort()
+      ),
     },
     {
       name: "Booze & Item Drop Test",

@@ -1,4 +1,4 @@
-import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute, equip, use, visitUrl } from "kolmafia";
 import {
   $effect,
@@ -11,7 +11,7 @@ import {
   CommunityService,
   have,
 } from "libram";
-import { MacroList } from "../combat";
+import { MeteorForceCombat } from "../combat";
 import { config } from "../config";
 import { checkAvailable } from "../lib";
 import { deepDarkVisions, innerElf, runTest } from "./shared";
@@ -39,7 +39,7 @@ export const SpellDamageQuest: Quest<Task> = {
         weapon: $item`Fourth of May Cosplay Saber`,
         familiar: $familiar`Machine Elf`,
       },
-      combat: new CombatStrategy().macro(MacroList.MeteorForce),
+      combat: MeteorForceCombat,
     },
     deepDarkVisions,
     {

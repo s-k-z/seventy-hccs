@@ -1,7 +1,7 @@
-import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { Quest, Task } from "grimoire-kolmafia";
 import { cliExecute } from "kolmafia";
 import { $effect, $familiar, $item, $location, CommunityService, have } from "libram";
-import { MacroList } from "../combat";
+import { FoamForceCombat } from "../combat";
 import { runTest } from "./shared";
 
 export const HotResistQuest: Quest<Task> = {
@@ -17,7 +17,7 @@ export const HotResistQuest: Quest<Task> = {
         offhand: $item`industrial fire extinguisher`,
         familiar: $familiar`Machine Elf`,
       },
-      combat: new CombatStrategy().macro(MacroList.FoamForce),
+      combat: FoamForceCombat,
     },
     {
       name: "Hot Resist Test",

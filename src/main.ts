@@ -1,8 +1,9 @@
-import { Args, Engine, getTasks } from "grimoire-kolmafia";
+import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
 import { getAutoAttack, print, setAutoAttack } from "kolmafia";
 import { get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
 import { batfellow } from "./batfellow";
+import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { CoilWire, PreCoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
@@ -34,6 +35,10 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
     Locket Reminiscences:
       Pterodactyl
       Cocktail Shrimp
+    Mapped Monsters:
+      amateur ninja
+      novelty tropical skeleton
+      toothless mastiff bitch
     Tome Summons:
       Borrowed Time
       Occult Jelly Donut
@@ -59,7 +64,11 @@ export function main(command = ""): void {
     Args.showHelp(config);
     return;
   }
-  if (config.test) return;
+  if (config.test) {
+    print("Default macro:");
+    print(DefaultCombat.compile(new CombatResources(), undefined, undefined).toString());
+    return;
+  }
   if (config.batfellow) {
     batfellow();
     return;

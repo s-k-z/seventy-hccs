@@ -23,7 +23,6 @@ import {
   have,
   Macro,
 } from "libram";
-import { MacroList } from "../combat";
 import { config } from "../config";
 import { useDroppedItems } from "../iotms";
 import {
@@ -207,7 +206,17 @@ export const PostCoilWire: Quest<Task> = {
         offhand: $item`latte lovers member's mug`,
         familiar: $familiar`Nanorhino`,
       },
-      combat: new CombatStrategy().macro(MacroList.Nanobrainy),
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Entangling Noodles`)
+          .trySkill($skill`Giant Growth`)
+          .trySkill($skill`Become a Wolf`)
+          .trySkill($skill`Throw Latte on Opponent`)
+          .trySkill($skill`KGB tranquilizer dart`)
+          .trySkill($skill`Reflex Hammer`)
+          .trySkill($skill`Bowl a Curveball`)
+          .trySkill($skill`Feel Hatred`)
+          .abort()
+      ),
     },
     {
       name: "DRINK ME",

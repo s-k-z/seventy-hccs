@@ -1,4 +1,4 @@
-import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { Quest, Task } from "grimoire-kolmafia";
 import {
   cliExecute,
   drink,
@@ -10,7 +10,7 @@ import {
   weightAdjustment,
 } from "kolmafia";
 import { $effect, $familiar, $item, $items, $location, CommunityService, have } from "libram";
-import { MacroList } from "../combat";
+import { MeteorForceCombat } from "../combat";
 import { acquireEffect, itemToEffect } from "../lib";
 import { runTest, tuneMoonPlatypus } from "./shared";
 
@@ -27,7 +27,7 @@ export const FamWeightQuest: Quest<Task> = {
         weapon: $item`Fourth of May Cosplay Saber`,
         familiar: $familiar`Machine Elf`,
       },
-      combat: new CombatStrategy().macro(MacroList.MeteorForce),
+      combat: MeteorForceCombat,
     },
     {
       name: "Use Best Weight Consumables",

@@ -1,4 +1,4 @@
-import { CombatStrategy, Task } from "grimoire-kolmafia";
+import { Task } from "grimoire-kolmafia";
 import {
   cliExecute,
   elementalResistance,
@@ -21,7 +21,7 @@ import {
   get,
   have,
 } from "libram";
-import { MacroList } from "../combat";
+import { DefaultCombat } from "../combat";
 import { config } from "../config";
 import { MoonSign, tuneMoon } from "../iotms";
 import { haveItemOrEffect } from "../lib";
@@ -111,7 +111,7 @@ export const innerElf: Task = {
   do: $location`The Slime Tube`,
   post: () => Clan.join(config.main_clan),
   outfit: { familiar: $familiar`Machine Elf` },
-  combat: new CombatStrategy().macro(MacroList.Banish),
+  combat: DefaultCombat,
 };
 
 export const tuneMoonPlatypus: Task = {

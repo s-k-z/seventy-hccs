@@ -35,10 +35,17 @@ import {
   $stat,
   get,
   have,
+  Macro,
   SourceTerminal,
   Witchess,
 } from "libram";
-import { MacroList } from "../combat";
+import {
+  DefaultCombat,
+  DMTEnvyAbstraction,
+  DMTGetJoyCombat,
+  RunawayCombat,
+  StenchCombat,
+} from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import { acquireEffect, checkAvailable, checkEffect, tryUse, voterMonsterNow } from "../lib";
@@ -119,7 +126,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     innerElf,
     {
@@ -138,7 +145,14 @@ export const Leveling: Quest<Task> = {
         acc3: $item`Kremlin's Greatest Briefcase`,
         familiar: $familiar`Ghost of Crimbo Carols`,
       },
-      combat: new CombatStrategy().macro(MacroList.Banish),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Throw Latte on Opponent`)
+          .trySkill($skill`KGB tranquilizer dart`)
+          .trySkill($skill`Reflex Hammer`)
+          .trySkill($skill`Bowl a Curveball`)
+          .trySkill($skill`Feel Hatred`)
+          .abort()
+      ),
     },
     {
       name: "Tunnel of L.O.V.E.",
@@ -165,7 +179,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.NoAttack),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.TunnelOfLOV),
+      combat: DefaultCombat,
     },
     {
       name: "Buff ML",
@@ -204,7 +218,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { ...levelingOutfit, familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Get Sprinkles",
@@ -212,6 +226,7 @@ export const Leveling: Quest<Task> = {
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkAvailable($item`sprinkles`, 50),
       outfit: {
+        hat: $item`Daylight Shavings Helmet`,
         back: $item`protonic accelerator pack`,
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $items`burning paper crane, rope, familiar scrapbook`,
@@ -220,7 +235,7 @@ export const Leveling: Quest<Task> = {
         acc3: $item`Lil' Doctor™ bag`,
         familiar: $familiar`Chocolate Lab`,
       },
-      combat: new CombatStrategy().macro(MacroList.Sprinkles),
+      combat: DefaultCombat,
     },
     {
       name: "Get Gingerbread Spice Latte",
@@ -231,7 +246,7 @@ export const Leveling: Quest<Task> = {
       post: () => tryUse($item`gingerbread spice latte`),
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(MacroList.Runaway),
+      combat: RunawayCombat,
     },
     {
       name: "Snojo",
@@ -246,7 +261,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { ...levelingOutfit, familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "BRICKOS",
@@ -257,7 +272,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Witchess Witch",
@@ -266,7 +281,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.WitchessWitch),
+      combat: DefaultCombat,
     },
     {
       name: "Eldritch Tentacle",
@@ -279,7 +294,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "God Lobster",
@@ -290,7 +305,7 @@ export const Leveling: Quest<Task> = {
         famequip: $items`God Lobster's Ring, God Lobster's Scepter, none`,
         familiar: $familiar`God Lobster`,
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Witchess King",
@@ -299,7 +314,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Remaining Witchess Fights",
@@ -308,7 +323,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
-      combat: new CombatStrategy().macro(MacroList.WitchessQueen),
+      combat: DefaultCombat,
     },
     {
       name: "Voter Wandering Monster",
@@ -318,7 +333,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         return { acc3: $item`"I Voted!" sticker`, familiar: selectBestFamiliar(AdvReq.Toxic) };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Get Abstraction: Action",
@@ -328,7 +343,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(MacroList.DMTSquare),
+      combat: DMTEnvyAbstraction,
     },
     {
       name: "Get Abstraction: Joy",
@@ -341,7 +356,7 @@ export const Leveling: Quest<Task> = {
         chew($item`abstraction: joy`);
       },
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(MacroList.DMTCircle),
+      combat: DMTGetJoyCombat,
     },
     {
       name: "Remaining Deep Machine Tunnels Fights",
@@ -349,7 +364,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Chest X-ray Fights",
@@ -363,7 +378,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.Toxic),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Shattering Punch Fights",
@@ -375,7 +390,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.Toxic),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Mob Hit",
@@ -387,7 +402,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.Toxic),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Shocking Lick",
@@ -399,14 +414,14 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.Toxic),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     {
       name: "Lectures on Relativity",
       completed: () => get("_pocketProfessorLectures") > 0,
       do: $location`The Toxic Teacups`,
       outfit: { offhand: $item`Kramco Sausage-o-Matic™`, familiar: $familiar`Pocket Professor` },
-      combat: new CombatStrategy().macro(MacroList.Default),
+      combat: DefaultCombat,
     },
     deepDarkVisions,
     {
@@ -423,7 +438,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(get("_backUpUses") >= 7 ? AdvReq.Wine : AdvReq.Normal),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.StenchFreeFight),
+      combat: StenchCombat,
     },
     {
       name: "Neverending Party",
@@ -437,7 +452,7 @@ export const Leveling: Quest<Task> = {
           familiar: selectBestFamiliar(AdvReq.Wine),
         };
       },
-      combat: new CombatStrategy().macro(MacroList.StenchFreeFight),
+      combat: StenchCombat,
     },
     {
       name: "Drink Lattes",
@@ -453,7 +468,12 @@ export const Leveling: Quest<Task> = {
         pants: $item`Cargo Cultist Shorts`,
         familiar: $familiar`Frumious Bandersnatch`,
       },
-      combat: new CombatStrategy().macro(MacroList.LatteGulpRunaway),
+      combat: new CombatStrategy().macro(
+        new Macro()
+          .trySkill($skill`Gulp Latte`)
+          .runaway()
+          .abort()
+      ),
     },
   ],
 };
