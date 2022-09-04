@@ -30,9 +30,10 @@ export const FamWeightQuest: Quest<Task> = {
       combat: MeteorForceCombat,
     },
     {
-      name: "Use Best Weight Consumables",
-      completed: () => have($effect`Wine-Befouled`),
-      do: () => {
+      name: "Familiar Weight Test",
+      after: ["Meteor Showered"],
+      completed: () => CommunityService.FamiliarWeight.isDone(),
+      prepare: () => {
         const loveSong = $item`love song of icy revenge`;
         const coldHeart = itemToEffect(loveSong);
         const icyWeight = Math.ceil(2.5 * Math.min(4, itemAmount(loveSong)));
@@ -56,11 +57,6 @@ export const FamWeightQuest: Quest<Task> = {
           }
         }
       },
-    },
-    {
-      name: "Familiar Weight Test",
-      after: ["Meteor Showered", "Eat Eat Eat"],
-      completed: () => CommunityService.FamiliarWeight.isDone(),
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [
         $effect`A Girl Named Sue`,
