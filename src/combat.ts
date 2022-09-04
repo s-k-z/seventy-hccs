@@ -10,7 +10,7 @@ import {
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $monster, $skill, get, Macro } from "libram";
+import { $item, $monster, $skill, get, Macro } from "libram";
 
 const notAllowList = [
   // protonic ghosts
@@ -140,12 +140,14 @@ const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
+  /*
   .if_(
     `hasskill ${toInt($skill`Bowl Straight Up`)} && !haseffect ${toInt(
       $effect`Cosmic Ball in the Air`
     )}`,
     Macro.skill($skill`Bowl Straight Up`)
   )
+  */
   .step(SingAndKill);
 
 export const DefaultCombat = new CombatStrategy()
