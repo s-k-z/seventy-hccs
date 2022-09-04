@@ -30,7 +30,7 @@ export function runTest(test: CommunityService): void {
   const err = test.run(() => undefined, 1);
   // prettier-ignore
   const handler = {
-    "completed":         () => false,
+    "completed":         () => { return },
     "already completed": () => { throw `Re-ran test ${test.name}`; },
     "failed":            () => { throw `Failed test ${test.name}`; },
   }[err];
