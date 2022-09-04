@@ -10,7 +10,6 @@ import {
   mpCost,
   myClass,
   retrieveItem,
-  reverseNumberology,
   Skill,
   toFamiliar,
   toInt,
@@ -105,12 +104,6 @@ export const PreCoilWire: Quest<Task> = {
       completed: () => get("questM25Armorer").toLowerCase() === "started",
       choices: { 1065: 1 },
       do: () => visitUrl("shop.php?whichshop=armory&action=talk"),
-    },
-    {
-      name: "Calculate the Universe",
-      ready: () => Object.keys(reverseNumberology()).includes("69"),
-      completed: () => get("_universeCalculated") >= 3,
-      do: () => cliExecute(`numberology 69`),
     },
     {
       name: "Equip Stillsuit",

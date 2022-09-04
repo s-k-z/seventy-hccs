@@ -53,12 +53,6 @@ export function main(command = ""): void {
   sinceKolmafiaRevision(26718);
   if (getAutoAttack() !== 0) setAutoAttack(0);
 
-  const numberologyNeed = 3;
-  if (get("skillLevel144") < numberologyNeed) {
-    print(`Numberology skill level too low (${get("skillLevel144")}/${numberologyNeed})`, "red");
-    return;
-  }
-
   Args.fill(config, command);
   if (config.help) {
     Args.showHelp(config);
@@ -107,14 +101,18 @@ export function main(command = ""): void {
   ]);
 
   const engine = new Engine(tasks);
-  engine.propertyManager.setChoices({
-    1340: 2, // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
-    1387: 3, // Using the Force: (1) banish (2) find friends (3) force item drops
-  });
+  try {
+    engine.propertyManager.setChoices({
+      1340: 2, // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
+      1387: 3, // Using the Force: (1) banish (2) find friends (3) force item drops
+    });
 
-  while (!get("kingLiberated")) {
-    const task = engine.getNextTask();
-    if (!task) throw `No available tasks?`;
-    engine.execute(task);
+    while (!get("kingLiberated")) {
+      const task = engine.getNextTask();
+      if (!task) throw `No available tasks?`;
+      engine.execute(task);
+    }
+  } finally {
+    engine.destruct();
   }
 }
