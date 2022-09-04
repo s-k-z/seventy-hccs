@@ -310,7 +310,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "God Lobster",
       completed: () => get("_godLobsterFights") >= 3,
-      choices: { 1310: have($item`God Lobster's Ring`) ? 2 : 1 }, // Granted a Boon: (1) equipment (2) blessing (3) experience
+      choices: { 1310: () => (have($item`God Lobster's Ring`) ? 2 : 1) }, // Granted a Boon: (1) equipment (2) blessing (3) experience
       do: () => visitUrl("main.php?fightgodlobster=1"),
       outfit: {
         famequip: $items`God Lobster's Ring, God Lobster's Scepter, none`,
