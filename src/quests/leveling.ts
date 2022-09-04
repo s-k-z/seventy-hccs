@@ -8,7 +8,6 @@ import {
   eat,
   equip,
   mpCost,
-  myClass,
   myHp,
   myLevel,
   myMaxhp,
@@ -24,7 +23,6 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
-  $class,
   $effect,
   $effects,
   $familiar,
@@ -43,25 +41,8 @@ import {
 import { DefaultCombat, DMT1Combat, DMT2Combat, RunawayCombat, StenchCombat } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
-import {
-  acquireEffect,
-  checkAvailable,
-  checkEffect,
-  haveItemOrEffect,
-  tryUse,
-  voterMonsterNow,
-} from "../lib";
+import { checkAvailable, checkEffect, haveItemOrEffect, tryUse, voterMonsterNow } from "../lib";
 import { AdvReq, deepDarkVisions, innerElf, selectBestFamiliar } from "./shared";
-
-const monsterLevel = [
-  myClass() === $class`Pastamancer`
-    ? $effect`Shield of the Pastalord`
-    : $effect`Flimsy Shield of the Pastalord`,
-  $effect`Drescher's Annoying Noise`,
-  $effect`Pride of the Puffin`,
-  // Song(s)
-  $effect`Ur-Kel's Aria of Annoyance`,
-];
 
 const levelingOutfit = {
   hat: $item`Daylight Shavings Helmet`,
@@ -190,12 +171,6 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Buff ML",
-      after: ["Tunnel of L.O.V.E."],
-      completed: () => monsterLevel.every((m) => have(m)),
-      do: () => monsterLevel.forEach((m) => acquireEffect(m)),
-    },
-    {
       name: "Ten-percent Bonus",
       ready: () => have($item`LOV Epaulettes`),
       completed: () => !have($item`a ten-percent bonus`),
@@ -223,6 +198,13 @@ export const Leveling: Quest<Task> = {
       prepare: () => cliExecute("umbrella ml"),
       do: () => Witchess.fightPiece($monster`Witchess Rook`),
       post: () => use($item`Greek fire`),
+      effects: [
+        $effect`Flimsy Shield of the Pastalord`,
+        $effect`Drescher's Annoying Noise`,
+        $effect`Pride of the Puffin`,
+        // Song(s)
+        $effect`Ur-Kel's Aria of Annoyance`,
+      ],
       outfit: () => {
         return { ...levelingOutfit, familiar: selectBestFamiliar() };
       },
