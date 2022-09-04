@@ -1,5 +1,5 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { Familiar, haveFamiliar, itemAmount, toFamiliar } from "kolmafia";
+import { Familiar, haveFamiliar, itemAmount, storageAmount, toFamiliar } from "kolmafia";
 import { $familiar, $item, CommunityService, get } from "libram";
 import { batfellow } from "../batfellow";
 import { config } from "../config";
@@ -10,7 +10,8 @@ export const DonateQuest: Quest<Task> = {
   tasks: [
     {
       name: "Batfellow Comic",
-      completed: () => itemAmount($item`Batfellow comic`) > 0,
+      completed: () =>
+        itemAmount($item`Batfellow comic`) > 0 || storageAmount($item`Batfellow comic`) < 1,
       do: () => batfellow(),
       outfit: () => {
         const stillSuitFam = toFamiliar(config.stillsuit);
