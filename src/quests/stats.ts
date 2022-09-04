@@ -10,11 +10,13 @@ export const HPQuest: Quest<Task> = {
     {
       name: "HP Test",
       completed: () => CommunityService.HP.isDone(),
+      prepare: () => cliExecute("parka kachungasaur"),
       do: () => runTest(CommunityService.HP),
       effects: $effects`Song of Starch`,
       outfit: {
         hat: $items`extra-wide head candle, wad of used tape`,
         back: $item`vampyric cloake`,
+        shirt: $item`Jurassic Parka`,
         offhand: $item`unbreakable umbrella`,
         pants: $item`Cargo Cultist Shorts`,
       },
