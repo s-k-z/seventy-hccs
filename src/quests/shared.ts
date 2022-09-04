@@ -106,7 +106,10 @@ export const innerElf: Task = {
   name: "Inner Elf",
   ready: () => myLevel() >= 13,
   completed: () => have($effect`Inner Elf`),
-  prepare: () => Clan.join(config.side_clan),
+  prepare: () => {
+    if (get("_snokebombUsed") >= 3) throw "Can't banish Mother Slime?";
+    Clan.join(config.side_clan);
+  },
   choices: { 326: 1 }, // Showdown: (1) fight mother slime (2) leave
   do: $location`The Slime Tube`,
   post: () => Clan.join(config.main_clan),
