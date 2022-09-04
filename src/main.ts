@@ -7,6 +7,7 @@ import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { CoilWire, PreCoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
+import { DonateQuest } from "./quests/donate";
 import { FamWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
@@ -102,6 +103,7 @@ export function main(command = ""): void {
     FamWeightQuest,
     ItemDropQuest,
     MysticalityQuest,
+    DonateQuest,
   ]);
 
   const engine = new Engine(tasks);
