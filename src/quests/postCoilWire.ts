@@ -59,31 +59,31 @@ const buffs = [
   $effect`We're All Made of Starfish`,
   $effect`You Learned Something Maybe!`,
   // Skills
-  $effect`Big`,
-  $effect`Blessing of the Bird`,
-  $effect`Blessing of your favorite Bird`,
+  $effect`Big`, // 15 mp
+  $effect`Blessing of the Bird`, // 10 mp
+  $effect`Blessing of your favorite Bird`, // 50 mp
   $effect`Blood Bubble`,
-  $effect`Carol of the Bulls`,
-  $effect`Carol of the Hells`,
-  $effect`Carol of the Thrills`,
+  $effect`Carol of the Bulls`, // 30 mp
+  $effect`Carol of the Hells`, // 30 mp
+  $effect`Carol of the Thrills`, // 30 mp
   $effect`Feeling Excited`,
   $effect`Feeling Peaceful`,
   $effect`Frenzied, Bloody`,
-  $effect`Inscrutable Gaze`,
-  $effect`Ruthlessly Efficient`,
-  $effect`Singer's Faithful Ocelot`,
+  $effect`Inscrutable Gaze`, // 10 mp
+  $effect`Ruthlessly Efficient`, // 10 mp
+  $effect`Singer's Faithful Ocelot`, // 15 mp
   $effect`Triple-Sized`,
+  // Class skills
+  $effect`Astral Shell`, // 10 mp
+  $effect`Elemental Saucesphere`, // 10 mp
+  $effect`Ghostly Shell`, // 6 mp
+  $effect`Springy Fusilli`, // 10 mp
+  // Song(s)
+  $effect`Ode to Booze`, // 50 mp
+  $effect`Polka of Plenty`, // 7 mp
   // Batteries
   $effect`AAA-Charged`, // +30 MP
   $effect`Lantern-Charged`, // +70 MP
-  // Class skills
-  $effect`Astral Shell`,
-  $effect`Elemental Saucesphere`,
-  $effect`Ghostly Shell`,
-  $effect`Springy Fusilli`,
-  // Song(s)
-  $effect`Ode to Booze`,
-  $effect`Polka of Plenty`,
 ];
 
 const famWeight = [
@@ -143,14 +143,15 @@ export const PostCoilWire: Quest<Task> = {
       name: "Summon Items",
       completed: () => false,
       do: () => {
+        // prettier-ignore
         [
-          $skill`Advanced Cocktailcrafting`,
-          $skill`Advanced Saucecrafting`,
-          $skill`Chubby and Plump`,
-          $skill`Perfect Freeze`,
-          $skill`Prevent Scurvy and Sobriety`,
-          $skill`Summon Alice's Army Cards`,
-        ].forEach((skill) => useSkill(skill)); // 140 mp
+          $skill`Advanced Cocktailcrafting`,   // 10 mp
+          $skill`Advanced Saucecrafting`,      // 10 mp
+          $skill`Chubby and Plump`,            // 50 mp
+          $skill`Perfect Freeze`,              // 5 mp
+          $skill`Prevent Scurvy and Sobriety`, // 50 mp
+          $skill`Summon Alice's Army Cards`,   // 5 mp
+        ].forEach((skill) => useSkill(skill)); // 130 mp
       },
     },
     {
