@@ -64,7 +64,7 @@ const monsterLevel = [
 
 const levelingOutfit = {
   hat: $item`Daylight Shavings Helmet`,
-  back: $item`LOV Epaulettes`,
+  back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
   weapon: $item`Fourth of May Cosplay Saber`,
   offhand: $item`unbreakable umbrella`,
   pants: $item`Cargo Cultist Shorts`,
