@@ -74,7 +74,7 @@ export function main(command = ""): void {
   ]);
   for (const [name, shouldReturn] of configCheck) {
     if (name === "") {
-      print(`${name} property not set`, shouldReturn ? "red" : "orange");
+      print(`${Args.name}_${name} property not set`, shouldReturn ? "red" : "orange");
       if (shouldReturn) return;
     }
   }
