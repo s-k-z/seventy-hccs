@@ -48,6 +48,13 @@ import { checkAvailable, checkEffect, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, selectBestFamiliar } from "./shared";
 
 // prettier-ignore
+const questHandlers = new Map([
+  ["questM23Meatsmith", "shop.php?whichshop=meatsmith&action=talk"],
+  ["questM24Doc",       "shop.php?whichshop=doc&action=talk"],
+  ["questM25Armorer",   "shop.php?whichshop=armory&action=talk"],
+]);
+
+// prettier-ignore
 const toAcquire = new Map<Item | Skill, () => void>([
   [$skill`Seek out a Bird`,          () => use($item`Bird-a-Day calendar`) ],
   [$item`"I Voted!" sticker`,        () => vote() ],
@@ -83,27 +90,18 @@ export const PreCoilWire: Quest<Task> = {
       },
     },
     {
+      name: "Talk to quest NPCs",
+      completed: () => Array.from(questHandlers).every(([key]) => get(key) === "started"),
+      choices: { 1059: 1, 1064: 1, 1065: 1 },
+      do: () =>
+        Array.from(questHandlers).forEach(([key, url]) => {
+          if (get(key) === "unstarted") visitUrl(url);
+        }),
+    },
+    {
       name: "Light a candle",
       completed: () => !have($item`natural magick candle`),
       do: () => use($item`natural magick candle`),
-    },
-    {
-      name: "Open Skeleton Store",
-      completed: () => get("questM23Meatsmith").toLowerCase() === "started",
-      choices: { 1059: 1 },
-      do: () => visitUrl("shop.php?whichshop=meatsmith&action=talk"),
-    },
-    {
-      name: "Open Overgrown Lot",
-      completed: () => get("questM24Doc").toLowerCase() === "started",
-      choices: { 1064: 1 },
-      do: () => visitUrl("shop.php?whichshop=doc&action=talk"),
-    },
-    {
-      name: "Open Madness Bakery",
-      completed: () => get("questM25Armorer").toLowerCase() === "started",
-      choices: { 1065: 1 },
-      do: () => visitUrl("shop.php?whichshop=armory&action=talk"),
     },
     {
       name: "Equip Stillsuit",
