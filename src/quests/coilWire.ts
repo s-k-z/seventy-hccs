@@ -4,6 +4,7 @@ import {
   changeMcd,
   cliExecute,
   create,
+  Effect,
   equip,
   Item,
   itemAmount,
@@ -55,26 +56,28 @@ const questHandlers = new Map([
 ]);
 
 // prettier-ignore
-const toAcquire = new Map<Item | Skill, () => void>([
-  [$skill`Seek out a Bird`,          () => use($item`Bird-a-Day calendar`) ],
-  [$item`"I Voted!" sticker`,        () => vote() ],
-  [$item`pantogram pants`,           () => getPantogramPants() ],
-  [$item`battery (AAA)`,             () => harvestBatteries() ],
-  [$item`battery (lantern)`,         () => create($item`battery (lantern)`) ],
-  [$item`occult jelly donut`,        () => create($item`occult jelly donut`) ],
-  [$item`Brutal brogues`,            () => cliExecute("bastille bbq brutalist catapult") ],
-  [$item`cuppa Loyal tea`,           () => cliExecute("teatree loyal") ],
-  [$item`green mana`,                () => cliExecute("cheat forest") ],
-  [$item`wrench`,                    () => cliExecute("cheat wrench") ],
-  [$item`Yeg's Motel hand soap`,     () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`) ],
-  [$item`"DRINK ME" potion`,         () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2") ],
-  [$item`gold detective badge`,      () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct") ],
-  [$item`your cowboy boots`,         () => visitUrl("place.php?whichplace=town_right&action=townright_ltt") ],
-  [$item`flimsy hardwood scraps`,    () => visitUrl("shop.php?whichshop=lathe") ],
-  [$item`weeping willow wand`,       () => create($item`weeping willow wand`) ],
-  [$item`detuned radio`,             () => retrieveItem($item`detuned radio`) ],             // -270 meat
-  [$item`sombrero-mounted sparkler`, () => retrieveItem($item`sombrero-mounted sparkler`) ], // -450 meat
-  [$item`toy accordion`,             () => retrieveItem($item`toy accordion`) ],             // -135 meat
+const toAcquire = new Map<Effect | Item | Skill, () => void>([
+  [$effect`The Odour of Magick`,         () => use($item`natural magick candle`)],
+  [$effect`That's Just Cloud-Talk, Man`, () => visitUrl("place.php?whichplace=campaway&action=campaway_sky")],
+  [$item`"I Voted!" sticker`,            () => vote()],
+  [$item`pantogram pants`,               () => getPantogramPants()],
+  [$item`battery (AAA)`,                 () => harvestBatteries()],
+  [$item`battery (lantern)`,             () => create($item`battery (lantern)`)],
+  [$item`occult jelly donut`,            () => create($item`occult jelly donut`)],
+  [$item`Brutal brogues`,                () => cliExecute("bastille bbq brutalist catapult")],
+  [$item`cuppa Loyal tea`,               () => cliExecute("teatree loyal")],
+  [$item`green mana`,                    () => cliExecute("cheat forest")],
+  [$item`wrench`,                        () => cliExecute("cheat wrench")],
+  [$item`Yeg's Motel hand soap`,         () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
+  [$item`"DRINK ME" potion`,             () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2")],
+  [$item`gold detective badge`,          () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
+  [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
+  [$item`flimsy hardwood scraps`,        () => visitUrl("shop.php?whichshop=lathe")],
+  [$item`weeping willow wand`,           () => create($item`weeping willow wand`)],
+  [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)],             // -270 meat
+  [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // -450 meat
+  [$item`toy accordion`,                 () => retrieveItem($item`toy accordion`)],             // -135 meat
+  [$skill`Seek out a Bird`,              () => use($item`Bird-a-Day calendar`)],
 ]);
 
 export const PreCoilWire: Quest<Task> = {
@@ -99,11 +102,6 @@ export const PreCoilWire: Quest<Task> = {
         }),
     },
     {
-      name: "Light a candle",
-      completed: () => !have($item`natural magick candle`),
-      do: () => use($item`natural magick candle`),
-    },
-    {
       name: "Equip Stillsuit",
       completed: () =>
         toFamiliar(config.stillsuit) === $familiar`none` || itemAmount($item`tiny stillsuit`) < 1,
@@ -126,12 +124,7 @@ export const PreCoilWire: Quest<Task> = {
       do: () => SongBoom.setSong("Total Eclipse of Your Meat"),
     },
     {
-      name: "Gaze at the Stars",
-      completed: () => have($effect`That's Just Cloud-Talk, Man`),
-      do: () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
-    },
-    {
-      name: "Acquire Necessary Items",
+      name: "Acquire Necessary Things",
       completed: () => Array.from(toAcquire).every(([a]) => have(a)),
       do: () => {
         for (const [want, acquire] of toAcquire) if (!have(want)) acquire();
