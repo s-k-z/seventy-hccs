@@ -6,6 +6,7 @@ import {
   cliExecute,
   create,
   eat,
+  equip,
   mpCost,
   myClass,
   myHp,
@@ -287,6 +288,7 @@ export const Leveling: Quest<Task> = {
       name: "Witchess Witch",
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
+      post: () => equip($item`battle broom`),
       outfit: () => {
         return { familiar: selectBestFamiliar() };
       },
@@ -457,7 +459,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Neverending Party`,
       outfit: () => {
         return {
-          // acc3: $item`none`, PICK SOMETHING
+          acc3: $item`Beach Comb`,
           familiar: selectBestFamiliar(AdvReq.Wine),
         };
       },
