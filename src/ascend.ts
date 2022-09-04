@@ -11,7 +11,7 @@ import {
 } from "kolmafia";
 import { $class, $item, $monster, ascend, get, Lifestyle, Paths, prepareAscension } from "libram";
 
-export function isReadyToContinue(checkFites: boolean, checkVote: boolean): boolean {
+export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
   if (myPath() !== Path.get("Community Service")) {
     const badDays = ["april fool's day"];
     const today = holiday().split("/");
@@ -22,22 +22,21 @@ export function isReadyToContinue(checkFites: boolean, checkVote: boolean): bool
     }
 
     const banish = $monster`Perceiver of Sensations`;
-    const notFound = () =>
-      !get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
-    if (notFound()) visitUrl("museum.php?action=icehouse");
-    if (notFound()) {
+    const found = () => get("banishedMonsters").toLowerCase().includes(banish.name.toLowerCase());
+    if (!found()) visitUrl("museum.php?action=icehouse");
+    if (!found()) {
       print(`Need to ice house ${banish}`, "red");
       return false;
     }
 
-    if (checkFites && pvpAttacksLeft() > 0) {
+    if (!skipFites && pvpAttacksLeft() > 0) {
       print("Spend your pvp fites", "red");
       return false;
     }
 
     const voterPreCoilNotReady = totalTurnsPlayed() % 11 !== 1;
     const voterPostCoilNotReady = (totalTurnsPlayed() + 60) % 11 !== 1;
-    if (checkVote && voterPreCoilNotReady && voterPostCoilNotReady) {
+    if (!skipVote && voterPreCoilNotReady && voterPostCoilNotReady) {
       const turnsA = 11 - (((totalTurnsPlayed() % 11) + 10) % 11);
       const turnsB = 11 - ((((totalTurnsPlayed() + 60) % 11) + 10) % 11);
       print(`Spend more ${turnsA} or ${turnsB} turns for voter monster`, "red");
