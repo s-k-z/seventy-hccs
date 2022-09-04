@@ -113,6 +113,12 @@ export const Leveling: Quest<Task> = {
       do: () => cliExecute("hottub"),
     },
     {
+      name: "Make Burning Paper Crane",
+      ready: () => have($item`burning newspaper`),
+      completed: () => have($item`burning paper crane`),
+      do: () => create($item`burning paper crane`),
+    },
+    {
       name: "Protonic Ghost",
       completed: () => get("ghostLocation") === null,
       do: () => {
