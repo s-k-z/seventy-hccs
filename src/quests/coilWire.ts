@@ -91,7 +91,7 @@ export const PreCoilWire: Quest<Task> = {
     },
     {
       name: "Talk to quest NPCs",
-      completed: () => Array.from(questHandlers).every(([key]) => get(key) === "started"),
+      completed: () => Array.from(questHandlers).every(([key]) => get(key) !== "unstarted"),
       choices: { 1059: 1, 1064: 1, 1065: 1 },
       do: () =>
         Array.from(questHandlers).forEach(([key, url]) => {
