@@ -221,14 +221,14 @@ export const DefaultCombat = new CombatStrategy()
   )
   .macro(DefaultMacro);
 
-export const DMTEnvyAbstraction = new CombatStrategy().macro(
+export const DMT1Combat = new CombatStrategy().macro(
   Macro.if_(notAllowList, Macro.abort())
     .if_(`!monsterid ${$monster`Performer of Actions`.id}`, Macro.skill($skill`Macrometeorite`))
     .skill($skill`Feel Envy`)
     .step(DefaultMacro)
 );
 
-export const DMTGetJoyCombat = new CombatStrategy().macro(
+export const DMT2Combat = new CombatStrategy().macro(
   Macro.if_(notAllowList, Macro.abort())
     .if_(`!monsterid ${$monster`Thinker of Thoughts`}`, Macro.skill($skill`Macrometeorite`))
     .tryItem($item`abstraction: action`)

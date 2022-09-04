@@ -40,16 +40,17 @@ import {
   SourceTerminal,
   Witchess,
 } from "libram";
-import {
-  DefaultCombat,
-  DMTEnvyAbstraction,
-  DMTGetJoyCombat,
-  RunawayCombat,
-  StenchCombat,
-} from "../combat";
+import { DefaultCombat, DMT1Combat, DMT2Combat, RunawayCombat, StenchCombat } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
-import { acquireEffect, checkAvailable, checkEffect, tryUse, voterMonsterNow } from "../lib";
+import {
+  acquireEffect,
+  checkAvailable,
+  checkEffect,
+  haveItemOrEffect,
+  tryUse,
+  voterMonsterNow,
+} from "../lib";
 import { AdvReq, deepDarkVisions, innerElf, selectBestFamiliar } from "./shared";
 
 const monsterLevel = [
@@ -139,7 +140,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Crimbo Carol",
       completed: () =>
-        ![
+        [
           $effect`All I Want For Crimbo Is Stuff`,
           $effect`Crimbo Wrapping`,
           $effect`Do You Crush What I Crush?`,
@@ -218,7 +219,7 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Witchess Rook",
-      completed: () => have($effect`Sweetbreads Flambé`),
+      completed: () => haveItemOrEffect($item`Greek fire`),
       prepare: () => cliExecute("umbrella ml"),
       do: () => Witchess.fightPiece($monster`Witchess Rook`),
       post: () => use($item`Greek fire`),
@@ -229,7 +230,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Get Sprinkles",
-      completed: () => have($effect`Whole Latte Love`) || have($item`sprinkles`, 50),
+      completed: () =>
+        haveItemOrEffect($item`gingerbread spice latte`) || have($item`sprinkles`, 50),
       prepare: () => {
         if (get("_gingerbreadCityTurns") >= 5) throw `Failed to get gingerbread spice latte?`;
       },
@@ -250,7 +252,8 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Gingerbread Spice Latte",
       ready: () => have($item`sprinkles`, 50),
-      completed: () => have($effect`Whole Latte Love`) || get("_gingerbreadCityTurns") >= 5,
+      completed: () =>
+        haveItemOrEffect($item`gingerbread spice latte`) || get("_gingerbreadCityTurns") >= 5,
       choices: { 1208: 3 }, // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
       do: $location`Gingerbread Upscale Retail District`,
       post: () => tryUse($item`gingerbread spice latte`),
@@ -349,17 +352,17 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Abstraction: Action",
       completed: () =>
-        have($effect`Joy`) || have($item`abstraction: joy`) || have($item`abstraction: action`),
+        haveItemOrEffect($item`abstraction: joy`) || have($item`abstraction: action`),
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: DMTEnvyAbstraction,
+      combat: DMT1Combat,
     },
     {
       name: "Get Abstraction: Joy",
       ready: () => have($item`abstraction: action`),
-      completed: () => have($effect`Joy`) || have($item`abstraction: joy`),
+      completed: () => haveItemOrEffect($item`abstraction: joy`),
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => {
@@ -367,7 +370,7 @@ export const Leveling: Quest<Task> = {
         chew($item`abstraction: joy`);
       },
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: DMTGetJoyCombat,
+      combat: DMT2Combat,
     },
     {
       name: "Remaining Deep Machine Tunnels Fights",
