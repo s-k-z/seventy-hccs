@@ -184,7 +184,9 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Christmas Card",
-      completed: () => get("_deckCardsSeen").includes("Christmas Card"),
+      completed: () =>
+        haveItemOrEffect($item`Gene Tonic: Elf`) ||
+        get("_deckCardsSeen").includes("Christmas Card"),
       do: () => cliExecute("cheat christmas card"),
       post: () => DNALab.makeTonic(),
       effects: $effects`Ode to Booze`,
