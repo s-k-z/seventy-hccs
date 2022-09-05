@@ -55,6 +55,16 @@ const levelingOutfit = {
   acc3: $item`Beach Comb`,
 };
 
+function canEatSausages(): boolean {
+  return (
+    have($item`magical sausage casing`) &&
+    get("_sausagesEaten") < 23 &&
+    myMaxmp() - myMp() > 1000 &&
+    myMaxmp() - mpCost($skill`Summon BRICKOs`) > config.MP_SAFE_LIMIT &&
+    (get("_sausagesMade") + 1) * 111 < myMeat() - config.MEAT_SAFE_LIMIT
+  );
+}
+
 export const Leveling: Quest<Task> = {
   name: "Leveling",
   tasks: [
@@ -70,15 +80,9 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Eat Magical Sausages",
-      completed: () => true,
+      completed: () => !canEatSausages(),
       do: () => {
-        while (
-          have($item`magical sausage casing`) &&
-          (get("_sausagesMade") + 1) * 111 < myMeat() - config.MEAT_SAFE_LIMIT &&
-          myMaxmp() - myMp() > 1000 &&
-          myMaxmp() - mpCost($skill`Summon BRICKOs`) > config.MP_SAFE_LIMIT &&
-          get("_sausagesEaten") < 23
-        ) {
+        while (canEatSausages()) {
           create($item`magical sausage`);
           eat($item`magical sausage`);
         }

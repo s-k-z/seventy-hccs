@@ -38,8 +38,6 @@ const buffs = [
   $effect`Broad-Spectrum Vaccine`,
   $effect`Favored by Lyle`,
   $effect`Grumpy and Ornery`,
-  $effect`Mystically Oiled`,
-  $effect`Pisces in the Skyces`,
   $effect`Sigils of Yeg`,
   $effect`Starry-Eyed`,
   $effect`Total Protonic Reversal`,
@@ -141,7 +139,7 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Summon Items",
-      completed: () => false,
+      completed: () => have($effect`Pisces in the Skyces`),
       do: () => {
         // prettier-ignore
         [
@@ -152,12 +150,13 @@ export const PostCoilWire: Quest<Task> = {
           $skill`Prevent Scurvy and Sobriety`, // 50 mp
           $skill`Summon Alice's Army Cards`,   // 5 mp
         ].forEach((skill) => useSkill(skill)); // 130 mp
+        acquireEffect($effect`Pisces in the Skyces`);
       },
     },
     {
       name: "Cook Sauce Potions",
       after: ["Dynamic Range", "Summon Items"],
-      completed: () => false,
+      completed: () => have($effect`Mystically Oiled`),
       do: () => {
         retrieveItem($item`soda water`); // -63 meat
         [
@@ -169,6 +168,7 @@ export const PostCoilWire: Quest<Task> = {
         ].forEach((saucePotion) => {
           if (!have(saucePotion) && !have(itemToEffect(saucePotion))) create(saucePotion);
         });
+        acquireEffect($effect`Mystically Oiled`);
       },
     },
     {
