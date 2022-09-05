@@ -4,6 +4,7 @@ import {
   cliExecute,
   create,
   eat,
+  mpCost,
   retrieveItem,
   sweetSynthesis,
   use,
@@ -16,6 +17,7 @@ import {
   $familiar,
   $item,
   $location,
+  $monster,
   $skill,
   Clan,
   DNALab,
@@ -24,7 +26,6 @@ import {
   Macro,
 } from "libram";
 import { config } from "../config";
-import { useDroppedItems } from "../iotms";
 import {
   acquireEffect,
   checkEffect,
@@ -84,10 +85,11 @@ const buffs = [
   $effect`Lantern-Charged`, // +70 MP
 ];
 
-const famWeight = [
+const postNanorhino = [
   $effect`A Girl Named Sue`,
   $effect`Billiards Belligerence`,
   $effect`Fidoxene`,
+  $effect`Human-Elf Hybrid`,
   $effect`Human-Fish Hybrid`,
   $effect`Human-Machine Hybrid`,
   $effect`Hustlin'`,
@@ -181,6 +183,27 @@ export const PostCoilWire: Quest<Task> = {
       combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
     },
     {
+      name: "Christmas Card",
+      completed: () => get("_deckCardsSeen").includes("Christmas Card"),
+      do: () => cliExecute("cheat christmas card"),
+      post: () => DNALab.makeTonic(),
+      effects: $effects`Ode to Booze`,
+      outfit: { familiar: $familiar`Frumious Bandersnatch` },
+      combat: new CombatStrategy()
+        .startingMacro(Macro.item($item`DNA extraction syringe`))
+        .macro(
+          Macro.skill($skill`Curse of Weaksauce`)
+            .skill($skill`Micrometeorite`)
+            .item($item`Time-Spinner`)
+            .skill($skill`Sing Along`)
+            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+            .attack()
+            .repeat(),
+          $monster`Black Crayon Crimbo Elf`
+        )
+        .macro(Macro.runaway()),
+    },
+    {
       name: "Advance Clock",
       completed: () => get("_gingerbreadClockAdvanced"),
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
@@ -221,14 +244,13 @@ export const PostCoilWire: Quest<Task> = {
       do: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
     },
     {
-      name: "Buff Familiar Weight",
+      name: "Buff More",
       after: ["Nanobrainy", "DRINK ME"],
-      completed: () => famWeight.every((f) => have(f)),
+      completed: () => postNanorhino.every((f) => have(f)),
       do: () => {
         $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
-        useDroppedItems();
         cliExecute("saber familiar");
-        famWeight.every((f) => acquireEffect(f));
+        postNanorhino.forEach((f) => acquireEffect(f));
       },
     },
     {
