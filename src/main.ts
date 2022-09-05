@@ -5,7 +5,7 @@ import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
 import { batfellow } from "./batfellow";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
-import { prepareAll } from "./core/prepare";
+import { prepareAll } from "./prepare";
 import { CoilWire, PreCoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
 import { DonateQuest } from "./quests/donate";

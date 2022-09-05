@@ -14,9 +14,9 @@ import {
   useSkill,
 } from "kolmafia";
 import { $item, $skill, get, have } from "libram";
-import { config } from "../config";
-import { castBestLibram } from "../iotms";
-import { effectDuration, itemToEffect } from "../lib";
+import { config } from "./config";
+import { castBestLibram } from "./iotms";
+import { effectDuration, itemToEffect } from "./lib";
 
 function getHowManySausages(): number {
   if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
