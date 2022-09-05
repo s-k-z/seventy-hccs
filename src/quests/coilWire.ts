@@ -72,8 +72,7 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$item`"DRINK ME" potion`,             () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2")],
   [$item`gold detective badge`,          () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
   [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
-  [$item`flimsy hardwood scraps`,        () => visitUrl("shop.php?whichshop=lathe")],
-  [$item`weeping willow wand`,           () => create($item`weeping willow wand`)],
+  [$item`weeping willow wand`,           () => { visitUrl("shop.php?whichshop=lathe");create($item`weeping willow wand`); }],
   [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)],             // -270 meat
   [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // -450 meat
   [$item`toy accordion`,                 () => retrieveItem($item`toy accordion`)],             // -135 meat
@@ -82,6 +81,7 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
 
 export const PreCoilWire: Quest<Task> = {
   name: "Pre-Coil Setup",
+  completed: () => CommunityService.CoilWire.isDone(),
   tasks: [
     {
       name: "Visit Toot Oriole",
