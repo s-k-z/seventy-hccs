@@ -435,7 +435,7 @@ export const Leveling: Quest<Task> = {
         return {
           offhand: $item`unbreakable umbrella`,
           acc3: $item`backup camera`,
-          familiar: selectBestFamiliar(get("_backUpUses") >= 7 ? AdvReq.Wine : AdvReq.Normal),
+          familiar: selectBestFamiliar(get("_backUpUses") > 7 ? AdvReq.Wine : AdvReq.Normal),
         };
       },
       combat: StenchCombat,
