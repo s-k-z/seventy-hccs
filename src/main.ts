@@ -5,6 +5,7 @@ import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
 import { batfellow } from "./batfellow";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
+import { prepareAll } from "./core/prepare";
 import { CoilWire, PreCoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
 import { DonateQuest } from "./quests/donate";
@@ -111,6 +112,7 @@ export function main(command = ""): void {
     while (!get("kingLiberated")) {
       const task = engine.getNextTask();
       if (!task) throw `No available tasks?`;
+      prepareAll(); // Only want to do for leveling tasks? how?
       engine.execute(task);
     }
   } finally {

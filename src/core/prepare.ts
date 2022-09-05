@@ -1,6 +1,7 @@
 import {
   create,
   eat,
+  haveEffect,
   mpCost,
   myHp,
   myMaxhp,
@@ -9,40 +10,68 @@ import {
   myMp,
   mySoulsauce,
   soulsauceCost,
+  use,
   useSkill,
 } from "kolmafia";
 import { $item, $skill, get, have } from "libram";
-import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
-import { castBestLibram, useDroppedItems } from "../iotms";
+import { config } from "../config";
+import { castBestLibram } from "../iotms";
+import { effectDuration, itemToEffect } from "../lib";
+
+function getHowManySausages(): number {
+  if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
+
+  const offset = get("_sausagesMade");
+  if (offset >= 23) return 0;
+
+  const costs = [...Array(24).keys()].map((k) => k * 111).splice(1);
+  const mpRefills = (myMaxmp() - myMp()) / 999;
+  let toEat = 0;
+  let totalCost = 0;
+  while (toEat < mpRefills && toEat + offset < costs.length) {
+    totalCost += costs[toEat + offset];
+    if (myMeat() - totalCost < config.MEAT_SAFE_LIMIT) break;
+    toEat++;
+  }
+
+  return toEat;
+}
 
 export function prepareAll() {
-  if (myHp() / myMaxhp() < 0.3) useSkill($skill`Cannelloni Cocoon`);
+  const needHeal = myHp() / myMaxhp() < 0.3;
+  const haveEnoughMp = myMp() > 2 * mpCost($skill`Cannelloni Cocoon`);
+  if (needHeal && haveEnoughMp) useSkill($skill`Cannelloni Cocoon`);
 
   const maxMPGains = (myMaxmp() - myMp()) / 15;
   const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
   const soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
   if (soulFoodCasts > 0) useSkill(soulFoodCasts, $skill`Soul Food`);
 
-  while (
-    have($item`magical sausage casing`) &&
-    (get("_sausagesMade") + 1) * 111 < myMeat() - config.MEAT_SAFE_LIMIT &&
-    myMaxmp() - myMp() > 1000 &&
-    myMaxmp() - mpCost($skill`Summon BRICKOs`) > config.MP_SAFE_LIMIT &&
-    get("_sausagesEaten") < 23
-  ) {
-    create($item`magical sausage`);
-    eat($item`magical sausage`);
+  const sausages = getHowManySausages();
+  if (sausages > 0) {
+    create(sausages, $item`magical sausage`);
+    eat(sausages, $item`magical sausage`);
   }
 
   while (myMp() - mpCost($skill`Summon BRICKOs`) > config.MP_SAFE_LIMIT) {
     castBestLibram();
   }
 
-  // TODO: figure out how to fit this in
-  useDroppedItems();
-
-  while (have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKO_COST)) {
-    create(BRICKO_TARGET_ITEM);
+  const potions = new Map([
+    [$item`green candy heart`, 1],
+    [$item`pulled yellow taffy`, 1],
+    [$item`pulled violet taffy`, 50],
+    [$item`resolution: be feistier`, 1],
+    [$item`resolution: be happier`, 1],
+    [$item`resolution: be kinder`, 1],
+    [$item`resolution: be luckier`, 1],
+    [$item`resolution: be smarter`, 1],
+    [$item`resolution: be wealthier`, 1],
+    [$item`short stack of pancakes`, 1],
+  ]);
+  for (const [potion, limit] of potions) {
+    const wantToUse = Math.ceil(limit - haveEffect(itemToEffect(potion)) / effectDuration(potion));
+    if (have(potion) && wantToUse > 0) use(wantToUse, potion);
   }
 
   if (have($item`burning newspaper`)) create($item`burning paper crane`);

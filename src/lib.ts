@@ -6,6 +6,7 @@ import {
   equippedItem,
   holiday,
   Item,
+  numericModifier,
   Slot,
   toInt,
   totalTurnsPlayed,
@@ -26,6 +27,10 @@ export function checkAvailable(i: Item, n = 1): void {
 
 export function checkEffect(e: Effect): void {
   if (!have(e)) throw `Missing effect ${e}`;
+}
+
+export function effectDuration(i: Item): number {
+  return numericModifier(i, "effect duration");
 }
 
 export function isHolidayWandererDay(): boolean {
