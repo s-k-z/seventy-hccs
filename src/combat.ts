@@ -27,13 +27,16 @@ const notAllowList = [
   $monster`The ghost of Waldo the Carpathian`,
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
+
   // mapped monsters
   // $monster`amateur ninja`,
   // $monster`novelty tropical skeleton`,
   // $monster`toothless mastiff bitch`,
+
   // reminisced monsters
   // $monster`cocktail shrimp`,
   // $monster`pterodactyl`,
+
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
@@ -140,14 +143,6 @@ const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
-  /*
-  .if_(
-    `hasskill ${toInt($skill`Bowl Straight Up`)} && !haseffect ${toInt(
-      $effect`Cosmic Ball in the Air`
-    )}`,
-    Macro.skill($skill`Bowl Straight Up`)
-  )
-  */
   .step(SingAndKill);
 
 export const DefaultCombat = new CombatStrategy()
