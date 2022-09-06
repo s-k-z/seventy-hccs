@@ -452,7 +452,6 @@ export const Leveling: Quest<Task> = {
       after: ["Backup Camera Fights"],
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
       completed: () => get("_backUpUses") >= 11,
-      prepare: () => cliExecute("umbrella ml"),
       do: $location`The Toxic Teacups`,
       effects: $effects`Wizard Squint`,
       outfit: () => {
