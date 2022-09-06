@@ -46,7 +46,7 @@ import {
   vote,
 } from "../iotms";
 import { checkAvailable, checkEffect, voterMonsterNow } from "../lib";
-import { AdvReq, darkHorse, selectBestFamiliar } from "./shared";
+import { AdvReq, darkHorse, runTest, selectBestFamiliar } from "./shared";
 
 // prettier-ignore
 const questHandlers = new Map([
@@ -323,7 +323,7 @@ export const CoilWire: Quest<Task> = {
         cliExecute("parka ghostasaurus");
         cliExecute("retrocape heck thrill");
       },
-      do: () => CommunityService.CoilWire.do(),
+      do: () => runTest(CommunityService.CoilWire),
       effects: [
         myClass() === $class`Sauceror`
           ? $effect`[1458]Blood Sugar Sauce Magic`

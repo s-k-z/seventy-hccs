@@ -27,8 +27,10 @@ import { MoonSign, tuneMoon } from "../iotms";
 import { haveItemOrEffect } from "../lib";
 
 export function runTest(test: CommunityService): void {
-  if (test.actualCost() > 1) throw `Can't do ${test.name} in 1 turn?`;
-  const err = test.run(() => undefined);
+  const famWeight = test.statName === "Familiar Weight";
+  if (famWeight && test.actualCost() > 1) throw `Can't do ${test.name} in 1 turn?`;
+  const coilWire = test.name === "Coil Wire";
+  const err = test.run(() => undefined, coilWire || famWeight ? 60 : 1);
   // prettier-ignore
   const handler = {
     "completed":         () => { return },
@@ -36,7 +38,6 @@ export function runTest(test: CommunityService): void {
     "failed":            () => { throw `Failed test ${test.name}`; },
   }[err];
   handler();
-  if (!test.verifyIsDone()) throw `Failed to actually do ${test.name}?`;
 }
 
 export const enum AdvReq {
