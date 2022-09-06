@@ -68,8 +68,8 @@ export function prepareAll() {
     [$item`short stack of pancakes`, 1],
   ]);
   for (const [potion, limit] of potions) {
-    const wantToUse = Math.ceil(limit - haveEffect(itemToEffect(potion)) / effectDuration(potion));
-    if (have(potion) && wantToUse > 0) use(wantToUse, potion);
+    const toUse = Math.ceil((limit - haveEffect(itemToEffect(potion))) / effectDuration(potion));
+    if (have(potion) && toUse > 0) use(toUse, potion);
   }
 
   if (have($item`burning newspaper`)) create($item`burning paper crane`);
