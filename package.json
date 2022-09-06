@@ -1,6 +1,6 @@
 {
   "name": "seventy-hccs",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A 70-turn Community Service project for Kingdom of Loathing",
   "main": "KoLmafia/scripts/seventy-hccs/seventy-hccs.js",
   "scripts": {
