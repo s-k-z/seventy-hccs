@@ -9,7 +9,7 @@ import {
   userConfirm,
   visitUrl,
 } from "kolmafia";
-import { $class, $item, $monster, ascend, get, Lifestyle, Paths, prepareAscension } from "libram";
+import { $class, $item, $monster, $path, ascend, get, Lifestyle, prepareAscension } from "libram";
 
 export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
   if (myPath() === Path.get("Community Service")) return true;
@@ -69,7 +69,7 @@ export function prepAndAscendIfNecessary() {
       throwOnFail: true,
     });
     ascend(
-      Paths.CommunityService,
+      $path`Community Service`,
       $class`Sauceror`,
       Lifestyle.hardcore,
       "wallaby",
