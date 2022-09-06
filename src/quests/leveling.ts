@@ -433,14 +433,32 @@ export const Leveling: Quest<Task> = {
       name: "Backup Camera Fights",
       after: ["Lectures on Relativity"],
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
-      completed: () => get("_backUpUses") >= 11,
-      prepare: () => cliExecute("umbrella ml"),
+      completed: () => get("_backUpUses") >= 7,
+      prepare: () => {
+        if (get("umbrellaState") !== "broken") cliExecute("umbrella ml");
+      },
       do: $location`The Toxic Teacups`,
       outfit: () => {
         return {
           offhand: $item`unbreakable umbrella`,
           acc3: $item`backup camera`,
-          familiar: selectBestFamiliar(get("_backUpUses") > 7 ? AdvReq.Wine : AdvReq.Normal),
+          familiar: selectBestFamiliar(AdvReq.Normal),
+        };
+      },
+      combat: DefaultCombat,
+    },
+    {
+      name: "Vinter Backup Fights",
+      after: ["Backup Camera Fights"],
+      ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
+      completed: () => get("_backUpUses") >= 11,
+      prepare: () => cliExecute("umbrella ml"),
+      do: $location`The Toxic Teacups`,
+      effects: $effects`Wizard Squint`,
+      outfit: () => {
+        return {
+          acc3: $item`backup camera`,
+          familiar: selectBestFamiliar(AdvReq.Wine),
         };
       },
       combat: StenchCombat,
