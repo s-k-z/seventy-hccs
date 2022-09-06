@@ -2,7 +2,6 @@ import {
   canInteract,
   holiday,
   myPath,
-  Path,
   print,
   pvpAttacksLeft,
   totalTurnsPlayed,
@@ -12,7 +11,7 @@ import {
 import { $class, $item, $monster, $path, ascend, get, Lifestyle, prepareAscension } from "libram";
 
 export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
-  if (myPath() === Path.get("Community Service")) return true;
+  if (myPath() === $path`Community Service`) return true;
 
   const inWrongPath = !canInteract();
   if (inWrongPath) {
@@ -56,7 +55,7 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
 }
 
 export function prepAndAscendIfNecessary() {
-  if (myPath() !== Path.get("Community Service")) {
+  if (myPath() !== $path`Community Service`) {
     prepareAscension({
       workshed: "Little Geneticist DNA-Splicing Lab",
       garden: "Peppermint Pip Packet",
