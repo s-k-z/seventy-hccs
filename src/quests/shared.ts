@@ -27,7 +27,8 @@ import { MoonSign, tuneMoon } from "../iotms";
 import { haveItemOrEffect } from "../lib";
 
 export function runTest(test: CommunityService): void {
-  const err = test.run(() => undefined, 1);
+  if (test.actualCost() > 1) throw `Can't do ${test.name} in 1 turn?`;
+  const err = test.run(() => undefined);
   // prettier-ignore
   const handler = {
     "completed":         () => { return },
