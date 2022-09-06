@@ -37,6 +37,7 @@ import {
 
 const buffs = [
   $effect`Broad-Spectrum Vaccine`,
+  $effect`El Aroma de Salsa`,
   $effect`Favored by Lyle`,
   $effect`Grumpy and Ornery`,
   $effect`Sigils of Yeg`,

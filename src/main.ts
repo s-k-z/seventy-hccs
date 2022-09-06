@@ -1,6 +1,6 @@
 import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
 import { getAutoAttack, print, setAutoAttack } from "kolmafia";
-import { get, sinceKolmafiaRevision } from "libram";
+import { CommunityService as CS, get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
 import { batfellow } from "./batfellow";
 import { DefaultCombat } from "./combat";
@@ -28,12 +28,11 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
     Deck Cards:
       Wrench
       Green Mana
-      Christmas Card (Elf) *
+      Christmas Card (Elf)
     DNA:
       Construct
       Elf
       Fish
-      Pirate or... ? *
     Locket Reminiscences:
       Pterodactyl
       Cocktail Shrimp
@@ -44,7 +43,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
     Tome Summons:
       Borrowed Time
       Occult Jelly Donut
-      Box of Familiar Jacks *
+      Box of Familiar Jacks
     Wishes:
       All is Forgiven
       Sparkly!
@@ -112,7 +111,7 @@ export function main(command = ""): void {
     while (!get("kingLiberated")) {
       const task = engine.getNextTask();
       if (!task) throw `No available tasks?`;
-      prepareAll(); // Only want to do for leveling tasks? how?
+      if (CS.CoilWire.isDone() && !CS.Muscle.isDone()) prepareAll();
       engine.execute(task);
     }
   } finally {

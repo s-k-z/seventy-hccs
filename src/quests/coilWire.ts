@@ -63,6 +63,7 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$item`pantogram pants`,               () => getPantogramPants()],
   [$item`battery (AAA)`,                 () => harvestBatteries()],
   [$item`battery (lantern)`,             () => create($item`battery (lantern)`)],
+  [$item`box of Familiar Jacks`,         () => create($item`box of Familiar Jacks`)],
   [$item`occult jelly donut`,            () => create($item`occult jelly donut`)],
   [$item`Brutal brogues`,                () => cliExecute("bastille bbq brutalist catapult")],
   [$item`cuppa Loyal tea`,               () => cliExecute("teatree loyal")],
@@ -72,7 +73,7 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$item`"DRINK ME" potion`,             () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2")],
   [$item`gold detective badge`,          () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
   [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
-  [$item`weeping willow wand`,           () => { visitUrl("shop.php?whichshop=lathe");create($item`weeping willow wand`); }],
+  [$item`weeping willow wand`,           () => { visitUrl("shop.php?whichshop=lathe"); create($item`weeping willow wand`); }],
   [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)],             // -270 meat
   [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // -450 meat
   [$item`toy accordion`,                 () => retrieveItem($item`toy accordion`)],             // -135 meat
@@ -236,7 +237,10 @@ export const CoilWire: Quest<Task> = {
       name: "Reminisce 2",
       completed: () => monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
-      post: () => DNALab.hybridize(),
+      post: () => {
+        DNALab.hybridize();
+        if (!have($item`Gene Tonic: Fish`)) DNALab.makeTonic();
+      },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
       combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
     },
