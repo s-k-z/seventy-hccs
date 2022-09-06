@@ -448,7 +448,7 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Vinter Backup Fights",
+      name: "Vintner Backup Fights",
       after: ["Backup Camera Fights"],
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
       completed: () => get("_backUpUses") >= 11,
