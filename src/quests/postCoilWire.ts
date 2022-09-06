@@ -81,6 +81,8 @@ const buffs = [
   // Song(s)
   $effect`Ode to Booze`, // 50 mp
   $effect`Polka of Plenty`, // 7 mp
+  // Dread Song
+  $effect`Song of Sauce`, // 100 mp
   // Batteries
   $effect`AAA-Charged`, // +30 MP
   $effect`Lantern-Charged`, // +70 MP
@@ -96,7 +98,9 @@ const postNanorhino = [
   $effect`Hustlin'`,
   $effect`Loyal Tea`,
   $effect`Mental A-cue-ity`,
+  $effect`Over-Familiar With Dactyls`,
   $effect`Puzzle Champ`,
+  $effect`Shrimpin' Ain't Easy`,
   $effect`You Can Really Taste the Dormouse`,
   // Skills
   $effect`Blood Bond`,
@@ -117,6 +121,12 @@ export const PostCoilWire: Quest<Task> = {
       name: "Eat a donut",
       completed: () => !have($item`occult jelly donut`),
       do: () => eat($item`occult jelly donut`),
+    },
+    {
+      name: "Get cracker",
+      completed: () => have($item`cracker`),
+      do: () => use($item`box of Familiar Jacks`),
+      outfit: { familiar: $familiar`Exotic Parrot` },
     },
     {
       name: "Open MayDay package",
