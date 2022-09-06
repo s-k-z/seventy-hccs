@@ -36,6 +36,7 @@ export function runTest(test: CommunityService): void {
     "failed":            () => { throw `Failed test ${test.name}`; },
   }[err];
   handler();
+  if (!test.verifyIsDone()) throw `Failed to actually do ${test.name}?`;
 }
 
 export const enum AdvReq {
