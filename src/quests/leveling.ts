@@ -7,7 +7,9 @@ import {
   create,
   eat,
   equip,
+  familiarWeight,
   mpCost,
+  myFamiliar,
   myHp,
   myLevel,
   myMaxhp,
@@ -15,12 +17,14 @@ import {
   myMeat,
   myMp,
   mySoulsauce,
+  print,
   runChoice,
   soulsauceCost,
   totalFreeRests,
   use,
   useSkill,
   visitUrl,
+  weightAdjustment,
 } from "kolmafia";
 import {
   $effect,
@@ -219,6 +223,7 @@ export const Leveling: Quest<Task> = {
       completed: () =>
         haveItemOrEffect($item`gingerbread spice latte`) || have($item`sprinkles`, 50),
       prepare: () => {
+        print(`Getting sprinkles, have ${familiarWeight(myFamiliar()) + weightAdjustment()} lbs`);
         if (get("_gingerbreadCityTurns") >= 5) throw `Failed to get gingerbread spice latte?`;
       },
       do: $location`Gingerbread Upscale Retail District`,
