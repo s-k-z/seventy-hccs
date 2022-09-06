@@ -28,14 +28,14 @@ import { haveItemOrEffect } from "../lib";
 
 export function runTest(test: CommunityService): void {
   const famWeight = test.statName === "Familiar Weight";
-  if (famWeight && test.actualCost() > 1) throw `Can't do ${test.name} in 1 turn?`;
+  if (famWeight && test.actualCost() > 1) throw `Can't do ${test.statName} in 1 turn?`;
   const coilWire = test.name === "Coil Wire";
   const err = test.run(() => undefined, coilWire || famWeight ? 60 : 1);
   // prettier-ignore
   const handler = {
     "completed":         () => { return },
-    "already completed": () => { throw `Re-ran test ${test.name}`; },
-    "failed":            () => { throw `Failed test ${test.name}`; },
+    "already completed": () => { throw `Re-ran test ${test.statName}`; },
+    "failed":            () => { throw `Failed test ${test.statName}`; },
   }[err];
   handler();
 }
