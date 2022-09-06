@@ -38,9 +38,7 @@ function getHowManySausages(): number {
 }
 
 export function prepareAll() {
-  const needHeal = myHp() / myMaxhp() < 0.3;
-  const haveEnoughMp = myMp() > 2 * mpCost($skill`Cannelloni Cocoon`);
-  if (needHeal && haveEnoughMp) useSkill($skill`Cannelloni Cocoon`);
+  if (myHp() / myMaxhp() < 0.3) useSkill($skill`Cannelloni Cocoon`);
 
   const maxMPGains = (myMaxmp() - myMp()) / 15;
   const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
