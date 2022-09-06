@@ -21,7 +21,6 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 // TODO:
 // Double check crit for vintner
 // Check missed effects/outfits/tasks
-// Implement prepare.ts
 // Review completion criteria & after tags
 
 /* Resources:
