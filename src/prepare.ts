@@ -24,12 +24,12 @@ function getHowManySausages(): number {
   const offset = get("_sausagesMade");
   if (offset >= 23) return 0;
 
-  const costs = [...Array(24).keys()].map((k) => k * 111).splice(1);
+  const costsOfNext = [...Array(24).keys()].map((k) => k * 111).splice(1);
   const mpRefills = (myMaxmp() - myMp()) / 999;
   let toEat = 0;
   let totalCost = 0;
-  while (toEat < mpRefills && toEat + offset < costs.length) {
-    totalCost += costs[toEat + offset];
+  while (toEat < mpRefills && toEat + offset < costsOfNext.length) {
+    totalCost += costsOfNext[toEat + offset];
     if (myMeat() - totalCost < config.MEAT_SAFE_LIMIT) break;
     toEat++;
   }
