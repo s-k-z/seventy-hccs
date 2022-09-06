@@ -7,13 +7,12 @@ import {
   runChoice,
   Skill,
   toInt,
-  use,
   useSkill,
   visitUrl,
 } from "kolmafia";
 import { $class, $item, $skill, $stat, get, have } from "libram";
 import { BRICKO_COST, BRICKO_DROP, BRICKO_TARGET_ITEM } from "./config";
-import { haveItemOrEffect, itemToEffect } from "./lib";
+import { haveItemOrEffect } from "./lib";
 
 export function castBestLibram(): void {
   const owned = itemAmount(BRICKO_TARGET_ITEM);
@@ -95,28 +94,6 @@ export const enum MoonSign {
 
 export function tuneMoon(moon: MoonSign): void {
   visitUrl(`inv_use.php?whichitem=${toInt($item`hewn moon-rune spoon`)}&doit=96&whichsign=${moon}`);
-}
-
-export function useDroppedItems(): void {
-  new Map([[$item`pulled violet taffy`, 50]]).forEach((limit, multiUse) => {
-    if (have(multiUse) && !have(itemToEffect(multiUse), limit)) use(itemAmount(multiUse), multiUse);
-  });
-  [
-    // librams
-    $item`green candy heart`,
-    $item`pulled yellow taffy`,
-    $item`resolution: be feistier`,
-    $item`resolution: be happier`,
-    $item`resolution: be kinder`,
-    $item`resolution: be luckier`,
-    $item`resolution: be smarter`,
-    $item`resolution: be wealthier`,
-    // other potions
-    $item`power pill`,
-    $item`short stack of pancakes`,
-  ].forEach((singleUse) => {
-    if (have(singleUse) && !have(itemToEffect(singleUse))) use(singleUse);
-  });
 }
 
 export function vote(): void {
