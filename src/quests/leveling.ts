@@ -456,6 +456,7 @@ export const Leveling: Quest<Task> = {
       effects: $effects`Wizard Squint`,
       outfit: () => {
         return {
+          acc2: $item`battle broom`,
           acc3: $item`backup camera`,
           familiar: selectBestFamiliar(AdvReq.Wine),
         };
@@ -470,6 +471,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Neverending Party`,
       outfit: () => {
         return {
+          acc2: $item`battle broom`,
           acc3: $item`Beach Comb`,
           familiar: selectBestFamiliar(AdvReq.Wine),
         };
