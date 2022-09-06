@@ -40,6 +40,8 @@ const buffs = [
   $effect`El Aroma de Salsa`,
   $effect`Favored by Lyle`,
   $effect`Grumpy and Ornery`,
+  $effect`Hustlin'`,
+  $effect`Mental A-cue-ity`,
   $effect`Sigils of Yeg`,
   $effect`Starry-Eyed`,
   $effect`Total Protonic Reversal`,
@@ -72,6 +74,7 @@ const buffs = [
   $effect`Inscrutable Gaze`, // 10 mp
   $effect`Ruthlessly Efficient`, // 10 mp
   $effect`Singer's Faithful Ocelot`, // 15 mp
+  $effect`Sauce Monocle`, // 20 mp
   $effect`Triple-Sized`,
   // Class skills
   $effect`Astral Shell`, // 10 mp
@@ -95,9 +98,7 @@ const postNanorhino = [
   $effect`Human-Elf Hybrid`,
   $effect`Human-Fish Hybrid`,
   $effect`Human-Machine Hybrid`,
-  $effect`Hustlin'`,
   $effect`Loyal Tea`,
-  $effect`Mental A-cue-ity`,
   $effect`Over-Familiar With Dactyls`,
   $effect`Puzzle Champ`,
   $effect`Shrimpin' Ain't Easy`,
