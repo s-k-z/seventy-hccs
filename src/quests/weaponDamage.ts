@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, use } from "kolmafia";
+import { cliExecute, equip, use } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -8,6 +8,7 @@ import {
   $location,
   $monster,
   $skill,
+  $slot,
   CommunityService,
   have,
   Macro,
@@ -45,6 +46,7 @@ export const WeaponDamageQuest: Quest<Task> = {
       completed: () => CommunityService.WeaponDamage.isDone(),
       prepare: () => cliExecute("umbrella weapon"),
       do: () => runTest(CommunityService.WeaponDamage),
+      post: () => equip($slot`familiar`, $item`none`),
       effects: [
         $effect`Billiards Belligerence`,
         $effect`Blessing of your favorite Bird`,
