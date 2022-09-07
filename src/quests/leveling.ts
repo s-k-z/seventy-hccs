@@ -5,6 +5,7 @@ import {
   chew,
   cliExecute,
   create,
+  currentMcd,
   eat,
   equip,
   familiarWeight,
@@ -482,7 +483,7 @@ export const Leveling: Quest<Task> = {
       name: "Drink Lattes",
       completed: () => get("_latteRefillsUsed") >= 3,
       prepare: () => {
-        changeMcd(0);
+        if (currentMcd() > 0) changeMcd(0);
         if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
       },
       do: $location`The Dire Warren`,
