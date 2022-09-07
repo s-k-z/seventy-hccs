@@ -6,7 +6,7 @@ import { batfellow } from "./batfellow";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { prepareAll } from "./prepare";
-import { CoilWire, PreCoilWire } from "./quests/coilWire";
+import { CoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
 import { DonateQuest } from "./quests/donate";
 import { FamWeightQuest } from "./quests/familiarWeight";
@@ -83,7 +83,6 @@ export function main(command = ""): void {
   prepAndAscendIfNecessary();
 
   const tasks = getTasks([
-    PreCoilWire,
     CoilWire,
     PostCoilWire,
     Leveling,

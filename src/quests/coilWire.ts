@@ -80,8 +80,20 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$skill`Seek out a Bird`,              () => use($item`Bird-a-Day calendar`)],
 ]);
 
-export const PreCoilWire: Quest<Task> = {
-  name: "Pre-Coil Setup",
+const defaultOutfit = {
+  hat: $item`Daylight Shavings Helmet`,
+  back: $item`protonic accelerator pack`,
+  shirt: $item`Jurassic Parka`,
+  weapon: $item`Fourth of May Cosplay Saber`,
+  offhand: $item`familiar scrapbook`,
+  pants: $item`designer sweatpants`,
+  acc1: $item`hewn moon-rune spoon`,
+  acc2: $item`Powerful Glove`,
+  acc3: $item`Kremlin's Greatest Briefcase`,
+};
+
+export const CoilWire: Quest<Task> = {
+  name: "Coil Wire",
   completed: () => CommunityService.CoilWire.isDone(),
   tasks: [
     {
@@ -144,25 +156,6 @@ export const PreCoilWire: Quest<Task> = {
       acquire: [{ item: $item`borrowed time`, get: () => create($item`borrowed time`) }],
       do: () => use($item`borrowed time`),
     },
-  ],
-};
-
-const defaultOutfit = {
-  hat: $item`Daylight Shavings Helmet`,
-  back: $item`protonic accelerator pack`,
-  shirt: $item`Jurassic Parka`,
-  weapon: $item`Fourth of May Cosplay Saber`,
-  offhand: $item`familiar scrapbook`,
-  pants: $item`designer sweatpants`,
-  acc1: $item`hewn moon-rune spoon`,
-  acc2: $item`Powerful Glove`,
-  acc3: $item`Kremlin's Greatest Briefcase`,
-};
-
-export const CoilWire: Quest<Task> = {
-  name: "Coil Wire",
-  completed: () => CommunityService.CoilWire.isDone(),
-  tasks: [
     {
       name: "Setup & Heal",
       completed: () => get("_hotTubSoaks") > 0,
