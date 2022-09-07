@@ -46,11 +46,10 @@ import {
 import { checkAvailable, checkEffect, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, runTest, selectBestFamiliar } from "./shared";
 
-// prettier-ignore
 const questHandlers = new Map([
   ["questM23Meatsmith", "shop.php?whichshop=meatsmith&action=talk"],
-  ["questM24Doc",       "shop.php?whichshop=doc&action=talk"],
-  ["questM25Armorer",   "shop.php?whichshop=armory&action=talk"],
+  ["questM24Doc", "shop.php?whichshop=doc&action=talk"],
+  ["questM25Armorer", "shop.php?whichshop=armory&action=talk"],
 ]);
 
 // prettier-ignore
