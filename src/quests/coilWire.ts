@@ -7,6 +7,7 @@ import {
   Effect,
   equip,
   Item,
+  itemAmount,
   mpCost,
   retrieveItem,
   Skill,
@@ -154,7 +155,7 @@ export const CoilWire: Quest<Task> = {
       do: () => {
         cliExecute("hottub");
         const target = toFamiliar(config.stillsuit);
-        const canUseStillsuit = target !== $familiar`none` && have($item`tiny stillsuit`);
+        const canUseStillsuit = target !== $familiar`none` && itemAmount($item`tiny stillsuit`) > 0;
         if (canUseStillsuit) equip(target, $item`tiny stillsuit`);
       },
       effects: [
