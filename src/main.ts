@@ -19,7 +19,6 @@ import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/sta
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 // TODO:
-// Double check crit for vintner
 // Check missed effects/outfits/tasks
 // Review completion criteria & after tags
 

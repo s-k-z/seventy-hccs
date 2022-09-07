@@ -7,7 +7,6 @@ import {
   Effect,
   equip,
   Item,
-  itemAmount,
   mpCost,
   retrieveItem,
   Skill,
@@ -113,12 +112,6 @@ export const CoilWire: Quest<Task> = {
         }),
     },
     {
-      name: "Equip Stillsuit",
-      completed: () =>
-        toFamiliar(config.stillsuit) === $familiar`none` || itemAmount($item`tiny stillsuit`) < 1,
-      do: () => equip(toFamiliar(config.stillsuit), $item`tiny stillsuit`),
-    },
-    {
       name: "Communism!",
       completed: () => get("_communismUsed"),
       do: () => useSkill($skill`Communism!`),
@@ -158,7 +151,12 @@ export const CoilWire: Quest<Task> = {
       name: "Setup & Heal",
       completed: () => get("_hotTubSoaks") > 0,
       prepare: () => cliExecute("parka dilophosaur"),
-      do: () => cliExecute("hottub"),
+      do: () => {
+        cliExecute("hottub");
+        const target = toFamiliar(config.stillsuit);
+        const canUseStillsuit = target !== $familiar`none` && have($item`tiny stillsuit`);
+        if (canUseStillsuit) equip(target, $item`tiny stillsuit`);
+      },
       effects: [
         $effect`Feeling Excited`,
         $effect`Feeling Peaceful`,
