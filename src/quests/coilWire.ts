@@ -9,7 +9,6 @@ import {
   Item,
   itemAmount,
   mpCost,
-  myClass,
   retrieveItem,
   Skill,
   toFamiliar,
@@ -19,7 +18,6 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
-  $class,
   $effect,
   $familiar,
   $item,
@@ -317,11 +315,7 @@ export const CoilWire: Quest<Task> = {
         cliExecute("retrocape heck thrill");
       },
       do: () => runTest(CommunityService.CoilWire),
-      effects: [
-        myClass() === $class`Sauceror`
-          ? $effect`[1458]Blood Sugar Sauce Magic`
-          : $effect`[1457]Blood Sugar Sauce Magic`,
-      ],
+      effects: [$effect`[1458]Blood Sugar Sauce Magic`], // 1457 for other classes
       outfit: {
         hat: $item`Iunion Crown`,
         back: $item`unwrapped knock-off retro superhero cape`,
