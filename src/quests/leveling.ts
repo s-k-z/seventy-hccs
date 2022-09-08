@@ -188,7 +188,10 @@ export const Leveling: Quest<Task> = {
     {
       name: "Tunnel of L.O.V.E.",
       completed: () => get("_loveTunnelUsed"),
-      prepare: () => spendAllMpOnLibrams(),
+      prepare: () => {
+        spendAllMpOnLibrams();
+        cliExecute("retrocape heck thrill");
+      },
       // 1222 The Tunnel of L.O.V.E.: (1) enter the tunnel (2) leave
       // 1223 L.O.V. Entrance: (1) fight the enforcer (2) skip
       // 1224 L.O.V. Equipment Room: (1) take the cardigan (2) take the epaulettes (3) take the earrings (4) skip
