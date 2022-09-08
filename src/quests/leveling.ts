@@ -9,6 +9,8 @@ import {
   eat,
   equip,
   familiarWeight,
+  haveEffect,
+  Item,
   mpCost,
   myFamiliar,
   myHp,
@@ -46,7 +48,15 @@ import {
 import { DefaultCombat, DMT1Combat, DMT2Combat, RunawayCombat, StenchCombat } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
-import { checkAvailable, checkEffect, haveItemOrEffect, tryUse, voterMonsterNow } from "../lib";
+import {
+  checkAvailable,
+  checkEffect,
+  effectDuration,
+  haveItemOrEffect,
+  itemToEffect,
+  tryUse,
+  voterMonsterNow,
+} from "../lib";
 import { AdvReq, deepDarkVisions, innerElf, selectBestFamiliar } from "./shared";
 
 const levelingOutfit = {
@@ -60,14 +70,43 @@ const levelingOutfit = {
   acc3: $item`Beach Comb`,
 };
 
-function canEatSausages(): boolean {
-  return (
-    have($item`magical sausage casing`) &&
-    get("_sausagesEaten") < 23 &&
-    myMaxmp() - myMp() > 1000 &&
-    myMaxmp() - mpCost($skill`Summon BRICKOs`) > config.MP_SAFE_LIMIT &&
-    (get("_sausagesMade") + 1) * 111 < myMeat() - config.MEAT_SAFE_LIMIT
-  );
+function getHowManySausagesToEat(): number {
+  if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
+
+  const offset = get("_sausagesMade");
+  if (offset >= 23) return 0;
+
+  const costsOfNext = [...Array(24).keys()].map((k) => k * 111).splice(1);
+  const mpRefills = (myMaxmp() - myMp()) / 999;
+  let toEat = 0;
+  let totalCost = 0;
+  while (toEat < mpRefills && toEat + offset < costsOfNext.length) {
+    totalCost += costsOfNext[toEat + offset];
+    if (myMeat() - totalCost < config.MEAT_SAFE_LIMIT) break;
+    toEat++;
+  }
+
+  return toEat;
+}
+
+const potions = new Map([
+  [$item`green candy heart`, 1],
+  [$item`pulled yellow taffy`, 1],
+  [$item`pulled violet taffy`, 50],
+  [$item`resolution: be feistier`, 1],
+  [$item`resolution: be happier`, 1],
+  [$item`resolution: be kinder`, 1],
+  [$item`resolution: be luckier`, 1],
+  [$item`resolution: be smarter`, 1],
+  [$item`resolution: be wealthier`, 1],
+  [$item`short stack of pancakes`, 1],
+]);
+
+function getPotionsToUse(): [Item, number][] {
+  const howMany = (potion: Item, limit: number) =>
+    Math.ceil((limit - haveEffect(itemToEffect(potion))) / effectDuration(potion));
+  const usablePotions = Array.from(potions).filter(([p, l]) => howMany(p, l) > 0);
+  return usablePotions.map(([p, l]) => [p, howMany(p, l)]);
 }
 
 export const Leveling: Quest<Task> = {
@@ -77,20 +116,19 @@ export const Leveling: Quest<Task> = {
       name: "Cast Soul Food",
       completed: () => mySoulsauce() / soulsauceCost($skill`Soul Food`) < 1,
       do: () => {
-        const maxMPGains = (myMaxmp() - myMp()) / 15;
+        const maxMpGain = (myMaxmp() - myMp()) / 15;
         const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
-        const soulFoodCasts = Math.floor(Math.min(maxMPGains, maxSoulFoodCasts));
-        if (soulFoodCasts >= 1) useSkill(soulFoodCasts, $skill`Soul Food`);
+        const soulFoodCasts = Math.floor(Math.min(maxMpGain, maxSoulFoodCasts));
+        if (soulFoodCasts > 0) useSkill(soulFoodCasts, $skill`Soul Food`);
       },
     },
     {
       name: "Eat Magical Sausages",
-      completed: () => !canEatSausages(),
+      completed: () => getHowManySausagesToEat() < 1,
       do: () => {
-        while (canEatSausages()) {
-          create($item`magical sausage`);
-          eat($item`magical sausage`);
-        }
+        const toEat = getHowManySausagesToEat();
+        create(toEat, $item`magical sausage`);
+        eat(toEat, $item`magical sausage`);
       },
     },
     {
@@ -99,10 +137,20 @@ export const Leveling: Quest<Task> = {
       do: () => castBestLibram(),
     },
     {
+      name: "Use Potions",
+      completed: () => getPotionsToUse().length > 0,
+      do: () => getPotionsToUse().forEach(([potion, count]) => use(count, potion)),
+    },
+    {
       name: "Remove Temporary Blindness",
       ready: () => get("_hotTubSoaks") < 5,
       completed: () => !have($effect`Temporary Blindness`),
       do: () => cliExecute("hottub"),
+    },
+    {
+      name: "Heal if needed",
+      completed: () => myHp() / myMaxhp() > 0.3,
+      do: () => useSkill($skill`Cannelloni Cocoon`),
     },
     {
       name: "Make Burning Paper Crane",

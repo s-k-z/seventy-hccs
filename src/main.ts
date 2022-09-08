@@ -1,11 +1,10 @@
 import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
 import { getAutoAttack, print, setAutoAttack } from "kolmafia";
-import { CommunityService as CS, get, sinceKolmafiaRevision } from "libram";
+import { get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
 import { batfellow } from "./batfellow";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
-import { prepareAll } from "./prepare";
 import { CoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
 import { DonateQuest } from "./quests/donate";
@@ -108,7 +107,6 @@ export function main(command = ""): void {
     while (!get("kingLiberated")) {
       const task = engine.getNextTask();
       if (!task) throw `No available tasks?`;
-      if (CS.CoilWire.isDone() && !CS.Muscle.isDone()) prepareAll();
       engine.execute(task);
     }
   } finally {
