@@ -42,8 +42,8 @@ export function runTest(test: CommunityService): void {
 
 export const enum AdvReq {
   NoAttack,
-  Toxic,
   Normal,
+  Toxic,
   Wine,
 }
 
@@ -54,10 +54,10 @@ export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): Familiar {
   if (req === AdvReq.Toxic && get("_hipsterAdv") < 7) return $familiar`Artistic Goth Kid`;
 
   const pancake = $item`short stack of pancakes`;
-  if (req >= AdvReq.Normal && !haveItemOrEffect(pancake)) return $familiar`Shorter-Order Cook`;
+  if (req === AdvReq.Normal && !haveItemOrEffect(pancake)) return $familiar`Shorter-Order Cook`;
 
   const absinthe = $item`tiny bottle of absinthe`;
-  if (req >= AdvReq.Normal && !haveItemOrEffect(absinthe)) return $familiar`Green Pixie`;
+  if (req === AdvReq.Normal && !haveItemOrEffect(absinthe)) return $familiar`Green Pixie`;
 
   if (!$items`rope, burning newspaper, burning paper crane`.some((i) => have(i)))
     return $familiar`Garbage Fire`;
