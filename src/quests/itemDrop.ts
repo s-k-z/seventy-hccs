@@ -15,7 +15,7 @@ import { runTest } from "./shared";
 
 export const ItemDropQuest: Quest<Task> = {
   name: "Make Margaritas",
-  completed: () => CommunityService.WeaponDamage.isDone(),
+  completed: () => CommunityService.BoozeDrop.isDone(),
   tasks: [
     {
       name: "Become a Bat",
