@@ -35,10 +35,7 @@ export const SpellDamageQuest: Quest<Task> = {
       },
       do: () => use($item`photocopied monster`),
       post: () => checkAvailable($item`corrupted marrow`),
-      outfit: {
-        weapon: $item`Fourth of May Cosplay Saber`,
-        familiar: $familiar`Machine Elf`,
-      },
+      outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: MeteorForceCombat,
     },
     deepDarkVisions,

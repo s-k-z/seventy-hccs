@@ -7,6 +7,7 @@ import {
   myLevel,
   myMaxhp,
   useSkill,
+  visitUrl,
 } from "kolmafia";
 import {
   $effect,
@@ -25,6 +26,11 @@ import { DefaultCombat } from "../combat";
 import { config } from "../config";
 import { MoonSign, tuneMoon } from "../iotms";
 import { haveItemOrEffect } from "../lib";
+
+export function refreshGhost(verify = true): void {
+  visitUrl("questlog.php?which=1");
+  if (verify && !get("ghostLocation")) throw `Failed to get protonic ghost notice`;
+}
 
 export function runTest(test: CommunityService): void {
   const famWeight = test.statName === "Familiar Weight";

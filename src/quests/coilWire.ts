@@ -9,6 +9,8 @@ import {
   Item,
   itemAmount,
   mpCost,
+  myMaxmp,
+  myMp,
   retrieveItem,
   Skill,
   toFamiliar,
@@ -44,7 +46,7 @@ import {
   vote,
 } from "../iotms";
 import { checkAvailable, checkEffect, voterMonsterNow } from "../lib";
-import { AdvReq, darkHorse, runTest, selectBestFamiliar } from "./shared";
+import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
   ["questM23Meatsmith", "shop.php?whichshop=meatsmith&action=talk"],
@@ -169,6 +171,14 @@ export const CoilWire: Quest<Task> = {
       outfit: defaultOutfit,
     },
     {
+      name: "Use energy blobs",
+      completed: () => !have($item`psychokinetic energy blob`) || (myMaxmp() - myMp()) / 30 < 1,
+      do: () => {
+        const blob = $item`psychokinetic energy blob`;
+        use(Math.min(itemAmount(blob), Math.floor((myMaxmp() - myMp()) / 30)), blob);
+      },
+    },
+    {
       name: "Wanderer Sweep",
       completed: () => get("_banderRunaways") > 0,
       do: $location`Noob Cave`,
@@ -189,6 +199,7 @@ export const CoilWire: Quest<Task> = {
       prepare: () => cliExecute("parka dilophosaur"),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
+      post: () => refreshGhost(),
       outfit: () => {
         return {
           back: $item`protonic accelerator pack`,
@@ -212,7 +223,7 @@ export const CoilWire: Quest<Task> = {
       prepare: () => visitUrl("questlog.php?which=1"),
       do: () => {
         const ghostZone = get("ghostLocation");
-        if (!ghostZone) throw `Failed to get protonic ghost notice!`;
+        if (!ghostZone) throw `Failed to get protonic ghost notice`;
         adv1(ghostZone, -1);
       },
       post: () => equip($slot`familiar`, $item`none`),

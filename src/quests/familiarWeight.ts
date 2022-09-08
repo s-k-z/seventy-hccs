@@ -23,10 +23,7 @@ export const FamWeightQuest: Quest<Task> = {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
       do: $location`The Dire Warren`,
-      outfit: {
-        weapon: $item`Fourth of May Cosplay Saber`,
-        familiar: $familiar`Machine Elf`,
-      },
+      outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: MeteorForceCombat,
     },
     {

@@ -223,9 +223,7 @@ export const PostCoilWire: Quest<Task> = {
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
       do: $location`Gingerbread Civic Center`,
       effects: $effects`Ode to Booze`,
-      outfit: {
-        familiar: $familiar`Frumious Bandersnatch`,
-      },
+      outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: new CombatStrategy().startingMacro(Macro.abort()),
     },
     {

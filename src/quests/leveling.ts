@@ -57,7 +57,7 @@ import {
   tryUse,
   voterMonsterNow,
 } from "../lib";
-import { AdvReq, deepDarkVisions, innerElf, selectBestFamiliar } from "./shared";
+import { AdvReq, deepDarkVisions, innerElf, refreshGhost, selectBestFamiliar } from "./shared";
 
 const levelingOutfit = {
   hat: $item`Daylight Shavings Helmet`,
@@ -111,6 +111,7 @@ function getPotionsToUse(): [Item, number][] {
 
 export const Leveling: Quest<Task> = {
   name: "Leveling",
+  completed: () => get("csServicesPerformed").includes(","),
   tasks: [
     {
       name: "Cast Soul Food",
@@ -138,7 +139,7 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Use Potions",
-      completed: () => getPotionsToUse().length > 0,
+      completed: () => getPotionsToUse().length === 0,
       do: () => getPotionsToUse().forEach(([potion, count]) => use(count, potion)),
     },
     {
@@ -157,22 +158,6 @@ export const Leveling: Quest<Task> = {
       ready: () => have($item`burning newspaper`),
       completed: () => have($item`burning paper crane`),
       do: () => create($item`burning paper crane`),
-    },
-    {
-      name: "Protonic Ghost",
-      completed: () => get("ghostLocation") === null,
-      do: () => {
-        const ghostZone = get("ghostLocation");
-        if (!ghostZone) throw `Failed to get protonic ghost notice`;
-        adv1(ghostZone, -1);
-      },
-      outfit: () => {
-        return {
-          back: $item`protonic accelerator pack`,
-          familiar: selectBestFamiliar(AdvReq.NoAttack),
-        };
-      },
-      combat: DefaultCombat,
     },
     innerElf,
     {
@@ -220,10 +205,7 @@ export const Leveling: Quest<Task> = {
         use($item`LOV Elixir #6`);
       },
       outfit: () => {
-        return {
-          back: $item`protonic accelerator pack`,
-          familiar: selectBestFamiliar(AdvReq.NoAttack),
-        };
+        return { ...levelingOutfit, familiar: selectBestFamiliar(AdvReq.NoAttack) };
       },
       combat: DefaultCombat,
     },
@@ -233,10 +215,7 @@ export const Leveling: Quest<Task> = {
       completed: () => !have($item`a ten-percent bonus`),
       do: () => use($item`a ten-percent bonus`),
       effects: $effects`Inscrutable Gaze, That's Just Cloud-Talk\, Man, Synthesis: Learning`,
-      outfit: {
-        back: $item`LOV Epaulettes`,
-        offhand: $item`familiar scrapbook`,
-      },
+      outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },
     },
     {
       name: "Chateau Rest",
@@ -244,17 +223,17 @@ export const Leveling: Quest<Task> = {
       completed: () => get("timesRested") > totalFreeRests(),
       do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
       effects: $effects`Inscrutable Gaze, That's Just Cloud-Talk\, Man, Synthesis: Learning`,
-      outfit: {
-        back: $item`LOV Epaulettes`,
-        offhand: $item`familiar scrapbook`,
-      },
+      outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },
     },
     {
       name: "Witchess Rook",
       completed: () => haveItemOrEffect($item`Greek fire`),
       prepare: () => cliExecute("umbrella ml"),
       do: () => Witchess.fightPiece($monster`Witchess Rook`),
-      post: () => use($item`Greek fire`),
+      post: () => {
+        refreshGhost();
+        use($item`Greek fire`);
+      },
       effects: [
         $effect`Flimsy Shield of the Pastalord`,
         $effect`Drescher's Annoying Noise`,
@@ -263,7 +242,28 @@ export const Leveling: Quest<Task> = {
         $effect`Ur-Kel's Aria of Annoyance`,
       ],
       outfit: () => {
-        return { ...levelingOutfit, familiar: selectBestFamiliar() };
+        return {
+          offhand: levelingOutfit.offhand,
+          back: $item`protonic accelerator pack`,
+          familiar: selectBestFamiliar(),
+        };
+      },
+      combat: DefaultCombat,
+    },
+    {
+      name: "Protonic Ghost",
+      completed: () => get("ghostLocation") === null,
+      prepare: () => visitUrl("questlog.php?which=1"),
+      do: () => {
+        const ghostZone = get("ghostLocation");
+        if (!ghostZone) throw `Failed to get protonic ghost notice`;
+        adv1(ghostZone, -1);
+      },
+      outfit: () => {
+        return {
+          back: $item`protonic accelerator pack`,
+          familiar: selectBestFamiliar(AdvReq.NoAttack),
+        };
       },
       combat: DefaultCombat,
     },

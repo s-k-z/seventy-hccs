@@ -22,10 +22,7 @@ export const ItemDropQuest: Quest<Task> = {
       completed: () => have($effect`Bat-Adjacent Form`),
       do: $location`The Dire Warren`,
       effects: $effects`Ode to Booze`,
-      outfit: {
-        back: $item`vampyric cloake`,
-        familiar: $familiar`Frumious Bandersnatch`,
-      },
+      outfit: { back: $item`vampyric cloake`, familiar: $familiar`Frumious Bandersnatch` },
       combat: new CombatStrategy().macro(Macro.trySkill($skill`Become a Bat`).runaway()),
     },
     {

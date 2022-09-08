@@ -29,10 +29,7 @@ export const WeaponDamageQuest: Quest<Task> = {
       prepare: () => use($item`tiny bottle of absinthe`),
       do: () => mapMonster($location`The Stately Pleasure Dome`, $monster`toothless mastiff bitch`),
       post: () => use($item`disintegrating spiky collar`),
-      outfit: {
-        weapon: $item`Fourth of May Cosplay Saber`,
-        familiar: $familiar`Machine Elf`,
-      },
+      outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .macro(
           Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`),
