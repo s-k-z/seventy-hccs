@@ -14,7 +14,7 @@ import { MeteorForceCombat } from "../combat";
 import { acquireEffect, itemToEffect } from "../lib";
 import { runTest, tuneMoonPlatypus } from "./shared";
 
-export const FamWeightQuest: Quest<Task> = {
+export const FamiliarWeightQuest: Quest<Task> = {
   name: "Breed More Collies",
   completed: () => CommunityService.FamiliarWeight.isDone(),
   tasks: [

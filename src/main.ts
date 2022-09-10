@@ -8,7 +8,7 @@ import { config } from "./config";
 import { CoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
 import { DonateQuest } from "./quests/donate";
-import { FamWeightQuest } from "./quests/familiarWeight";
+import { FamiliarWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
 import { Leveling } from "./quests/leveling";
@@ -19,7 +19,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 // TODO:
 // Check missed effects/outfits/tasks
-// Review completion criteria & after tags
+// Review after tags
 
 /* Resources:
     Deck Cards:
@@ -91,7 +91,7 @@ export function main(command = ""): void {
     WeaponDamageQuest,
     CombatFrequencyQuest,
     HotResistQuest,
-    FamWeightQuest,
+    FamiliarWeightQuest,
     ItemDropQuest,
     MysticalityQuest,
     DonateQuest,
