@@ -272,7 +272,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Voter Monster",
       ready: () => voterMonsterNow(),
-      completed: () => get("_voteFreeFights") > 0,
+      completed: () => get("_voteFreeFights") >= 1,
       do: $location`Noob Cave`,
       outfit: () => {
         return {

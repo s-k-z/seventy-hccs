@@ -112,6 +112,7 @@ const postNanorhino = [
 
 export const PostCoilWire: Quest<Task> = {
   name: "Post-Coil Wire",
+  completed: () => get("csServicesPerformed").includes(","),
   tasks: [
     {
       name: "Buff",
@@ -120,7 +121,7 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Eat a donut",
-      completed: () => !have($item`occult jelly donut`),
+      completed: () => have($effect`Filled with Magic`),
       do: () => eat($item`occult jelly donut`),
     },
     {
@@ -131,7 +132,7 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Open MayDay package",
-      completed: () => !have($item`MayDay™ supply package`),
+      completed: () => have($effect`Ready to Survive`),
       do: () => {
         use($item`MayDay™ supply package`);
         if (have($item`space blanket`)) autosell(1, $item`space blanket`); // +5000 meat
@@ -250,18 +251,13 @@ export const PostCoilWire: Quest<Task> = {
       ),
     },
     {
-      name: "DRINK ME",
-      after: ["Nanobrainy"],
-      completed: () => get("_lookingGlass"),
-      do: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
-    },
-    {
       name: "Buff More",
-      after: ["Nanobrainy", "DRINK ME"],
+      after: ["Nanobrainy"],
       completed: () => postNanorhino.every((f) => have(f)),
       do: () => {
         $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
         cliExecute("saber familiar");
+        visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2");
         postNanorhino.forEach((f) => acquireEffect(f));
       },
     },
