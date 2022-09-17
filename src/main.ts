@@ -2,12 +2,11 @@ import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
 import { getAutoAttack, print, setAutoAttack } from "kolmafia";
 import { get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
-import { batfellow } from "./batfellow";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { CoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
-import { DonateQuest } from "./quests/donate";
+import { BatfellowTask, DonateQuest } from "./quests/donate";
 import { FamiliarWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
@@ -18,8 +17,8 @@ import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/sta
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 // TODO:
-// Check missed effects/outfits/tasks
-// Review after tags
+// Review effects/outfits/tasks
+// Review after tags. Are these necessary at all? Only if ready conditions exist
 
 /* Resources:
     Deck Cards:
@@ -62,7 +61,12 @@ export function main(command = ""): void {
     return;
   }
   if (config.batfellow) {
-    batfellow();
+    const engine = new Engine([BatfellowTask]);
+    try {
+      engine.execute(BatfellowTask);
+    } finally {
+      engine.destruct();
+    }
     return;
   }
   const configCheck = new Map<string, boolean>([
