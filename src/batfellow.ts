@@ -30,11 +30,12 @@ function runBatfellow() {
     1: Rocket Booster
     11: Back to Main R&D Menu
     3: Bat-Cavern upgrades
+    3: Transfusion Satellite (Restore 5 HP at the end of combat)
     4: Surveillance Network (Fights cost 1 minute less)
     11: Back to Main R&D Menu
     6: Stop Researching and Developing
   */
-  for (const c of [1, 3, 11, 2, 1, 11, 3, 4, 11, 6]) runChoice(c);
+  for (const c of [1, 3, 11, 2, 1, 11, 3, 3, 4, 11, 6]) runChoice(c);
   visitUrl("place.php?whichplace=batman_cave&action=batman_cave_car");
   runChoice(5); // Center Park
   while (get("batmanTimeLeft") >= 4) visitUrl(toUrl($location`Center Park After Dark`));
