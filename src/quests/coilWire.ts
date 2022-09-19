@@ -239,8 +239,8 @@ export const CoilWire: Quest<Task> = {
       completed: () => monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
       post: () => {
-        DNALab.hybridize();
         if (!have($item`Gene Tonic: Fish`)) DNALab.makeTonic();
+        DNALab.hybridize();
       },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
       combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
