@@ -37,8 +37,8 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
       toothless mastiff bitch
     Tome Summons:
       Borrowed Time
-      Occult Jelly Donut
       Box of Familiar Jacks
+      Occult Jelly Donut
     Wishes:
       All is Forgiven
       Sparkly!
@@ -83,24 +83,25 @@ export function main(command = ""): void {
 
   prepAndAscendIfNecessary();
 
-  const tasks = getTasks([
-    CoilWire,
-    PostCoilWire,
-    Leveling,
-    MuscleQuest,
-    MoxieQuest,
-    HPQuest,
-    SpellDamageQuest,
-    WeaponDamageQuest,
-    CombatFrequencyQuest,
-    HotResistQuest,
-    FamiliarWeightQuest,
-    ItemDropQuest,
-    MysticalityQuest,
-    DonateQuest,
-  ]);
+  const engine = new Engine(
+    getTasks([
+      CoilWire,
+      PostCoilWire,
+      Leveling,
+      MuscleQuest,
+      MoxieQuest,
+      HPQuest,
+      SpellDamageQuest,
+      WeaponDamageQuest,
+      CombatFrequencyQuest,
+      HotResistQuest,
+      FamiliarWeightQuest,
+      ItemDropQuest,
+      MysticalityQuest,
+      DonateQuest,
+    ])
+  );
 
-  const engine = new Engine(tasks);
   try {
     engine.propertyManager.setChoices({
       1340: 2, // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
