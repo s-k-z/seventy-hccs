@@ -194,7 +194,6 @@ export const CoilWire: Quest<Task> = {
     },
     {
       name: "Ninja Costume",
-      after: ["Reminisce 1"],
       completed: () => have($item`li'l ninja costume`),
       prepare: () => cliExecute("parka dilophosaur"),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
@@ -218,7 +217,6 @@ export const CoilWire: Quest<Task> = {
     },
     {
       name: "Stocking Mimic Candy",
-      after: ["Ninja Costume"],
       completed: () => get("_bagOfCandy"),
       prepare: () => visitUrl("questlog.php?which=1"),
       do: () => {
@@ -247,7 +245,6 @@ export const CoilWire: Quest<Task> = {
     },
     {
       name: "Sausage Goblin",
-      after: ["Reminisce 2"],
       completed: () => get("_sausageFights") > 0,
       prepare: () => cliExecute("retrocape heck thrill"),
       do: $location`Noob Cave`,

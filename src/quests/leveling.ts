@@ -483,7 +483,6 @@ export const Leveling: Quest<Task> = {
     deepDarkVisions,
     {
       name: "Backup Camera Fights",
-      after: ["Lectures on Relativity"],
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
       completed: () => get("_backUpUses") >= 7,
       prepare: () => {
@@ -501,7 +500,6 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Vintner Backup Fights",
-      after: ["Backup Camera Fights"],
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
       completed: () => get("_backUpUses") >= 11,
       do: $location`The Toxic Teacups`,
@@ -517,7 +515,6 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Neverending Party",
-      after: ["Backup Camera Fights"],
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,

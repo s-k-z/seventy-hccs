@@ -28,7 +28,6 @@ export const FamiliarWeightQuest: Quest<Task> = {
     },
     {
       name: "Familiar Weight Test",
-      after: ["Meteor Showered"],
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
         const loveSong = $item`love song of icy revenge`;

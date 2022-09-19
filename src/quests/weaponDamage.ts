@@ -24,7 +24,6 @@ export const WeaponDamageQuest: Quest<Task> = {
     innerElf,
     {
       name: "Meteor Showered",
-      after: ["Inner Elf"],
       completed: () => have($effect`Meteor Showered`),
       prepare: () => use($item`tiny bottle of absinthe`),
       do: () => mapMonster($location`The Stately Pleasure Dome`, $monster`toothless mastiff bitch`),
@@ -39,7 +38,6 @@ export const WeaponDamageQuest: Quest<Task> = {
     },
     {
       name: "Weapon Damage Test",
-      after: ["Inner Elf", "Meteor Showered"],
       completed: () => CommunityService.WeaponDamage.isDone(),
       prepare: () => cliExecute("umbrella weapon"),
       do: () => runTest(CommunityService.WeaponDamage),

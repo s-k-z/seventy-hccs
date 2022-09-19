@@ -21,7 +21,6 @@ export const HotResistQuest: Quest<Task> = {
     },
     {
       name: "Hot Resist Test",
-      after: ["Fireproof Foam Suit"],
       completed: () => CommunityService.HotRes.isDone(),
       prepare: () => {
         cliExecute("parka pterodactyl");

@@ -27,7 +27,6 @@ export const ItemDropQuest: Quest<Task> = {
     },
     {
       name: "Booze & Item Drop Test",
-      after: ["Become a Bat"],
       completed: () => CommunityService.BoozeDrop.isDone(),
       prepare: () => cliExecute("umbrella item"),
       do: () => runTest(CommunityService.BoozeDrop),

@@ -170,7 +170,6 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Cook Sauce Potions",
-      after: ["Dynamic Range", "Summon Items"],
       completed: () => have($effect`Mystically Oiled`),
       do: () => {
         retrieveItem($item`soda water`); // -63 meat
@@ -229,7 +228,6 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Nanobrainy",
-      after: ["Advance Clock"],
       completed: () => have($effect`Nanobrainy`),
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkEffect($effect`Nanobrainy`),
@@ -252,7 +250,6 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Buff More",
-      after: ["Nanobrainy"],
       completed: () => postNanorhino.every((f) => have(f)),
       do: () => {
         $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
@@ -280,7 +277,6 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Synthesize Smart",
-      after: ["Summon Items"],
       completed: () => have($effect`Synthesis: Smart`),
       do: () => sweetSynthesis($item`Chubby and Plump bar`, $item`bag of many confections`),
     },

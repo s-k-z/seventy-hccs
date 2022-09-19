@@ -23,7 +23,6 @@ export const SpellDamageQuest: Quest<Task> = {
     innerElf,
     {
       name: "Cowrruption",
-      after: ["Inner Elf"],
       completed: () => have($effect`Cowrruption`),
       prepare: () => {
         const fax = $item`photocopied monster`;
@@ -41,7 +40,6 @@ export const SpellDamageQuest: Quest<Task> = {
     deepDarkVisions,
     {
       name: "Spell Damage Test",
-      after: ["Inner Elf", "Cowrruption"],
       completed: () => CommunityService.SpellDamage.isDone(),
       prepare: () => cliExecute("umbrella spell"),
       do: () => runTest(CommunityService.SpellDamage),

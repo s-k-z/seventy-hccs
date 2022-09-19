@@ -18,7 +18,6 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 // TODO:
 // Review effects/outfits/tasks
-// Review after tags. Are these necessary at all? Only if ready conditions exist
 
 /* Resources:
     Deck Cards:
