@@ -23,7 +23,7 @@ export const HotResistQuest: Quest<Task> = {
       name: "Hot Resist Test",
       completed: () => CommunityService.HotRes.isDone(),
       prepare: () => {
-        cliExecute("parka pterodactyl");
+        cliExecute("parka hot");
         cliExecute("retrocape vampire hold");
       },
       do: () => runTest(CommunityService.HotRes),

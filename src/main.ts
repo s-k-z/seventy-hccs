@@ -46,7 +46,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 */
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(26718);
+  sinceKolmafiaRevision(26767);
   if (getAutoAttack() !== 0) setAutoAttack(0);
 
   Args.fill(config, command);

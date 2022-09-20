@@ -12,7 +12,7 @@ export const CombatFrequencyQuest: Quest<Task> = {
       name: "Non-Combat Frequency Test",
       completed: () => CommunityService.Noncombat.isDone(),
       prepare: () => {
-        cliExecute("parka pterodactyl");
+        cliExecute("parka nc");
         cliExecute("umbrella nc");
       },
       do: () => runTest(CommunityService.Noncombat),

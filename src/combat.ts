@@ -175,8 +175,7 @@ export const DefaultCombat = new CombatStrategy()
     ]
   )
   .macro(
-    Macro.skill($skill`Meteor Shower`)
-      .skill($skill`Sing Along`)
+    Macro.skill($skill`Sing Along`)
       .trySkill($skill`Chest X-Ray`)
       .trySkill($skill`Shattering Punch`)
       .trySkill($skill`Gingerbread Mob Hit`)

@@ -153,7 +153,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Setup & Heal",
       completed: () => get("_hotTubSoaks") > 0,
-      prepare: () => cliExecute("parka dilophosaur"),
+      prepare: () => cliExecute("parka acid"),
       do: () => {
         cliExecute("hottub");
         const target = toFamiliar(config.stillsuit);
@@ -195,7 +195,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Ninja Costume",
       completed: () => have($item`li'l ninja costume`),
-      prepare: () => cliExecute("parka dilophosaur"),
+      prepare: () => cliExecute("parka acid"),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
       post: () => refreshGhost(),
@@ -318,7 +318,7 @@ export const CoilWire: Quest<Task> = {
       completed: () => CommunityService.CoilWire.isDone(),
       prepare: () => {
         spendAllMpOnLibrams();
-        cliExecute("parka ghostasaurus");
+        cliExecute("parka mp");
         cliExecute("retrocape heck thrill");
       },
       do: () => runTest(CommunityService.CoilWire),

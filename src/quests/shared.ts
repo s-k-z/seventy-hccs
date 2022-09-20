@@ -89,7 +89,7 @@ export const deepDarkVisions: Task = {
   ready: () => myMaxhp() > 500,
   completed: () => have($effect`Visions of the Deep Dark Deeps`),
   prepare: () => {
-    cliExecute("parka ghostasaurus");
+    cliExecute("parka spooky");
     cliExecute("retrocape vampire hold");
   },
   do: () => {

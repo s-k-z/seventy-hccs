@@ -5,12 +5,11 @@ import { runTest } from "./shared";
 
 export const HPQuest: Quest<Task> = {
   name: "Donate Blood",
-  completed: () => CommunityService.HP.isDone(),
   tasks: [
     {
       name: "HP Test",
       completed: () => CommunityService.HP.isDone(),
-      prepare: () => cliExecute("parka kachungasaur"),
+      prepare: () => cliExecute("parka hp"),
       do: () => runTest(CommunityService.HP),
       effects: $effects`Song of Starch`,
       outfit: {
@@ -26,7 +25,6 @@ export const HPQuest: Quest<Task> = {
 
 export const MoxieQuest: Quest<Task> = {
   name: "Feed Conspirators",
-  completed: () => CommunityService.Moxie.isDone(),
   tasks: [
     {
       name: "Moxie Test",
@@ -49,7 +47,6 @@ export const MoxieQuest: Quest<Task> = {
 
 export const MuscleQuest: Quest<Task> = {
   name: "Feed The Children (But Not Too Much)",
-  completed: () => CommunityService.Muscle.isDone(),
   tasks: [
     {
       name: "Muscle Test",
@@ -77,7 +74,6 @@ export const MuscleQuest: Quest<Task> = {
 
 export const MysticalityQuest: Quest<Task> = {
   name: "Build Playground Mazes",
-  completed: () => CommunityService.WeaponDamage.isDone(),
   tasks: [
     {
       name: "Mysticality Test",
