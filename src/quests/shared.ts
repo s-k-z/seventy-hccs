@@ -79,14 +79,14 @@ export function darkHorse(): Task {
   };
 }
 
-function safeHpLimit(): number {
-  const resist = 1 - elementalResistance($element`spooky`) / 100;
-  if (resist <= 0) throw `invalid resist value ${resist} calculated?`;
-  const maxMultiplier = 4;
-  return myMaxhp() * maxMultiplier * resist;
-}
-
 export function deepDarkVisions(): Task {
+  const safeHpLimit = (): number => {
+    const resist = 1 - elementalResistance($element`spooky`) / 100;
+    if (resist <= 0) throw `invalid resist value ${resist} calculated?`;
+    const maxMultiplier = 4;
+    return myMaxhp() * maxMultiplier * resist;
+  };
+
   return {
     name: "Deep Dark Visions",
     ready: () => myMaxhp() > 500,
