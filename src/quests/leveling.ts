@@ -159,7 +159,7 @@ export const Leveling: Quest<Task> = {
       completed: () => have($item`burning paper crane`),
       do: () => create($item`burning paper crane`),
     },
-    innerElf,
+    innerElf(),
     {
       name: "Crimbo Carol",
       completed: () =>
@@ -480,7 +480,7 @@ export const Leveling: Quest<Task> = {
       outfit: { offhand: $item`Kramco Sausage-o-Matic™`, familiar: $familiar`Pocket Professor` },
       combat: DefaultCombat,
     },
-    deepDarkVisions,
+    deepDarkVisions(),
     {
       name: "Backup Camera Fights",
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,

@@ -18,7 +18,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
   name: "Breed More Collies",
   completed: () => CommunityService.FamiliarWeight.isDone(),
   tasks: [
-    tuneMoonPlatypus,
+    tuneMoonPlatypus(),
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),

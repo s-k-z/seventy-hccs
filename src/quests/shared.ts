@@ -71,11 +71,13 @@ export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): Familiar {
   return $familiar`Baby Sandworm`;
 }
 
-export const darkHorse: Task = {
-  name: "Dark Horse",
-  completed: () => get("_horsery").toLowerCase() === "dark horse",
-  do: () => cliExecute("horsery dark"),
-};
+export function darkHorse(): Task {
+  return {
+    name: "Dark Horse",
+    completed: () => get("_horsery").toLowerCase() === "dark horse",
+    do: () => cliExecute("horsery dark"),
+  };
+}
 
 function safeHpLimit(): number {
   const resist = 1 - elementalResistance($element`spooky`) / 100;
@@ -84,50 +86,56 @@ function safeHpLimit(): number {
   return myMaxhp() * maxMultiplier * resist;
 }
 
-export const deepDarkVisions: Task = {
-  name: "Deep Dark Visions",
-  ready: () => myMaxhp() > 500,
-  completed: () => have($effect`Visions of the Deep Dark Deeps`),
-  prepare: () => {
-    cliExecute("parka spooky");
-    cliExecute("retrocape vampire hold");
-  },
-  do: () => {
-    if (myMaxhp() < safeHpLimit()) throw `Not enough HP for deep dark visions`;
-    if (myHp() < safeHpLimit()) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
-    if (myHp() < safeHpLimit()) throw `Failed to heal enough for Deep Dark Visions?`;
-    useSkill($skill`Deep Dark Visions`);
-  },
-  post: () => cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`),
-  outfit: {
-    back: $item`unwrapped knock-off retro superhero cape`,
-    shirt: $item`Jurassic Parka`,
-    weapon: $item`Fourth of May Cosplay Saber`,
-    offhand: $items`burning paper crane, unbreakable umbrella`,
-    pants: $item`pantogram pants`,
-    acc3: $item`Kremlin's Greatest Briefcase`,
-    famequip: $item`cracker`,
-    familiar: $familiar`Exotic Parrot`,
-  },
-};
+export function deepDarkVisions(): Task {
+  return {
+    name: "Deep Dark Visions",
+    ready: () => myMaxhp() > 500,
+    completed: () => have($effect`Visions of the Deep Dark Deeps`),
+    prepare: () => {
+      cliExecute("parka spooky");
+      cliExecute("retrocape vampire hold");
+    },
+    do: () => {
+      if (myMaxhp() < safeHpLimit()) throw `Not enough HP for deep dark visions`;
+      if (myHp() < safeHpLimit()) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
+      if (myHp() < safeHpLimit()) throw `Failed to heal enough for Deep Dark Visions?`;
+      useSkill($skill`Deep Dark Visions`);
+    },
+    post: () => cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`),
+    outfit: {
+      back: $item`unwrapped knock-off retro superhero cape`,
+      shirt: $item`Jurassic Parka`,
+      weapon: $item`Fourth of May Cosplay Saber`,
+      offhand: $items`burning paper crane, unbreakable umbrella`,
+      pants: $item`pantogram pants`,
+      acc3: $item`Kremlin's Greatest Briefcase`,
+      famequip: $item`cracker`,
+      familiar: $familiar`Exotic Parrot`,
+    },
+  };
+}
 
-export const innerElf: Task = {
-  name: "Inner Elf",
-  ready: () => myLevel() >= 13,
-  completed: () => have($effect`Inner Elf`),
-  prepare: () => {
-    if (get("_snokebombUsed") >= 3) throw "Can't banish Mother Slime?";
-    Clan.join(config.side_clan);
-  },
-  choices: { 326: 1 }, // Showdown: (1) fight mother slime (2) leave
-  do: $location`The Slime Tube`,
-  post: () => Clan.join(config.main_clan),
-  outfit: { familiar: $familiar`Machine Elf` },
-  combat: DefaultCombat,
-};
+export function innerElf(): Task {
+  return {
+    name: "Inner Elf",
+    ready: () => myLevel() >= 13,
+    completed: () => have($effect`Inner Elf`),
+    prepare: () => {
+      if (get("_snokebombUsed") >= 3) throw "Can't banish Mother Slime?";
+      Clan.join(config.side_clan);
+    },
+    choices: { 326: 1 }, // Showdown: (1) fight mother slime (2) leave
+    do: $location`The Slime Tube`,
+    post: () => Clan.join(config.main_clan),
+    outfit: { familiar: $familiar`Machine Elf` },
+    combat: DefaultCombat,
+  };
+}
 
-export const tuneMoonPlatypus: Task = {
-  name: "Tune Moon",
-  completed: () => get("moonTuned"),
-  do: () => tuneMoon(MoonSign.Platypus),
-};
+export function tuneMoonPlatypus(): Task {
+  return {
+    name: "Tune Moon",
+    completed: () => get("moonTuned"),
+    do: () => tuneMoon(MoonSign.Platypus),
+  };
+}

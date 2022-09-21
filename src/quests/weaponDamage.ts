@@ -20,8 +20,8 @@ export const WeaponDamageQuest: Quest<Task> = {
   name: "Reduce Gazelle Population",
   completed: () => CommunityService.WeaponDamage.isDone(),
   tasks: [
-    tuneMoonPlatypus,
-    innerElf,
+    tuneMoonPlatypus(),
+    innerElf(),
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),

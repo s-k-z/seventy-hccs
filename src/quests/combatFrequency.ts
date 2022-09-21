@@ -7,7 +7,7 @@ export const CombatFrequencyQuest: Quest<Task> = {
   name: "Be a Living Statue",
   completed: () => CommunityService.Noncombat.isDone(),
   tasks: [
-    darkHorse,
+    darkHorse(),
     {
       name: "Non-Combat Frequency Test",
       completed: () => CommunityService.Noncombat.isDone(),

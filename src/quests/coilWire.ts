@@ -124,7 +124,7 @@ export const CoilWire: Quest<Task> = {
       completed: () => get("_chateauDeskHarvested"),
       do: () => visitUrl("place.php?whichplace=chateau&action=chateau_desk1"),
     },
-    darkHorse,
+    darkHorse(),
     {
       name: "SongBoom™",
       completed: () => SongBoom.song() === "Total Eclipse of Your Meat",

@@ -20,7 +20,7 @@ export const SpellDamageQuest: Quest<Task> = {
   name: "Make Sausage",
   completed: () => CommunityService.SpellDamage.isDone(),
   tasks: [
-    innerElf,
+    innerElf(),
     {
       name: "Cowrruption",
       completed: () => have($effect`Cowrruption`),
@@ -37,7 +37,7 @@ export const SpellDamageQuest: Quest<Task> = {
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: MeteorForceCombat,
     },
-    deepDarkVisions,
+    deepDarkVisions(),
     {
       name: "Spell Damage Test",
       completed: () => CommunityService.SpellDamage.isDone(),
