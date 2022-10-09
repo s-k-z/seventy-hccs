@@ -28,6 +28,7 @@ import {
   $monster,
   $skill,
   $slot,
+  AutumnAton,
   CommunityService,
   DNALab,
   get,
@@ -312,6 +313,11 @@ export const CoilWire: Quest<Task> = {
           $monster`novelty tropical skeleton`
         )
         .macro(Macro.abort()),
+    },
+    {
+      name: "Send autumn-aton",
+      completed: () => !AutumnAton.available(),
+      do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
     },
     {
       name: "Coil Wire",

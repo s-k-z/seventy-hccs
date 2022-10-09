@@ -16,9 +16,6 @@ import { SpellDamageQuest } from "./quests/spellDamage";
 import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/stats";
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
-// TODO:
-// Review effects/outfits/tasks
-
 /* Resources:
     Deck Cards:
       Wrench
@@ -46,7 +43,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 */
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(26767);
+  sinceKolmafiaRevision(26829);
   if (getAutoAttack() !== 0) setAutoAttack(0);
 
   Args.fill(config, command);
