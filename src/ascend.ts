@@ -1,6 +1,5 @@
 import {
   canInteract,
-  holiday,
   isBanished,
   myPath,
   print,
@@ -17,14 +16,6 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
   const inWrongPath = !canInteract();
   if (inWrongPath) {
     print("Nope", "red");
-    return false;
-  }
-
-  const badDays = ["april fool's day"];
-  const today = holiday().split("/");
-  const badDayToday = today.some((day) => badDays.includes(day.toLowerCase()));
-  if (badDayToday) {
-    print(`Don't want to ascend during ${holiday()}`, "red");
     return false;
   }
 
