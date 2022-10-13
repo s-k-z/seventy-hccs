@@ -56,7 +56,7 @@ The script can be run either in Aftercore, or in Community Service provided that
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
    - seventyhccs_stillsuit_target - Optional familiar name to be equipped with the tiny stillsuit
 
-3. Run the script file named **seventy-hccs.js** using KoLMafia
+3. Run the script file named **seventyhccs.js** using KoLMafia
 
 ## Building from source
 

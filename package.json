@@ -4,7 +4,7 @@
   "description": "A 70-turn Community Service project for Kingdom of Loathing",
   "main": "KoLmafia/scripts/seventy-hccs/seventy-hccs.js",
   "scripts": {
-    "build": "tsc && node ./build.mjs",
+    "build": "node ./build.mjs",
     "format": "eslint src --fix --ext .ts && prettier --write src/**/*.ts",
     "lint": "eslint src --ext .ts && prettier --check src/**/*.ts"
   },
@@ -18,15 +18,14 @@
     "esbuild-plugin-babel": "^0.2.3",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-libram": "^0.2.18",
+    "eslint-plugin-libram": "^0.2.19",
     "prettier": "^2.1.2",
     "typescript": "^4.5.5"
   },
   "dependencies": {
     "grimoire-kolmafia": "^0.3.7",
-    "kolmafia": "^5.26827.0",
-    "libram": "^0.7.2",
-    "yarn": "^1.22.19"
+    "kolmafia": "^5.26840.0",
+    "libram": "^0.7.3"
   },
   "author": "Skaazi",
   "license": "Apache-2.0",

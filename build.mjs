@@ -1,16 +1,16 @@
 /* eslint-env node */
-
 import { build } from "esbuild";
 import babel from "esbuild-plugin-babel";
 
 build({
-  entryPoints: ["src/main.ts"],
+  entryPoints: { seventyhccs: "src/main.ts" },
   bundle: true,
   platform: "node",
   target: "rhino1.7.14",
   external: ["kolmafia"],
   plugins: [babel()],
-  outfile: "KoLmafia/scripts/seventy-hccs/seventy-hccs.js",
-}).catch(() => process.exit(1));
-
-export {};
+  outdir: "KoLmafia/scripts/seventy-hccs",
+  define: {
+    "process.env.NODE_ENV": '"production"',
+  },
+});
