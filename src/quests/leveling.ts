@@ -207,9 +207,7 @@ export const Leveling: Quest<Task> = {
         use($item`LOV Elixir #3`);
         use($item`LOV Elixir #6`);
       },
-      outfit: () => {
-        return { ...levelingOutfit, familiar: selectBestFamiliar(AdvReq.NoAttack) };
-      },
+      outfit: () => ({ ...levelingOutfit, familiar: selectBestFamiliar(AdvReq.NoAttack) }),
       combat: DefaultCombat,
     },
     {
@@ -244,13 +242,11 @@ export const Leveling: Quest<Task> = {
         // Song(s)
         $effect`Ur-Kel's Aria of Annoyance`,
       ],
-      outfit: () => {
-        return {
-          offhand: levelingOutfit.offhand,
-          back: $item`protonic accelerator pack`,
-          familiar: selectBestFamiliar(),
-        };
-      },
+      outfit: () => ({
+        offhand: levelingOutfit.offhand,
+        back: $item`protonic accelerator pack`,
+        familiar: selectBestFamiliar(),
+      }),
       combat: DefaultCombat,
     },
     {
@@ -262,12 +258,10 @@ export const Leveling: Quest<Task> = {
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
         adv1(ghostZone, -1);
       },
-      outfit: () => {
-        return {
-          back: $item`protonic accelerator pack`,
-          familiar: selectBestFamiliar(AdvReq.NoAttack),
-        };
-      },
+      outfit: () => ({
+        back: $item`protonic accelerator pack`,
+        familiar: selectBestFamiliar(AdvReq.NoAttack),
+      }),
       combat: DefaultCombat,
     },
     {
@@ -314,9 +308,7 @@ export const Leveling: Quest<Task> = {
         }
       },
       do: $location`The X-32-F Combat Training Snowman`,
-      outfit: () => {
-        return { ...levelingOutfit, familiar: selectBestFamiliar() };
-      },
+      outfit: () => ({ ...levelingOutfit, familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },
     {
@@ -325,9 +317,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_brickoFights") >= 3,
       acquire: [{ item: BRICKO_TARGET_ITEM }],
       do: () => use(BRICKO_TARGET_ITEM),
-      outfit: () => {
-        return { familiar: selectBestFamiliar() };
-      },
+      outfit: () => ({ familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },
     {
@@ -335,9 +325,7 @@ export const Leveling: Quest<Task> = {
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       post: () => equip($item`battle broom`),
-      outfit: () => {
-        return { familiar: selectBestFamiliar() };
-      },
+      outfit: () => ({ familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },
     {
@@ -348,9 +336,7 @@ export const Leveling: Quest<Task> = {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
       },
-      outfit: () => {
-        return { familiar: selectBestFamiliar() };
-      },
+      outfit: () => ({ familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },
     {
@@ -368,18 +354,14 @@ export const Leveling: Quest<Task> = {
       name: "Witchess King",
       completed: () => have($item`dented scepter`),
       do: () => Witchess.fightPiece($monster`Witchess King`),
-      outfit: () => {
-        return { familiar: selectBestFamiliar() };
-      },
+      outfit: () => ({ familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },
     {
       name: "Remaining Witchess Fights",
       completed: () => get("_witchessFights") >= 5,
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      outfit: () => {
-        return { familiar: selectBestFamiliar() };
-      },
+      outfit: () => ({ familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },
     {
@@ -387,9 +369,10 @@ export const Leveling: Quest<Task> = {
       ready: () => voterMonsterNow(),
       completed: () => get("_voteFreeFights") >= 1,
       do: $location`The Toxic Teacups`,
-      outfit: () => {
-        return { acc3: $item`"I Voted!" sticker`, familiar: selectBestFamiliar(AdvReq.Toxic) };
-      },
+      outfit: () => ({
+        acc3: $item`"I Voted!" sticker`,
+        familiar: selectBestFamiliar(AdvReq.Toxic),
+      }),
       combat: DefaultCombat,
     },
     {
@@ -428,49 +411,41 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_chestXRayUsed") >= 3,
       prepare: () => SourceTerminal.educate($skill`Turbo`), // Turbo used a flag to cast pride
       do: $location`The Toxic Teacups`,
-      outfit: () => {
-        return {
-          shirt: $item`makeshift garbage shirt`,
-          acc3: $item`Lil' Doctor™ bag`,
-          familiar: selectBestFamiliar(AdvReq.Toxic),
-        };
-      },
+      outfit: () => ({
+        shirt: $item`makeshift garbage shirt`,
+        acc3: $item`Lil' Doctor™ bag`,
+        familiar: selectBestFamiliar(AdvReq.Toxic),
+      }),
       combat: DefaultCombat,
     },
     {
       name: "Shattering Punch Fights",
       completed: () => get("_shatteringPunchUsed") >= 3,
       do: $location`The Toxic Teacups`,
-      outfit: () => {
-        return {
-          shirt: $item`makeshift garbage shirt`,
-          familiar: selectBestFamiliar(AdvReq.Toxic),
-        };
-      },
+      outfit: () => ({
+        shirt: $item`makeshift garbage shirt`,
+        familiar: selectBestFamiliar(AdvReq.Toxic),
+      }),
       combat: DefaultCombat,
     },
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
       do: $location`The Toxic Teacups`,
-      outfit: () => {
-        return {
-          shirt: $item`makeshift garbage shirt`,
-          familiar: selectBestFamiliar(AdvReq.Toxic),
-        };
-      },
+      outfit: () => ({
+        shirt: $item`makeshift garbage shirt`,
+        familiar: selectBestFamiliar(AdvReq.Toxic),
+      }),
       combat: DefaultCombat,
     },
     {
       name: "Shocking Lick",
       completed: () => get("shockingLickCharges") < 1,
       do: $location`The Toxic Teacups`,
-      outfit: () => {
-        return {
-          shirt: $item`makeshift garbage shirt`,
-          familiar: selectBestFamiliar(AdvReq.Toxic),
-        };
-      },
+      outfit: () => ({
+        shirt: $item`makeshift garbage shirt`,
+        familiar: selectBestFamiliar(AdvReq.Toxic),
+      }),
       combat: DefaultCombat,
     },
     {
@@ -489,13 +464,11 @@ export const Leveling: Quest<Task> = {
         if (get("umbrellaState") !== "broken") cliExecute("umbrella ml");
       },
       do: $location`The Toxic Teacups`,
-      outfit: () => {
-        return {
-          offhand: $item`unbreakable umbrella`,
-          acc3: $item`backup camera`,
-          familiar: selectBestFamiliar(AdvReq.Normal),
-        };
-      },
+      outfit: () => ({
+        offhand: $item`unbreakable umbrella`,
+        acc3: $item`backup camera`,
+        familiar: selectBestFamiliar(AdvReq.Normal),
+      }),
       combat: DefaultCombat,
     },
     {
@@ -504,13 +477,11 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_backUpUses") >= 11,
       do: $location`The Toxic Teacups`,
       effects: $effects`Wizard Squint`,
-      outfit: () => {
-        return {
-          acc2: $item`battle broom`,
-          acc3: $item`backup camera`,
-          familiar: selectBestFamiliar(AdvReq.Wine),
-        };
-      },
+      outfit: () => ({
+        acc2: $item`battle broom`,
+        acc3: $item`backup camera`,
+        familiar: selectBestFamiliar(AdvReq.Wine),
+      }),
       combat: StenchCombat,
     },
     {
@@ -518,13 +489,11 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
-      outfit: () => {
-        return {
-          acc2: $item`battle broom`,
-          acc3: $item`Beach Comb`,
-          familiar: selectBestFamiliar(AdvReq.Wine),
-        };
-      },
+      outfit: () => ({
+        acc2: $item`battle broom`,
+        acc3: $item`Beach Comb`,
+        familiar: selectBestFamiliar(AdvReq.Wine),
+      }),
       combat: StenchCombat,
     },
     {

@@ -200,13 +200,11 @@ export const CoilWire: Quest<Task> = {
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
       post: () => refreshGhost(),
-      outfit: () => {
-        return {
-          back: $item`protonic accelerator pack`,
-          shirt: $item`Jurassic Parka`,
-          familiar: selectBestFamiliar(AdvReq.NoAttack),
-        };
-      },
+      outfit: () => ({
+        back: $item`protonic accelerator pack`,
+        shirt: $item`Jurassic Parka`,
+        familiar: selectBestFamiliar(AdvReq.NoAttack),
+      }),
       combat: new CombatStrategy()
         .macro(
           Macro.skill($skill`Feel Nostalgic`)
@@ -249,13 +247,11 @@ export const CoilWire: Quest<Task> = {
       completed: () => get("_sausageFights") > 0,
       prepare: () => cliExecute("retrocape heck thrill"),
       do: $location`Noob Cave`,
-      outfit: () => {
-        return {
-          back: $item`unwrapped knock-off retro superhero cape`,
-          offhand: $item`Kramco Sausage-o-Matic™`,
-          familiar: selectBestFamiliar(AdvReq.NoAttack),
-        };
-      },
+      outfit: () => ({
+        back: $item`unwrapped knock-off retro superhero cape`,
+        offhand: $item`Kramco Sausage-o-Matic™`,
+        familiar: selectBestFamiliar(AdvReq.NoAttack),
+      }),
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Curse of Weaksauce`)
           .item($item`Time-Spinner`)
@@ -272,13 +268,11 @@ export const CoilWire: Quest<Task> = {
       ready: () => voterMonsterNow(),
       completed: () => get("_voteFreeFights") >= 1,
       do: $location`Noob Cave`,
-      outfit: () => {
-        return {
-          offhand: defaultOutfit.offhand,
-          acc3: $item`"I Voted!" sticker`,
-          familiar: selectBestFamiliar(),
-        };
-      },
+      outfit: () => ({
+        offhand: defaultOutfit.offhand,
+        acc3: $item`"I Voted!" sticker`,
+        familiar: selectBestFamiliar(),
+      }),
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Curse of Weaksauce`)
           .item($item`Time-Spinner`)

@@ -76,8 +76,8 @@ export function main(command = ""): void {
       if (shouldReturn) return;
     }
   }
-  if (!isReadyToContinue(config.nofites, config.novote)) return;
 
+  if (!isReadyToContinue(config.nofites, config.novote)) return;
   prepAndAscendIfNecessary();
 
   const engine = new Engine(
