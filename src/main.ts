@@ -44,7 +44,6 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 export function main(command = ""): void {
   sinceKolmafiaRevision(26829);
-  if (getAutoAttack() !== 0) setAutoAttack(0);
 
   Args.fill(config, command);
   if (config.help) {
@@ -65,20 +64,26 @@ export function main(command = ""): void {
     }
     return;
   }
-  const configCheck = new Map<string, boolean>([
-    [config.main_clan, true],
-    [config.side_clan, true],
-    [config.stillsuit, false],
-  ]);
-  for (const [name, shouldReturn] of configCheck) {
-    if (name === "") {
-      print(`${Args.name}_${name} property not set`, shouldReturn ? "red" : "orange");
+
+  const checkConfig = (name: string, value: string, shouldReturn: boolean) => {
+    if (value === "") {
+      print(`seventyhccs_${name} property not set`, shouldReturn ? "red" : "orange");
       if (shouldReturn) return;
     }
+  };
+  const toCheck = {
+    main_clan: { prop: config.main_clan, return: true },
+    side_clan: { prop: config.side_clan, return: true },
+    stillsuit: { prop: config.stillsuit, return: false },
+  };
+  for (const name of Object.keys(toCheck)) {
+    const key = name as keyof typeof toCheck;
+    checkConfig(name, toCheck[key].prop, toCheck[key].return);
   }
 
   if (!isReadyToContinue(config.nofites, config.novote)) return;
   prepAndAscendIfNecessary();
+  if (getAutoAttack() !== 0) setAutoAttack(0);
 
   const engine = new Engine(
     getTasks([
