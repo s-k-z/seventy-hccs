@@ -409,6 +409,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Chest X-ray Fights",
       completed: () => get("_chestXRayUsed") >= 3,
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: () => SourceTerminal.educate($skill`Turbo`), // Turbo used a flag to cast pride
       do: $location`The Toxic Teacups`,
       outfit: () => ({
@@ -421,6 +422,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Shattering Punch Fights",
       completed: () => get("_shatteringPunchUsed") >= 3,
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
       outfit: () => ({
         shirt: $item`makeshift garbage shirt`,
@@ -431,6 +433,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
       outfit: () => ({
         shirt: $item`makeshift garbage shirt`,
@@ -441,6 +444,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Shocking Lick",
       completed: () => get("shockingLickCharges") < 1,
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
       outfit: () => ({
         shirt: $item`makeshift garbage shirt`,
