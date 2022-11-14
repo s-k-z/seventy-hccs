@@ -54,7 +54,7 @@ export function main(command = ""): void {
   if (config.test !== "") {
     switch (config.test.toLowerCase()) {
       case "kramco":
-        print(`We can eat ${getHowManySausagesToEat()}`);
+        print(`We can eat ${getHowManySausagesToEat()} sausages.`);
         return;
       case "macro":
         print("Default macro:");
