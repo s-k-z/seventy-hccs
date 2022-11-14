@@ -1,5 +1,5 @@
 import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
-import { getAutoAttack, print, setAutoAttack } from "kolmafia";
+import { print, setAutoAttack } from "kolmafia";
 import { get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
 import { DefaultCombat } from "./combat";
@@ -10,7 +10,7 @@ import { BatfellowTask, DonateQuest } from "./quests/donate";
 import { FamiliarWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
-import { Leveling } from "./quests/leveling";
+import { getHowManySausagesToEat, Leveling } from "./quests/leveling";
 import { PostCoilWire } from "./quests/postCoilWire";
 import { SpellDamageQuest } from "./quests/spellDamage";
 import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/stats";
@@ -30,7 +30,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
       Cocktail Shrimp
     Mapped Monsters:
       amateur ninja
-      novelty tropical skeleton
+      goblin flapper
       toothless mastiff bitch
     Tome Summons:
       Borrowed Time
@@ -43,18 +43,29 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 */
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(26829);
+  sinceKolmafiaRevision(26939);
 
   Args.fill(config, command);
   if (config.help) {
     Args.showHelp(config);
     return;
   }
-  if (config.test) {
-    print("Default macro:");
-    print(DefaultCombat.compile(new CombatResources(), undefined, undefined).toString());
-    return;
+
+  if (config.test !== "") {
+    switch (config.test.toLowerCase()) {
+      case "kramco":
+        print(`We can eat ${getHowManySausagesToEat()}`);
+        return;
+      case "macro":
+        print("Default macro:");
+        print(DefaultCombat.compile(new CombatResources(), undefined, undefined).toString());
+        return;
+      default:
+        print(`Unknown test ${config.test}`);
+        return;
+    }
   }
+
   if (config.batfellow) {
     const engine = new Engine([BatfellowTask]);
     try {
@@ -83,7 +94,7 @@ export function main(command = ""): void {
 
   if (!isReadyToContinue(config.nofites, config.novote)) return;
   prepAndAscendIfNecessary();
-  if (getAutoAttack() !== 0) setAutoAttack(0);
+  setAutoAttack(0);
 
   const engine = new Engine(
     getTasks([

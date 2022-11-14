@@ -1,7 +1,6 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
-  changeMcd,
   cliExecute,
   create,
   Effect,
@@ -14,8 +13,8 @@ import {
   retrieveItem,
   Skill,
   toFamiliar,
-  toInt,
   use,
+  useFamiliar,
   useSkill,
   visitUrl,
 } from "kolmafia";
@@ -30,6 +29,7 @@ import {
   $slot,
   AutumnAton,
   CommunityService,
+  CrimboShrub,
   DNALab,
   get,
   have,
@@ -46,7 +46,7 @@ import {
   spendAllMpOnLibrams,
   vote,
 } from "../iotms";
-import { checkAvailable, checkEffect, voterMonsterNow } from "../lib";
+import { checkAvailable, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
@@ -74,7 +74,6 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$item`gold detective badge`,          () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
   [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
   [$item`weeping willow wand`,           () => { visitUrl("shop.php?whichshop=lathe"); create($item`weeping willow wand`); }],
-  [$item`detuned radio`,                 () => retrieveItem($item`detuned radio`)],             // -270 meat
   [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // -450 meat
   [$item`toy accordion`,                 () => retrieveItem($item`toy accordion`)],             // -135 meat
   [$skill`Seek out a Bird`,              () => use($item`Bird-a-Day calendar`)],
@@ -118,12 +117,12 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Communism!",
       completed: () => get("_communismUsed"),
-      do: () => useSkill($skill`Communism!`),
+      do: () => useSkill($skill`Communism!`), // +1 meat
     },
     {
       name: "Chateau Desk",
       completed: () => get("_chateauDeskHarvested"),
-      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_desk1"),
+      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_desk1"), // +1000 meat
     },
     darkHorse(),
     {
@@ -137,7 +136,6 @@ export const CoilWire: Quest<Task> = {
       do: () => {
         for (const [want, acquire] of toAcquire) if (!have(want)) acquire();
         checkAvailable($item`sombrero-mounted sparkler`);
-        changeMcd(10);
       },
     },
     {
@@ -187,9 +185,12 @@ export const CoilWire: Quest<Task> = {
       combat: RunawayCombat,
     },
     {
-      name: "Reminisce 1",
+      name: "Reminisce pterodactyl",
       completed: () => monstersReminisced().includes($monster`pterodactyl`),
       do: () => reminisce($monster`pterodactyl`),
+      post: () => {
+        if (!monstersReminisced().includes($monster`pterodactyl`)) throw `Failed to reminisce?`;
+      },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
       combat: RunawayCombat,
     },
@@ -217,7 +218,6 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Stocking Mimic Candy",
       completed: () => get("_bagOfCandy"),
-      prepare: () => visitUrl("questlog.php?which=1"),
       do: () => {
         const ghostZone = get("ghostLocation");
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
@@ -232,15 +232,40 @@ export const CoilWire: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Reminisce 2",
-      completed: () => monstersReminisced().includes($monster`cocktail shrimp`),
+      name: "Get Crimbo Shrub decorations",
+      completed: () => have($item`box of old Crimbo decorations`),
+      do: () => useFamiliar($familiar`Crimbo Shrub`),
+    },
+    {
+      name: "Decorate Crimbo Shrub",
+      completed: () => get("_shrubDecorated"),
+      do: () => CrimboShrub.decorate("Mysticality", "Sleaze Damage", "Blocking", "Red Ray"),
+    },
+    {
+      name: "Reminisce cocktail shrimp",
+      completed: () =>
+        DNALab.isHybridized() ||
+        get("_saberForceUses") > 0 ||
+        monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
-      post: () => {
-        if (!have($item`Gene Tonic: Fish`)) DNALab.makeTonic();
-        DNALab.hybridize();
-      },
+      post: () => DNALab.hybridize(),
+      outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
+      combat: new CombatStrategy()
+        .macro(
+          Macro.item($item`DNA extraction syringe`)
+            .skill($skill`Open a Big Red Present`)
+            .skill($skill`Use the Force`),
+          $monster`cocktail shrimp`
+        )
+        .macro(Macro.abort()),
+    },
+    {
+      name: "Goblin Flapper",
+      completed: () => true,
+      // eslint-disable-next-line libram/verify-constants
+      do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
+      combat: RunawayCombat,
     },
     {
       name: "Sausage Goblin",
@@ -252,16 +277,20 @@ export const CoilWire: Quest<Task> = {
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: selectBestFamiliar(AdvReq.NoAttack),
       }),
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Curse of Weaksauce`)
-          .item($item`Time-Spinner`)
-          .skill($skill`Feel Envy`)
-          .skill($skill`Feel Nostalgic`)
-          .skill($skill`Sing Along`)
-          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-          .attack()
-          .repeat()
-      ),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Curse of Weaksauce`)
+            .item($item`Time-Spinner`)
+            .skill($skill`Micrometeorite`)
+            .skill($skill`Feel Envy`)
+            .skill($skill`Feel Nostalgic`)
+            .skill($skill`Sing Along`)
+            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+            .attack()
+            .repeat(),
+          $monster`sausage goblin`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Voter Monster",
@@ -281,32 +310,6 @@ export const CoilWire: Quest<Task> = {
           .attack()
           .repeat()
       ),
-    },
-    {
-      name: "Novelty Tropical Skeleton",
-      completed: () => get("_saberForceUses") > 0,
-      prepare: () => {
-        if (!get("_shrubDecorated")) {
-          visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`box of old Crimbo decorations`)}`);
-          visitUrl(`choice.php?whichchoice=999&pwd=&option=1&topper=2&lights=5&garland=3&gift=2`);
-        }
-      },
-      do: () => mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`),
-      post: () => {
-        checkEffect($effect`Everything Looks Red`);
-        $items`cherry, grapefruit, lemon, strawberry`.forEach((fruit) => checkAvailable(fruit));
-      },
-      outfit: {
-        weapon: $item`Fourth of May Cosplay Saber`,
-        acc3: defaultOutfit.acc3,
-        familiar: $familiar`Crimbo Shrub`,
-      },
-      combat: new CombatStrategy()
-        .macro(
-          Macro.skill($skill`Open a Big Red Present`).skill($skill`Use the Force`),
-          $monster`novelty tropical skeleton`
-        )
-        .macro(Macro.abort()),
     },
     {
       name: "Send autumn-aton",

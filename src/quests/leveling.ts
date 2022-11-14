@@ -1,11 +1,9 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
-  changeMcd,
   chew,
   cliExecute,
   create,
-  currentMcd,
   eat,
   equip,
   familiarWeight,
@@ -70,7 +68,20 @@ const levelingOutfit = {
   acc3: $item`Beach Comb`,
 };
 
-function getHowManySausagesToEat(): number {
+export const vintnerOutfit = () => ({
+  hat: $item`wad of used tape`,
+  back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
+  shirt: get("garbageShirtCharge") > 0 ? $item`makeshift garbage shirt` : $item`Jurassic Parka`,
+  weapon: $item`weeping willow wand`,
+  offhand: $item`unbreakable umbrella`,
+  pants: $item`Cargo Cultist Shorts`,
+  acc1: $item`Powerful Glove`,
+  acc2: $items`battle broom, gold detective badge`,
+  acc3: get("_backUpUses") < 11 ? $item`backup camera` : $item`Kremlin's Greatest Briefcase`,
+  familiar: selectBestFamiliar(AdvReq.Wine),
+});
+
+export function getHowManySausagesToEat(): number {
   if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
 
   const offset = get("_sausagesMade");
@@ -252,7 +263,6 @@ export const Leveling: Quest<Task> = {
     {
       name: "Protonic Ghost",
       completed: () => get("ghostLocation") === null,
-      prepare: () => visitUrl("questlog.php?which=1"),
       do: () => {
         const ghostZone = get("ghostLocation");
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
@@ -359,7 +369,7 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Remaining Witchess Fights",
-      completed: () => get("_witchessFights") >= 5,
+      completed: () => Witchess.fightsDone() >= 5,
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
       outfit: () => ({ familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
@@ -369,6 +379,9 @@ export const Leveling: Quest<Task> = {
       ready: () => voterMonsterNow(),
       completed: () => get("_voteFreeFights") >= 1,
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (get("_voteFreeFights") < 1) throw `Failed to fight a voter wanderer?`;
+      },
       outfit: () => ({
         acc3: $item`"I Voted!" sticker`,
         familiar: selectBestFamiliar(AdvReq.Toxic),
@@ -382,7 +395,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
-      outfit: { familiar: $familiar`Machine Elf` },
+      outfit: { acc3: levelingOutfit.acc3, familiar: $familiar`Machine Elf` },
       combat: DMT1Combat,
     },
     {
@@ -426,6 +439,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       outfit: () => ({
         shirt: $item`makeshift garbage shirt`,
+        acc3: levelingOutfit.acc3,
         familiar: selectBestFamiliar(AdvReq.Toxic),
       }),
       combat: DefaultCombat,
@@ -446,6 +460,9 @@ export const Leveling: Quest<Task> = {
       completed: () => get("shockingLickCharges") < 1,
       acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (get("shockingLickCharges") > 0) throw `Failed to decrement shockingLickCharges?`;
+      },
       outfit: () => ({
         shirt: $item`makeshift garbage shirt`,
         familiar: selectBestFamiliar(AdvReq.Toxic),
@@ -468,6 +485,11 @@ export const Leveling: Quest<Task> = {
         if (get("umbrellaState") !== "broken") cliExecute("umbrella ml");
       },
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (get("lastCopyableMonster") !== $monster`sausage goblin`) {
+          throw `Encountered a ${get("lastCopyableMonster")}?`;
+        }
+      },
       outfit: () => ({
         offhand: $item`unbreakable umbrella`,
         acc3: $item`backup camera`,
@@ -480,12 +502,13 @@ export const Leveling: Quest<Task> = {
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
       completed: () => get("_backUpUses") >= 11,
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (get("lastCopyableMonster") !== $monster`sausage goblin`) {
+          throw `Encountered a ${get("lastCopyableMonster")}?`;
+        }
+      },
       effects: $effects`Wizard Squint`,
-      outfit: () => ({
-        acc2: $item`battle broom`,
-        acc3: $item`backup camera`,
-        familiar: selectBestFamiliar(AdvReq.Wine),
-      }),
+      outfit: vintnerOutfit,
       combat: StenchCombat,
     },
     {
@@ -493,18 +516,13 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
-      outfit: () => ({
-        acc2: $item`battle broom`,
-        acc3: $item`Beach Comb`,
-        familiar: selectBestFamiliar(AdvReq.Wine),
-      }),
+      outfit: vintnerOutfit,
       combat: StenchCombat,
     },
     {
       name: "Drink Lattes",
       completed: () => get("_latteRefillsUsed") >= 3,
       prepare: () => {
-        if (currentMcd() > 0) changeMcd(0);
         if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
       },
       do: $location`The Dire Warren`,

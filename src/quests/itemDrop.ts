@@ -35,6 +35,7 @@ export const ItemDropQuest: Quest<Task> = {
         $effect`Blessing of the Bird`,
         $effect`Blessing of your favorite Bird`,
         $effect`Cosmic Ball in the Air`,
+        $effect`Crunching Leaves`,
         $effect`Ermine Eyes`,
         $effect`Fat Leon's Phat Loot Lyric`,
         $effect`Feeling Lost`,

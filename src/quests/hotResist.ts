@@ -1,7 +1,15 @@
-import { Quest, Task } from "grimoire-kolmafia";
+import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import { cliExecute } from "kolmafia";
-import { $effect, $familiar, $item, $location, CommunityService, have } from "libram";
-import { FoamForceCombat } from "../combat";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $location,
+  $skill,
+  CommunityService,
+  have,
+  Macro,
+} from "libram";
 import { runTest } from "./shared";
 
 export const HotResistQuest: Quest<Task> = {
@@ -17,7 +25,9 @@ export const HotResistQuest: Quest<Task> = {
         offhand: $item`industrial fire extinguisher`,
         familiar: $familiar`Machine Elf`,
       },
-      combat: FoamForceCombat,
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Fire Extinguisher: Foam Yourself`).skill($skill`Use the Force`)
+      ),
     },
     {
       name: "Hot Resist Test",

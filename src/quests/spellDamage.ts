@@ -1,17 +1,19 @@
-import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, equip, use, visitUrl } from "kolmafia";
+import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { cliExecute, create, equip, retrieveItem, use, useSkill, visitUrl } from "kolmafia";
 import {
   $effect,
   $familiar,
   $item,
   $items,
   $monster,
+  $skill,
   $slot,
   Clan,
   CommunityService,
+  get,
   have,
+  Macro,
 } from "libram";
-import { MeteorForceCombat } from "../combat";
 import { config } from "../config";
 import { checkAvailable } from "../lib";
 import { deepDarkVisions, innerElf, runTest } from "./shared";
@@ -20,7 +22,25 @@ export const SpellDamageQuest: Quest<Task> = {
   name: "Make Sausage",
   completed: () => CommunityService.SpellDamage.isDone(),
   tasks: [
+    {
+      name: "Install Dynamic Range",
+      completed: () => get("hasRange"),
+      do: () => {
+        const range = $item`Dramatic™ range`;
+        retrieveItem(range); // -900 meat
+        use(range);
+      },
+    },
+    {
+      name: "Cook cordial of concentration",
+      completed: () => have($item`cordial of concentration`),
+      do: () => {
+        useSkill($skill`Advanced Saucecrafting`); // 10 mp
+        create($item`cordial of concentration`);
+      },
+    },
     innerElf(),
+    deepDarkVisions(),
     {
       name: "Cowrruption",
       completed: () => have($effect`Cowrruption`),
@@ -35,9 +55,10 @@ export const SpellDamageQuest: Quest<Task> = {
       do: () => use($item`photocopied monster`),
       post: () => checkAvailable($item`corrupted marrow`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
-      combat: MeteorForceCombat,
+      combat: new CombatStrategy()
+        .macro(Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`), $monster`ungulith`)
+        .macro(Macro.abort()),
     },
-    deepDarkVisions(),
     {
       name: "Spell Damage Test",
       completed: () => CommunityService.SpellDamage.isDone(),
@@ -54,6 +75,8 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Filled with Magic`,
         $effect`Grumpy and Ornery`,
         $effect`Human-Elf Hybrid`,
+        // eslint-disable-next-line libram/verify-constants
+        $effect`Imported Strength`,
         $effect`In a Lather`,
         $effect`Inner Elf`,
         $effect`Jackasses' Symphony of Destruction`,
@@ -76,11 +99,12 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Witch Breaded`,
       ],
       outfit: {
+        hat: $item`astral chapeau`,
         weapon: $item`wrench`,
         offhand: $item`weeping willow wand`,
         pants: $item`pantogram pants`,
-        acc1: $item`battle broom`,
-        acc2: $item`Powerful Glove`,
+        acc1: $item`Powerful Glove`,
+        acc2: $item`battle broom`,
         acc3: $item`Kremlin's Greatest Briefcase`,
         famequip: $items`Abracandalabra, unbreakable umbrella`,
         familiar: $familiar`Left-Hand Man`,

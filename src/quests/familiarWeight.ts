@@ -1,4 +1,4 @@
-import { Quest, Task } from "grimoire-kolmafia";
+import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
   cliExecute,
   drink,
@@ -9,8 +9,17 @@ import {
   use,
   weightAdjustment,
 } from "kolmafia";
-import { $effect, $familiar, $item, $items, $location, CommunityService, have } from "libram";
-import { MeteorForceCombat } from "../combat";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $items,
+  $location,
+  $skill,
+  CommunityService,
+  have,
+  Macro,
+} from "libram";
 import { acquireEffect, itemToEffect } from "../lib";
 import { runTest, tuneMoonPlatypus } from "./shared";
 
@@ -24,7 +33,9 @@ export const FamiliarWeightQuest: Quest<Task> = {
       completed: () => have($effect`Meteor Showered`),
       do: $location`The Dire Warren`,
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
-      combat: MeteorForceCombat,
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`)
+      ),
     },
     {
       name: "Familiar Weight Test",

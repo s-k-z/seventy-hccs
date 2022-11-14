@@ -5,7 +5,6 @@ import {
   create,
   eat,
   mpCost,
-  retrieveItem,
   sweetSynthesis,
   use,
   useSkill,
@@ -26,22 +25,15 @@ import {
   Macro,
 } from "libram";
 import { config } from "../config";
-import {
-  acquireEffect,
-  checkEffect,
-  haveItemOrEffect,
-  itemToEffect,
-  tuple,
-  wishEffect,
-} from "../lib";
+import { acquireEffect, checkEffect, haveItemOrEffect, tuple, wishEffect } from "../lib";
 
 const buffs = [
   $effect`Broad-Spectrum Vaccine`,
-  $effect`El Aroma de Salsa`,
   $effect`Favored by Lyle`,
   $effect`Grumpy and Ornery`,
   $effect`Hustlin'`,
   $effect`Mental A-cue-ity`,
+  $effect`Pisces in the Skyces`,
   $effect`Sigils of Yeg`,
   $effect`Starry-Eyed`,
   $effect`Total Protonic Reversal`,
@@ -115,6 +107,11 @@ export const PostCoilWire: Quest<Task> = {
   completed: () => get("csServicesPerformed").includes(","),
   tasks: [
     {
+      name: "Summon Alice's Army",
+      completed: () => get("grimoire3Summons") > 0,
+      do: () => useSkill($skill`Summon Alice's Army Cards`), // 5 mp
+    },
+    {
       name: "Buff",
       completed: () => buffs.every((b) => have(b)),
       do: () => buffs.every((b) => acquireEffect(b)),
@@ -133,10 +130,12 @@ export const PostCoilWire: Quest<Task> = {
     {
       name: "Open MayDay package",
       completed: () => have($effect`Ready to Survive`),
-      do: () => {
-        use($item`MayDay™ supply package`);
-        if (have($item`space blanket`)) autosell(1, $item`space blanket`); // +5000 meat
-      },
+      do: () => use($item`MayDay™ supply package`),
+    },
+    {
+      name: "Sell space blanket",
+      completed: () => !have($item`space blanket`),
+      do: () => autosell(1, $item`space blanket`), // +5000 meat
     },
     {
       name: "Configure KGB",
@@ -144,55 +143,17 @@ export const PostCoilWire: Quest<Task> = {
       do: () => cliExecute("Briefcase e spell spooky -combat"),
     },
     {
-      name: "Install Dynamic Range",
-      completed: () => get("hasRange"),
-      do: () => {
-        const range = $item`Dramatic™ range`;
-        retrieveItem(range); // -900 meat
-        use(range);
-      },
-    },
-    {
-      name: "Summon Items",
-      completed: () => have($effect`Pisces in the Skyces`),
-      do: () => {
-        // prettier-ignore
-        [
-          $skill`Advanced Cocktailcrafting`,   // 10 mp
-          $skill`Advanced Saucecrafting`,      // 10 mp
-          $skill`Chubby and Plump`,            // 50 mp
-          $skill`Perfect Freeze`,              // 5 mp
-          $skill`Prevent Scurvy and Sobriety`, // 50 mp
-          $skill`Summon Alice's Army Cards`,   // 5 mp
-        ].forEach((skill) => useSkill(skill)); // 130 mp
-        acquireEffect($effect`Pisces in the Skyces`);
-      },
-    },
-    {
-      name: "Cook Sauce Potions",
-      completed: () => have($effect`Mystically Oiled`),
-      do: () => {
-        retrieveItem($item`soda water`); // -63 meat
-        [
-          $item`cordial of concentration`,
-          $item`oil of expertise`,
-          $item`philter of phorce`,
-          $item`ointment of the occult`,
-          $item`eyedrops of the ermine`,
-        ].forEach((saucePotion) => {
-          if (!have(saucePotion) && !have(itemToEffect(saucePotion))) create(saucePotion);
-        });
-        acquireEffect($effect`Mystically Oiled`);
-      },
-    },
-    {
       name: "Wanderer Sweep",
       completed: () => haveItemOrEffect($item`Gene Tonic: Construct`),
       do: $location`Noob Cave`,
-      post: () => DNALab.makeTonic(),
+      post: () => {
+        if (get("lastCopyableMonster") === $monster`crate`) DNALab.makeTonic();
+      },
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(Macro.item($item`DNA extraction syringe`).runaway()),
+      combat: new CombatStrategy()
+        .macro(Macro.item($item`DNA extraction syringe`), $monster`crate`)
+        .macro(Macro.runaway()),
     },
     {
       name: "Christmas Card",
@@ -263,6 +224,7 @@ export const PostCoilWire: Quest<Task> = {
       completed: () => $effects`[1701]Hip to the Jive, In a Lather`.every((e) => have(e)),
       prepare: () => Clan.join(config.main_clan),
       do: () => $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect), // 5 drunk, -5500 meat
+      post: () => visitUrl("place.php?whichplace=speakeasy&action=olivers_pooltable"), // +75 meat
       effects: $effects`Ode to Booze`,
     },
     {
@@ -278,7 +240,10 @@ export const PostCoilWire: Quest<Task> = {
     {
       name: "Synthesize Smart",
       completed: () => have($effect`Synthesis: Smart`),
-      do: () => sweetSynthesis($item`Chubby and Plump bar`, $item`bag of many confections`),
+      do: () => {
+        useSkill($skill`Chubby and Plump`); // 50 mp
+        sweetSynthesis($item`Chubby and Plump bar`, $item`bag of many confections`);
+      },
     },
   ],
 };

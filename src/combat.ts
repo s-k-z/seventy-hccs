@@ -28,15 +28,6 @@ const notAllowList = [
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
 
-  // mapped monsters
-  // $monster`amateur ninja`,
-  // $monster`novelty tropical skeleton`,
-  // $monster`toothless mastiff bitch`,
-
-  // reminisced monsters
-  // $monster`cocktail shrimp`,
-  // $monster`pterodactyl`,
-
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
@@ -122,20 +113,6 @@ const Backup = Macro.if_(
 // Turbo used a flag to cast pride
 const Pride = Macro.if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`));
 
-const FreeInstaKill = Macro.skill($skill`Sing Along`)
-  .step(Pride)
-  .trySkill($skill`Chest X-Ray`)
-  .trySkill($skill`Shattering Punch`)
-  .trySkill($skill`Gingerbread Mob Hit`)
-  .trySkill($skill`Shocking Lick`)
-  .abort();
-
-const SingAndKill = Macro.skill($skill`Sing Along`)
-  .step(Pride)
-  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-  .attack()
-  .repeat();
-
 const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
@@ -143,7 +120,11 @@ const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
-  .step(SingAndKill);
+  .skill($skill`Sing Along`)
+  .step(Pride)
+  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+  .attack()
+  .repeat();
 
 export const DefaultCombat = new CombatStrategy()
   .startingMacro(Macro.if_(notAllowList, Macro.abort()))
@@ -198,7 +179,14 @@ export const DefaultCombat = new CombatStrategy()
   .macro(
     Backup.if_(
       `monsterid ${$monster`toxic beastie`.id}`,
-      Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill)
+      Macro.skill($skill`Summon Love Gnats`)
+        .skill($skill`Sing Along`)
+        .step(Pride)
+        .trySkill($skill`Chest X-Ray`)
+        .trySkill($skill`Shattering Punch`)
+        .trySkill($skill`Gingerbread Mob Hit`)
+        .trySkill($skill`Shocking Lick`)
+        .abort()
     ),
     $monster`toxic beastie`
   )
@@ -229,13 +217,6 @@ export const DMT2Combat = new CombatStrategy().macro(
     .if_(`!monsterid ${$monster`Thinker of Thoughts`}`, Macro.skill($skill`Macrometeorite`))
     .tryItem($item`abstraction: action`)
     .step(DefaultMacro)
-);
-
-export const MeteorForceCombat = new CombatStrategy().macro(
-  Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`)
-);
-export const FoamForceCombat = new CombatStrategy().macro(
-  Macro.skill($skill`Fire Extinguisher: Foam Yourself`).skill($skill`Use the Force`)
 );
 
 export const StenchCombat = new CombatStrategy().macro(

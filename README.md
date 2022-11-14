@@ -41,7 +41,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## Requirements in Valhalla
 
-1. Astral Trousers from Pet Heaven
+1. Astral Chapeau from Pet Heaven
 2. Sauceror class
 3. Wallaby moon sign
 
@@ -49,7 +49,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## To run the script
 
-1. Ensure you have KoLMafia r26829 or later [available here](https://github.com/kolmafia/kolmafia/releases)
+1. Ensure you have KoLMafia r26939 or later [available here](https://github.com/kolmafia/kolmafia/releases)
 2. Set properties in kolmafia to appropriate values:
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge

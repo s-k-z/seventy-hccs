@@ -27,9 +27,9 @@ import { config } from "../config";
 import { MoonSign, tuneMoon } from "../iotms";
 import { haveItemOrEffect } from "../lib";
 
-export function refreshGhost(verify = true): void {
+export function refreshGhost(): void {
   visitUrl("questlog.php?which=1");
-  if (verify && !get("ghostLocation")) throw `Failed to get protonic ghost notice`;
+  if (!get("ghostLocation")) throw `Failed to get protonic ghost notice`;
 }
 
 export function runTest(test: CommunityService): void {
@@ -127,7 +127,7 @@ export function innerElf(): Task {
     choices: { 326: 1 }, // Showdown: (1) fight mother slime (2) leave
     do: $location`The Slime Tube`,
     post: () => Clan.join(config.main_clan),
-    outfit: { familiar: $familiar`Machine Elf` },
+    outfit: { acc3: $item`Kremlin's Greatest Briefcase`, familiar: $familiar`Machine Elf` },
     combat: DefaultCombat,
   };
 }
