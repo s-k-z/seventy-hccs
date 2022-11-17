@@ -42,6 +42,7 @@ export const WeaponDamageQuest: Quest<Task> = {
       prepare: () => cliExecute("umbrella weapon"),
       do: () => runTest(CommunityService.WeaponDamage),
       post: () => equip($slot`familiar`, $item`none`),
+      acquire: [{ item: $item`broken champagne bottle` }],
       effects: [
         $effect`Billiards Belligerence`,
         $effect`Blessing of your favorite Bird`,

@@ -30,6 +30,7 @@ export const ItemDropQuest: Quest<Task> = {
       completed: () => CommunityService.BoozeDrop.isDone(),
       prepare: () => cliExecute("umbrella item"),
       do: () => runTest(CommunityService.BoozeDrop),
+      acquire: [{ item: $item`wad of used tape` }],
       effects: [
         $effect`Bat-Adjacent Form`,
         $effect`Blessing of the Bird`,

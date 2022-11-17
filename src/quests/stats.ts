@@ -11,6 +11,7 @@ export const HPQuest: Quest<Task> = {
       completed: () => CommunityService.HP.isDone(),
       prepare: () => cliExecute("parka hp"),
       do: () => runTest(CommunityService.HP),
+      acquire: [{ item: $item`wad of used tape` }],
       effects: $effects`Song of Starch`,
       outfit: {
         hat: $items`extra-wide head candle, wad of used tape`,
@@ -53,6 +54,7 @@ export const MuscleQuest: Quest<Task> = {
       completed: () => CommunityService.Muscle.isDone(),
       prepare: () => cliExecute("retrocape muscle"),
       do: () => runTest(CommunityService.Muscle),
+      acquire: [{ item: $item`wad of used tape` }],
       effects: [
         $effect`Expert Oiliness`,
         $effect`Giant Growth`,
@@ -80,6 +82,7 @@ export const MysticalityQuest: Quest<Task> = {
       completed: () => CommunityService.Mysticality.isDone(),
       prepare: () => cliExecute("retrocape myst"),
       do: () => runTest(CommunityService.Mysticality),
+      acquire: [{ item: $item`wad of used tape` }],
       effects: $effects`Nanobrainy, Quiet Judgement, Witch Breaded`,
       outfit: {
         hat: $item`wad of used tape`,
