@@ -28,7 +28,6 @@ export function castBestLibram(): void {
     [get("_resolutionRareSummons") < 3,           $skill`Summon Resolutions`],
     [!have($item`pulled blue taffy`, 4),          $skill`Summon Taffy`],
     [!have($item`love song of icy revenge`, 4),   $skill`Summon Love Song`],
-    [true,                                        $skill`Summon Taffy`],
   ])) {
     if (check) {
       useSkill(summon);
