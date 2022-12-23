@@ -24,8 +24,10 @@ import {
   have,
   Macro,
 } from "libram";
+import { DefaultCombat } from "../combat";
 import { config } from "../config";
 import { acquireEffect, checkEffect, haveItemOrEffect, tuple, wishEffect } from "../lib";
+import { selectBestFamiliar } from "./shared";
 
 const buffs = [
   $effect`Broad-Spectrum Vaccine`,
@@ -122,10 +124,12 @@ export const PostCoilWire: Quest<Task> = {
       do: () => eat($item`occult jelly donut`),
     },
     {
-      name: "Get cracker",
-      completed: () => have($item`cracker`),
+      name: "Use box of familiar jacks",
+      // eslint-disable-next-line libram/verify-constants
+      completed: () => have($item`overloaded Yule battery`),
       do: () => use($item`box of Familiar Jacks`),
-      outfit: { familiar: $familiar`Exotic Parrot` },
+      // eslint-disable-next-line libram/verify-constants
+      outfit: { familiar: $familiar`Mini-Trainbot` },
     },
     {
       name: "Open MayDay package",
@@ -144,16 +148,13 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Wanderer Sweep",
-      completed: () => haveItemOrEffect($item`Gene Tonic: Construct`),
-      do: $location`Noob Cave`,
+      completed: () => get("_speakeasyFreeFights") >= 2,
       post: () => {
-        if (get("lastCopyableMonster") === $monster`crate`) DNALab.makeTonic();
+        if (get("_speakeasyFreeFights") < 2) throw `Didn't increment oliver place fights?`;
       },
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy()
-        .macro(Macro.item($item`DNA extraction syringe`), $monster`crate`)
-        .macro(Macro.runaway()),
+      do: $location`An Unusually Quiet Barroom Brawl`,
+      outfit: { familiar: selectBestFamiliar() },
+      combat: DefaultCombat,
     },
     {
       name: "Christmas Card",
@@ -212,12 +213,18 @@ export const PostCoilWire: Quest<Task> = {
     {
       name: "Buff More",
       completed: () => postNanorhino.every((f) => have(f)),
-      do: () => {
-        $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect);
-        cliExecute("saber familiar");
-        visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2");
-        postNanorhino.forEach((f) => acquireEffect(f));
-      },
+      prepare: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
+      do: () => postNanorhino.forEach((f) => acquireEffect(f)),
+    },
+    {
+      name: "Upgrade Cosplay Saber",
+      completed: () => get("_saberMod") !== 0,
+      do: () => cliExecute("saber familiar"),
+    },
+    {
+      name: "Wish Effects",
+      completed: () => $effects`All Is Forgiven, Sparkly!, Witch Breaded`.every((e) => have(e)),
+      do: () => $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect),
     },
     {
       name: "Drink Speakeasy",

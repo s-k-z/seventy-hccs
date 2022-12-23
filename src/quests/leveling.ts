@@ -37,6 +37,7 @@ import {
   $monster,
   $skill,
   $stat,
+  DNALab,
   get,
   have,
   Macro,
@@ -69,7 +70,7 @@ const levelingOutfit = {
 };
 
 export const vintnerOutfit = () => ({
-  hat: $item`wad of used tape`,
+  hat: $item`Iunion Crown`,
   back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
   shirt: get("garbageShirtCharge") > 0 ? $item`makeshift garbage shirt` : $item`Jurassic Parka`,
   weapon: $item`weeping willow wand`,
@@ -318,6 +319,13 @@ export const Leveling: Quest<Task> = {
         }
       },
       do: $location`The X-32-F Combat Training Snowman`,
+      post: () => {
+        if (!have($effect`Human-Machine Hybrid`)) {
+          DNALab.makeTonic();
+          use($item`Gene Tonic: Construct`);
+        }
+        checkEffect($effect`Human-Machine Hybrid`);
+      },
       outfit: () => ({ ...levelingOutfit, familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
     },

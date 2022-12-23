@@ -49,7 +49,6 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
 export function prepAndAscendIfNecessary() {
   if (myPath() !== $path`Community Service`) {
     prepareAscension({
-      workshed: "Little Geneticist DNA-Splicing Lab",
       garden: "Peppermint Pip Packet",
       eudora: "Our Daily Candles™ order form",
       chateau: {

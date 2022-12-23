@@ -43,7 +43,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 */
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(26939);
+  sinceKolmafiaRevision(27020);
 
   Args.fill(config, command);
   if (config.help) {

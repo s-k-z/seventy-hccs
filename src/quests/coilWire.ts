@@ -5,9 +5,9 @@ import {
   create,
   Effect,
   equip,
+  getWorkshed,
   Item,
   itemAmount,
-  mpCost,
   myMaxmp,
   myMp,
   retrieveItem,
@@ -178,11 +178,26 @@ export const CoilWire: Quest<Task> = {
       },
     },
     {
+      name: "Install Workshed 1",
+      completed: () => getWorkshed() === $item`Little Geneticist DNA-Splicing Lab`,
+      do: () => use($item`Little Geneticist DNA-Splicing Lab`),
+    },
+    {
       name: "Wanderer Sweep",
-      completed: () => get("_banderRunaways") > 0,
-      do: $location`Noob Cave`,
-      outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: RunawayCombat,
+      completed: () => get("_speakeasyFreeFights") >= 1,
+      do: $location`An Unusually Quiet Barroom Brawl`,
+      post: () => {
+        if (get("_speakeasyFreeFights") < 1) throw `Didn't increment oliver place fights?`;
+      },
+      outfit: { familiar: selectBestFamiliar() },
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Curse of Weaksauce`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Micrometeorite`)
+          .skill($skill`Sing Along`)
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: "Reminisce pterodactyl",
@@ -260,14 +275,6 @@ export const CoilWire: Quest<Task> = {
         .macro(Macro.abort()),
     },
     {
-      name: "Goblin Flapper",
-      completed: () => true,
-      // eslint-disable-next-line libram/verify-constants
-      do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
-      outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: RunawayCombat,
-    },
-    {
       name: "Sausage Goblin",
       completed: () => get("_sausageFights") > 0,
       prepare: () => cliExecute("retrocape heck thrill"),
@@ -277,20 +284,7 @@ export const CoilWire: Quest<Task> = {
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: selectBestFamiliar(AdvReq.NoAttack),
       }),
-      combat: new CombatStrategy()
-        .macro(
-          Macro.skill($skill`Curse of Weaksauce`)
-            .item($item`Time-Spinner`)
-            .skill($skill`Micrometeorite`)
-            .skill($skill`Feel Envy`)
-            .skill($skill`Feel Nostalgic`)
-            .skill($skill`Sing Along`)
-            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-            .attack()
-            .repeat(),
-          $monster`sausage goblin`
-        )
-        .macro(Macro.abort()),
+      combat: DefaultCombat,
     },
     {
       name: "Voter Monster",
@@ -302,14 +296,7 @@ export const CoilWire: Quest<Task> = {
         acc3: $item`"I Voted!" sticker`,
         familiar: selectBestFamiliar(),
       }),
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Curse of Weaksauce`)
-          .item($item`Time-Spinner`)
-          .skill($skill`Sing Along`)
-          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-          .attack()
-          .repeat()
-      ),
+      combat: DefaultCombat,
     },
     {
       name: "Send autumn-aton",

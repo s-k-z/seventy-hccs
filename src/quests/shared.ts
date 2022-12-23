@@ -109,7 +109,6 @@ export function deepDarkVisions(): Task {
       offhand: $items`burning paper crane, unbreakable umbrella`,
       pants: $item`pantogram pants`,
       acc3: $item`Kremlin's Greatest Briefcase`,
-      famequip: $item`cracker`,
       familiar: $familiar`Exotic Parrot`,
     },
   };

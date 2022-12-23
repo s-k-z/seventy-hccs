@@ -97,8 +97,10 @@ export const FamiliarWeightQuest: Quest<Task> = {
         acc1: $item`Brutal brogues`,
         acc2: $item`hewn moon-rune spoon`,
         acc3: $item`Beach Comb`,
-        famequip: $item`cracker`,
-        familiar: $familiar`Exotic Parrot`,
+        // eslint-disable-next-line libram/verify-constants
+        famequip: $item`overloaded Yule battery`,
+        // eslint-disable-next-line libram/verify-constants
+        familiar: $familiar`Mini-Trainbot`,
       },
     },
   ],

@@ -75,7 +75,6 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Filled with Magic`,
         $effect`Grumpy and Ornery`,
         $effect`Human-Elf Hybrid`,
-        // eslint-disable-next-line libram/verify-constants
         $effect`Imported Strength`,
         $effect`In a Lather`,
         $effect`Inner Elf`,

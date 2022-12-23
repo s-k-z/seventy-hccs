@@ -52,7 +52,6 @@ export const WeaponDamageQuest: Quest<Task> = {
         $effect`Do You Crush What I Crush?`,
         $effect`Frenzied, Bloody`,
         $effect`Grumpy and Ornery`,
-        // eslint-disable-next-line libram/verify-constants
         $effect`Imported Strength`,
         $effect`In a Lather`,
         $effect`Inner Elf`,
