@@ -30,7 +30,6 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
       Cocktail Shrimp
     Mapped Monsters:
       amateur ninja
-      goblin flapper
       toothless mastiff bitch
     Tome Summons:
       Borrowed Time

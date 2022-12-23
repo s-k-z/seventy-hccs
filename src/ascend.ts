@@ -64,7 +64,7 @@ export function prepAndAscendIfNecessary() {
       Lifestyle.hardcore,
       "wallaby",
       $item`astral six-pack`,
-      $item`astral chapeau`
+      $item`astral trousers`
     );
   }
 }

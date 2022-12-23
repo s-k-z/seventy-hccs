@@ -75,7 +75,6 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Filled with Magic`,
         $effect`Grumpy and Ornery`,
         $effect`Human-Elf Hybrid`,
-        $effect`Imported Strength`,
         $effect`In a Lather`,
         $effect`Inner Elf`,
         $effect`Jackasses' Symphony of Destruction`,
@@ -98,7 +97,6 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Witch Breaded`,
       ],
       outfit: {
-        hat: $item`astral chapeau`,
         weapon: $item`wrench`,
         offhand: $item`weeping willow wand`,
         pants: $item`pantogram pants`,

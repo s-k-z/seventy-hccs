@@ -52,7 +52,6 @@ export const WeaponDamageQuest: Quest<Task> = {
         $effect`Do You Crush What I Crush?`,
         $effect`Frenzied, Bloody`,
         $effect`Grumpy and Ornery`,
-        $effect`Imported Strength`,
         $effect`In a Lather`,
         $effect`Inner Elf`,
         $effect`Jackasses' Symphony of Destruction`,
@@ -66,7 +65,7 @@ export const WeaponDamageQuest: Quest<Task> = {
         $effect`The Power of LOV`,
       ],
       outfit: {
-        hat: $items`extra-wide head candle, none`,
+        hat: $items`extra-wide head candle, astral trousers`,
         weapon: $item`dented scepter`,
         offhand: $item`unbreakable umbrella`,
         acc1: $item`Powerful Glove`,
