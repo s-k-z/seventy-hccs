@@ -43,7 +43,7 @@ import { WeaponDamageQuest } from "./quests/weaponDamage";
 */
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(27020);
+  sinceKolmafiaRevision(27021);
 
   Args.fill(config, command);
   if (config.help) {
@@ -51,7 +51,7 @@ export function main(command = ""): void {
     return;
   }
 
-  if (config.test !== "") {
+  if (config.test) {
     switch (config.test.toLowerCase()) {
       case "kramco":
         print(`We can eat ${getHowManySausagesToEat()} sausages.`);

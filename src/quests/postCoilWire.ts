@@ -3,6 +3,7 @@ import {
   autosell,
   cliExecute,
   create,
+  drink,
   eat,
   mpCost,
   sweetSynthesis,
@@ -121,7 +122,7 @@ export const PostCoilWire: Quest<Task> = {
     {
       name: "Eat a donut",
       completed: () => have($effect`Filled with Magic`),
-      do: () => eat($item`occult jelly donut`),
+      do: () => eat($item`occult jelly donut`), // 3-4 adventures, 1 full
     },
     {
       name: "Use box of familiar jacks",
@@ -228,10 +229,9 @@ export const PostCoilWire: Quest<Task> = {
     },
     {
       name: "Drink Speakeasy",
-      completed: () => $effects`[1701]Hip to the Jive, In a Lather`.every((e) => have(e)),
+      completed: () => have($effect`In a Lather`),
       prepare: () => Clan.join(config.main_clan),
-      do: () => $effects`[1701]Hip to the Jive, In a Lather`.forEach(acquireEffect), // 5 drunk, -5500 meat
-      post: () => visitUrl("place.php?whichplace=speakeasy&action=olivers_pooltable"), // +75 meat
+      do: () => drink($item`Sockdollager`), // 7-9 adventures, 2 drunk, -500 meat
       effects: $effects`Ode to Booze`,
     },
     {

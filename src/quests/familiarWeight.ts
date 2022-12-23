@@ -54,7 +54,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
         if (needWeight() && !have(coldHeart) && loveSongSufficient) cliExecute(`use * ${loveSong}`);
         if (needWeight() && have(wine)) {
           acquireEffect($effect`Ode to Booze`);
-          drink(wine); // 1 drunk
+          drink(wine); // 3-5 adventures, 1 drunk
         }
         if (needWeight()) {
           while (have(loveSong) && haveEffect(coldHeart) < 20) {
