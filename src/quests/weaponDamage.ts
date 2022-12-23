@@ -30,8 +30,10 @@ export const WeaponDamageQuest: Quest<Task> = {
       post: () => use($item`disintegrating spiky collar`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
-        .macro(
-          Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`),
+        .ccs(
+          `skill ${$skill`Meteor Shower`}
+          twiddle your thumbs
+          skill ${$skill`Use the Force`}`,
           $monster`toothless mastiff bitch`
         )
         .macro(Macro.abort()),

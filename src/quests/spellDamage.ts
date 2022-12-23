@@ -56,7 +56,12 @@ export const SpellDamageQuest: Quest<Task> = {
       post: () => checkAvailable($item`corrupted marrow`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
-        .macro(Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`), $monster`ungulith`)
+        .ccs(
+          `skill ${$skill`Meteor Shower`}
+          twiddle your thumbs
+          skill ${$skill`Use the Force`}`,
+          $monster`ungulith`
+        )
         .macro(Macro.abort()),
     },
     {

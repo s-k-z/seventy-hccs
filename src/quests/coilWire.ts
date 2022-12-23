@@ -8,6 +8,7 @@ import {
   getWorkshed,
   Item,
   itemAmount,
+  mpCost,
   myMaxmp,
   myMp,
   retrieveItem,
@@ -192,9 +193,10 @@ export const CoilWire: Quest<Task> = {
       outfit: { familiar: selectBestFamiliar() },
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Curse of Weaksauce`)
-          .item($item`Time-Spinner`)
           .skill($skill`Micrometeorite`)
+          .item($item`Time-Spinner`)
           .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
           .attack()
           .repeat()
       ),
@@ -266,10 +268,11 @@ export const CoilWire: Quest<Task> = {
       post: () => DNALab.hybridize(),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
-        .macro(
-          Macro.item($item`DNA extraction syringe`)
-            .skill($skill`Open a Big Red Present`)
-            .skill($skill`Use the Force`),
+        .ccs(
+          `item ${$item`DNA extraction syringe`}
+          skill ${$skill`Open a Big Red Present`}
+          twiddle your thumbs
+          skill ${$skill`Use the Force`}`,
           $monster`cocktail shrimp`
         )
         .macro(Macro.abort()),

@@ -15,6 +15,7 @@ import {
   $item,
   $items,
   $location,
+  $monster,
   $skill,
   CommunityService,
   have,
@@ -33,9 +34,14 @@ export const FamiliarWeightQuest: Quest<Task> = {
       completed: () => have($effect`Meteor Showered`),
       do: $location`The Dire Warren`,
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`)
-      ),
+      combat: new CombatStrategy()
+        .ccs(
+          `skill ${$skill`Meteor Shower`}
+          twiddle your thumbs
+          skill ${$skill`Use the Force`}`,
+          $monster`fluffy bunny`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Familiar Weight Test",

@@ -5,6 +5,7 @@ import {
   $familiar,
   $item,
   $location,
+  $monster,
   $skill,
   CommunityService,
   have,
@@ -25,9 +26,14 @@ export const HotResistQuest: Quest<Task> = {
         offhand: $item`industrial fire extinguisher`,
         familiar: $familiar`Machine Elf`,
       },
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Fire Extinguisher: Foam Yourself`).skill($skill`Use the Force`)
-      ),
+      combat: new CombatStrategy()
+        .ccs(
+          `skill ${$skill`Fire Extinguisher: Foam Yourself`}
+          twiddle your thumbs
+          skill ${$skill`Use the Force`}`,
+          $monster`fluffy bunny`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Hot Resist Test",
