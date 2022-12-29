@@ -1,7 +1,7 @@
 import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
 import { print, setAutoAttack } from "kolmafia";
 import { get, sinceKolmafiaRevision } from "libram";
-import { isReadyToContinue, prepAndAscendIfNecessary } from "./ascend";
+import { isReadyToContinue, prepAndAscendIfNecessary, prepareToAscend } from "./ascend";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { CoilWire } from "./quests/coilWire";
@@ -89,6 +89,11 @@ export function main(command = ""): void {
   for (const name of Object.keys(toCheck)) {
     const key = name as keyof typeof toCheck;
     checkConfig(name, toCheck[key].prop, toCheck[key].return);
+  }
+
+  if (config.prep) {
+    prepareToAscend();
+    return;
   }
 
   if (!isReadyToContinue(config.nofites, config.novote)) return;

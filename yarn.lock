@@ -1516,10 +1516,10 @@ eslint-config-prettier@^8.5.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.5.0.tgz#5a81680ec934beca02c7b1a61cf8ca34b66feab1"
   integrity sha512-obmWKLUNCnhtQRKc+tmnYuQl0pFU1ibYJQ5BGhTVB08bHe9wC8qUeG7c08dj9XX+AuPj1YSGSQIHl1pnDHZR0Q==
 
-eslint-plugin-libram@^0.2.22:
-  version "0.2.22"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.22.tgz#8050aea62148d2a3e8cec2bc8a3f7993b122cb84"
-  integrity sha512-0kKU2LEsqhvx7x0K97WSDlIWDg0lsloHO/EiFD5blDgkcZSvjv7pdbMf55ywvqbk/9O2gNVLhmVlSvx+ErmHOA==
+eslint-plugin-libram@^0.2.25:
+  version "0.2.25"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.25.tgz#c2a3dc767f1e392be608901a9248036f70714354"
+  integrity sha512-lFYasWDh+ImR4Cyv3rv1wr15X9AznHHg9dWm+8AqQnrq6QKnw9N0zoeJ9+oqrUPk7aaD9qm6NqCVux4045zaAg==
   dependencies:
     html-entities "^2.3.2"
     requireindex "~1.1.0"
@@ -1786,10 +1786,10 @@ grapheme-splitter@^1.0.4:
   resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
   integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
 
-grimoire-kolmafia@^0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.9.tgz#f46ac204e74fb451889964841f3338162087b3da"
-  integrity sha512-LyGc4nn8X53YzPoaNEf7O216oPRRssSS96vuh3RF1cwJg7NparbH9xSPZlySQIbNy/BvOjiy4lbujkYPxE2/kA==
+grimoire-kolmafia@^0.3.11:
+  version "0.3.11"
+  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.11.tgz#0b7f1edb12ab111535b6dfcf4e583956e226fdd9"
+  integrity sha512-dogNycjk4afMN5YrT0Xy3H2U8k1OwhZFT/GBwZGz2atPZomyFE5V19sk0k0WpR2DOWIxATnsGDqRTrgDhLomrg==
   dependencies:
     core-js "^3.16.4"
 
@@ -1929,10 +1929,10 @@ json5@^2.2.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
   integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
 
-kolmafia@^5.27006.0:
-  version "5.27006.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27006.0.tgz#d6658bf47b15ac6ddd0928a2c08c6b03d484154c"
-  integrity sha512-3QmuHRM3Y+K4/ooCaznhvEv8Lj7tNHPXixWKrOqNExBvwG9bITPeY2ATyqmWa+XOBG4O0WrFWAy0TkDKLDNwBQ==
+kolmafia@^5.27040.0:
+  version "5.27040.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27040.0.tgz#b847ce2e33703a9834a49973a400dbcc83beff44"
+  integrity sha512-x2clC6Wpf11IDVjO7vOW7PkuND3h/9sHfaTxPPpQhMaqcnHH2tZdgAfaO08N7o3ZMmXIbby6WS3cLAcNiNhtaQ==
 
 levn@^0.4.1:
   version "0.4.1"

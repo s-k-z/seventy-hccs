@@ -8,7 +8,17 @@ import {
   userConfirm,
   visitUrl,
 } from "kolmafia";
-import { $class, $item, $monster, $path, ascend, Lifestyle, prepareAscension } from "libram";
+import {
+  $class,
+  $item,
+  $monster,
+  $path,
+  $skill,
+  ascend,
+  have,
+  Lifestyle,
+  prepareAscension,
+} from "libram";
 
 export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
   if (myPath() === $path`Community Service`) return true;
@@ -46,7 +56,9 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
   return true;
 }
 
-export function prepAndAscendIfNecessary() {
+const toPerm = [$skill`Crimbo Training: Dessert Steward`];
+
+export function prepareToAscend() {
   if (myPath() !== $path`Community Service`) {
     prepareAscension({
       garden: "Peppermint Pip Packet",
@@ -58,13 +70,22 @@ export function prepAndAscendIfNecessary() {
       },
       throwOnFail: true,
     });
-    ascend(
-      $path`Community Service`,
-      $class`Sauceror`,
-      Lifestyle.hardcore,
-      "wallaby",
-      $item`astral six-pack`,
-      $item`astral trousers`
-    );
   }
+}
+
+export function prepAndAscendIfNecessary() {
+  prepareToAscend();
+  visitUrl("charsheet.php");
+  ascend(
+    $path`Community Service`,
+    $class`Sauceror`,
+    Lifestyle.hardcore,
+    "wallaby",
+    $item`astral six-pack`,
+    $item`astral trousers`,
+    {
+      permSkills: new Map(toPerm.filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])),
+      neverAbort: true,
+    }
+  );
 }
