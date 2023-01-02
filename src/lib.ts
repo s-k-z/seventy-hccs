@@ -8,7 +8,7 @@ import {
   totalTurnsPlayed,
   use,
 } from "kolmafia";
-import { get, have, set } from "libram";
+import { get, have } from "libram";
 
 export function acquireEffect(e: Effect): void {
   if (!have(e) && e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
@@ -52,16 +52,4 @@ export function voterMonsterNow(): boolean {
 
 export function wishEffect(e: Effect): void {
   if (!have(e)) cliExecute(`genie effect ${e}`);
-}
-
-type propertyPair = [string, string | number | boolean];
-export function withContext(callback: () => void, context: propertyPair[]): void {
-  const previous = context.map(([prop]): propertyPair => [prop, get(prop)]);
-  const setProps = (p: propertyPair[]) => p.forEach(([prop, value]) => set(prop, value));
-  setProps(context);
-  try {
-    callback();
-  } finally {
-    setProps(previous);
-  }
 }
