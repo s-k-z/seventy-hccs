@@ -15,31 +15,6 @@ import { SpellDamageQuest } from "./quests/spellDamage";
 import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/stats";
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
-/* Resources:
-    Deck Cards:
-      Wrench
-      Green Mana
-      Christmas Card (Elf)
-    DNA:
-      Construct
-      Elf
-      Fish
-    Locket Reminiscences:
-      Pterodactyl
-      Cocktail Shrimp
-    Mapped Monsters:
-      amateur ninja
-      toothless mastiff bitch
-    Tome Summons:
-      Borrowed Time
-      Box of Familiar Jacks
-      Occult Jelly Donut
-    Wishes:
-      All is Forgiven
-      Sparkly!
-      Witch Breaded
-*/
-
 export function main(command = ""): void {
   sinceKolmafiaRevision(27054);
 
