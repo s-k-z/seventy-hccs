@@ -49,12 +49,12 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## To run the script
 
-1. Ensure you have KoLMafia r26959 or later [available here](https://github.com/kolmafia/kolmafia/releases)
+1. Ensure you have KoLMafia r27054 or later [available here](https://github.com/kolmafia/kolmafia/releases)
 2. Set properties in kolmafia to appropriate values:
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
-   - seventyhccs_stillsuit_target - Optional familiar name to be equipped with the tiny stillsuit
+   - seventyhccs_stillsuit - Optional familiar name to be equipped with the tiny stillsuit
 
 3. Run the script file named **seventyhccs.js** using KoLMafia
 
