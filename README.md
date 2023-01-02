@@ -23,22 +23,25 @@ git checkout https://github.com/s-k-z/seventy-hccs.git release
    - ceiling fan
    - foreign language tapes
    - a piggy bank
-7. [Diabolic pizza cube](https://kol.coldfront.net/thekolwiki/index.php/Diabolic_pizza_cube) installed into your workshed
-8. [Gingerbread City fully upgraded](https://kol.coldfront.net/thekolwiki/index.php/Civic_Planning_Office) with access to the Upscale Retail District, Sewers, Digital Clock and Thickened Walls
-9. A [Gold detective badge](https://kol.coldfront.net/thekolwiki/index.php/Gold_detective_badge) purchased from the [11th Precinct](https://kol.coldfront.net/thekolwiki/index.php/The_Precinct)
-10. At least 196 bronze deliveries for the [Guzzlr tablet](https://kol.coldfront.net/thekolwiki/index.php/Guzzlr_tablet)
-11. An [Ice house](https://kol.coldfront.net/thekolwiki/index.php/Ice_house) containing a [Perceiver of Sensations](https://kol.coldfront.net/thekolwiki/index.php/Perceiver_of_Sensations)
-12. [Your cowboy boots](https://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots) from the LT&T Office with nicksilver spurs and mountain lion skin applied (item drops and moxie stats)
-13. A [Peppermint patch](https://kol.coldfront.net/thekolwiki/index.php/A_Peppermint_Patch) growing in your garden
-14. [Source Terminal](https://kol.coldfront.net/thekolwiki/index.php/Source_Terminal) full upgraded
-15. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
-16. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed
+7. [Combat lover's locket](https://kol.coldfront.net/thekolwiki/index.php/Combat_lover%27s_locket) containing:
+   - cocktail shrimp
+   - pterodactyl
+8. [Little Geneticist DNA-Splicing Lab](https://kol.coldfront.net/thekolwiki/index.php/Little_Geneticist_DNA-Splicing_Lab) installed into your workshed
+9. [Gingerbread City fully upgraded](https://kol.coldfront.net/thekolwiki/index.php/Civic_Planning_Office) with access to the Upscale Retail District, Sewers, Digital Clock and Thickened Walls
+10. A [Gold detective badge](https://kol.coldfront.net/thekolwiki/index.php/Gold_detective_badge) purchased from the [11th Precinct](https://kol.coldfront.net/thekolwiki/index.php/The_Precinct)
+11. At least 196 bronze deliveries for the [Guzzlr tablet](https://kol.coldfront.net/thekolwiki/index.php/Guzzlr_tablet)
+12. An [Ice house](https://kol.coldfront.net/thekolwiki/index.php/Ice_house) containing a [Perceiver of Sensations](https://kol.coldfront.net/thekolwiki/index.php/Perceiver_of_Sensations)
+13. [Your cowboy boots](https://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots) from the LT&T Office with nicksilver spurs and mountain lion skin applied (item drops and moxie stats)
+14. A [Peppermint patch](https://kol.coldfront.net/thekolwiki/index.php/A_Peppermint_Patch) growing in your garden
+15. [Source Terminal](https://kol.coldfront.net/thekolwiki/index.php/Source_Terminal) full upgraded
+16. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
+17. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed
 
 The script can be run either in Aftercore, or in Community Service provided that the following are selected:
 
 ## Requirements in Valhalla
 
-1. Astral Statuette from Pet Heaven
+1. Astral Trousers from Pet Heaven
 2. Sauceror class
 3. Wallaby moon sign
 
@@ -46,16 +49,14 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## To run the script
 
-1. Ensure you have KoLMafia r26624 or later [available here](https://github.com/kolmafia/kolmafia/releases)
-2. Ensure **seventy_hccs.ccs** exists in the the KoLMafia ccs folder
-3. Set properties in kolmafia to appropriate values:
+1. Ensure you have KoLMafia r27054 or later [available here](https://github.com/kolmafia/kolmafia/releases)
+2. Set properties in kolmafia to appropriate values:
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
-   - seventyhccs_fortune_friend - Optional character name in main clan that will respond to fortune teller requests
-   - seventyhccs_stillsuit_target - Optional familiar name to be equipped with the tiny stillsuit
+   - seventyhccs_stillsuit - Optional familiar name to be equipped with the tiny stillsuit
 
-4. Run the script file named **seventy-hccs.js** using KoLMafia
+3. Run the script file named **seventyhccs.js** using KoLMafia
 
 ## Building from source
 

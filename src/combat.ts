@@ -1,35 +1,20 @@
+import { CombatStrategy } from "grimoire-kolmafia";
 import {
-  adv1,
-  choiceFollowsFight,
-  getAutoAttack,
   handlingChoice,
-  inMultiFight,
   Location,
   Monster,
   mpCost,
   myTurncount,
   runChoice,
   runCombat,
-  setAutoAttack,
   toInt,
   toUrl,
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $effect, $item, $monster, $skill, get, Macro, Witchess } from "libram";
-
-const amateurNinja = $monster`amateur ninja`.id;
-const noveltySkeleton = $monster`novelty tropical skeleton`.id;
-const mastiff = $monster`toothless mastiff bitch`.id;
-const gentrifier = $monster`gingerbread gentrifier`.id;
-const toxicBeastie = $monster`toxic beastie`.id;
-const LOVEnforcer = $monster`LOV Enforcer`.id;
-const LOVEngineer = $monster`LOV Engineer`.id;
-const DMTSquare = $monster`Performer of Actions`.id;
-const DMTCircle = $monster`Thinker of Thoughts`.id;
+import { $item, $monster, $skill, get, Macro } from "libram";
 
 const notAllowList = [
-  $monster`sausage goblin`,
   // protonic ghosts
   $monster`boneless blobghost`,
   $monster`Emily Koops, a spooky lime`,
@@ -44,14 +29,7 @@ const notAllowList = [
   $monster`The ghost of Waldo the Carpathian`,
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
-  // mapped monsters
-  $monster`amateur ninja`,
-  $monster`novelty tropical skeleton`,
-  $monster`toothless mastiff bitch`,
-  // reminisced monsters
-  $monster`cocktail shrimp`,
-  $monster`mutant circuit-soldering elf`,
-  $monster`pterodactyl`,
+
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,
@@ -70,10 +48,34 @@ const notAllowList = [
   $monster`Witchess Witch`,
   $monster`Witchess Queen`,
   // more free combats
+  $monster`sausage goblin`,
   $monster`Eldritch Tentacle`,
   $monster`Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl`,
   $monster`God Lobster`,
   $monster`X-32-F Combat Training Snowman`,
+  // Goth Kid Wanderers
+  $monster`Black Crayon Beast`,
+  $monster`Black Crayon Beetle`,
+  $monster`Black Crayon Constellation`,
+  $monster`Black Crayon Crimbo Elf`,
+  $monster`Black Crayon Demon`,
+  $monster`Black Crayon Elemental`,
+  $monster`Black Crayon Fish`,
+  $monster`Black Crayon Flower`,
+  $monster`Black Crayon Frat Orc`,
+  $monster`Black Crayon Goblin`,
+  $monster`Black Crayon Golem`,
+  $monster`Black Crayon Hippy`,
+  $monster`Black Crayon Hobo`,
+  $monster`Black Crayon Man`,
+  $monster`Black Crayon Manloid`,
+  $monster`Black Crayon Mer-kin`,
+  $monster`Black Crayon Penguin`,
+  $monster`Black Crayon Pirate`,
+  $monster`Black Crayon Shambling Monstrosity`,
+  $monster`Black Crayon Slime`,
+  $monster`Black Crayon Spiraling Shape`,
+  $monster`Black Crayon Undead Thing`,
   // BRICKOS
   $monster`BRICKO ooze`,
   $monster`BRICKO bat`,
@@ -97,196 +99,150 @@ const notAllowList = [
   $monster`jock`,
   $monster`party girl`,
   $monster`"plain" girl`,
-  // boss(es)
-  $monster`Mother Slime`,
   // toxic teacups
   $monster`toxic beastie`,
-  $monster`Black Crayon Slime`,
+  // Boss(es)
+  $monster`Mother Slime`,
 ]
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
 
-const Ghost = new Macro()
-  .skill($skill`Summon Love Gnats`)
-  .skill($skill`Sing Along`)
-  .skill($skill`Shoot Ghost`)
-  .skill($skill`Shoot Ghost`)
-  .skill($skill`Shoot Ghost`)
-  .skill($skill`Trap Ghost`)
-  .abort();
-
-const TryBanish = new Macro() // Reserve Snokebomb for Mother Slime
-  .trySkill($skill`Throw Latte on Opponent`)
-  .trySkill($skill`KGB tranquilizer dart`)
-  .trySkill($skill`Reflex Hammer`)
-  .trySkill($skill`Bowl a Curveball`)
-  .trySkill($skill`Feel Hatred`)
-  .abort();
-
-const Replace = new Macro().skill($skill`Macrometeorite`);
-const Backup = new Macro().if_(
+const Backup = Macro.if_(
   `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
   Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
 );
-const Pride = new Macro().if_(
-  // Turbo used a flag to cast pride
-  `hasskill ${toInt($skill`Turbo`)}`,
-  Macro.trySkill($skill`Feel Pride`)
-);
 
-const FreeInstaKill = new Macro()
-  .skill($skill`Sing Along`)
-  .step(Pride)
-  .trySkill($skill`Chest X-Ray`)
-  .trySkill($skill`Shattering Punch`)
-  .trySkill($skill`Gingerbread Mob Hit`)
-  .trySkill($skill`Shocking Lick`)
-  .abort();
+// Turbo used a flag to cast pride
+const Pride = Macro.if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`));
 
-const SingAndKill = new Macro()
-  .skill($skill`Sing Along`)
-  .step(Pride)
-  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-  .attack()
-  .repeat();
-const DefaultMacro = new Macro()
-  .if_(`hasskill ${toInt($skill`Shoot Ghost`)}`, Ghost)
-  .if_(`monsterid ${toxicBeastie}`, Backup)
-  .if_(`monsterid ${toxicBeastie}`, Macro.skill($skill`Summon Love Gnats`).step(FreeInstaKill))
-  .if_(`monsterid ${amateurNinja}`, FreeInstaKill)
-  .if_(
-    `monsterid ${noveltySkeleton}`,
-    Macro.trySkill($skill`Open a Big Red Present`).skill($skill`Use the Force`)
-  )
-  .if_(`monsterid ${mastiff}`, Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`))
-  .if_(notAllowList, TryBanish)
-  .skill($skill`Curse of Weaksauce`)
+const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
   .if_(
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
-  .if_(
-    `hasskill ${toInt($skill`Bowl Straight Up`)} && !haseffect ${toInt(
-      $effect`Cosmic Ball in the Air`
-    )}`,
-    Macro.skill($skill`Bowl Straight Up`)
-  )
-  .step(SingAndKill);
+  .skill($skill`Sing Along`)
+  .step(Pride)
+  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+  .attack()
+  .repeat();
 
-export const MacroList = {
-  FreeFight: DefaultMacro,
-  FastFreeFight: SingAndKill,
-  StenchFreeFight: new Macro()
-    .if_(`monsterid ${toxicBeastie}`, Backup)
-    .if_(`monsterid ${toxicBeastie}`, Macro.abort())
+export const DefaultCombat = new CombatStrategy()
+  .startingMacro(Macro.if_(notAllowList, Macro.abort()))
+  .macro(
+    Macro.if_(
+      `hasskill ${toInt($skill`Shoot Ghost`)}`,
+      Macro.skill($skill`Summon Love Gnats`)
+        .skill($skill`Sing Along`)
+        .skill($skill`Shoot Ghost`)
+        .skill($skill`Shoot Ghost`)
+        .skill($skill`Shoot Ghost`)
+        .skill($skill`Trap Ghost`)
+        .abort()
+    ),
+    [
+      $monster`boneless blobghost`,
+      $monster`Emily Koops, a spooky lime`,
+      $monster`The ghost of Ebenoozer Screege`,
+      $monster`The ghost of Jim Unfortunato`,
+      $monster`The ghost of Lord Montague Spookyraven`,
+      $monster`the ghost of Monsieur Baguelle`,
+      $monster`the ghost of Oily McBindle`,
+      $monster`The ghost of Richard Cockingham`,
+      $monster`The ghost of Sam McGee`,
+      $monster`The ghost of Vanillica "Trashblossom" Gorton`,
+      $monster`The ghost of Waldo the Carpathian`,
+      $monster`The Headless Horseman`,
+      $monster`The Icewoman`,
+    ]
+  )
+  .macro(
+    Macro.skill($skill`Sing Along`)
+      .trySkill($skill`Chest X-Ray`)
+      .trySkill($skill`Shattering Punch`)
+      .trySkill($skill`Gingerbread Mob Hit`)
+      .trySkill($skill`Shocking Lick`)
+      .abort(),
+    [
+      $monster`gingerbread finance bro`,
+      $monster`gingerbread gentrifier`,
+      $monster`gingerbread tech bro`,
+    ]
+  )
+  .macro(Macro.attack().repeat(), $monster`LOV Enforcer`)
+  .macro(Macro.skill($skill`Candyblast`).repeat(), $monster`LOV Engineer`)
+  .macro(
+    Macro.trySkill($skill`KGB tranquilizer dart`)
+      .skill($skill`Snokebomb`)
+      .abort(),
+    $monster`Mother Slime`
+  )
+  .macro(
+    Backup.if_(
+      `monsterid ${$monster`toxic beastie`.id}`,
+      Macro.skill($skill`Summon Love Gnats`)
+        .skill($skill`Sing Along`)
+        .step(Pride)
+        .trySkill($skill`Chest X-Ray`)
+        .trySkill($skill`Shattering Punch`)
+        .trySkill($skill`Gingerbread Mob Hit`)
+        .trySkill($skill`Shocking Lick`)
+        .abort()
+    ),
+    $monster`toxic beastie`
+  )
+  .macro(
+    Macro.item($item`Time-Spinner`)
+      .attack()
+      .repeat(),
+    $monster`Witchess Queen`
+  )
+  .macro(
+    Macro.skill($skill`Curse of Weaksauce`)
+      .skill($skill`Sing Along`)
+      .attack()
+      .repeat(),
+    $monster`Witchess Witch`
+  )
+  .macro(DefaultMacro);
+
+export const DMT1Combat = new CombatStrategy().macro(
+  Macro.if_(notAllowList, Macro.abort())
+    .if_(`!monsterid ${$monster`Performer of Actions`.id}`, Macro.skill($skill`Macrometeorite`))
+    .skill($skill`Feel Envy`)
+    .step(DefaultMacro)
+);
+
+export const DMT2Combat = new CombatStrategy().macro(
+  Macro.if_(notAllowList, Macro.abort())
+    .if_(`!monsterid ${$monster`Thinker of Thoughts`}`, Macro.skill($skill`Macrometeorite`))
+    .tryItem($item`abstraction: action`)
+    .step(DefaultMacro)
+);
+
+export const StenchCombat = new CombatStrategy().macro(
+  Macro.if_(`monsterid ${$monster`toxic beastie`.id}`, Backup)
+    .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
     .if_(`monsterhpabove 300`, Macro.skill($skill`Curse of Weaksauce`))
     .if_(`monsterhpabove 300`, Macro.skill($skill`Sing Along`))
-    .skill($skill`Garbage Nova`),
+    .skill($skill`Garbage Nova`)
+);
 
-  // Just runaway on its own causes a null pointer exception?
-  Runaway: new Macro().trySkill($skill`Saucy Salve`).runaway(),
+export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 
-  Banish: TryBanish,
-
-  Nanobrainy: new Macro()
-    .skill($skill`Entangling Noodles`)
-    .trySkill($skill`Giant Growth`)
-    .trySkill($skill`Become a Wolf`)
-    .step(TryBanish),
-
-  Sprinkles: new Macro()
-    .if_(`monsterid ${gentrifier}`, Replace)
-    .skill($skill`Meteor Shower`)
-    .step(FreeInstaKill),
-
-  TunnelOfLOV: new Macro()
-    .if_(`monsterid ${LOVEnforcer}`, Macro.attack().repeat())
-    .if_(`monsterid ${LOVEngineer}`, Macro.skill($skill`Candyblast`).repeat())
-    .step(DefaultMacro),
-
-  WitchessQueen: new Macro()
-    .item($item`Time-Spinner`)
-    .attack()
-    .repeat(),
-  WitchessWitch: new Macro()
-    .skill($skill`Curse of Weaksauce`)
-    .skill($skill`Sing Along`)
-    .attack()
-    .repeat(),
-
-  DMTSquare: new Macro()
-    .if_(notAllowList, Macro.abort())
-    .if_(`!monsterid ${DMTSquare}`, Replace)
-    .skill($skill`Feel Envy`)
-    .step(DefaultMacro),
-  DMTCircle: new Macro()
-    .if_(notAllowList, Macro.abort())
-    .if_(`!monsterid ${DMTCircle}`, Replace)
-    .tryItem($item`abstraction: action`)
-    .step(DefaultMacro),
-
-  MotherSlime: new Macro()
-    .if_(notAllowList, Macro.abort())
-    .trySkill($skill`KGB tranquilizer dart`)
-    .skill($skill`Snokebomb`),
-
-  BatFormRunaway: new Macro().trySkill($skill`Become a Bat`).runaway(),
-  LatteGulpRunaway: new Macro().trySkill($skill`Gulp Latte`).runaway(),
-
-  MeteorForce: new Macro().skill($skill`Meteor Shower`).skill($skill`Use the Force`),
-  FoamForce: new Macro()
-    .skill($skill`Fire Extinguisher: Foam Yourself`)
-    .skill($skill`Use the Force`),
-};
-
-export function adventure(loc: Location, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
-  adv1(loc, 0, macro.toString());
-  while (inMultiFight()) runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
-}
-
-export function adventureUrl(url: string, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
-  visitUrl(url);
-  runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
-}
-
-export function mapMonster(location: Location, monster: Monster, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
+export function mapMonster(location: Location, monster: Monster): void {
   if (get("_monstersMapped") >= 3) throw "Trying to map too many monsters";
   if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
   const expectedTurnCount = myTurncount();
   let mapPage = "";
   while (!mapPage.includes("Leading Yourself Right to Them")) {
     mapPage = visitUrl(toUrl(location));
-    if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat(macro.toString());
+    if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat();
     if (myTurncount() > expectedTurnCount) throw "Wasted a turn somehow mapping monsters?";
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
-  runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
+  runCombat();
   if (handlingChoice()) runChoice(-1);
   if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
-}
-
-export function reminisce(monster: Monster, macro: Macro): void {
-  if (getAutoAttack() !== 0) setAutoAttack(0);
-  visitUrl(`inventory.php?reminisce=1`);
-  visitUrl(`choice.php?pwd=&whichchoice=1463&option=1&mid=${monster.id}`);
-  runCombat(macro.toString());
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
-}
-
-export function fightWitchess(piece: Monster, macro: Macro): void {
-  macro.setAutoAttack();
-  Witchess.fightPiece(piece);
-  if (choiceFollowsFight()) visitUrl("choice.php");
-  if (handlingChoice()) runChoice(-1);
 }

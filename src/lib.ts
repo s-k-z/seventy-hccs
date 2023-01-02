@@ -2,11 +2,8 @@ import {
   cliExecute,
   Effect,
   effectModifier,
-  equip,
-  equippedItem,
-  holiday,
   Item,
-  Slot,
+  numericModifier,
   toInt,
   totalTurnsPlayed,
   use,
@@ -28,19 +25,16 @@ export function checkEffect(e: Effect): void {
   if (!have(e)) throw `Missing effect ${e}`;
 }
 
-export function isHolidayWandererDay(): boolean {
-  const holidays = ["el dia de los muertos borrachos", "feast of boris", "talk like a pirate day"];
-  const today = holiday().split("/");
-  const wandererToday = today.some((day) => holidays.includes(day.toLowerCase()));
-  return wandererToday;
+export function effectDuration(i: Item): number {
+  return numericModifier(i, "effect duration");
 }
 
 export function itemToEffect(i: Item): Effect {
   return effectModifier(i, "effect");
 }
 
-export function shrugEffect(effect: Effect): void {
-  if (have(effect)) cliExecute(`shrug ${effect}`);
+export function haveItemOrEffect(i: Item): boolean {
+  return have(i) || have(itemToEffect(i));
 }
 
 export function tryUse(i: Item): void {
@@ -69,17 +63,5 @@ export function withContext(callback: () => void, context: propertyPair[]): void
     callback();
   } finally {
     setProps(previous);
-  }
-}
-
-type slottedItem = [Slot, Item];
-export function withEquipment(callback: () => void, equips: slottedItem[]): void {
-  const previous = equips.map(([slot]): slottedItem => [slot, equippedItem(slot)]);
-  const equipAll = (o: slottedItem[]) => o.forEach(([slot, item]) => equip(slot, item));
-  equipAll(equips);
-  try {
-    callback();
-  } finally {
-    equipAll(previous);
   }
 }

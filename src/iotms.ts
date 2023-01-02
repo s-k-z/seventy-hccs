@@ -5,36 +5,36 @@ import {
   myMp,
   myPrimestat,
   runChoice,
+  Skill,
   toInt,
-  use,
   useSkill,
   visitUrl,
 } from "kolmafia";
-import { $class, $effect, $item, $skill, $stat, get, have } from "libram";
-import { BRICKO_TARGET_ITEM, BRICKOS_PER_FIGHT } from "./config";
-import { itemToEffect } from "./lib";
+import { $class, $item, $skill, $stat, get, have } from "libram";
+import { BRICKO_COST, BRICKO_DROP, BRICKO_TARGET_ITEM } from "./config";
+import { haveItemOrEffect } from "./lib";
 
 export function castBestLibram(): void {
-  const wantGreenCandy = !have($item`green candy heart`) && !have($effect`Heart of Green`);
-  const brickosOwned = itemAmount(BRICKO_TARGET_ITEM);
-  const brickosNeeded = BRICKOS_PER_FIGHT * Math.max(0, 3 - (get("_brickoFights") + brickosOwned));
-  if (wantGreenCandy && get("libramSummons") < 10) {
-    useSkill($skill`Summon Candy Heart`);
-  } else if (get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, brickosNeeded)) {
-    useSkill($skill`Summon BRICKOs`);
-  } else if (wantGreenCandy) {
-    useSkill($skill`Summon Candy Heart`);
-  } else if (!have($item`love song of icy revenge`, 2)) {
-    useSkill($skill`Summon Love Song`);
-  } else if (get("_resolutionRareSummons") < 3) {
-    useSkill($skill`Summon Resolutions`);
-  } else if (!have($item`pulled blue taffy`, 4)) {
-    useSkill($skill`Summon Taffy`);
-  } else if (!have($item`love song of icy revenge`, 4)) {
-    useSkill($skill`Summon Love Song`);
-  } else {
-    useSkill($skill`Summon Resolutions`);
+  const owned = itemAmount(BRICKO_TARGET_ITEM);
+  const remainingFights = Math.max(0, 3 - get("_brickoFights"));
+  const remainingDrops = Math.max(0, 2 - get("_brickoFights"));
+  const need = BRICKO_COST * remainingFights - BRICKO_DROP * remainingDrops - owned;
+  const wantBrickos = get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, need);
+  // prettier-ignore
+  for (const [summon, check] of new Map<Skill, boolean>([
+    [$skill`Summon BRICKOs`,      wantBrickos],
+    [$skill`Summon Candy Heart`, !haveItemOrEffect($item`green candy heart`)],
+    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 2)],
+    [$skill`Summon Resolutions`, get("_resolutionRareSummons") < 3],
+    [$skill`Summon Taffy`,       !have($item`pulled blue taffy`, 4)],
+    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 4)]
+  ])) {
+    if (check) {
+      useSkill(summon);
+      return;
+    }
   }
+  useSkill($skill`Summon Taffy`);
 }
 
 export function getPantogramPants(): void {
@@ -94,28 +94,6 @@ export const enum MoonSign {
 
 export function tuneMoon(moon: MoonSign): void {
   visitUrl(`inv_use.php?whichitem=${toInt($item`hewn moon-rune spoon`)}&doit=96&whichsign=${moon}`);
-}
-
-export function useDroppedItems(): void {
-  new Map([[$item`pulled violet taffy`, 50]]).forEach((limit, multiUse) => {
-    if (have(multiUse) && !have(itemToEffect(multiUse), limit)) use(itemAmount(multiUse), multiUse);
-  });
-  [
-    // librams
-    $item`green candy heart`,
-    $item`pulled yellow taffy`,
-    $item`resolution: be feistier`,
-    $item`resolution: be happier`,
-    $item`resolution: be kinder`,
-    $item`resolution: be luckier`,
-    $item`resolution: be smarter`,
-    $item`resolution: be wealthier`,
-    // other potions
-    $item`power pill`,
-    $item`short stack of pancakes`,
-  ].forEach((singleUse) => {
-    if (have(singleUse) && !have(itemToEffect(singleUse))) use(singleUse);
-  });
 }
 
 export function vote(): void {
