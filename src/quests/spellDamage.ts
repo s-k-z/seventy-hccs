@@ -15,7 +15,7 @@ import {
   Macro,
 } from "libram";
 import { config } from "../config";
-import { checkAvailable } from "../lib";
+import { checkAvailable, haveItemOrEffect } from "../lib";
 import { deepDarkVisions, innerElf, runTest } from "./shared";
 
 export const SpellDamageQuest: Quest<Task> = {
@@ -43,7 +43,7 @@ export const SpellDamageQuest: Quest<Task> = {
     deepDarkVisions(),
     {
       name: "Cowrruption",
-      completed: () => have($effect`Cowrruption`),
+      completed: () => haveItemOrEffect($item`corrupted marrow`),
       prepare: () => {
         const fax = $item`photocopied monster`;
         const faxMon = $monster`ungulith`;

@@ -67,9 +67,10 @@ export const WeaponDamageQuest: Quest<Task> = {
         $effect`The Power of LOV`,
       ],
       outfit: {
-        hat: $items`extra-wide head candle, astral trousers`,
+        hat: $items`extra-wide head candle, none`,
         weapon: $item`dented scepter`,
         offhand: $item`unbreakable umbrella`,
+        pants: $item`astral trousers`,
         acc1: $item`Powerful Glove`,
         acc2: $item`Brutal brogues`,
         famequip: $item`broken champagne bottle`,

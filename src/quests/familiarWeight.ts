@@ -79,7 +79,6 @@ export const FamiliarWeightQuest: Quest<Task> = {
         $effect`Do I Know You From Somewhere?`,
         $effect`Empathy`,
         $effect`Fidoxene`,
-        $effect`[1701]Hip to the Jive`,
         $effect`Human-Machine Hybrid`,
         $effect`Human-Fish Hybrid`,
         $effect`Joy`,
@@ -103,9 +102,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
         acc1: $item`Brutal brogues`,
         acc2: $item`hewn moon-rune spoon`,
         acc3: $item`Beach Comb`,
-        // eslint-disable-next-line libram/verify-constants
         famequip: $item`overloaded Yule battery`,
-        // eslint-disable-next-line libram/verify-constants
         familiar: $familiar`Mini-Trainbot`,
       },
     },
