@@ -22,6 +22,7 @@ import {
   print,
   runChoice,
   soulsauceCost,
+  toInt,
   totalFreeRests,
   use,
   useSkill,
@@ -328,11 +329,22 @@ export const Leveling: Quest<Task> = {
         if (!have($effect`Human-Machine Hybrid`)) {
           DNALab.makeTonic();
           use($item`Gene Tonic: Construct`);
-          checkEffect($effect`Human-Machine Hybrid`);
         }
       },
       outfit: () => ({ ...levelingOutfit, familiar: selectBestFamiliar() }),
-      combat: DefaultCombat,
+      combat: new CombatStrategy().macro(
+        Macro.if_(
+          `!haseffect ${toInt($effect`Human-Machine Hybrid`)}`,
+          Macro.item($item`DNA extraction syringe`)
+        )
+          .skill($skill`Curse of Weaksauce`)
+          .skill($skill`Micrometeorite`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: "BRICKOS",
