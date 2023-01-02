@@ -1,9 +1,11 @@
 import { CombatStrategy } from "grimoire-kolmafia";
 import {
+  handlingChoice,
   Location,
   Monster,
   mpCost,
   myTurncount,
+  runChoice,
   runCombat,
   toInt,
   toUrl,
@@ -241,5 +243,6 @@ export function mapMonster(location: Location, monster: Monster): void {
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
   runCombat();
+  if (handlingChoice()) runChoice(-1);
   if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
 }
