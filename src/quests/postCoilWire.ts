@@ -25,85 +25,9 @@ import {
   have,
   Macro,
 } from "libram";
-import { DefaultCombat } from "../combat";
 import { config } from "../config";
-import { acquireEffect, checkEffect, haveItemOrEffect, tuple, wishEffect } from "../lib";
+import { checkEffect, haveItemOrEffect, tuple, wishEffect } from "../lib";
 import { selectBestFamiliar } from "./shared";
-
-const buffs = [
-  $effect`Broad-Spectrum Vaccine`,
-  $effect`Favored by Lyle`,
-  $effect`Grumpy and Ornery`,
-  $effect`Hustlin'`,
-  $effect`Mental A-cue-ity`,
-  $effect`Pisces in the Skyces`,
-  $effect`Sigils of Yeg`,
-  $effect`Starry-Eyed`,
-  $effect`Total Protonic Reversal`,
-  $effect`Warlock, Warstock, and Warbarrel`,
-  $effect`items.enh`,
-  $effect`meat.enh`,
-  // Beach comb
-  $effect`Cold as Nice`,
-  $effect`A Brush with Grossness`,
-  $effect`Do I Know You From Somewhere?`,
-  $effect`Does It Have a Skull In There??`,
-  $effect`Hot-Headed`,
-  $effect`Lack of Body-Building`,
-  $effect`Oiled, Slick`,
-  $effect`Pomp & Circumsands`,
-  $effect`Resting Beach Face`,
-  $effect`We're All Made of Starfish`,
-  $effect`You Learned Something Maybe!`,
-  // Skills
-  $effect`Big`, // 15 mp
-  $effect`Blessing of the Bird`, // 10 mp
-  $effect`Blessing of your favorite Bird`, // 50 mp
-  $effect`Blood Bubble`,
-  $effect`Carol of the Bulls`, // 30 mp
-  $effect`Carol of the Hells`, // 30 mp
-  $effect`Carol of the Thrills`, // 30 mp
-  $effect`Feeling Excited`,
-  $effect`Feeling Peaceful`,
-  $effect`Frenzied, Bloody`,
-  $effect`Inscrutable Gaze`, // 10 mp
-  $effect`Ruthlessly Efficient`, // 10 mp
-  $effect`Singer's Faithful Ocelot`, // 15 mp
-  $effect`Sauce Monocle`, // 20 mp
-  $effect`Triple-Sized`,
-  // Class skills
-  $effect`Astral Shell`, // 10 mp
-  $effect`Elemental Saucesphere`, // 10 mp
-  $effect`Ghostly Shell`, // 6 mp
-  $effect`Springy Fusilli`, // 10 mp
-  // Song(s)
-  $effect`Ode to Booze`, // 50 mp
-  $effect`Polka of Plenty`, // 7 mp
-  // Dread Song
-  $effect`Song of Sauce`, // 100 mp
-  // Batteries
-  $effect`AAA-Charged`, // +30 MP
-  $effect`Lantern-Charged`, // +70 MP
-];
-
-const postNanorhino = [
-  $effect`A Girl Named Sue`,
-  $effect`Billiards Belligerence`,
-  $effect`Fidoxene`,
-  $effect`Human-Elf Hybrid`,
-  $effect`Human-Fish Hybrid`,
-  $effect`Human-Machine Hybrid`,
-  $effect`Loyal Tea`,
-  $effect`Over-Familiar With Dactyls`,
-  $effect`Puzzle Champ`,
-  $effect`Shrimpin' Ain't Easy`,
-  $effect`You Can Really Taste the Dormouse`,
-  // Skills
-  $effect`Blood Bond`,
-  // Class skills
-  $effect`Empathy`,
-  $effect`Leash of Linguini`,
-];
 
 export const PostCoilWire: Quest<Task> = {
   name: "Post-Coil Wire",
@@ -115,21 +39,14 @@ export const PostCoilWire: Quest<Task> = {
       do: () => useSkill($skill`Summon Alice's Army Cards`), // 5 mp
     },
     {
-      name: "Buff",
-      completed: () => buffs.every((b) => have(b)),
-      do: () => buffs.every((b) => acquireEffect(b)),
-    },
-    {
       name: "Eat a donut",
       completed: () => have($effect`Filled with Magic`),
       do: () => eat($item`occult jelly donut`), // 3-4 adventures, 1 full
     },
     {
       name: "Use box of familiar jacks",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => have($item`overloaded Yule battery`),
       do: () => use($item`box of Familiar Jacks`),
-      // eslint-disable-next-line libram/verify-constants
       outfit: { familiar: $familiar`Mini-Trainbot` },
     },
     {
@@ -155,7 +72,70 @@ export const PostCoilWire: Quest<Task> = {
       },
       do: $location`An Unusually Quiet Barroom Brawl`,
       outfit: { familiar: selectBestFamiliar() },
-      combat: DefaultCombat,
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Curse of Weaksauce`)
+          .skill($skill`Micrometeorite`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
+      effects: [
+        $effect`Broad-Spectrum Vaccine`,
+        $effect`Favored by Lyle`,
+        $effect`Grumpy and Ornery`,
+        $effect`Hustlin'`,
+        $effect`Mental A-cue-ity`,
+        $effect`Pisces in the Skyces`,
+        $effect`Sigils of Yeg`,
+        $effect`Starry-Eyed`,
+        $effect`Total Protonic Reversal`,
+        $effect`Warlock, Warstock, and Warbarrel`,
+        $effect`items.enh`,
+        $effect`meat.enh`,
+        // Beach comb (requres >0 turns available)
+        $effect`Cold as Nice`,
+        $effect`A Brush with Grossness`,
+        $effect`Do I Know You From Somewhere?`,
+        $effect`Does It Have a Skull In There??`,
+        $effect`Hot-Headed`,
+        $effect`Lack of Body-Building`,
+        $effect`Oiled, Slick`,
+        $effect`Pomp & Circumsands`,
+        $effect`Resting Beach Face`,
+        $effect`We're All Made of Starfish`,
+        $effect`You Learned Something Maybe!`,
+        // Skills
+        $effect`Big`, // 15 mp
+        $effect`Blessing of the Bird`, // 10 mp
+        $effect`Blessing of your favorite Bird`, // 50 mp
+        $effect`Blood Bubble`,
+        $effect`Carol of the Bulls`, // 30 mp
+        $effect`Carol of the Hells`, // 30 mp
+        $effect`Carol of the Thrills`, // 30 mp
+        $effect`Feeling Excited`,
+        $effect`Feeling Peaceful`,
+        $effect`Frenzied, Bloody`,
+        $effect`Inscrutable Gaze`, // 10 mp
+        $effect`Ruthlessly Efficient`, // 10 mp
+        $effect`Singer's Faithful Ocelot`, // 15 mp
+        $effect`Sauce Monocle`, // 20 mp
+        $effect`Triple-Sized`,
+        // Class skills
+        $effect`Astral Shell`, // 10 mp
+        $effect`Elemental Saucesphere`, // 10 mp
+        $effect`Ghostly Shell`, // 6 mp
+        $effect`Springy Fusilli`, // 10 mp
+        // Song(s)
+        $effect`Ode to Booze`, // 50 mp
+        $effect`Polka of Plenty`, // 7 mp
+        // Dread Song
+        $effect`Song of Sauce`, // 100 mp
+        // Batteries
+        $effect`AAA-Charged`, // +30 MP
+        $effect`Lantern-Charged`, // +70 MP
+      ],
     },
     {
       name: "Christmas Card",
@@ -163,7 +143,10 @@ export const PostCoilWire: Quest<Task> = {
         haveItemOrEffect($item`Gene Tonic: Elf`) ||
         get("_deckCardsSeen").includes("Christmas Card"),
       do: () => cliExecute("cheat christmas card"),
-      post: () => DNALab.makeTonic(),
+      post: () => {
+        DNALab.makeTonic();
+        use($item`Gene Tonic: Elf`);
+      },
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: new CombatStrategy()
@@ -212,15 +195,29 @@ export const PostCoilWire: Quest<Task> = {
       ),
     },
     {
-      name: "Buff More",
-      completed: () => postNanorhino.every((f) => have(f)),
-      prepare: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
-      do: () => postNanorhino.forEach((f) => acquireEffect(f)),
+      name: "Visit the Looking Glass",
+      completed: () => get("_lookingGlass"),
+      do: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
     },
     {
-      name: "Upgrade Cosplay Saber",
+      name: "Buff Familiar Weight",
       completed: () => get("_saberMod") !== 0,
       do: () => cliExecute("saber familiar"),
+      effects: [
+        $effect`A Girl Named Sue`,
+        $effect`Billiards Belligerence`,
+        $effect`Fidoxene`,
+        $effect`Loyal Tea`,
+        $effect`Over-Familiar With Dactyls`,
+        $effect`Puzzle Champ`,
+        $effect`Shrimpin' Ain't Easy`,
+        $effect`You Can Really Taste the Dormouse`,
+        // Skills
+        $effect`Blood Bond`,
+        // Class skills
+        $effect`Empathy`,
+        $effect`Leash of Linguini`,
+      ],
     },
     {
       name: "Wish Effects",
