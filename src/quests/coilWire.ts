@@ -12,6 +12,7 @@ import {
   myMaxmp,
   myMp,
   retrieveItem,
+  runChoice,
   Skill,
   toFamiliar,
   use,
@@ -108,10 +109,12 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Talk to quest NPCs",
       completed: () => Array.from(questHandlers).every(([key]) => get(key) !== "unstarted"),
-      choices: { 1059: 1, 1064: 1, 1065: 1 },
       do: () => {
         for (const [key, url] of questHandlers) {
-          if (get(key) === "unstarted") visitUrl(url);
+          if (get(key) === "unstarted") {
+            visitUrl(url);
+            runChoice(1);
+          }
         }
       },
     },
