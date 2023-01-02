@@ -1,5 +1,6 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import {
+  cliExecute,
   Familiar,
   haveFamiliar,
   itemAmount,
@@ -19,7 +20,10 @@ export const BatfellowTask: Task = {
   name: "Enter the Batfellow",
   completed: () => !have($item`Batfellow comic`) || get("lastEncounter") === "Batfellow Ends",
   choices: { 1133: 1, 1134: 1, 1135: 0, 1136: 0, 1137: 0, 1138: 0, 1139: 0 },
-  prepare: () => Macro.skill($skill`Bat-Kick`).setAutoAttack(),
+  prepare: () =>
+    Macro.skill($skill`Bat-Kick`)
+      .repeat()
+      .setAutoAttack(),
   do: () => {
     use(1, $item`Batfellow comic`); // Batfellow Begins
     visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
@@ -43,7 +47,10 @@ export const BatfellowTask: Task = {
     visitUrl("place.php?whichplace=batman_park&action=batman_park_car");
     runChoice(9); // EJECT
   },
-  post: () => setAutoAttack(0),
+  post: () => {
+    setAutoAttack(0);
+    cliExecute("refresh inventory");
+  },
   outfit: () => {
     const stillSuitFam = toFamiliar(config.stillsuit);
     const myFams = Familiar.all().filter(
