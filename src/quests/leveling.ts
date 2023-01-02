@@ -9,6 +9,7 @@ import {
   familiarWeight,
   haveEffect,
   Item,
+  itemAmount,
   mpCost,
   myFamiliar,
   myHp,
@@ -85,6 +86,8 @@ export const vintnerOutfit = () => ({
 export function getHowManySausagesToEat(): number {
   if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
 
+  if (itemAmount($item`magical sausage casing`) < 1) return 0;
+
   const offset = get("_sausagesMade");
   if (offset >= 23) return 0;
 
@@ -98,7 +101,7 @@ export function getHowManySausagesToEat(): number {
     toEat++;
   }
 
-  return toEat;
+  return Math.min(toEat, itemAmount($item`magical sausage casing`));
 }
 
 const potions = new Map([
@@ -117,8 +120,10 @@ const potions = new Map([
 function getPotionsToUse(): [Item, number][] {
   const howMany = (potion: Item, limit: number) =>
     Math.ceil((limit - haveEffect(itemToEffect(potion))) / effectDuration(potion));
-  const usablePotions = Array.from(potions).filter(([p, l]) => howMany(p, l) > 0);
-  return usablePotions.map(([p, l]) => [p, howMany(p, l)]);
+  const usablePotions = Array.from(potions).filter(
+    ([p, l]) => howMany(p, l) > 0 && itemAmount(p) > 0
+  );
+  return usablePotions.map(([p, l]) => [p, Math.min(itemAmount(p), howMany(p, l))]);
 }
 
 export const Leveling: Quest<Task> = {
@@ -323,8 +328,8 @@ export const Leveling: Quest<Task> = {
         if (!have($effect`Human-Machine Hybrid`)) {
           DNALab.makeTonic();
           use($item`Gene Tonic: Construct`);
+          checkEffect($effect`Human-Machine Hybrid`);
         }
-        checkEffect($effect`Human-Machine Hybrid`);
       },
       outfit: () => ({ ...levelingOutfit, familiar: selectBestFamiliar() }),
       combat: DefaultCombat,
@@ -387,9 +392,6 @@ export const Leveling: Quest<Task> = {
       ready: () => voterMonsterNow(),
       completed: () => get("_voteFreeFights") >= 1,
       do: $location`The Toxic Teacups`,
-      post: () => {
-        if (get("_voteFreeFights") < 1) throw `Failed to fight a voter wanderer?`;
-      },
       outfit: () => ({
         acc3: $item`"I Voted!" sticker`,
         familiar: selectBestFamiliar(AdvReq.Toxic),
