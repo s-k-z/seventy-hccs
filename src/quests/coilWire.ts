@@ -72,7 +72,6 @@ const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$item`green mana`,                    () => cliExecute("cheat forest")],
   [$item`wrench`,                        () => cliExecute("cheat wrench")],
   [$item`Yeg's Motel hand soap`,         () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
-  [$item`"DRINK ME" potion`,             () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2")],
   [$item`gold detective badge`,          () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
   [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
   [$item`weeping willow wand`,           () => { visitUrl("shop.php?whichshop=lathe"); create($item`weeping willow wand`); }],
