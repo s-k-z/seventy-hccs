@@ -74,18 +74,20 @@ export function prepareToAscend() {
 }
 
 export function prepAndAscendIfNecessary() {
-  prepareToAscend();
-  visitUrl("charsheet.php");
-  ascend(
-    $path`Community Service`,
-    $class`Sauceror`,
-    Lifestyle.hardcore,
-    "wallaby",
-    $item`astral six-pack`,
-    $item`astral trousers`,
-    {
-      permSkills: new Map(toPerm.filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])),
-      neverAbort: true,
-    }
-  );
+  if (myPath() !== $path`Community Service`) {
+    prepareToAscend();
+    visitUrl("charsheet.php");
+    ascend(
+      $path`Community Service`,
+      $class`Sauceror`,
+      Lifestyle.hardcore,
+      "wallaby",
+      $item`astral six-pack`,
+      $item`astral trousers`,
+      {
+        permSkills: new Map(toPerm.filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])),
+        neverAbort: true,
+      }
+    );
+  }
 }
