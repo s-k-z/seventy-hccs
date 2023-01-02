@@ -38,12 +38,13 @@ export function runTest(test: CommunityService): void {
   const coilWire = test.name === "Coil Wire";
   const err = test.run(() => undefined, coilWire || famWeight ? 60 : 1);
   // prettier-ignore
-  const handler = {
-    "completed":         () => { return },
-    "already completed": () => { throw `Re-ran test ${test.statName}`; },
-    "failed":            () => { throw `Failed test ${test.statName}`; },
-  }[err];
-  handler();
+  const handler = new Map([
+    ["completed",         () => { return } ],
+    ["already completed", () => { throw `Re-ran test ${test.statName}`; } ],
+    ["failed",            () => { throw `Failed test ${test.statName}`; } ],
+  ]).get(err);
+  if (handler) handler();
+  else throw `Unexpected test result`;
 }
 
 export const enum AdvReq {
