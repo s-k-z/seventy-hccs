@@ -11,7 +11,6 @@ import { FamiliarWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
 import { getHowManySausagesToEat, Leveling } from "./quests/leveling";
-import { PostCoilWire } from "./quests/postCoilWire";
 import { SpellDamageQuest } from "./quests/spellDamage";
 import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/stats";
 import { WeaponDamageQuest } from "./quests/weaponDamage";
@@ -103,7 +102,6 @@ export function main(command = ""): void {
   const engine = new Engine(
     getTasks([
       CoilWire,
-      PostCoilWire,
       Leveling,
       MuscleQuest,
       MoxieQuest,
