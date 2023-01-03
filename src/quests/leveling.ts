@@ -91,9 +91,11 @@ export const vintnerOutfit = () => ({
 });
 
 export function getHowManySausagesToEat(): number {
-  if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
+  if (myMaxmp() - myMp() < 999) return 0;
 
   if (itemAmount($item`magical sausage casing`) < 1) return 0;
+
+  if (myMaxmp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT) return 0;
 
   const offset = get("_sausagesMade");
   if (offset >= 23) return 0;
