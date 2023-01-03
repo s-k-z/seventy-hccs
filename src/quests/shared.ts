@@ -36,6 +36,7 @@ export function runTest(test: CommunityService): void {
   const famWeight = test.statName === "Familiar Weight";
   if (famWeight && test.actualCost() > 1) throw `Can't do ${test.statName} in 1 turn?`;
   const coilWire = test.name === "Coil Wire";
+  if (coilWire) visitUrl("council.php");
   const err = test.run(() => undefined, coilWire || famWeight ? 60 : 1);
   // prettier-ignore
   const handler = new Map([
