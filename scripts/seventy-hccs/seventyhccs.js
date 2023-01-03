@@ -11991,6 +11991,8 @@ function runTest(test) {
   if (famWeight && test.actualCost() > 1)
     throw "Can't do ".concat(test.statName, " in 1 turn?");
   var coilWire = test.name === "Coil Wire";
+  if (coilWire)
+    (0, import_kolmafia29.visitUrl)("council.php");
   var err = test.run(function() {
     return void 0;
   }, coilWire || famWeight ? 60 : 1);
