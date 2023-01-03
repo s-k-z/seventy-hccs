@@ -5,7 +5,6 @@ import {
   chew,
   cliExecute,
   create,
-  drink,
   eat,
   equip,
   familiarWeight,
@@ -41,6 +40,7 @@ import {
   $location,
   $monster,
   $skill,
+  $slot,
   $stat,
   Clan,
   DNALab,
@@ -54,6 +54,7 @@ import { DefaultCombat, DMT1Combat, DMT2Combat, RunawayCombat, StenchCombat } fr
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import {
+  acquireEffect,
   checkAvailable,
   checkEffect,
   effectDuration,
@@ -220,10 +221,14 @@ export const Leveling: Quest<Task> = {
     {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 2,
+      prepare: () => {
+        equip($slot`acc2`, $item`Powerful Glove`);
+        acquireEffect($effect`Triple-Sized`);
+      },
+      do: $location`An Unusually Quiet Barroom Brawl`,
       post: () => {
         if (get("_speakeasyFreeFights") < 2) throw `Didn't increment oliver place fights?`;
       },
-      do: $location`An Unusually Quiet Barroom Brawl`,
       outfit: { familiar: selectBestFamiliar() },
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Curse of Weaksauce`)
@@ -274,7 +279,6 @@ export const Leveling: Quest<Task> = {
         $effect`Ruthlessly Efficient`, // 10 mp
         $effect`Singer's Faithful Ocelot`, // 15 mp
         $effect`Sauce Monocle`, // 20 mp
-        $effect`Triple-Sized`,
         // Class skills
         $effect`Astral Shell`, // 10 mp
         $effect`Elemental Saucesphere`, // 10 mp
@@ -381,7 +385,11 @@ export const Leveling: Quest<Task> = {
       name: "Drink Speakeasy",
       completed: () => have($effect`In a Lather`),
       prepare: () => Clan.join(config.main_clan),
-      do: () => drink($item`Sockdollager`), // 7-9 adventures, 2 drunk, -500 meat
+      do: () => {
+        // 7-9 adventures, 2 drunk, -500 meat
+        visitUrl("clan_viplounge.php?preaction=speakeasydrink&drink=6&pwd");
+        checkEffect($effect`In a Lather`);
+      },
       effects: $effects`Ode to Booze`,
     },
     {

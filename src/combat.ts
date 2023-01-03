@@ -216,7 +216,7 @@ export const DMT1Combat = new CombatStrategy().macro(
 
 export const DMT2Combat = new CombatStrategy().macro(
   Macro.if_(notAllowList, Macro.abort())
-    .if_(`!monsterid ${$monster`Thinker of Thoughts`}`, Macro.skill($skill`Macrometeorite`))
+    .if_(`!monsterid ${$monster`Thinker of Thoughts`.id}`, Macro.skill($skill`Macrometeorite`))
     .tryItem($item`abstraction: action`)
     .step(DefaultMacro)
 );
