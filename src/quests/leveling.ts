@@ -139,7 +139,8 @@ export const Leveling: Quest<Task> = {
   tasks: [
     {
       name: "Cast Soul Food",
-      completed: () => mySoulsauce() / soulsauceCost($skill`Soul Food`) < 1,
+      completed: () =>
+        mySoulsauce() / soulsauceCost($skill`Soul Food`) < 1 || myMaxmp() - myMp() < 15,
       do: () => {
         const maxMpGain = (myMaxmp() - myMp()) / 15;
         const maxSoulFoodCasts = mySoulsauce() / soulsauceCost($skill`Soul Food`);
