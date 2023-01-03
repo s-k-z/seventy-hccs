@@ -13670,7 +13670,7 @@ var Leveling = {
   tasks: [{
     name: "Cast Soul Food",
     completed: function() {
-      return (0, import_kolmafia36.mySoulsauce)() / (0, import_kolmafia36.soulsauceCost)($skill(_templateObject3310 || (_templateObject3310 = _taggedTemplateLiteral25(["Soul Food"])))) < 1;
+      return (0, import_kolmafia36.mySoulsauce)() / (0, import_kolmafia36.soulsauceCost)($skill(_templateObject3310 || (_templateObject3310 = _taggedTemplateLiteral25(["Soul Food"])))) < 1 || (0, import_kolmafia36.myMaxmp)() - (0, import_kolmafia36.myMp)() < 15;
     },
     do: function() {
       var maxMpGain = ((0, import_kolmafia36.myMaxmp)() - (0, import_kolmafia36.myMp)()) / 15;
