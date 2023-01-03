@@ -645,6 +645,9 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Get Abstraction: Action",
+      prepare: () => {
+        if (myMaxhp() - myHp() > 0) useSkill($skill`Cannelloni Cocoon`);
+      },
       completed: () =>
         haveItemOrEffect($item`abstraction: joy`) || have($item`abstraction: action`),
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
@@ -656,6 +659,9 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Abstraction: Joy",
       ready: () => have($item`abstraction: action`),
+      prepare: () => {
+        if (myMaxhp() - myHp() > 0) useSkill($skill`Cannelloni Cocoon`);
+      },
       completed: () => haveItemOrEffect($item`abstraction: joy`),
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
@@ -668,6 +674,9 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Remaining Deep Machine Tunnels Fights",
+      prepare: () => {
+        if (myMaxhp() - myHp() > 0) useSkill($skill`Cannelloni Cocoon`);
+      },
       completed: () => get("_machineTunnelsAdv") >= 5,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
