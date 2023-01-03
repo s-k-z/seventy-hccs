@@ -19,11 +19,11 @@ import { config } from "../config";
 export const BatfellowTask: Task = {
   name: "Enter the Batfellow",
   completed: () => !have($item`Batfellow comic`) || get("lastEncounter") === "Batfellow Ends",
-  choices: { 1133: 1, 1134: 1, 1135: 0, 1136: 0, 1137: 0, 1138: 0, 1139: 0 },
   prepare: () =>
     Macro.skill($skill`Bat-Kick`)
       .repeat()
       .setAutoAttack(),
+  choices: { 1133: 1, 1134: 1, 1135: 0, 1136: 0, 1137: 0, 1138: 0, 1139: 0 },
   do: () => {
     use(1, $item`Batfellow comic`); // Batfellow Begins
     visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");

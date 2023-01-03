@@ -78,7 +78,7 @@ const levelingOutfit = {
   acc3: $item`Beach Comb`,
 };
 
-export const vintnerOutfit = () => ({
+const vintnerOutfit = () => ({
   hat: $item`Iunion Crown`,
   back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
   shirt: get("garbageShirtCharge") > 0 ? $item`makeshift garbage shirt` : $item`Jurassic Parka`,
@@ -90,6 +90,10 @@ export const vintnerOutfit = () => ({
   acc3: get("_backUpUses") < 11 ? $item`backup camera` : $item`Kremlin's Greatest Briefcase`,
   familiar: selectBestFamiliar(AdvReq.Wine),
 });
+
+function topOffHp(): void {
+  if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
+}
 
 export function getHowManySausagesToEat(): number {
   if (myMaxmp() - myMp() < 999) return 0;
@@ -385,11 +389,7 @@ export const Leveling: Quest<Task> = {
       name: "Drink Speakeasy",
       completed: () => have($effect`In a Lather`),
       prepare: () => Clan.join(config.main_clan),
-      do: () => {
-        // 7-9 adventures, 2 drunk, -500 meat
-        visitUrl("clan_viplounge.php?preaction=speakeasydrink&drink=6&pwd");
-        checkEffect($effect`In a Lather`);
-      },
+      do: () => acquireEffect($effect`In a Lather`), // 7-9 adventures, 2 drunk, -500 meat
       effects: $effects`Ode to Booze`,
     },
     {
@@ -645,11 +645,9 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Get Abstraction: Action",
-      prepare: () => {
-        if (myMaxhp() - myHp() > 0) useSkill($skill`Cannelloni Cocoon`);
-      },
       completed: () =>
         haveItemOrEffect($item`abstraction: joy`) || have($item`abstraction: action`),
+      prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
@@ -659,10 +657,8 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Abstraction: Joy",
       ready: () => have($item`abstraction: action`),
-      prepare: () => {
-        if (myMaxhp() - myHp() > 0) useSkill($skill`Cannelloni Cocoon`);
-      },
       completed: () => haveItemOrEffect($item`abstraction: joy`),
+      prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => {
@@ -674,10 +670,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Remaining Deep Machine Tunnels Fights",
-      prepare: () => {
-        if (myMaxhp() - myHp() > 0) useSkill($skill`Cannelloni Cocoon`);
-      },
       completed: () => get("_machineTunnelsAdv") >= 5,
+      prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       outfit: { familiar: $familiar`Machine Elf` },
@@ -736,6 +730,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Lectures on Relativity",
       completed: () => get("_pocketProfessorLectures") > 0,
+      prepare: topOffHp,
       do: $location`The Toxic Teacups`,
       outfit: { offhand: $item`Kramco Sausage-o-Matic™`, familiar: $familiar`Pocket Professor` },
       combat: DefaultCombat,
