@@ -4,21 +4,12 @@ import {
   myPath,
   print,
   pvpAttacksLeft,
+  Skill,
   totalTurnsPlayed,
   userConfirm,
   visitUrl,
 } from "kolmafia";
-import {
-  $class,
-  $item,
-  $monster,
-  $path,
-  $skill,
-  ascend,
-  have,
-  Lifestyle,
-  prepareAscension,
-} from "libram";
+import { $class, $item, $monster, $path, ascend, have, Lifestyle, prepareAscension } from "libram";
 
 export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
   if (myPath() === $path`Community Service`) return true;
@@ -56,7 +47,7 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
   return true;
 }
 
-const toPerm = [$skill`Crimbo Training: Dessert Steward`];
+const toPerm: Skill[] = [];
 
 export function prepareToAscend() {
   if (myPath() !== $path`Community Service`) {
