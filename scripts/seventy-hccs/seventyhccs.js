@@ -13627,9 +13627,11 @@ var vintnerOutfit = function() {
   };
 };
 function getHowManySausagesToEat() {
-  if ((0, import_kolmafia36.myMaxmp)() - (0, import_kolmafia36.mpCost)($skill(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral25(["Summon BRICKOs"])))) < config.MP_SAFE_LIMIT)
+  if ((0, import_kolmafia36.myMaxmp)() - (0, import_kolmafia36.myMp)() < 999)
     return 0;
-  if ((0, import_kolmafia36.itemAmount)($item(_templateObject2119 || (_templateObject2119 = _taggedTemplateLiteral25(["magical sausage casing"])))) < 1)
+  if ((0, import_kolmafia36.itemAmount)($item(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral25(["magical sausage casing"])))) < 1)
+    return 0;
+  if ((0, import_kolmafia36.myMaxmp)() - (0, import_kolmafia36.mpCost)($skill(_templateObject2119 || (_templateObject2119 = _taggedTemplateLiteral25(["Summon BRICKOs"])))) < config.MP_SAFE_LIMIT)
     return 0;
   var offset = get("_sausagesMade");
   if (offset >= 23)
