@@ -14,7 +14,7 @@ import {
 } from "kolmafia";
 import { $item, $monster, $skill, get, Macro } from "libram";
 
-const notAllowList = [
+export const notAllowList = [
   // protonic ghosts
   $monster`boneless blobghost`,
   $monster`Emily Koops, a spooky lime`,
@@ -115,7 +115,7 @@ const Backup = Macro.if_(
 // Turbo used a flag to cast pride
 const Pride = Macro.if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`));
 
-const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
+export const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
   .skill($skill`Micrometeorite`)
   .item($item`Time-Spinner`)
   .if_(
@@ -159,6 +159,7 @@ export const DefaultCombat = new CombatStrategy()
   )
   .macro(
     Macro.skill($skill`Sing Along`)
+      .trySkill($skill`Meteor Shower`)
       .trySkill($skill`Chest X-Ray`)
       .trySkill($skill`Shattering Punch`)
       .trySkill($skill`Gingerbread Mob Hit`)
@@ -206,20 +207,6 @@ export const DefaultCombat = new CombatStrategy()
     $monster`Witchess Witch`
   )
   .macro(DefaultMacro);
-
-export const DMT1Combat = new CombatStrategy().macro(
-  Macro.if_(notAllowList, Macro.abort())
-    .if_(`!monsterid ${$monster`Performer of Actions`.id}`, Macro.skill($skill`Macrometeorite`))
-    .skill($skill`Feel Envy`)
-    .step(DefaultMacro)
-);
-
-export const DMT2Combat = new CombatStrategy().macro(
-  Macro.if_(notAllowList, Macro.abort())
-    .if_(`!monsterid ${$monster`Thinker of Thoughts`.id}`, Macro.skill($skill`Macrometeorite`))
-    .tryItem($item`abstraction: action`)
-    .step(DefaultMacro)
-);
 
 export const StenchCombat = new CombatStrategy().macro(
   Macro.if_(`monsterid ${$monster`toxic beastie`.id}`, Backup)

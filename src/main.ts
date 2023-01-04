@@ -1,6 +1,6 @@
 import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
 import { print, setAutoAttack } from "kolmafia";
-import { get, sinceKolmafiaRevision } from "libram";
+import { CommunityService, get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary, prepareToAscend } from "./ascend";
 import { DefaultCombat } from "./combat";
 import { config } from "./config";
@@ -104,6 +104,7 @@ export function main(command = ""): void {
       engine.execute(task);
     }
   } finally {
+    CommunityService.printLog();
     engine.destruct();
   }
 }

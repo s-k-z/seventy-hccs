@@ -15,7 +15,7 @@ git checkout https://github.com/s-k-z/seventy-hccs.git release
 ## Requirements before Ascending
 
 1. [Ungulith](https://kol.coldfront.net/thekolwiki/index.php/Ungulith) in a side clan fax machine
-2. [Mother Slime](https://kol.coldfront.net/thekolwiki/index.php/Showdown) ready in the side clan Slimetube
+2. [Mother Slime](https://kol.coldfront.net/thekolwiki/index.php/Showdown) ready in a side clan Slimetube
 3. Access to a fully stocked clan [VIP Lounge](https://kol.coldfront.net/thekolwiki/index.php/VIP_Lounge)
 4. All 11 beach heads unlocked for the [Beach Comb](https://kol.coldfront.net/thekolwiki/index.php/Beach_Comb)
 5. A 50% Item drop and 100% Weapon damage favorite bird from the [Bird-a-Day calendar](https://kol.coldfront.net/thekolwiki/index.php/Bird-a-Day_calendar)

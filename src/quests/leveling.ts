@@ -50,7 +50,7 @@ import {
   SourceTerminal,
   Witchess,
 } from "libram";
-import { DefaultCombat, DMT1Combat, DMT2Combat, RunawayCombat, StenchCombat } from "../combat";
+import { DefaultCombat, DefaultMacro, notAllowList, RunawayCombat, StenchCombat } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import {
@@ -223,26 +223,19 @@ export const Leveling: Quest<Task> = {
       do: () => cliExecute("Briefcase e spell spooky -combat"),
     },
     {
-      name: "Wanderer Sweep",
-      completed: () => get("_speakeasyFreeFights") >= 2,
-      prepare: () => {
+      name: "Triple-Size",
+      completed: () => have($effect`Triple-Sized`),
+      do: () => {
         equip($slot`acc2`, $item`Powerful Glove`);
         acquireEffect($effect`Triple-Sized`);
       },
+    },
+    {
+      name: "Wanderer Sweep",
+      completed: () => get("_speakeasyFreeFights") >= 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
-      post: () => {
-        if (get("_speakeasyFreeFights") < 2) throw `Didn't increment oliver place fights?`;
-      },
       outfit: { familiar: selectBestFamiliar() },
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Curse of Weaksauce`)
-          .skill($skill`Micrometeorite`)
-          .item($item`Time-Spinner`)
-          .skill($skill`Sing Along`)
-          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-          .attack()
-          .repeat()
-      ),
+      combat: new CombatStrategy().macro(DefaultMacro), // Don't abort on unexpected monsters
       effects: [
         $effect`Broad-Spectrum Vaccine`,
         $effect`Favored by Lyle`,
@@ -652,12 +645,36 @@ export const Leveling: Quest<Task> = {
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
       outfit: { acc3: levelingOutfit.acc3, familiar: $familiar`Machine Elf` },
-      combat: DMT1Combat,
+      combat: new CombatStrategy().macro(
+        Macro.if_(notAllowList, Macro.abort())
+          .if_(
+            `!monsterid ${$monster`Performer of Actions`.id}`,
+            Macro.skill($skill`Macrometeorite`)
+          )
+          .skill($skill`Feel Envy`)
+          .step(DefaultMacro)
+      ),
     },
     {
-      name: "Get Abstraction: Joy",
+      name: "Deep Machine Tunnels Fights",
+      completed: () => get("_machineTunnelsAdv") >= 4,
+      prepare: topOffHp,
+      choices: { 1119: -1 }, // Shining Mauve Backwards In Time
+      do: $location`The Deep Machine Tunnels`,
+      outfit: { familiar: $familiar`Machine Elf` },
+      combat: new CombatStrategy().macro(
+        Macro.if_(notAllowList, Macro.abort())
+          .if_(
+            `monsterid ${$monster`Thinker of Thoughts`.id}`,
+            Macro.tryItem($item`abstraction: action`)
+          )
+          .step(DefaultMacro)
+      ),
+    },
+    {
+      name: "Ensure Abstraction: Joy",
       ready: () => have($item`abstraction: action`),
-      completed: () => haveItemOrEffect($item`abstraction: joy`),
+      completed: () => haveItemOrEffect($item`abstraction: joy`) || get("_machineTunnelsAdv") >= 5,
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
@@ -666,10 +683,18 @@ export const Leveling: Quest<Task> = {
         chew($item`abstraction: joy`);
       },
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: DMT2Combat,
+      combat: new CombatStrategy().macro(
+        Macro.if_(notAllowList, Macro.abort())
+          .if_(
+            `!monsterid ${$monster`Thinker of Thoughts`.id}`,
+            Macro.skill($skill`Macrometeorite`)
+          )
+          .tryItem($item`abstraction: action`)
+          .step(DefaultMacro)
+      ),
     },
     {
-      name: "Remaining Deep Machine Tunnels Fights",
+      name: "Final Deep Machine Tunnels Fight",
       completed: () => get("_machineTunnelsAdv") >= 5,
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
