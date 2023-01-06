@@ -42,7 +42,7 @@ export function tryUse(i: Item): void {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function tuple<T extends any[]>(...args: T): T {
+export function tuple<T extends any[]>(...args: T): Readonly<T> {
   return args;
 }
 

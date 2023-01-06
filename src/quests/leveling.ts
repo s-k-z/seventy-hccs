@@ -744,7 +744,9 @@ export const Leveling: Quest<Task> = {
       acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
       post: () => {
-        if (get("shockingLickCharges") > 0) throw `Failed to decrement shockingLickCharges?`;
+        if (get("shockingLickCharges") > 0 && get("lastEncounter") === "toxic beastie") {
+          throw `Failed to decrement shockingLickCharges?`;
+        }
       },
       outfit: () => ({
         shirt: $item`makeshift garbage shirt`,
