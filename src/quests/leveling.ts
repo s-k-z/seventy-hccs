@@ -12,6 +12,7 @@ import {
   Item,
   itemAmount,
   mpCost,
+  myBasestat,
   myFamiliar,
   myHp,
   myLevel,
@@ -190,6 +191,12 @@ export const Leveling: Quest<Task> = {
       ready: () => have($item`burning newspaper`),
       completed: () => have($item`burning paper crane`),
       do: () => create($item`burning paper crane`),
+    },
+    {
+      name: "Make candy knife",
+      ready: () => myBasestat($stat`muscle`) >= 40,
+      completed: () => get("_discoKnife"),
+      do: () => useSkill($skill`That's Not a Knife`),
     },
     {
       name: "Summon Alice's Army",
