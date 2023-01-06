@@ -14434,8 +14434,9 @@ var Leveling = {
     }],
     do: $location(_templateObject2762 || (_templateObject2762 = _taggedTemplateLiteral25(["The Toxic Teacups"]))),
     post: function() {
-      if (get("shockingLickCharges") > 0)
+      if (get("shockingLickCharges") > 0 && get("lastEncounter") === "toxic beastie") {
         throw "Failed to decrement shockingLickCharges?";
+      }
     },
     outfit: function() {
       return {
