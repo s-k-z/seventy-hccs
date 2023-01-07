@@ -183,6 +183,7 @@ export const DefaultCombat = new CombatStrategy()
     Backup.if_(
       `monsterid ${$monster`toxic beastie`.id}`,
       Macro.skill($skill`Summon Love Gnats`)
+        .trySkill($skill`Bowl Sideways`)
         .skill($skill`Sing Along`)
         .step(Pride)
         .trySkill($skill`Chest X-Ray`)
