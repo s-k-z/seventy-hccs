@@ -1,9 +1,11 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import {
+  currentRound,
   Familiar,
   haveFamiliar,
   itemAmount,
   runChoice,
+  runCombat,
   setAutoAttack,
   storageAmount,
   takeStorage,
@@ -139,7 +141,15 @@ export const DonateQuest: Quest<Task> = {
       name: "Fight a common criminal",
       completed: () => get("batmanTimeLeft") < 4,
       do: () => {
-        while (get("batmanTimeLeft") >= 4) visitUrl(toUrl($location`Center Park After Dark`));
+        while (get("batmanTimeLeft") >= 4) {
+          visitUrl(toUrl($location`Center Park After Dark`));
+          if (currentRound() > 0)
+            runCombat(
+              Macro.skill($skill`Bat-Kick`)
+                .repeat()
+                .toString()
+            );
+        }
       },
     },
     {
