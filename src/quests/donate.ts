@@ -36,7 +36,7 @@ export const DonateQuest: Quest<Task> = {
     {
       name: "Grab Comic",
       ready: () => storageAmount($item`Batfellow comic`) > 0,
-      completed: () => itemAmount($item`Batfellow comic`) > 0,
+      completed: () => itemAmount($item`Batfellow comic`) > 0 || get("_batfellowToday", false),
       do: () => takeStorage(1, $item`Batfellow comic`),
     },
     {
