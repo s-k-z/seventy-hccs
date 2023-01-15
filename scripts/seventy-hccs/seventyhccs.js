@@ -12870,7 +12870,7 @@ var DonateQuest = {
       return (0, import_kolmafia32.storageAmount)($item(_templateObject170 || (_templateObject170 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0;
     },
     completed: function() {
-      return (0, import_kolmafia32.itemAmount)($item(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0;
+      return (0, import_kolmafia32.itemAmount)($item(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0 || get("_batfellowToday", false);
     },
     do: function() {
       return (0, import_kolmafia32.takeStorage)(1, $item(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral21(["Batfellow comic"]))));
