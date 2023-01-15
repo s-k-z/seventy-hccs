@@ -29,7 +29,6 @@ export const notAllowList = [
   $monster`The ghost of Waldo the Carpathian`,
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
-
   // gingerbread city
   $monster`gingerbread finance bro`,
   $monster`gingerbread gentrifier`,

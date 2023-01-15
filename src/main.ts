@@ -6,7 +6,7 @@ import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { CoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
-import { BatfellowTask, DonateQuest } from "./quests/donate";
+import { DonateQuest } from "./quests/donate";
 import { FamiliarWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
@@ -39,22 +39,6 @@ export function main(command = ""): void {
     }
   }
 
-  if (config.batfellow) {
-    const engine = new Engine([BatfellowTask]);
-    try {
-      engine.execute(BatfellowTask);
-    } finally {
-      engine.destruct();
-    }
-    return;
-  }
-
-  const checkConfig = (name: string, value: string, shouldReturn: boolean) => {
-    if (value === "") {
-      print(`seventyhccs_${name} property not set`, shouldReturn ? "red" : "orange");
-      if (shouldReturn) return;
-    }
-  };
   const toCheck = {
     main_clan: { prop: config.main_clan, return: true },
     side_clan: { prop: config.side_clan, return: true },
@@ -62,7 +46,10 @@ export function main(command = ""): void {
   };
   for (const name of Object.keys(toCheck)) {
     const key = name as keyof typeof toCheck;
-    checkConfig(name, toCheck[key].prop, toCheck[key].return);
+    if (toCheck[key].prop === "") {
+      print(`seventyhccs_${name} property not set`, toCheck[key].return ? "red" : "orange");
+      if (toCheck[key].return) return;
+    }
   }
 
   if (config.prep) {
@@ -104,7 +91,7 @@ export function main(command = ""): void {
       engine.execute(task);
     }
   } finally {
-    CommunityService.printLog();
+    CommunityService.printLog("green");
     engine.destruct();
   }
 }

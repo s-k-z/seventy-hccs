@@ -2,7 +2,6 @@ import { Args } from "grimoire-kolmafia";
 import { $item } from "libram";
 
 export const config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
-  batfellow: Args.flag({ help: "Only run batfellow, weird.", setting: "" }),
   nofites: Args.flag({ help: "Skip warning for unspent pvp fites.", setting: "", default: false }),
   novote: Args.flag({ help: "Skip guaranteed vote wanderer check.", setting: "", default: false }),
   prep: Args.flag({ help: "Switch chateau, eudora, and garden", setting: "", default: false }),
