@@ -46,7 +46,7 @@ export const DonateQuest: Quest<Task> = {
         Macro.skill($skill`Bat-Kick`)
           .repeat()
           .setAutoAttack(),
-      choices: { 1133: 1, 1134: 1, 1135: 0, 1136: 0, 1137: 0, 1138: 0, 1139: 0 },
+      choices: { 1133: 1 },
       do: () => use(1, $item`Batfellow comic`), // Batfellow Begins
       post: () => set("_batfellowToday", true),
       outfit: () => {
@@ -65,6 +65,7 @@ export const DonateQuest: Quest<Task> = {
       name: "Get Extra-Swishy Cloak",
       ready: () => get("batmanFundsAvailable") > 0,
       completed: () => get("batmanUpgrades").includes("Extra-Swishy Cloak"),
+      choices: { 1136: 0, 1137: 0 },
       do: () => {
         visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
         /*
@@ -80,6 +81,7 @@ export const DonateQuest: Quest<Task> = {
       name: "Get Surveillance Network",
       ready: () => get("batmanFundsAvailable") > 0,
       completed: () => get("batmanUpgrades").includes("Surveillance Network"),
+      choices: { 1136: 0, 1139: 0 },
       do: () => {
         visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
         /*
@@ -95,6 +97,7 @@ export const DonateQuest: Quest<Task> = {
       name: "Get Transfusion Satellite",
       ready: () => get("batmanFundsAvailable") > 0,
       completed: () => get("batmanUpgrades").includes("Transfusion Satellite"),
+      choices: { 1136: 0, 1139: 0 },
       do: () => {
         visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
         /*
@@ -110,6 +113,7 @@ export const DonateQuest: Quest<Task> = {
       name: "Get Rocket Booster",
       ready: () => get("batmanFundsAvailable") > 0,
       completed: () => get("batmanUpgrades").includes("Rocket Booster"),
+      choices: { 1136: 0, 1138: 0 },
       do: () => {
         visitUrl("place.php?whichplace=batman_cave&action=batman_cave_rnd");
         /*
@@ -125,6 +129,7 @@ export const DonateQuest: Quest<Task> = {
       name: "Go to Center Park",
       ready: () => get("batmanTimeLeft") >= 4,
       completed: () => get("batmanZone") === "Center Park (Low Crime)",
+      choices: { 1135: 0 },
       do: () => {
         visitUrl("place.php?whichplace=batman_cave&action=batman_cave_car");
         runChoice(5); // Center Park
@@ -140,6 +145,7 @@ export const DonateQuest: Quest<Task> = {
     {
       name: "End Comic",
       completed: () => get("batmanZone").includes("Gotpork City"),
+      choices: { 1134: 1 },
       do: () => {
         visitUrl("place.php?whichplace=batman_park&action=batman_park_car");
         runChoice(9); // EJECT
