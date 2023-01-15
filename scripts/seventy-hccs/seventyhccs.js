@@ -12884,13 +12884,7 @@ var DonateQuest = {
       return Macro.skill($skill(_templateObject525 || (_templateObject525 = _taggedTemplateLiteral21(["Bat-Kick"])))).repeat().setAutoAttack();
     },
     choices: {
-      1133: 1,
-      1134: 1,
-      1135: 0,
-      1136: 0,
-      1137: 0,
-      1138: 0,
-      1139: 0
+      1133: 1
     },
     do: function() {
       return (0, import_kolmafia32.use)(1, $item(_templateObject625 || (_templateObject625 = _taggedTemplateLiteral21(["Batfellow comic"]))));
@@ -12919,6 +12913,10 @@ var DonateQuest = {
     completed: function() {
       return get("batmanUpgrades").includes("Extra-Swishy Cloak");
     },
+    choices: {
+      1136: 0,
+      1137: 0
+    },
     do: function() {
       (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
       runChoices([1, 3, 11, 6]);
@@ -12930,6 +12928,10 @@ var DonateQuest = {
     },
     completed: function() {
       return get("batmanUpgrades").includes("Surveillance Network");
+    },
+    choices: {
+      1136: 0,
+      1139: 0
     },
     do: function() {
       (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
@@ -12943,6 +12945,10 @@ var DonateQuest = {
     completed: function() {
       return get("batmanUpgrades").includes("Transfusion Satellite");
     },
+    choices: {
+      1136: 0,
+      1139: 0
+    },
     do: function() {
       (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
       runChoices([3, 3, 11, 6]);
@@ -12955,6 +12961,10 @@ var DonateQuest = {
     completed: function() {
       return get("batmanUpgrades").includes("Rocket Booster");
     },
+    choices: {
+      1136: 0,
+      1138: 0
+    },
     do: function() {
       (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
       runChoices([2, 1, 11, 6]);
@@ -12966,6 +12976,9 @@ var DonateQuest = {
     },
     completed: function() {
       return get("batmanZone") === "Center Park (Low Crime)";
+    },
+    choices: {
+      1135: 0
     },
     do: function() {
       (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_car");
@@ -12984,6 +12997,9 @@ var DonateQuest = {
     name: "End Comic",
     completed: function() {
       return get("batmanZone").includes("Gotpork City");
+    },
+    choices: {
+      1134: 1
     },
     do: function() {
       (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_park&action=batman_park_car");
