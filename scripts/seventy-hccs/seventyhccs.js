@@ -11627,10 +11627,6 @@ function _taggedTemplateLiteral16(strings, raw) {
   return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 var config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
-  batfellow: Args.flag({
-    help: "Only run batfellow, weird.",
-    setting: ""
-  }),
   nofites: Args.flag({
     help: "Skip warning for unspent pvp fites.",
     setting: "",
@@ -12791,55 +12787,78 @@ function _taggedTemplateLiteral21(strings, raw) {
   }
   return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var BatfellowTask = {
-  name: "Enter the Batfellow",
-  completed: function() {
-    return !have($item(_templateObject170 || (_templateObject170 = _taggedTemplateLiteral21(["Batfellow comic"])))) || get("lastEncounter") === "Batfellow Ends";
-  },
-  prepare: function() {
-    return Macro.skill($skill(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral21(["Bat-Kick"])))).repeat().setAutoAttack();
-  },
-  choices: {
-    1133: 1,
-    1134: 1,
-    1135: 0,
-    1136: 0,
-    1137: 0,
-    1138: 0,
-    1139: 0
-  },
-  do: function() {
-    (0, import_kolmafia32.use)(1, $item(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral21(["Batfellow comic"]))));
-    (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
-    for (var _i = 0, _arr = [1, 3, 11, 2, 1, 11, 3, 3, 4, 11, 6]; _i < _arr.length; _i++) {
-      var c = _arr[_i];
+function _createForOfIteratorHelper15(o, allowArrayLike) {
+  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  if (!it) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray19(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it)
+        o = it;
+      var i = 0;
+      var F = function F2() {
+      };
+      return { s: F, n: function n() {
+        if (i >= o.length)
+          return { done: true };
+        return { done: false, value: o[i++] };
+      }, e: function e(_e) {
+        throw _e;
+      }, f: F };
+    }
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  var normalCompletion = true, didErr = false, err;
+  return { s: function s() {
+    it = it.call(o);
+  }, n: function n() {
+    var step = it.next();
+    normalCompletion = step.done;
+    return step;
+  }, e: function e(_e2) {
+    didErr = true;
+    err = _e2;
+  }, f: function f() {
+    try {
+      if (!normalCompletion && it.return != null)
+        it.return();
+    } finally {
+      if (didErr)
+        throw err;
+    }
+  } };
+}
+function _unsupportedIterableToArray19(o, minLen) {
+  if (!o)
+    return;
+  if (typeof o === "string")
+    return _arrayLikeToArray19(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor)
+    n = o.constructor.name;
+  if (n === "Map" || n === "Set")
+    return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+    return _arrayLikeToArray19(o, minLen);
+}
+function _arrayLikeToArray19(arr, len) {
+  if (len == null || len > arr.length)
+    len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++)
+    arr2[i] = arr[i];
+  return arr2;
+}
+function runChoices(choices) {
+  var _iterator = _createForOfIteratorHelper15(choices), _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done; ) {
+      var c = _step.value;
       (0, import_kolmafia32.runChoice)(c);
     }
-    (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_car");
-    (0, import_kolmafia32.runChoice)(5);
-    while (get("batmanTimeLeft") >= 4)
-      (0, import_kolmafia32.visitUrl)((0, import_kolmafia32.toUrl)($location(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral21(["Center Park After Dark"])))));
-    (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_park&action=batman_park_car");
-    (0, import_kolmafia32.runChoice)(9);
-  },
-  post: function() {
-    (0, import_kolmafia32.setAutoAttack)(0);
-    (0, import_kolmafia32.cliExecute)("refresh inventory");
-  },
-  outfit: function() {
-    var stillSuitFam = (0, import_kolmafia32.toFamiliar)(config.stillsuit);
-    var myFams = import_kolmafia32.Familiar.all().filter(function(f) {
-      return !f.attributes.includes("pokefam") && (0, import_kolmafia32.haveFamiliar)(f) && f !== stillSuitFam;
-    });
-    var randomFam = myFams[Math.floor(Math.random() * myFams.length)];
-    if (!randomFam || randomFam === $familiar(_templateObject525 || (_templateObject525 = _taggedTemplateLiteral21(["none"]))) || !(0, import_kolmafia32.haveFamiliar)(randomFam)) {
-      throw "Failed to select a valid familiar?";
-    }
-    return {
-      familiar: randomFam
-    };
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
   }
-};
+}
 var DonateQuest = {
   name: "Donate Your Body to Science",
   completed: function() {
@@ -12848,15 +12867,130 @@ var DonateQuest = {
   tasks: [{
     name: "Grab Comic",
     ready: function() {
-      return (0, import_kolmafia32.storageAmount)($item(_templateObject625 || (_templateObject625 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0;
+      return (0, import_kolmafia32.storageAmount)($item(_templateObject170 || (_templateObject170 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0;
     },
     completed: function() {
-      return (0, import_kolmafia32.itemAmount)($item(_templateObject721 || (_templateObject721 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0;
+      return (0, import_kolmafia32.itemAmount)($item(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral21(["Batfellow comic"])))) > 0;
     },
     do: function() {
-      return (0, import_kolmafia32.takeStorage)(1, $item(_templateObject821 || (_templateObject821 = _taggedTemplateLiteral21(["Batfellow comic"]))));
+      return (0, import_kolmafia32.takeStorage)(1, $item(_templateObject329 || (_templateObject329 = _taggedTemplateLiteral21(["Batfellow comic"]))));
     }
-  }, BatfellowTask, {
+  }, {
+    name: "Enter the Batfellow",
+    completed: function() {
+      return !have($item(_templateObject428 || (_templateObject428 = _taggedTemplateLiteral21(["Batfellow comic"])))) || get("_batfellowToday", false);
+    },
+    prepare: function() {
+      return Macro.skill($skill(_templateObject525 || (_templateObject525 = _taggedTemplateLiteral21(["Bat-Kick"])))).repeat().setAutoAttack();
+    },
+    choices: {
+      1133: 1,
+      1134: 1,
+      1135: 0,
+      1136: 0,
+      1137: 0,
+      1138: 0,
+      1139: 0
+    },
+    do: function() {
+      return (0, import_kolmafia32.use)(1, $item(_templateObject625 || (_templateObject625 = _taggedTemplateLiteral21(["Batfellow comic"]))));
+    },
+    post: function() {
+      return _set("_batfellowToday", true);
+    },
+    outfit: function() {
+      var stillSuitFam = (0, import_kolmafia32.toFamiliar)(config.stillsuit);
+      var myFams = import_kolmafia32.Familiar.all().filter(function(f) {
+        return !f.attributes.includes("pokefam") && (0, import_kolmafia32.haveFamiliar)(f) && f !== stillSuitFam;
+      });
+      var randomFam = myFams[Math.floor(Math.random() * myFams.length)];
+      if (!randomFam || randomFam === $familiar(_templateObject721 || (_templateObject721 = _taggedTemplateLiteral21(["none"]))) || !(0, import_kolmafia32.haveFamiliar)(randomFam)) {
+        throw "Failed to select a valid familiar?";
+      }
+      return {
+        familiar: randomFam
+      };
+    }
+  }, {
+    name: "Get Extra-Swishy Cloak",
+    ready: function() {
+      return get("batmanFundsAvailable") > 0;
+    },
+    completed: function() {
+      return get("batmanUpgrades").includes("Extra-Swishy Cloak");
+    },
+    do: function() {
+      (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
+      runChoices([1, 3, 11, 6]);
+    }
+  }, {
+    name: "Get Surveillance Network",
+    ready: function() {
+      return get("batmanFundsAvailable") > 0;
+    },
+    completed: function() {
+      return get("batmanUpgrades").includes("Surveillance Network");
+    },
+    do: function() {
+      (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
+      runChoices([3, 4, 11, 6]);
+    }
+  }, {
+    name: "Get Transfusion Satellite",
+    ready: function() {
+      return get("batmanFundsAvailable") > 0;
+    },
+    completed: function() {
+      return get("batmanUpgrades").includes("Transfusion Satellite");
+    },
+    do: function() {
+      (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
+      runChoices([3, 3, 11, 6]);
+    }
+  }, {
+    name: "Get Rocket Booster",
+    ready: function() {
+      return get("batmanFundsAvailable") > 0;
+    },
+    completed: function() {
+      return get("batmanUpgrades").includes("Rocket Booster");
+    },
+    do: function() {
+      (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_rnd");
+      runChoices([2, 1, 11, 6]);
+    }
+  }, {
+    name: "Go to Center Park",
+    ready: function() {
+      return get("batmanTimeLeft") >= 4;
+    },
+    completed: function() {
+      return get("batmanZone") === "Center Park (Low Crime)";
+    },
+    do: function() {
+      (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_cave&action=batman_cave_car");
+      (0, import_kolmafia32.runChoice)(5);
+    }
+  }, {
+    name: "Fight a common criminal",
+    completed: function() {
+      return get("batmanTimeLeft") < 4;
+    },
+    do: function() {
+      while (get("batmanTimeLeft") >= 4)
+        (0, import_kolmafia32.visitUrl)((0, import_kolmafia32.toUrl)($location(_templateObject821 || (_templateObject821 = _taggedTemplateLiteral21(["Center Park After Dark"])))));
+    }
+  }, {
+    name: "End Comic",
+    completed: function() {
+      return get("batmanZone").includes("Gotpork City");
+    },
+    do: function() {
+      (0, import_kolmafia32.visitUrl)("place.php?whichplace=batman_park&action=batman_park_car");
+      (0, import_kolmafia32.runChoice)(9);
+      (0, import_kolmafia32.setAutoAttack)(0);
+    }
+  }, {
     name: "Donate",
     completed: function() {
       return get("kingLiberated");
@@ -13490,10 +13624,10 @@ function _toPrimitive16(input, hint) {
   }
   return (hint === "string" ? String : Number)(input);
 }
-function _createForOfIteratorHelper15(o, allowArrayLike) {
+function _createForOfIteratorHelper16(o, allowArrayLike) {
   var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray19(o)) || allowArrayLike && o && typeof o.length === "number") {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray20(o)) || allowArrayLike && o && typeof o.length === "number") {
       if (it)
         o = it;
       var i = 0;
@@ -13530,7 +13664,7 @@ function _createForOfIteratorHelper15(o, allowArrayLike) {
   } };
 }
 function _slicedToArray11(arr, i) {
-  return _arrayWithHoles11(arr) || _iterableToArrayLimit11(arr, i) || _unsupportedIterableToArray19(arr, i) || _nonIterableRest11();
+  return _arrayWithHoles11(arr) || _iterableToArrayLimit11(arr, i) || _unsupportedIterableToArray20(arr, i) || _nonIterableRest11();
 }
 function _nonIterableRest11() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -13566,23 +13700,23 @@ function _arrayWithHoles11(arr) {
     return arr;
 }
 function _toConsumableArray8(arr) {
-  return _arrayWithoutHoles8(arr) || _iterableToArray8(arr) || _unsupportedIterableToArray19(arr) || _nonIterableSpread8();
+  return _arrayWithoutHoles8(arr) || _iterableToArray8(arr) || _unsupportedIterableToArray20(arr) || _nonIterableSpread8();
 }
 function _nonIterableSpread8() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray19(o, minLen) {
+function _unsupportedIterableToArray20(o, minLen) {
   if (!o)
     return;
   if (typeof o === "string")
-    return _arrayLikeToArray19(o, minLen);
+    return _arrayLikeToArray20(o, minLen);
   var n = Object.prototype.toString.call(o).slice(8, -1);
   if (n === "Object" && o.constructor)
     n = o.constructor.name;
   if (n === "Map" || n === "Set")
     return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-    return _arrayLikeToArray19(o, minLen);
+    return _arrayLikeToArray20(o, minLen);
 }
 function _iterableToArray8(iter) {
   if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -13590,9 +13724,9 @@ function _iterableToArray8(iter) {
 }
 function _arrayWithoutHoles8(arr) {
   if (Array.isArray(arr))
-    return _arrayLikeToArray19(arr);
+    return _arrayLikeToArray20(arr);
 }
-function _arrayLikeToArray19(arr, len) {
+function _arrayLikeToArray20(arr, len) {
   if (len == null || len > arr.length)
     len = arr.length;
   for (var i = 0, arr2 = new Array(len); i < len; i++)
@@ -13981,7 +14115,7 @@ var Leveling = {
     do: function() {
       (0, import_kolmafia36.cliExecute)("garden pick");
       var peppermints = tuple($item(_templateObject1542 || (_templateObject1542 = _taggedTemplateLiteral25(["peppermint patty"]))), $item(_templateObject1552 || (_templateObject1552 = _taggedTemplateLiteral25(["peppermint twist"]))));
-      var _iterator = _createForOfIteratorHelper15(peppermints), _step;
+      var _iterator = _createForOfIteratorHelper16(peppermints), _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done; ) {
           var p = _step.value;
@@ -14957,22 +15091,6 @@ function main() {
         return;
     }
   }
-  if (config.batfellow) {
-    var _engine = new Engine([BatfellowTask]);
-    try {
-      _engine.execute(BatfellowTask);
-    } finally {
-      _engine.destruct();
-    }
-    return;
-  }
-  var checkConfig = function(name2, value, shouldReturn) {
-    if (value === "") {
-      (0, import_kolmafia40.print)("seventyhccs_".concat(name2, " property not set"), shouldReturn ? "red" : "orange");
-      if (shouldReturn)
-        return;
-    }
-  };
   var toCheck = {
     main_clan: {
       prop: config.main_clan,
@@ -14990,7 +15108,11 @@ function main() {
   for (var _i = 0, _Object$keys = Object.keys(toCheck); _i < _Object$keys.length; _i++) {
     var name = _Object$keys[_i];
     var key = name;
-    checkConfig(name, toCheck[key].prop, toCheck[key].return);
+    if (toCheck[key].prop === "") {
+      (0, import_kolmafia40.print)("seventyhccs_".concat(name, " property not set"), toCheck[key].return ? "red" : "orange");
+      if (toCheck[key].return)
+        return;
+    }
   }
   if (config.prep) {
     prepareToAscend();
@@ -15013,7 +15135,7 @@ function main() {
       engine.execute(task);
     }
   } finally {
-    CommunityService.printLog();
+    CommunityService.printLog("green");
     engine.destruct();
   }
 }
