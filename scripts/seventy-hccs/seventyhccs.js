@@ -13064,6 +13064,62 @@ var _templateObject385;
 var _templateObject395;
 var _templateObject405;
 var _templateObject4111;
+function _slicedToArray11(arr, i) {
+  return _arrayWithHoles11(arr) || _iterableToArrayLimit11(arr, i) || _unsupportedIterableToArray20(arr, i) || _nonIterableRest11();
+}
+function _nonIterableRest11() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray20(o, minLen) {
+  if (!o)
+    return;
+  if (typeof o === "string")
+    return _arrayLikeToArray20(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor)
+    n = o.constructor.name;
+  if (n === "Map" || n === "Set")
+    return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+    return _arrayLikeToArray20(o, minLen);
+}
+function _arrayLikeToArray20(arr, len) {
+  if (len == null || len > arr.length)
+    len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++)
+    arr2[i] = arr[i];
+  return arr2;
+}
+function _iterableToArrayLimit11(arr, i) {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+    try {
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i)
+          return;
+        _n = false;
+      } else
+        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+          ;
+    } catch (err) {
+      _d = true, _e = err;
+    } finally {
+      try {
+        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+          return;
+      } finally {
+        if (_d)
+          throw _e;
+      }
+    }
+    return _arr;
+  }
+}
+function _arrayWithHoles11(arr) {
+  if (Array.isArray(arr))
+    return arr;
+}
 function _taggedTemplateLiteral22(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -13092,36 +13148,26 @@ var FamiliarWeightQuest = {
       return CommunityService.FamiliarWeight.isDone();
     },
     prepare: function() {
-      var loveSong = $item(_templateObject825 || (_templateObject825 = _taggedTemplateLiteral22(["love song of icy revenge"])));
-      var coldHeart = itemToEffect(loveSong);
-      var icyWeight = Math.ceil(2.5 * Math.min(4, (0, import_kolmafia33.itemAmount)(loveSong)));
-      var loveSongSufficient = (0, import_kolmafia33.familiarWeight)((0, import_kolmafia33.myFamiliar)()) + (0, import_kolmafia33.weightAdjustment)() + icyWeight >= 295;
-      var taffy = $item(_templateObject919 || (_templateObject919 = _taggedTemplateLiteral22(["pulled blue taffy"])));
-      var swayed = itemToEffect(taffy);
-      var wine = $item(_templateObject1017 || (_templateObject1017 = _taggedTemplateLiteral22(["1950 Vampire Vintner wine"])));
-      var needWeight = function() {
-        return (0, import_kolmafia33.familiarWeight)((0, import_kolmafia33.myFamiliar)()) + (0, import_kolmafia33.weightAdjustment)() < 295;
+      var needMore = function() {
+        return (0, import_kolmafia33.weightAdjustment)() < 275;
       };
-      if (needWeight() && !have(swayed) && have(taffy))
-        (0, import_kolmafia33.cliExecute)("use * ".concat(taffy));
-      if (needWeight() && !have(coldHeart) && loveSongSufficient)
-        (0, import_kolmafia33.cliExecute)("use * ".concat(loveSong));
-      if (needWeight() && have(wine)) {
-        acquireEffect($effect(_templateObject1115 || (_templateObject1115 = _taggedTemplateLiteral22(["Ode to Booze"]))));
-        (0, import_kolmafia33.drink)(wine);
+      var librams = [[4, $item(_templateObject825 || (_templateObject825 = _taggedTemplateLiteral22(["love song of icy revenge"])))], [5, $item(_templateObject919 || (_templateObject919 = _taggedTemplateLiteral22(["pulled blue taffy"])))]];
+      librams.forEach(function(_ref) {
+        var _ref2 = _slicedToArray11(_ref, 2), n = _ref2[0], i = _ref2[1];
+        if (needMore())
+          (0, import_kolmafia33.use)(Math.min(n, (0, import_kolmafia33.itemAmount)(i)), i);
+      });
+      if (needMore()) {
+        acquireEffect($effect(_templateObject1017 || (_templateObject1017 = _taggedTemplateLiteral22(["Ode to Booze"]))));
+        (0, import_kolmafia33.drink)($item(_templateObject1115 || (_templateObject1115 = _taggedTemplateLiteral22(["1950 Vampire Vintner wine"]))));
       }
-      if (needWeight()) {
-        while (have(loveSong) && (0, import_kolmafia33.haveEffect)(coldHeart) < 20) {
-          if ((0, import_kolmafia33.itemAmount)(loveSong) * 5 + (0, import_kolmafia33.haveEffect)(coldHeart) < 20)
-            (0, import_kolmafia33.cliExecute)("pillkeeper extend");
-          (0, import_kolmafia33.use)(loveSong);
-        }
-      }
+      if (needMore())
+        (0, import_kolmafia33.chew)($item(_templateObject1215 || (_templateObject1215 = _taggedTemplateLiteral22(["abstraction: joy"]))));
     },
     do: function() {
       return runTest(CommunityService.FamiliarWeight);
     },
-    effects: [$effect(_templateObject1215 || (_templateObject1215 = _taggedTemplateLiteral22(["A Girl Named Sue"]))), $effect(_templateObject1315 || (_templateObject1315 = _taggedTemplateLiteral22(["All Is Forgiven"]))), $effect(_templateObject1414 || (_templateObject1414 = _taggedTemplateLiteral22(["Billiards Belligerence"]))), $effect(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral22(["Blood Bond"]))), $effect(_templateObject1611 || (_templateObject1611 = _taggedTemplateLiteral22(["Do I Know You From Somewhere?"]))), $effect(_templateObject1711 || (_templateObject1711 = _taggedTemplateLiteral22(["Empathy"]))), $effect(_templateObject1811 || (_templateObject1811 = _taggedTemplateLiteral22(["Fidoxene"]))), $effect(_templateObject1911 || (_templateObject1911 = _taggedTemplateLiteral22(["Human-Machine Hybrid"]))), $effect(_templateObject2011 || (_templateObject2011 = _taggedTemplateLiteral22(["Human-Fish Hybrid"]))), $effect(_templateObject2116 || (_templateObject2116 = _taggedTemplateLiteral22(["Joy"]))), $effect(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral22(["Leash of Linguini"]))), $effect(_templateObject2311 || (_templateObject2311 = _taggedTemplateLiteral22(["Loyal Tea"]))), $effect(_templateObject2411 || (_templateObject2411 = _taggedTemplateLiteral22(["Man's Worst Enemy"]))), $effect(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral22(["Meteor Showered"]))), $effect(_templateObject2610 || (_templateObject2610 = _taggedTemplateLiteral22(["Open Heart Surgery"]))), $effect(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral22(["Over-Familiar With Dactyls"]))), $effect(_templateObject287 || (_templateObject287 = _taggedTemplateLiteral22(["Puzzle Champ"]))), $effect(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral22(["Robot Friends"]))), $effect(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral22(["Shortly Stacked"]))), $effect(_templateObject3112 || (_templateObject3112 = _taggedTemplateLiteral22(["Shrimpin' Ain't Easy"]))), $effect(_templateObject3210 || (_templateObject3210 = _taggedTemplateLiteral22(["Whole Latte Love"]))), $effect(_templateObject336 || (_templateObject336 = _taggedTemplateLiteral22(["You Can Really Taste the Dormouse"])))],
+    effects: [$effect(_templateObject1315 || (_templateObject1315 = _taggedTemplateLiteral22(["A Girl Named Sue"]))), $effect(_templateObject1414 || (_templateObject1414 = _taggedTemplateLiteral22(["All Is Forgiven"]))), $effect(_templateObject1512 || (_templateObject1512 = _taggedTemplateLiteral22(["Billiards Belligerence"]))), $effect(_templateObject1611 || (_templateObject1611 = _taggedTemplateLiteral22(["Blood Bond"]))), $effect(_templateObject1711 || (_templateObject1711 = _taggedTemplateLiteral22(["Do I Know You From Somewhere?"]))), $effect(_templateObject1811 || (_templateObject1811 = _taggedTemplateLiteral22(["Empathy"]))), $effect(_templateObject1911 || (_templateObject1911 = _taggedTemplateLiteral22(["Fidoxene"]))), $effect(_templateObject2011 || (_templateObject2011 = _taggedTemplateLiteral22(["Human-Machine Hybrid"]))), $effect(_templateObject2116 || (_templateObject2116 = _taggedTemplateLiteral22(["Human-Fish Hybrid"]))), $effect(_templateObject2213 || (_templateObject2213 = _taggedTemplateLiteral22(["Leash of Linguini"]))), $effect(_templateObject2311 || (_templateObject2311 = _taggedTemplateLiteral22(["Loyal Tea"]))), $effect(_templateObject2411 || (_templateObject2411 = _taggedTemplateLiteral22(["Man's Worst Enemy"]))), $effect(_templateObject2510 || (_templateObject2510 = _taggedTemplateLiteral22(["Meteor Showered"]))), $effect(_templateObject2610 || (_templateObject2610 = _taggedTemplateLiteral22(["Open Heart Surgery"]))), $effect(_templateObject279 || (_templateObject279 = _taggedTemplateLiteral22(["Over-Familiar With Dactyls"]))), $effect(_templateObject287 || (_templateObject287 = _taggedTemplateLiteral22(["Puzzle Champ"]))), $effect(_templateObject297 || (_templateObject297 = _taggedTemplateLiteral22(["Robot Friends"]))), $effect(_templateObject307 || (_templateObject307 = _taggedTemplateLiteral22(["Shortly Stacked"]))), $effect(_templateObject3112 || (_templateObject3112 = _taggedTemplateLiteral22(["Shrimpin' Ain't Easy"]))), $effect(_templateObject3210 || (_templateObject3210 = _taggedTemplateLiteral22(["Whole Latte Love"]))), $effect(_templateObject336 || (_templateObject336 = _taggedTemplateLiteral22(["You Can Really Taste the Dormouse"])))],
     outfit: {
       hat: $item(_templateObject346 || (_templateObject346 = _taggedTemplateLiteral22(["Daylight Shavings Helmet"]))),
       weapon: $item(_templateObject356 || (_templateObject356 = _taggedTemplateLiteral22(["Fourth of May Cosplay Saber"]))),
@@ -13647,7 +13693,7 @@ function _toPrimitive16(input, hint) {
 function _createForOfIteratorHelper16(o, allowArrayLike) {
   var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
   if (!it) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray20(o)) || allowArrayLike && o && typeof o.length === "number") {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray21(o)) || allowArrayLike && o && typeof o.length === "number") {
       if (it)
         o = it;
       var i = 0;
@@ -13683,13 +13729,13 @@ function _createForOfIteratorHelper16(o, allowArrayLike) {
     }
   } };
 }
-function _slicedToArray11(arr, i) {
-  return _arrayWithHoles11(arr) || _iterableToArrayLimit11(arr, i) || _unsupportedIterableToArray20(arr, i) || _nonIterableRest11();
+function _slicedToArray12(arr, i) {
+  return _arrayWithHoles12(arr) || _iterableToArrayLimit12(arr, i) || _unsupportedIterableToArray21(arr, i) || _nonIterableRest12();
 }
-function _nonIterableRest11() {
+function _nonIterableRest12() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit11(arr, i) {
+function _iterableToArrayLimit12(arr, i) {
   var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
   if (null != _i) {
     var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
@@ -13715,28 +13761,28 @@ function _iterableToArrayLimit11(arr, i) {
     return _arr;
   }
 }
-function _arrayWithHoles11(arr) {
+function _arrayWithHoles12(arr) {
   if (Array.isArray(arr))
     return arr;
 }
 function _toConsumableArray8(arr) {
-  return _arrayWithoutHoles8(arr) || _iterableToArray8(arr) || _unsupportedIterableToArray20(arr) || _nonIterableSpread8();
+  return _arrayWithoutHoles8(arr) || _iterableToArray8(arr) || _unsupportedIterableToArray21(arr) || _nonIterableSpread8();
 }
 function _nonIterableSpread8() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _unsupportedIterableToArray20(o, minLen) {
+function _unsupportedIterableToArray21(o, minLen) {
   if (!o)
     return;
   if (typeof o === "string")
-    return _arrayLikeToArray20(o, minLen);
+    return _arrayLikeToArray21(o, minLen);
   var n = Object.prototype.toString.call(o).slice(8, -1);
   if (n === "Object" && o.constructor)
     n = o.constructor.name;
   if (n === "Map" || n === "Set")
     return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-    return _arrayLikeToArray20(o, minLen);
+    return _arrayLikeToArray21(o, minLen);
 }
 function _iterableToArray8(iter) {
   if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
@@ -13744,9 +13790,9 @@ function _iterableToArray8(iter) {
 }
 function _arrayWithoutHoles8(arr) {
   if (Array.isArray(arr))
-    return _arrayLikeToArray20(arr);
+    return _arrayLikeToArray21(arr);
 }
-function _arrayLikeToArray20(arr, len) {
+function _arrayLikeToArray21(arr, len) {
   if (len == null || len > arr.length)
     len = arr.length;
   for (var i = 0, arr2 = new Array(len); i < len; i++)
@@ -13817,11 +13863,11 @@ function getPotionsToUse() {
     return Math.ceil((limit - (0, import_kolmafia36.haveEffect)(itemToEffect(potion))) / effectDuration(potion));
   };
   var usablePotions = Array.from(potions).filter(function(_ref) {
-    var _ref2 = _slicedToArray11(_ref, 2), p = _ref2[0], l = _ref2[1];
+    var _ref2 = _slicedToArray12(_ref, 2), p = _ref2[0], l = _ref2[1];
     return howMany(p, l) > 0 && (0, import_kolmafia36.itemAmount)(p) > 0;
   });
   return usablePotions.map(function(_ref3) {
-    var _ref4 = _slicedToArray11(_ref3, 2), p = _ref4[0], l = _ref4[1];
+    var _ref4 = _slicedToArray12(_ref3, 2), p = _ref4[0], l = _ref4[1];
     return [p, Math.min((0, import_kolmafia36.itemAmount)(p), howMany(p, l))];
   });
 }
@@ -13867,7 +13913,7 @@ var Leveling = {
     },
     do: function() {
       return getPotionsToUse().forEach(function(_ref5) {
-        var _ref6 = _slicedToArray11(_ref5, 2), potion = _ref6[0], count = _ref6[1];
+        var _ref6 = _slicedToArray12(_ref5, 2), potion = _ref6[0], count = _ref6[1];
         return (0, import_kolmafia36.use)(count, potion);
       });
     }
