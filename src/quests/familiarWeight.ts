@@ -1,14 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import {
-  cliExecute,
-  drink,
-  familiarWeight,
-  haveEffect,
-  itemAmount,
-  myFamiliar,
-  use,
-  weightAdjustment,
-} from "kolmafia";
+import { chew, drink, Item, itemAmount, use, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -21,7 +12,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { acquireEffect, itemToEffect } from "../lib";
+import { acquireEffect } from "../lib";
 import { runTest, tuneMoonPlatypus } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
@@ -47,28 +38,19 @@ export const FamiliarWeightQuest: Quest<Task> = {
       name: "Familiar Weight Test",
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
-        const loveSong = $item`love song of icy revenge`;
-        const coldHeart = itemToEffect(loveSong);
-        const icyWeight = Math.ceil(2.5 * Math.min(4, itemAmount(loveSong)));
-        const loveSongSufficient =
-          familiarWeight(myFamiliar()) + weightAdjustment() + icyWeight >= 295;
-        const taffy = $item`pulled blue taffy`;
-        const swayed = itemToEffect(taffy);
-        const wine = $item`1950 Vampire Vintner wine`;
-        const needWeight = () => familiarWeight(myFamiliar()) + weightAdjustment() < 295;
-        if (needWeight() && !have(swayed) && have(taffy)) cliExecute(`use * ${taffy}`);
-        if (needWeight() && !have(coldHeart) && loveSongSufficient) cliExecute(`use * ${loveSong}`);
-        if (needWeight() && have(wine)) {
+        const needMore = (): boolean => weightAdjustment() < 275;
+        const librams: [number, Item][] = [
+          [4, $item`love song of icy revenge`],
+          [5, $item`pulled blue taffy`],
+        ];
+        librams.forEach(([n, i]) => {
+          if (needMore()) use(Math.min(n, itemAmount(i)), i);
+        });
+        if (needMore()) {
           acquireEffect($effect`Ode to Booze`);
-          drink(wine); // 3-5 adventures, 1 drunk
+          drink($item`1950 Vampire Vintner wine`); // 3-5 adventures, 1 drunk
         }
-        if (needWeight()) {
-          while (have(loveSong) && haveEffect(coldHeart) < 20) {
-            if (itemAmount(loveSong) * 5 + haveEffect(coldHeart) < 20)
-              cliExecute("pillkeeper extend");
-            use(loveSong);
-          }
-        }
+        if (needMore()) chew($item`abstraction: joy`);
       },
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [
@@ -81,7 +63,6 @@ export const FamiliarWeightQuest: Quest<Task> = {
         $effect`Fidoxene`,
         $effect`Human-Machine Hybrid`,
         $effect`Human-Fish Hybrid`,
-        $effect`Joy`,
         $effect`Leash of Linguini`,
         $effect`Loyal Tea`,
         $effect`Man's Worst Enemy`,
