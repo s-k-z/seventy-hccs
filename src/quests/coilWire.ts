@@ -242,7 +242,10 @@ export const CoilWire: Quest<Task> = {
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
         adv1(ghostZone, -1);
       },
-      post: () => equip($slot`familiar`, $item`none`),
+      post: () => {
+        visitUrl("questlog.php?which=1");
+        equip($slot`familiar`, $item`none`);
+      },
       outfit: {
         back: $item`protonic accelerator pack`,
         famequip: $item`none`,

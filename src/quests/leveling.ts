@@ -2,7 +2,6 @@ import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
   autosell,
-  chew,
   cliExecute,
   create,
   eat,
@@ -508,6 +507,7 @@ export const Leveling: Quest<Task> = {
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
         adv1(ghostZone, -1);
       },
+      post: () => visitUrl("questlog.php?which=1"),
       outfit: () => ({
         back: $item`protonic accelerator pack`,
         familiar: selectBestFamiliar(AdvReq.NoAttack),
@@ -685,10 +685,7 @@ export const Leveling: Quest<Task> = {
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
-      post: () => {
-        checkAvailable($item`abstraction: joy`);
-        chew($item`abstraction: joy`);
-      },
+      post: () => checkAvailable($item`abstraction: joy`),
       outfit: { familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy().macro(
         Macro.if_(notAllowList, Macro.abort())
