@@ -12332,72 +12332,69 @@ var toAcquire = /* @__PURE__ */ new Map([
   [$effect(_templateObject160 || (_templateObject160 = _taggedTemplateLiteral19(["The Odour of Magick"]))), function() {
     return (0, import_kolmafia30.use)($item(_templateObject240 || (_templateObject240 = _taggedTemplateLiteral19(["natural magick candle"]))));
   }],
-  [$effect(_templateObject326 || (_templateObject326 = _taggedTemplateLiteral19(["That's Just Cloud-Talk, Man"]))), function() {
-    return (0, import_kolmafia30.visitUrl)("place.php?whichplace=campaway&action=campaway_sky");
-  }],
-  [$item(_templateObject425 || (_templateObject425 = _taggedTemplateLiteral19(['"I Voted!" sticker']))), function() {
+  [$item(_templateObject326 || (_templateObject326 = _taggedTemplateLiteral19(['"I Voted!" sticker']))), function() {
     return vote();
   }],
-  [$item(_templateObject520 || (_templateObject520 = _taggedTemplateLiteral19(["pantogram pants"]))), function() {
+  [$item(_templateObject425 || (_templateObject425 = _taggedTemplateLiteral19(["pantogram pants"]))), function() {
     return getPantogramPants();
   }],
-  [$item(_templateObject620 || (_templateObject620 = _taggedTemplateLiteral19(["battery (AAA)"]))), function() {
+  [$item(_templateObject520 || (_templateObject520 = _taggedTemplateLiteral19(["battery (AAA)"]))), function() {
     return harvestBatteries();
   }],
-  [$item(_templateObject719 || (_templateObject719 = _taggedTemplateLiteral19(["battery (lantern)"]))), function() {
-    return (0, import_kolmafia30.create)($item(_templateObject818 || (_templateObject818 = _taggedTemplateLiteral19(["battery (lantern)"]))));
+  [$item(_templateObject620 || (_templateObject620 = _taggedTemplateLiteral19(["battery (lantern)"]))), function() {
+    return (0, import_kolmafia30.create)($item(_templateObject719 || (_templateObject719 = _taggedTemplateLiteral19(["battery (lantern)"]))));
   }],
-  [$item(_templateObject915 || (_templateObject915 = _taggedTemplateLiteral19(["box of Familiar Jacks"]))), function() {
-    return (0, import_kolmafia30.create)($item(_templateObject1014 || (_templateObject1014 = _taggedTemplateLiteral19(["box of Familiar Jacks"]))));
+  [$item(_templateObject818 || (_templateObject818 = _taggedTemplateLiteral19(["box of Familiar Jacks"]))), function() {
+    return (0, import_kolmafia30.create)($item(_templateObject915 || (_templateObject915 = _taggedTemplateLiteral19(["box of Familiar Jacks"]))));
   }],
-  [$item(_templateObject1113 || (_templateObject1113 = _taggedTemplateLiteral19(["occult jelly donut"]))), function() {
-    return (0, import_kolmafia30.create)($item(_templateObject1213 || (_templateObject1213 = _taggedTemplateLiteral19(["occult jelly donut"]))));
+  [$item(_templateObject1014 || (_templateObject1014 = _taggedTemplateLiteral19(["occult jelly donut"]))), function() {
+    return (0, import_kolmafia30.create)($item(_templateObject1113 || (_templateObject1113 = _taggedTemplateLiteral19(["occult jelly donut"]))));
   }],
-  [$item(_templateObject1313 || (_templateObject1313 = _taggedTemplateLiteral19(["Brutal brogues"]))), function() {
+  [$item(_templateObject1213 || (_templateObject1213 = _taggedTemplateLiteral19(["Brutal brogues"]))), function() {
     return (0, import_kolmafia30.cliExecute)("bastille bbq brutalist catapult");
   }],
-  [$item(_templateObject1412 || (_templateObject1412 = _taggedTemplateLiteral19(["cuppa Loyal tea"]))), function() {
+  [$item(_templateObject1313 || (_templateObject1313 = _taggedTemplateLiteral19(["cuppa Loyal tea"]))), function() {
     return (0, import_kolmafia30.cliExecute)("teatree loyal");
   }],
-  [$item(_templateObject1511 || (_templateObject1511 = _taggedTemplateLiteral19(["green mana"]))), function() {
+  [$item(_templateObject1412 || (_templateObject1412 = _taggedTemplateLiteral19(["green mana"]))), function() {
     return (0, import_kolmafia30.cliExecute)("cheat forest");
   }],
-  [$item(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral19(["wrench"]))), function() {
+  [$item(_templateObject1511 || (_templateObject1511 = _taggedTemplateLiteral19(["wrench"]))), function() {
     return (0, import_kolmafia30.cliExecute)("cheat wrench");
   }],
-  [$item(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral19(["Yeg's Motel hand soap"]))), function() {
-    return (0, import_kolmafia30.cliExecute)("cargo item ".concat($item(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral19(["Yeg's Motel hand soap"])))));
+  [$item(_templateObject1610 || (_templateObject1610 = _taggedTemplateLiteral19(["Yeg's Motel hand soap"]))), function() {
+    return (0, import_kolmafia30.cliExecute)("cargo item ".concat($item(_templateObject1710 || (_templateObject1710 = _taggedTemplateLiteral19(["Yeg's Motel hand soap"])))));
   }],
-  [$item(_templateObject1910 || (_templateObject1910 = _taggedTemplateLiteral19(["gold detective badge"]))), function() {
+  [$item(_templateObject1810 || (_templateObject1810 = _taggedTemplateLiteral19(["gold detective badge"]))), function() {
     return (0, import_kolmafia30.visitUrl)("place.php?whichplace=town_wrong&action=townwrong_precinct");
   }],
-  [$item(_templateObject2010 || (_templateObject2010 = _taggedTemplateLiteral19(["your cowboy boots"]))), function() {
+  [$item(_templateObject1910 || (_templateObject1910 = _taggedTemplateLiteral19(["your cowboy boots"]))), function() {
     return (0, import_kolmafia30.visitUrl)("place.php?whichplace=town_right&action=townright_ltt");
   }],
-  [$item(_templateObject2115 || (_templateObject2115 = _taggedTemplateLiteral19(["weeping willow wand"]))), function() {
+  [$item(_templateObject2010 || (_templateObject2010 = _taggedTemplateLiteral19(["weeping willow wand"]))), function() {
     (0, import_kolmafia30.visitUrl)("shop.php?whichshop=lathe");
-    (0, import_kolmafia30.create)($item(_templateObject2212 || (_templateObject2212 = _taggedTemplateLiteral19(["weeping willow wand"]))));
+    (0, import_kolmafia30.create)($item(_templateObject2115 || (_templateObject2115 = _taggedTemplateLiteral19(["weeping willow wand"]))));
   }],
-  [$item(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))), function() {
-    return (0, import_kolmafia30.retrieveItem)($item(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
+  [$item(_templateObject2212 || (_templateObject2212 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))), function() {
+    return (0, import_kolmafia30.retrieveItem)($item(_templateObject2310 || (_templateObject2310 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
   }],
-  [$item(_templateObject259 || (_templateObject259 = _taggedTemplateLiteral19(["toy accordion"]))), function() {
-    return (0, import_kolmafia30.retrieveItem)($item(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral19(["toy accordion"]))));
+  [$item(_templateObject2410 || (_templateObject2410 = _taggedTemplateLiteral19(["toy accordion"]))), function() {
+    return (0, import_kolmafia30.retrieveItem)($item(_templateObject259 || (_templateObject259 = _taggedTemplateLiteral19(["toy accordion"]))));
   }],
-  [$skill(_templateObject278 || (_templateObject278 = _taggedTemplateLiteral19(["Seek out a Bird"]))), function() {
-    return (0, import_kolmafia30.use)($item(_templateObject286 || (_templateObject286 = _taggedTemplateLiteral19(["Bird-a-Day calendar"]))));
+  [$skill(_templateObject269 || (_templateObject269 = _taggedTemplateLiteral19(["Seek out a Bird"]))), function() {
+    return (0, import_kolmafia30.use)($item(_templateObject278 || (_templateObject278 = _taggedTemplateLiteral19(["Bird-a-Day calendar"]))));
   }]
 ]);
 var defaultOutfit = {
-  hat: $item(_templateObject296 || (_templateObject296 = _taggedTemplateLiteral19(["Daylight Shavings Helmet"]))),
-  back: $item(_templateObject306 || (_templateObject306 = _taggedTemplateLiteral19(["protonic accelerator pack"]))),
-  shirt: $item(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral19(["Jurassic Parka"]))),
-  weapon: $item(_templateObject327 || (_templateObject327 = _taggedTemplateLiteral19(["Fourth of May Cosplay Saber"]))),
-  offhand: $item(_templateObject335 || (_templateObject335 = _taggedTemplateLiteral19(["familiar scrapbook"]))),
-  pants: $item(_templateObject345 || (_templateObject345 = _taggedTemplateLiteral19(["designer sweatpants"]))),
-  acc1: $item(_templateObject355 || (_templateObject355 = _taggedTemplateLiteral19(["hewn moon-rune spoon"]))),
-  acc2: $item(_templateObject364 || (_templateObject364 = _taggedTemplateLiteral19(["Powerful Glove"]))),
-  acc3: $item(_templateObject374 || (_templateObject374 = _taggedTemplateLiteral19(["Kremlin's Greatest Briefcase"])))
+  hat: $item(_templateObject286 || (_templateObject286 = _taggedTemplateLiteral19(["Daylight Shavings Helmet"]))),
+  back: $item(_templateObject296 || (_templateObject296 = _taggedTemplateLiteral19(["protonic accelerator pack"]))),
+  shirt: $item(_templateObject306 || (_templateObject306 = _taggedTemplateLiteral19(["Jurassic Parka"]))),
+  weapon: $item(_templateObject3111 || (_templateObject3111 = _taggedTemplateLiteral19(["Fourth of May Cosplay Saber"]))),
+  offhand: $item(_templateObject327 || (_templateObject327 = _taggedTemplateLiteral19(["familiar scrapbook"]))),
+  pants: $item(_templateObject335 || (_templateObject335 = _taggedTemplateLiteral19(["designer sweatpants"]))),
+  acc1: $item(_templateObject345 || (_templateObject345 = _taggedTemplateLiteral19(["hewn moon-rune spoon"]))),
+  acc2: $item(_templateObject355 || (_templateObject355 = _taggedTemplateLiteral19(["Powerful Glove"]))),
+  acc3: $item(_templateObject364 || (_templateObject364 = _taggedTemplateLiteral19(["Kremlin's Greatest Briefcase"])))
 };
 var CoilWire = {
   name: "Coil Wire",
@@ -12411,8 +12408,8 @@ var CoilWire = {
     },
     do: function() {
       (0, import_kolmafia30.visitUrl)("tutorial.php?action=toot");
-      (0, import_kolmafia30.use)($item(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral19(["letter from King Ralph XI"]))));
-      (0, import_kolmafia30.use)($item(_templateObject394 || (_templateObject394 = _taggedTemplateLiteral19(["pork elf goodies sack"]))));
+      (0, import_kolmafia30.use)($item(_templateObject374 || (_templateObject374 = _taggedTemplateLiteral19(["letter from King Ralph XI"]))));
+      (0, import_kolmafia30.use)($item(_templateObject384 || (_templateObject384 = _taggedTemplateLiteral19(["pork elf goodies sack"]))));
     }
   }, {
     name: "Talk to quest NPCs",
@@ -12444,7 +12441,7 @@ var CoilWire = {
       return get("_communismUsed");
     },
     do: function() {
-      return (0, import_kolmafia30.useSkill)($skill(_templateObject404 || (_templateObject404 = _taggedTemplateLiteral19(["Communism!"]))));
+      return (0, import_kolmafia30.useSkill)($skill(_templateObject394 || (_templateObject394 = _taggedTemplateLiteral19(["Communism!"]))));
     }
   }, {
     name: "Chateau Desk",
@@ -12483,7 +12480,15 @@ var CoilWire = {
       } finally {
         _iterator2.f();
       }
-      checkAvailable($item(_templateObject4110 || (_templateObject4110 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
+      checkAvailable($item(_templateObject404 || (_templateObject404 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
+    }
+  }, {
+    name: "Gaze at the Stars",
+    completed: function() {
+      return have($effect(_templateObject4110 || (_templateObject4110 = _taggedTemplateLiteral19(["That's Just Cloud-Talk, Man"])))) || get("_campAwaySmileBuffs") > 0;
+    },
+    do: function() {
+      return (0, import_kolmafia30.visitUrl)("place.php?whichplace=campaway&action=campaway_sky");
     }
   }, {
     name: "Scavenge Daycare",
@@ -14024,6 +14029,9 @@ var Leveling = {
       return get("_speakeasyFreeFights") >= 3;
     },
     do: $location(_templateObject6111 || (_templateObject6111 = _taggedTemplateLiteral25(["An Unusually Quiet Barroom Brawl"]))),
+    post: function() {
+      return (0, import_kolmafia36.visitUrl)("place.php?whichplace=speakeasy");
+    },
     outfit: {
       familiar: selectBestFamiliar()
     },
@@ -14264,7 +14272,7 @@ var Leveling = {
     do: function() {
       return (0, import_kolmafia36.use)($item(_templateObject1815 || (_templateObject1815 = _taggedTemplateLiteral25(["a ten-percent bonus"]))));
     },
-    effects: $effects(_templateObject1822 || (_templateObject1822 = _taggedTemplateLiteral25(["Inscrutable Gaze, That's Just Cloud-Talk, Man, Synthesis: Learning"], ["Inscrutable Gaze, That's Just Cloud-Talk\\, Man, Synthesis: Learning"]))),
+    effects: $effects(_templateObject1822 || (_templateObject1822 = _taggedTemplateLiteral25(["Inscrutable Gaze, Synthesis: Learning"]))),
     outfit: {
       back: $item(_templateObject1832 || (_templateObject1832 = _taggedTemplateLiteral25(["LOV Epaulettes"]))),
       offhand: $item(_templateObject1842 || (_templateObject1842 = _taggedTemplateLiteral25(["familiar scrapbook"])))
@@ -14280,7 +14288,7 @@ var Leveling = {
     do: function() {
       return (0, import_kolmafia36.visitUrl)("place.php?whichplace=chateau&action=chateau_restlabelfree");
     },
-    effects: $effects(_templateObject1862 || (_templateObject1862 = _taggedTemplateLiteral25(["Inscrutable Gaze, That's Just Cloud-Talk, Man, Synthesis: Learning"], ["Inscrutable Gaze, That's Just Cloud-Talk\\, Man, Synthesis: Learning"]))),
+    effects: $effects(_templateObject1862 || (_templateObject1862 = _taggedTemplateLiteral25(["Inscrutable Gaze, Synthesis: Learning"]))),
     outfit: {
       back: $item(_templateObject1872 || (_templateObject1872 = _taggedTemplateLiteral25(["LOV Epaulettes"]))),
       offhand: $item(_templateObject1882 || (_templateObject1882 = _taggedTemplateLiteral25(["familiar scrapbook"])))
