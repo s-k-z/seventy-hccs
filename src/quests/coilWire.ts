@@ -60,7 +60,6 @@ const questHandlers = new Map([
 // prettier-ignore
 const toAcquire = new Map<Effect | Item | Skill, () => void>([
   [$effect`The Odour of Magick`,         () => use($item`natural magick candle`)],
-  [$effect`That's Just Cloud-Talk, Man`, () => visitUrl("place.php?whichplace=campaway&action=campaway_sky")],
   [$item`"I Voted!" sticker`,            () => vote()],
   [$item`pantogram pants`,               () => getPantogramPants()],
   [$item`battery (AAA)`,                 () => harvestBatteries()],
@@ -140,6 +139,11 @@ export const CoilWire: Quest<Task> = {
         for (const [want, acquire] of toAcquire) if (!have(want)) acquire();
         checkAvailable($item`sombrero-mounted sparkler`);
       },
+    },
+    {
+      name: "Gaze at the Stars",
+      completed: () => have($effect`That's Just Cloud-Talk, Man`) || get("_campAwaySmileBuffs") > 0,
+      do: () => visitUrl("place.php?whichplace=campaway&action=campaway_sky"),
     },
     {
       name: "Scavenge Daycare",

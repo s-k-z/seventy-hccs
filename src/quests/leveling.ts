@@ -240,6 +240,7 @@ export const Leveling: Quest<Task> = {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
+      post: () => visitUrl("place.php?whichplace=speakeasy"),
       outfit: { familiar: selectBestFamiliar() },
       combat: new CombatStrategy().macro(DefaultMacro), // Don't abort on unexpected monsters
       effects: [
@@ -465,7 +466,7 @@ export const Leveling: Quest<Task> = {
       ready: () => have($item`LOV Epaulettes`),
       completed: () => !have($item`a ten-percent bonus`),
       do: () => use($item`a ten-percent bonus`),
-      effects: $effects`Inscrutable Gaze, That's Just Cloud-Talk\, Man, Synthesis: Learning`,
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
       outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },
     },
     {
@@ -473,7 +474,7 @@ export const Leveling: Quest<Task> = {
       ready: () => have($item`LOV Epaulettes`) && myLevel() >= 8,
       completed: () => get("timesRested") > totalFreeRests(),
       do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
-      effects: $effects`Inscrutable Gaze, That's Just Cloud-Talk\, Man, Synthesis: Learning`,
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
       outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },
     },
     {
