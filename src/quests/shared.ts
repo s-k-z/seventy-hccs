@@ -37,15 +37,16 @@ export function runTest(test: CommunityService): void {
   if (famWeight && test.actualCost() > 1) throw `Can't do ${test.statName} in 1 turn?`;
   const coilWire = test.name === "Coil Wire";
   if (coilWire) visitUrl("council.php");
-  const err = test.run(() => undefined, coilWire || famWeight ? 60 : 1);
-  // prettier-ignore
-  const handler = new Map([
-    ["completed",         () => { return } ],
-    ["already completed", () => { throw `Re-ran test ${test.statName}`; } ],
-    ["failed",            () => { throw `Failed test ${test.statName}`; } ],
-  ]).get(err);
-  if (handler) handler();
-  else throw `Unexpected test result`;
+  switch (test.run(() => undefined, coilWire || famWeight ? 60 : 1)) {
+    case "completed":
+      return;
+    case "already completed":
+      throw `Re-ran test ${test.statName}`;
+    case "failed":
+      throw `Failed test ${test.statName}`;
+    default:
+      throw `Unexpected test result`;
+  }
 }
 
 export const enum AdvReq {

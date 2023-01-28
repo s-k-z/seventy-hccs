@@ -18,14 +18,14 @@
     "esbuild-plugin-babel": "^0.2.3",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-libram": "^0.2.25",
+    "eslint-plugin-libram": "^0.2.27",
     "prettier": "^2.8.1",
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "grimoire-kolmafia": "^0.3.11",
-    "kolmafia": "^5.27057.0",
-    "libram": "^0.7.6"
+    "grimoire-kolmafia": "^0.3.13",
+    "kolmafia": "^5.27130.0",
+    "libram": "^0.7.10"
   },
   "author": "Skaazi",
   "license": "Apache-2.0",
