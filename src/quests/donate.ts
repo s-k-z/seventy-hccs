@@ -27,7 +27,7 @@ import {
 } from "libram";
 import { config } from "../config";
 
-function runChoices(choices: number[]): void {
+function runChoices(...choices: number[]): void {
   for (const c of choices) runChoice(c);
 }
 
@@ -76,7 +76,7 @@ export const DonateQuest: Quest<Task> = {
           11: Back to Main R&D Menu
           6: Stop Researching and Developing
         */
-        runChoices([1, 3, 11, 6]);
+        runChoices(1, 3, 11, 6);
       },
     },
     {
@@ -92,7 +92,7 @@ export const DonateQuest: Quest<Task> = {
           11: Back to Main R&D Menu
           6: Stop Researching and Developing
         */
-        runChoices([3, 4, 11, 6]);
+        runChoices(3, 4, 11, 6);
       },
     },
     {
@@ -108,7 +108,7 @@ export const DonateQuest: Quest<Task> = {
           11: Back to Main R&D Menu
           6: Stop Researching and Developing
         */
-        runChoices([3, 3, 11, 6]);
+        runChoices(3, 3, 11, 6);
       },
     },
     {
@@ -124,7 +124,7 @@ export const DonateQuest: Quest<Task> = {
           11: Back to Main R&D Menu
           6: Stop Researching and Developing
         */
-        runChoices([2, 1, 11, 6]);
+        runChoices(2, 1, 11, 6);
       },
     },
     {
