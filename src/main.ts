@@ -1,8 +1,7 @@
-import { Args, CombatResources, Engine, getTasks } from "grimoire-kolmafia";
+import { Args, Engine, getTasks } from "grimoire-kolmafia";
 import { print, setAutoAttack } from "kolmafia";
 import { CommunityService, get, sinceKolmafiaRevision } from "libram";
 import { isReadyToContinue, prepAndAscendIfNecessary, prepareToAscend } from "./ascend";
-import { DefaultCombat } from "./combat";
 import { config } from "./config";
 import { CoilWire } from "./quests/coilWire";
 import { CombatFrequencyQuest } from "./quests/combatFrequency";
@@ -10,7 +9,7 @@ import { DonateQuest } from "./quests/donate";
 import { FamiliarWeightQuest } from "./quests/familiarWeight";
 import { HotResistQuest } from "./quests/hotResist";
 import { ItemDropQuest } from "./quests/itemDrop";
-import { getHowManySausagesToEat, Leveling } from "./quests/leveling";
+import { Leveling } from "./quests/leveling";
 import { SpellDamageQuest } from "./quests/spellDamage";
 import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/stats";
 import { WeaponDamageQuest } from "./quests/weaponDamage";
@@ -22,21 +21,6 @@ export function main(command = ""): void {
   if (config.help) {
     Args.showHelp(config);
     return;
-  }
-
-  if (config.test) {
-    switch (config.test.toLowerCase()) {
-      case "kramco":
-        print(`We can eat ${getHowManySausagesToEat()} sausages.`);
-        return;
-      case "macro":
-        print("Default macro:");
-        print(DefaultCombat.compile(new CombatResources(), undefined, undefined).toString());
-        return;
-      default:
-        print(`Unknown test ${config.test}`);
-        return;
-    }
   }
 
   const toCheck = {

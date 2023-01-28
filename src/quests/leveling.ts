@@ -95,7 +95,7 @@ function topOffHp(): void {
   if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
 }
 
-export function getHowManySausagesToEat(): number {
+function getHowManySausagesToEat(): number {
   if (myMaxmp() - myMp() < 999) return 0;
 
   if (itemAmount($item`magical sausage casing`) < 1) return 0;
