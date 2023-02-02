@@ -100,11 +100,11 @@ export function deepDarkVisions(): Task {
     },
     do: () => {
       if (myMaxhp() < safeHpLimit()) throw `Not enough HP for deep dark visions`;
-      if (myHp() < safeHpLimit()) cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`);
+      if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
       if (myHp() < safeHpLimit()) throw `Failed to heal enough for Deep Dark Visions?`;
       useSkill($skill`Deep Dark Visions`);
     },
-    post: () => cliExecute(`cast * ${$skill`Cannelloni Cocoon`}`),
+    post: () => useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`),
     outfit: {
       back: $item`unwrapped knock-off retro superhero cape`,
       shirt: $item`Jurassic Parka`,

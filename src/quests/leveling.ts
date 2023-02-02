@@ -47,10 +47,15 @@ import {
   get,
   have,
   Macro,
-  SourceTerminal,
   Witchess,
 } from "libram";
-import { DefaultCombat, DefaultMacro, notAllowList, RunawayCombat, StenchCombat } from "../combat";
+import {
+  DefaultCombat,
+  DefaultMacro,
+  DefaultStrategy,
+  RunawayCombat,
+  StenchCombat,
+} from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import {
@@ -282,11 +287,11 @@ export const Leveling: Quest<Task> = {
         $effect`Inscrutable Gaze`, // 10 mp
         $effect`Ruthlessly Efficient`, // 10 mp
         $effect`Singer's Faithful Ocelot`, // 15 mp
-        $effect`Sauce Monocle`, // 20 mp
         // Class skills
         $effect`Astral Shell`, // 10 mp
         $effect`Elemental Saucesphere`, // 10 mp
         $effect`Ghostly Shell`, // 6 mp
+        $effect`Sauce Monocle`, // 20 mp
         $effect`Springy Fusilli`, // 10 mp
         // Song(s)
         $effect`Ode to Booze`, // 50 mp
@@ -645,39 +650,33 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Get Abstraction: Action",
+      name: "Deep Machine Tunnels Fights",
+      completed: () => get("_machineTunnelsAdv") >= 3,
+      prepare: topOffHp,
+      choices: { 1119: -1 }, // Shining Mauve Backwards In Time
+      do: $location`The Deep Machine Tunnels`,
+      outfit: { familiar: $familiar`Machine Elf` },
+      combat: DefaultCombat,
+    },
+    {
+      name: "Ensure Abstraction: Action",
       completed: () =>
-        haveItemOrEffect($item`abstraction: joy`) || have($item`abstraction: action`),
+        haveItemOrEffect($item`abstraction: joy`) ||
+        have($item`abstraction: action`) ||
+        get("_machineTunnelsAdv") >= 4,
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
       outfit: { acc3: levelingOutfit.acc3, familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(
-        Macro.if_(notAllowList, Macro.abort())
-          .if_(
+      combat: DefaultStrategy()
+        .macro(
+          Macro.if_(
             `!monsterid ${$monster`Performer of Actions`.id}`,
             Macro.skill($skill`Macrometeorite`)
-          )
-          .skill($skill`Feel Envy`)
-          .step(DefaultMacro)
-      ),
-    },
-    {
-      name: "Deep Machine Tunnels Fights",
-      completed: () => get("_machineTunnelsAdv") >= 4,
-      prepare: topOffHp,
-      choices: { 1119: -1 }, // Shining Mauve Backwards In Time
-      do: $location`The Deep Machine Tunnels`,
-      outfit: { familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(
-        Macro.if_(notAllowList, Macro.abort())
-          .if_(
-            `monsterid ${$monster`Thinker of Thoughts`.id}`,
-            Macro.tryItem($item`abstraction: action`)
-          )
-          .step(DefaultMacro)
-      ),
+          ).skill($skill`Feel Envy`)
+        )
+        .macro(DefaultMacro),
     },
     {
       name: "Ensure Abstraction: Joy",
@@ -688,18 +687,17 @@ export const Leveling: Quest<Task> = {
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: joy`),
       outfit: { familiar: $familiar`Machine Elf` },
-      combat: new CombatStrategy().macro(
-        Macro.if_(notAllowList, Macro.abort())
-          .if_(
+      combat: DefaultStrategy()
+        .macro(
+          Macro.if_(
             `!monsterid ${$monster`Thinker of Thoughts`.id}`,
             Macro.skill($skill`Macrometeorite`)
-          )
-          .tryItem($item`abstraction: action`)
-          .step(DefaultMacro)
-      ),
+          ).item($item`abstraction: action`)
+        )
+        .macro(DefaultMacro),
     },
     {
-      name: "Final Deep Machine Tunnels Fight",
+      name: "Remaining Deep Machine Tunnels Fights",
       completed: () => get("_machineTunnelsAdv") >= 5,
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
@@ -710,37 +708,22 @@ export const Leveling: Quest<Task> = {
     {
       name: "Chest X-ray Fights",
       completed: () => get("_chestXRayUsed") >= 3,
-      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
-      outfit: () => ({
-        shirt: $item`makeshift garbage shirt`,
-        acc3: $item`Lil' Doctor™ bag`,
-        familiar: selectBestFamiliar(AdvReq.Toxic),
-      }),
+      outfit: () => ({ acc3: $item`Lil' Doctor™ bag`, familiar: selectBestFamiliar(AdvReq.Toxic) }),
       combat: DefaultCombat,
     },
     {
       name: "Shattering Punch Fights",
       completed: () => get("_shatteringPunchUsed") >= 3,
-      acquire: [{ item: $item`makeshift garbage shirt` }],
-      prepare: () => SourceTerminal.educate($skill`Turbo`), // Turbo used a flag to cast pride
       do: $location`The Toxic Teacups`,
-      outfit: () => ({
-        shirt: $item`makeshift garbage shirt`,
-        acc3: levelingOutfit.acc3,
-        familiar: selectBestFamiliar(AdvReq.Toxic),
-      }),
+      outfit: () => ({ acc3: levelingOutfit.acc3, familiar: selectBestFamiliar(AdvReq.Toxic) }),
       combat: DefaultCombat,
     },
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
-      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
-      outfit: () => ({
-        shirt: $item`makeshift garbage shirt`,
-        familiar: selectBestFamiliar(AdvReq.Toxic),
-      }),
+      outfit: () => ({ familiar: selectBestFamiliar(AdvReq.Toxic) }),
       combat: DefaultCombat,
     },
     {
@@ -762,9 +745,14 @@ export const Leveling: Quest<Task> = {
     {
       name: "Lectures on Relativity",
       completed: () => get("_pocketProfessorLectures") > 0,
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: topOffHp,
       do: $location`The Toxic Teacups`,
-      outfit: { offhand: $item`Kramco Sausage-o-Matic™`, familiar: $familiar`Pocket Professor` },
+      outfit: {
+        shirt: $item`makeshift garbage shirt`,
+        offhand: $item`Kramco Sausage-o-Matic™`,
+        familiar: $familiar`Pocket Professor`,
+      },
       combat: DefaultCombat,
     },
     deepDarkVisions(),
@@ -772,6 +760,7 @@ export const Leveling: Quest<Task> = {
       name: "Backup Camera Fights",
       ready: () => get("lastCopyableMonster") === $monster`sausage goblin`,
       completed: () => get("_backUpUses") >= 7,
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: () => {
         if (get("umbrellaState") !== "broken") cliExecute("umbrella ml");
       },
@@ -782,6 +771,7 @@ export const Leveling: Quest<Task> = {
         }
       },
       outfit: () => ({
+        shirt: $item`makeshift garbage shirt`,
         offhand: $item`unbreakable umbrella`,
         acc3: $item`backup camera`,
         familiar: selectBestFamiliar(AdvReq.Normal),
@@ -807,6 +797,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
+      effects: $effects`Wizard Squint`,
       outfit: vintnerOutfit,
       combat: StenchCombat,
     },

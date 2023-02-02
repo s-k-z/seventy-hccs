@@ -1,6 +1,7 @@
 import { CombatStrategy } from "grimoire-kolmafia";
 import {
   handlingChoice,
+  haveEquipped,
   Location,
   Monster,
   mpCost,
@@ -11,10 +12,12 @@ import {
   toUrl,
   useSkill,
   visitUrl,
+  weightAdjustment,
 } from "kolmafia";
-import { $item, $monster, $skill, get, Macro } from "libram";
+import { $item, $monster, $skill, get, getModifier, have, Macro } from "libram";
+import { haveItemOrEffect } from "./lib";
 
-export const notAllowList = [
+const notAllowList = [
   // protonic ghosts
   $monster`boneless blobghost`,
   $monster`Emily Koops, a spooky lime`,
@@ -111,24 +114,25 @@ const Backup = Macro.if_(
   Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
 );
 
-// Turbo used a flag to cast pride
-const Pride = Macro.if_(`hasskill ${toInt($skill`Turbo`)}`, Macro.trySkill($skill`Feel Pride`));
+export const DefaultMacro = () =>
+  Macro.skill($skill`Curse of Weaksauce`)
+    .skill($skill`Micrometeorite`)
+    .item($item`Time-Spinner`)
+    .if_(
+      `hasskill ${toInt($skill`lecture on relativity`)}`,
+      Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
+    )
+    .skill($skill`Sing Along`)
+    .externalIf(haveEquipped($item`makeshift garbage shirt`), Macro.trySkill($skill`Feel Pride`))
+    .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+    .attack()
+    .repeat();
 
-export const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
-  .skill($skill`Micrometeorite`)
-  .item($item`Time-Spinner`)
-  .if_(
-    `hasskill ${toInt($skill`lecture on relativity`)}`,
-    Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
-  )
-  .skill($skill`Sing Along`)
-  .step(Pride)
-  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-  .attack()
-  .repeat();
+export const DefaultStrategy = () => {
+  return new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort()));
+};
 
-export const DefaultCombat = new CombatStrategy()
-  .startingMacro(Macro.if_(notAllowList, Macro.abort()))
+export const DefaultCombat = DefaultStrategy()
   .macro(
     Macro.if_(
       `hasskill ${toInt($skill`Shoot Ghost`)}`,
@@ -179,12 +183,27 @@ export const DefaultCombat = new CombatStrategy()
     $monster`Mother Slime`
   )
   .macro(
+    () =>
+      Macro.externalIf(
+        !haveItemOrEffect($item`abstraction: joy`) && !have($item`abstraction: action`),
+        Macro.skill($skill`Feel Envy`)
+      ),
+    $monster`Performer of Actions`
+  )
+  .macro(
+    () =>
+      Macro.externalIf(
+        !haveItemOrEffect($item`abstraction: joy`),
+        Macro.tryItem($item`abstraction: action`)
+      ),
+    $monster`Thinker of Thoughts`
+  )
+  .macro(
     Backup.if_(
       `monsterid ${$monster`toxic beastie`.id}`,
       Macro.skill($skill`Summon Love Gnats`)
         .trySkill($skill`Bowl Sideways`)
         .skill($skill`Sing Along`)
-        .step(Pride)
         .trySkill($skill`Chest X-Ray`)
         .trySkill($skill`Shattering Punch`)
         .trySkill($skill`Gingerbread Mob Hit`)
@@ -208,13 +227,16 @@ export const DefaultCombat = new CombatStrategy()
   )
   .macro(DefaultMacro);
 
-export const StenchCombat = new CombatStrategy().macro(
-  Macro.if_(`monsterid ${$monster`toxic beastie`.id}`, Backup)
+export const StenchCombat = new CombatStrategy().macro(() => {
+  const weight = 20 + weightAdjustment();
+  const bonus = getModifier("Familiar Damage");
+  const maxVintnerDamage = 3 + weight + bonus;
+  const sum = maxVintnerDamage + 25; // safety margin
+  return Macro.if_(`monsterid ${$monster`toxic beastie`.id}`, Backup)
     .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
-    .if_(`monsterhpabove 300`, Macro.skill($skill`Curse of Weaksauce`))
-    .if_(`monsterhpabove 300`, Macro.skill($skill`Sing Along`))
-    .skill($skill`Garbage Nova`)
-);
+    .if_(`monsterhpabove ${sum}`, Macro.skill($skill`Sing Along`))
+    .skill($skill`Garbage Nova`);
+});
 
 export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 

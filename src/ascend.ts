@@ -72,7 +72,7 @@ export function prepAndAscendIfNecessary() {
       $path`Community Service`,
       $class`Sauceror`,
       Lifestyle.hardcore,
-      "wallaby",
+      "blender",
       $item`astral six-pack`,
       $item`astral trousers`,
       {
