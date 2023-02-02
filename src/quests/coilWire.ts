@@ -133,6 +133,18 @@ export const CoilWire: Quest<Task> = {
       do: () => SongBoom.setSong("Total Eclipse of Your Meat"),
     },
     {
+      name: "Become an Insectologist",
+      // eslint-disable-next-line libram/verify-constants
+      completed: () => have($skill`Insectologist`),
+      // eslint-disable-next-line libram/verify-constants
+      do: () => use($item`S.I.T. Course Completion Certificate`),
+      post: () => {
+        // eslint-disable-next-line libram/verify-constants
+        if (!have($skill`Insectologist`)) throw `Failed to finish your coursework?`;
+      },
+      choices: { 1494: 2 },
+    },
+    {
       name: "Acquire Necessary Things",
       completed: () => Array.from(toAcquire).every(([a]) => have(a)),
       do: () => {
