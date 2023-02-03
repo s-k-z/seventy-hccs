@@ -11065,7 +11065,7 @@ var CoilWire = {
       return {
         back: $item(_templateObject973 || (_templateObject973 = _taggedTemplateLiteral19(["unwrapped knock-off retro superhero cape"]))),
         offhand: $item(_templateObject983 || (_templateObject983 = _taggedTemplateLiteral19(["Kramco Sausage-o-Matic\u2122"]))),
-        familiar: selectBestFamiliar(AdvReq.NoAttack)
+        familiar: selectBestFamiliar()
       };
     },
     combat: DefaultCombat
