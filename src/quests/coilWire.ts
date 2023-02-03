@@ -306,7 +306,7 @@ export const CoilWire: Quest<Task> = {
       outfit: () => ({
         back: $item`unwrapped knock-off retro superhero cape`,
         offhand: $item`Kramco Sausage-o-Matic™`,
-        familiar: selectBestFamiliar(AdvReq.NoAttack),
+        familiar: selectBestFamiliar(),
       }),
       combat: DefaultCombat,
     },
