@@ -14,7 +14,7 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { $item, $monster, $skill, get, getModifier, have, Macro } from "libram";
+import { $item, $location, $monster, $skill, get, getModifier, have, Macro } from "libram";
 import { haveItemOrEffect } from "./lib";
 
 const notAllowList = [
@@ -109,11 +109,6 @@ const notAllowList = [
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
 
-const Backup = Macro.if_(
-  `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
-  Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
-);
-
 export const DefaultMacro = () =>
   Macro.skill($skill`Curse of Weaksauce`)
     .skill($skill`Micrometeorite`)
@@ -199,7 +194,10 @@ export const DefaultCombat = DefaultStrategy()
     $monster`Thinker of Thoughts`
   )
   .macro(
-    Backup.if_(
+    Macro.if_(
+      `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
+      Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
+    ).if_(
       `monsterid ${$monster`toxic beastie`.id}`,
       Macro.skill($skill`Summon Love Gnats`)
         .trySkill($skill`Bowl Sideways`)
@@ -231,10 +229,21 @@ export const StenchCombat = new CombatStrategy().macro(() => {
   const weight = 20 + weightAdjustment();
   const bonus = getModifier("Familiar Damage");
   const maxVintnerDamage = 3 + weight + bonus;
-  const sum = maxVintnerDamage + 25; // safety margin
-  return Macro.if_(`monsterid ${$monster`toxic beastie`.id}`, Backup)
+  const safe = maxVintnerDamage + 25;
+  return Macro.if_(
+    `monsterid ${$monster`toxic beastie`.id}`,
+    Macro.if_(
+      `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
+      Macro.skill($skill`Back-Up to your Last Enemy`)
+    )
+  )
     .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
-    .if_(`monsterhpabove ${sum}`, Macro.skill($skill`Sing Along`))
+    .skill($skill`Saucy Salve`)
+    .if_(
+      `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
+      Macro.trySkill($skill`Bowl a Curveball`)
+    )
+    .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
     .skill($skill`Garbage Nova`);
 });
 
