@@ -136,13 +136,13 @@ export const CoilWire: Quest<Task> = {
       name: "Become an Insectologist",
       // eslint-disable-next-line libram/verify-constants
       completed: () => have($skill`Insectologist`),
+      choices: { 1494: 2 },
       // eslint-disable-next-line libram/verify-constants
       do: () => use($item`S.I.T. Course Completion Certificate`),
       post: () => {
         // eslint-disable-next-line libram/verify-constants
         if (!have($skill`Insectologist`)) throw `Failed to finish your coursework?`;
       },
-      choices: { 1494: 2 },
     },
     {
       name: "Acquire Necessary Things",
@@ -197,7 +197,7 @@ export const CoilWire: Quest<Task> = {
       },
     },
     {
-      name: "Install Workshed 1",
+      name: "Install Workshed",
       completed: () => getWorkshed() === $item`Little Geneticist DNA-Splicing Lab`,
       do: () => use($item`Little Geneticist DNA-Splicing Lab`),
     },
