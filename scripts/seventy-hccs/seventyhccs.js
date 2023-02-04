@@ -10851,15 +10851,15 @@ var CoilWire = {
     completed: function() {
       return have($skill(_templateObject405 || (_templateObject405 = _taggedTemplateLiteral19(["Insectologist"]))));
     },
+    choices: {
+      1494: 2
+    },
     do: function() {
       return (0, import_kolmafia29.use)($item(_templateObject4111 || (_templateObject4111 = _taggedTemplateLiteral19(["S.I.T. Course Completion Certificate"]))));
     },
     post: function() {
       if (!have($skill(_templateObject427 || (_templateObject427 = _taggedTemplateLiteral19(["Insectologist"])))))
         throw "Failed to finish your coursework?";
-    },
-    choices: {
-      1494: 2
     }
   }, {
     name: "Acquire Necessary Things",
@@ -10941,7 +10941,7 @@ var CoilWire = {
       (0, import_kolmafia29.use)(Math.min((0, import_kolmafia29.itemAmount)(blob), Math.floor(((0, import_kolmafia29.myMaxmp)() - (0, import_kolmafia29.myMp)()) / 30)), blob);
     }
   }, {
-    name: "Install Workshed 1",
+    name: "Install Workshed",
     completed: function() {
       return (0, import_kolmafia29.getWorkshed)() === $item(_templateObject593 || (_templateObject593 = _taggedTemplateLiteral19(["Little Geneticist DNA-Splicing Lab"])));
     },
