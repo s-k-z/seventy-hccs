@@ -241,7 +241,7 @@ export const StenchCombat = new CombatStrategy().macro(() => {
     .skill($skill`Saucy Salve`)
     .if_(
       `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
-      Macro.trySkill($skill`Bowl a Curveball`)
+      Macro.trySkill($skill`Bowl Sideways`)
     )
     .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
     .skill($skill`Garbage Nova`);
