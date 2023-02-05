@@ -304,32 +304,6 @@ export const Leveling: Quest<Task> = {
       ],
     },
     {
-      name: "Christmas Card",
-      completed: () =>
-        haveItemOrEffect($item`Gene Tonic: Elf`) ||
-        get("_deckCardsSeen").includes("Christmas Card"),
-      do: () => cliExecute("cheat christmas card"),
-      post: () => {
-        DNALab.makeTonic();
-        use($item`Gene Tonic: Elf`);
-      },
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy()
-        .startingMacro(Macro.item($item`DNA extraction syringe`))
-        .macro(
-          Macro.skill($skill`Curse of Weaksauce`)
-            .skill($skill`Micrometeorite`)
-            .item($item`Time-Spinner`)
-            .skill($skill`Sing Along`)
-            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-            .attack()
-            .repeat(),
-          $monster`Black Crayon Crimbo Elf`
-        )
-        .macro(Macro.runaway()),
-    },
-    {
       name: "Advance Clock",
       completed: () => get("_gingerbreadClockAdvanced"),
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
@@ -344,14 +318,11 @@ export const Leveling: Quest<Task> = {
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkEffect($effect`Nanobrainy`),
       outfit: {
-        back: $item`vampyric cloake`,
         offhand: $item`latte lovers member's mug`,
         familiar: $familiar`Nanorhino`,
       },
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Entangling Noodles`)
-          .trySkill($skill`Giant Growth`)
-          .trySkill($skill`Become a Wolf`)
           .trySkill($skill`Throw Latte on Opponent`)
           .trySkill($skill`KGB tranquilizer dart`)
           .trySkill($skill`Reflex Hammer`)
@@ -429,17 +400,46 @@ export const Leveling: Quest<Task> = {
       do: $location`The Dire Warren`,
       post: () => checkEffect($effect`Do You Crush What I Crush?`),
       outfit: {
+        back: $item`vampyric cloake`,
         acc3: $item`Kremlin's Greatest Briefcase`,
         familiar: $familiar`Ghost of Crimbo Carols`,
       },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`Throw Latte on Opponent`)
+        Macro.trySkill($skill`Giant Growth`)
+          .trySkill($skill`Become a Wolf`)
+          .trySkill($skill`Bowl Straight Up`)
+          .trySkill($skill`Throw Latte on Opponent`)
           .trySkill($skill`KGB tranquilizer dart`)
           .trySkill($skill`Reflex Hammer`)
-          .trySkill($skill`Bowl a Curveball`)
           .trySkill($skill`Feel Hatred`)
           .abort()
       ),
+    },
+    {
+      name: "Christmas Card",
+      completed: () =>
+        haveItemOrEffect($item`Gene Tonic: Elf`) ||
+        get("_deckCardsSeen").includes("Christmas Card"),
+      do: () => cliExecute("cheat christmas card"),
+      post: () => {
+        DNALab.makeTonic();
+        use($item`Gene Tonic: Elf`);
+      },
+      effects: $effects`Ode to Booze`,
+      outfit: { familiar: $familiar`Frumious Bandersnatch` },
+      combat: new CombatStrategy()
+        .startingMacro(Macro.item($item`DNA extraction syringe`))
+        .macro(
+          Macro.skill($skill`Curse of Weaksauce`)
+            .skill($skill`Micrometeorite`)
+            .item($item`Time-Spinner`)
+            .skill($skill`Sing Along`)
+            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+            .attack()
+            .repeat(),
+          $monster`Black Crayon Crimbo Elf`
+        )
+        .macro(Macro.runaway()),
     },
     {
       name: "Tunnel of L.O.V.E.",
