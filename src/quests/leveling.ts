@@ -477,7 +477,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Chateau Rest",
       ready: () => have($item`LOV Epaulettes`) && myLevel() >= 8,
-      completed: () => get("timesRested") > totalFreeRests(),
+      completed: () => get("timesRested") >= totalFreeRests(),
       do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
       effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
       outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },

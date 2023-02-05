@@ -57,28 +57,6 @@ const questHandlers = new Map([
   ["questM25Armorer", "shop.php?whichshop=armory&action=talk"],
 ]);
 
-// prettier-ignore
-const toAcquire = new Map<Effect | Item | Skill, () => void>([
-  [$effect`The Odour of Magick`,         () => use($item`natural magick candle`)],
-  [$item`"I Voted!" sticker`,            () => vote()],
-  [$item`pantogram pants`,               () => getPantogramPants()],
-  [$item`battery (AAA)`,                 () => harvestBatteries()],
-  [$item`battery (lantern)`,             () => create($item`battery (lantern)`)],
-  [$item`box of Familiar Jacks`,         () => create($item`box of Familiar Jacks`)],
-  [$item`occult jelly donut`,            () => create($item`occult jelly donut`)],
-  [$item`Brutal brogues`,                () => cliExecute("bastille bbq brutalist catapult")],
-  [$item`cuppa Loyal tea`,               () => cliExecute("teatree loyal")],
-  [$item`green mana`,                    () => cliExecute("cheat forest")],
-  [$item`wrench`,                        () => cliExecute("cheat wrench")],
-  [$item`Yeg's Motel hand soap`,         () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
-  [$item`gold detective badge`,          () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
-  [$item`your cowboy boots`,             () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
-  [$item`weeping willow wand`,           () => { visitUrl("shop.php?whichshop=lathe"); create($item`weeping willow wand`); }],
-  [$item`sombrero-mounted sparkler`,     () => retrieveItem($item`sombrero-mounted sparkler`)], // -450 meat
-  [$item`toy accordion`,                 () => retrieveItem($item`toy accordion`)],             // -135 meat
-  [$skill`Seek out a Bird`,              () => use($item`Bird-a-Day calendar`)],
-]);
-
 const defaultOutfit = {
   hat: $item`Daylight Shavings Helmet`,
   back: $item`protonic accelerator pack`,
@@ -90,6 +68,14 @@ const defaultOutfit = {
   acc2: $item`Powerful Glove`,
   acc3: $item`Kremlin's Greatest Briefcase`,
 };
+
+function acquire(k: Effect | Item | Skill, callBack: () => void): Task {
+  return {
+    name: `Acquire ${k.name}`,
+    completed: () => have(k),
+    do: callBack,
+  };
+}
 
 export const CoilWire: Quest<Task> = {
   name: "Coil Wire",
@@ -139,16 +125,34 @@ export const CoilWire: Quest<Task> = {
       choices: { 1494: 2 },
       // eslint-disable-next-line libram/verify-constants
       do: () => use($item`S.I.T. Course Completion Certificate`),
-      post: () => {
-        // eslint-disable-next-line libram/verify-constants
-        if (!have($skill`Insectologist`)) throw `Failed to finish your coursework?`;
-      },
     },
+    // prettier-ignore
+    ...(
+      [
+        [$effect`The Odour of Magick`, () => use($item`natural magick candle`)],
+        [$item`"I Voted!" sticker`,    () => vote()],
+        [$item`pantogram pants`,       () => getPantogramPants()],
+        [$item`battery (AAA)`,         () => harvestBatteries()],
+        [$item`battery (lantern)`,     () => create($item`battery (lantern)`)],
+        [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
+        [$item`occult jelly donut`,    () => create($item`occult jelly donut`)],
+        [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
+        [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
+        [$item`green mana`,            () => cliExecute("cheat forest")],
+        [$item`wrench`,                () => cliExecute("cheat wrench")],
+        [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
+        [$item`gold detective badge`,  () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
+        [$item`your cowboy boots`,     () => visitUrl("place.php?whichplace=town_right&action=townright_ltt")],
+        [$item`weeping willow wand`,   () => { visitUrl("shop.php?whichshop=lathe"); create($item`weeping willow wand`); }],
+        [$item`toy accordion`,         () => retrieveItem($item`toy accordion`)], // -135 meat
+        [$skill`Seek out a Bird`,      () => use($item`Bird-a-Day calendar`)],
+      ] as [Effect | Item | Skill, () => void][]
+    ).map(([a, b]) => acquire(a,b)),
     {
-      name: "Acquire Necessary Things",
-      completed: () => Array.from(toAcquire).every(([a]) => have(a)),
+      name: "Acquire Sombrero",
+      completed: () => have($item`sombrero-mounted sparkler`),
       do: () => {
-        for (const [want, acquire] of toAcquire) if (!have(want)) acquire();
+        retrieveItem($item`sombrero-mounted sparkler`); // -450 meat
         checkAvailable($item`sombrero-mounted sparkler`);
       },
     },

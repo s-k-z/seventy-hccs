@@ -1,7 +1,6 @@
 import { CombatStrategy } from "grimoire-kolmafia";
 import {
   handlingChoice,
-  haveEquipped,
   Location,
   Monster,
   mpCost,
@@ -109,19 +108,17 @@ const notAllowList = [
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
 
-export const DefaultMacro = () =>
-  Macro.skill($skill`Curse of Weaksauce`)
-    .skill($skill`Micrometeorite`)
-    .item($item`Time-Spinner`)
-    .if_(
-      `hasskill ${toInt($skill`lecture on relativity`)}`,
-      Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
-    )
-    .skill($skill`Sing Along`)
-    .externalIf(haveEquipped($item`makeshift garbage shirt`), Macro.trySkill($skill`Feel Pride`))
-    .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-    .attack()
-    .repeat();
+export const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
+  .skill($skill`Micrometeorite`)
+  .item($item`Time-Spinner`)
+  .if_(
+    `hasskill ${toInt($skill`lecture on relativity`)}`,
+    Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
+  )
+  .skill($skill`Sing Along`)
+  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+  .attack()
+  .repeat();
 
 export const DefaultStrategy = () => {
   return new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort()));
@@ -242,6 +239,10 @@ export const StenchCombat = new CombatStrategy().macro(() => {
     .if_(
       `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
       Macro.trySkill($skill`Bowl Sideways`)
+    )
+    .externalIf(
+      get("garbageShirtCharge") <= 4 && get("cosmicBowlingBallReturnCombats") > 0,
+      Macro.if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Feel Pride`))
     )
     .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
     .skill($skill`Garbage Nova`);
