@@ -209,9 +209,35 @@ export const Leveling: Quest<Task> = {
       do: () => useSkill($skill`Summon Alice's Army Cards`), // 5 mp
     },
     {
+      name: "Synthesize Learning",
+      completed: () => have($effect`Synthesis: Learning`),
+      do: () => {
+        cliExecute("garden pick");
+        const peppermints = tuple($item`peppermint patty`, $item`peppermint twist`);
+        for (const p of peppermints) if (!have(p)) create(p);
+        sweetSynthesis(...peppermints);
+      },
+    },
+    {
+      name: "Synthesize Smart",
+      completed: () => have($effect`Synthesis: Smart`),
+      do: () => {
+        useSkill($skill`Chubby and Plump`); // 50 mp
+        sweetSynthesis($item`Chubby and Plump bar`, $item`bag of many confections`);
+      },
+    },
+    {
       name: "Eat a donut",
       completed: () => have($effect`Filled with Magic`),
       do: () => eat($item`occult jelly donut`), // 3-4 adventures, 1 full
+      effects: $effects`Inscrutable Gaze`, // 10 mp
+    },
+    {
+      name: "Drink Speakeasy",
+      completed: () => have($effect`In a Lather`),
+      prepare: () => Clan.join(config.main_clan),
+      do: () => acquireEffect($effect`In a Lather`), // 7-9 adventures, 2 drunk, -500 meat
+      effects: $effects`Ode to Booze`, // 50 mp
     },
     {
       name: "Use box of familiar jacks",
@@ -241,68 +267,6 @@ export const Leveling: Quest<Task> = {
         equip($slot`acc2`, $item`Powerful Glove`);
         acquireEffect($effect`Triple-Sized`);
       },
-    },
-    {
-      name: "Wanderer Sweep",
-      completed: () => get("_speakeasyFreeFights") >= 3,
-      do: $location`An Unusually Quiet Barroom Brawl`,
-      post: () => visitUrl("place.php?whichplace=speakeasy"),
-      outfit: { familiar: selectBestFamiliar() },
-      combat: new CombatStrategy().macro(DefaultMacro), // Don't abort on unexpected monsters
-      effects: [
-        $effect`Broad-Spectrum Vaccine`,
-        $effect`Favored by Lyle`,
-        $effect`Grumpy and Ornery`,
-        $effect`Hustlin'`,
-        $effect`Mental A-cue-ity`,
-        $effect`Pisces in the Skyces`,
-        $effect`Sigils of Yeg`,
-        $effect`Starry-Eyed`,
-        $effect`Total Protonic Reversal`,
-        $effect`Warlock, Warstock, and Warbarrel`,
-        $effect`items.enh`,
-        $effect`meat.enh`,
-        // Beach comb (requres >0 turns available)
-        $effect`Cold as Nice`,
-        $effect`A Brush with Grossness`,
-        $effect`Do I Know You From Somewhere?`,
-        $effect`Does It Have a Skull In There??`,
-        $effect`Hot-Headed`,
-        $effect`Lack of Body-Building`,
-        $effect`Oiled, Slick`,
-        $effect`Pomp & Circumsands`,
-        $effect`Resting Beach Face`,
-        $effect`We're All Made of Starfish`,
-        $effect`You Learned Something Maybe!`,
-        // Skills
-        $effect`Big`, // 15 mp
-        $effect`Blessing of the Bird`, // 10 mp
-        $effect`Blessing of your favorite Bird`, // 50 mp
-        $effect`Blood Bubble`,
-        $effect`Carol of the Bulls`, // 30 mp
-        $effect`Carol of the Hells`, // 30 mp
-        $effect`Carol of the Thrills`, // 30 mp
-        $effect`Feeling Excited`,
-        $effect`Feeling Peaceful`,
-        $effect`Frenzied, Bloody`,
-        $effect`Inscrutable Gaze`, // 10 mp
-        $effect`Ruthlessly Efficient`, // 10 mp
-        $effect`Singer's Faithful Ocelot`, // 15 mp
-        // Class skills
-        $effect`Astral Shell`, // 10 mp
-        $effect`Elemental Saucesphere`, // 10 mp
-        $effect`Ghostly Shell`, // 6 mp
-        $effect`Sauce Monocle`, // 20 mp
-        $effect`Springy Fusilli`, // 10 mp
-        // Song(s)
-        $effect`Ode to Booze`, // 50 mp
-        $effect`Polka of Plenty`, // 7 mp
-        // Dread Song
-        $effect`Song of Sauce`, // 100 mp
-        // Batteries
-        $effect`AAA-Charged`, // +30 MP
-        $effect`Lantern-Charged`, // +70 MP
-      ],
     },
     {
       name: "Advance Clock",
@@ -362,31 +326,6 @@ export const Leveling: Quest<Task> = {
       completed: () => $effects`All Is Forgiven, Sparkly!, Witch Breaded`.every((e) => have(e)),
       do: () => $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect),
     },
-    {
-      name: "Drink Speakeasy",
-      completed: () => have($effect`In a Lather`),
-      prepare: () => Clan.join(config.main_clan),
-      do: () => acquireEffect($effect`In a Lather`), // 7-9 adventures, 2 drunk, -500 meat
-      effects: $effects`Ode to Booze`,
-    },
-    {
-      name: "Synthesize Learning",
-      completed: () => have($effect`Synthesis: Learning`),
-      do: () => {
-        cliExecute("garden pick");
-        const peppermints = tuple($item`peppermint patty`, $item`peppermint twist`);
-        for (const p of peppermints) if (!have(p)) create(p);
-        sweetSynthesis(...peppermints);
-      },
-    },
-    {
-      name: "Synthesize Smart",
-      completed: () => have($effect`Synthesis: Smart`),
-      do: () => {
-        useSkill($skill`Chubby and Plump`); // 50 mp
-        sweetSynthesis($item`Chubby and Plump bar`, $item`bag of many confections`);
-      },
-    },
     innerElf(),
     {
       name: "Crimbo Carol",
@@ -443,6 +382,85 @@ export const Leveling: Quest<Task> = {
         .macro(Macro.runaway()),
     },
     {
+      name: "Wanderer Sweep",
+      completed: () => get("_speakeasyFreeFights") >= 3,
+      do: $location`An Unusually Quiet Barroom Brawl`,
+      post: () => visitUrl("place.php?whichplace=speakeasy"),
+      outfit: { familiar: selectBestFamiliar() },
+      combat: new CombatStrategy().macro(DefaultMacro), // Don't abort on unexpected monsters
+      effects: [
+        $effect`Broad-Spectrum Vaccine`,
+        $effect`Favored by Lyle`,
+        $effect`Grumpy and Ornery`,
+        $effect`Hustlin'`,
+        $effect`Mental A-cue-ity`,
+        $effect`Pisces in the Skyces`,
+        $effect`Sigils of Yeg`,
+        $effect`Starry-Eyed`,
+        $effect`Total Protonic Reversal`,
+        $effect`Warlock, Warstock, and Warbarrel`,
+        $effect`items.enh`,
+        $effect`meat.enh`,
+        // Beach comb (requres >0 turns available)
+        $effect`Cold as Nice`,
+        $effect`A Brush with Grossness`,
+        $effect`Do I Know You From Somewhere?`,
+        $effect`Does It Have a Skull In There??`,
+        $effect`Hot-Headed`,
+        $effect`Lack of Body-Building`,
+        $effect`Oiled, Slick`,
+        $effect`Pomp & Circumsands`,
+        $effect`Resting Beach Face`,
+        $effect`We're All Made of Starfish`,
+        $effect`You Learned Something Maybe!`,
+        // Skills
+        $effect`Big`, // 15 mp
+        $effect`Blessing of the Bird`, // 10 mp
+        $effect`Blessing of your favorite Bird`, // 50 mp
+        $effect`Blood Bubble`,
+        $effect`Carol of the Bulls`, // 30 mp
+        $effect`Carol of the Hells`, // 30 mp
+        $effect`Carol of the Thrills`, // 30 mp
+        $effect`Feeling Excited`,
+        $effect`Feeling Peaceful`,
+        $effect`Frenzied, Bloody`,
+        $effect`Inscrutable Gaze`, // 10 mp, used above
+        $effect`Ruthlessly Efficient`, // 10 mp
+        $effect`Singer's Faithful Ocelot`, // 15 mp
+        // Class skills
+        $effect`Astral Shell`, // 10 mp
+        $effect`Elemental Saucesphere`, // 10 mp
+        $effect`Flimsy Shield of the Pastalord`,
+        $effect`Ghostly Shell`, // 6 mp
+        $effect`Sauce Monocle`, // 20 mp
+        $effect`Springy Fusilli`, // 10 mp
+        // Song(s)
+        $effect`Ode to Booze`, // 50 mp
+        $effect`Polka of Plenty`, // 7 mp
+        // Batteries
+        $effect`AAA-Charged`, // +30 MP
+        $effect`Lantern-Charged`, // +70 MP
+        // Dread Song
+        $effect`Song of Sauce`, // 100 mp
+      ],
+    },
+    {
+      name: "Ten-percent Bonus",
+      ready: () => have($item`LOV Epaulettes`),
+      completed: () => !have($item`a ten-percent bonus`),
+      do: () => use($item`a ten-percent bonus`),
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
+      outfit: { offhand: $item`familiar scrapbook` },
+    },
+    {
+      name: "Chateau Rest",
+      ready: () => have($item`LOV Epaulettes`) && myLevel() >= 8,
+      completed: () => get("timesRested") >= totalFreeRests(),
+      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
+      outfit: { offhand: $item`familiar scrapbook` },
+    },
+    {
       name: "Tunnel of L.O.V.E.",
       completed: () => get("_loveTunnelUsed"),
       prepare: () => {
@@ -468,22 +486,6 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Ten-percent Bonus",
-      ready: () => have($item`LOV Epaulettes`),
-      completed: () => !have($item`a ten-percent bonus`),
-      do: () => use($item`a ten-percent bonus`),
-      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
-      outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },
-    },
-    {
-      name: "Chateau Rest",
-      ready: () => have($item`LOV Epaulettes`) && myLevel() >= 8,
-      completed: () => get("timesRested") >= totalFreeRests(),
-      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
-      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
-      outfit: { back: $item`LOV Epaulettes`, offhand: $item`familiar scrapbook` },
-    },
-    {
       name: "Witchess Rook",
       completed: () => haveItemOrEffect($item`Greek fire`),
       prepare: () => cliExecute("umbrella ml"),
@@ -493,7 +495,6 @@ export const Leveling: Quest<Task> = {
         use($item`Greek fire`);
       },
       effects: [
-        $effect`Flimsy Shield of the Pastalord`,
         $effect`Drescher's Annoying Noise`,
         $effect`Pride of the Puffin`,
         // Song(s)
@@ -533,12 +534,12 @@ export const Leveling: Quest<Task> = {
       post: () => checkAvailable($item`sprinkles`, 50),
       outfit: {
         hat: $item`Daylight Shavings Helmet`,
-        back: $item`protonic accelerator pack`,
+        back: levelingOutfit.back,
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $items`burning paper crane, rope, familiar scrapbook`,
         acc1: $item`hewn moon-rune spoon`,
         acc2: $item`Brutal brogues`,
-        acc3: $item`Lil' Doctor™ bag`,
+        acc3: $item`Beach Comb`,
         familiar: $familiar`Chocolate Lab`,
       },
       combat: DefaultCombat,
