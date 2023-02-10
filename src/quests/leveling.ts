@@ -14,7 +14,6 @@ import {
   myBasestat,
   myFamiliar,
   myHp,
-  myLevel,
   myMaxhp,
   myMaxmp,
   myMeat,
@@ -446,7 +445,6 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Ten-percent Bonus",
-      ready: () => have($item`LOV Epaulettes`),
       completed: () => !have($item`a ten-percent bonus`),
       do: () => use($item`a ten-percent bonus`),
       effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
@@ -454,7 +452,6 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Chateau Rest",
-      ready: () => have($item`LOV Epaulettes`) && myLevel() >= 8,
       completed: () => get("timesRested") >= totalFreeRests(),
       do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
       effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
