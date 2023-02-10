@@ -10880,6 +10880,9 @@ var CoilWire = {
     completed: function() {
       return have($item(_templateObject405 || (_templateObject405 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
     },
+    prepare: function() {
+      return Clan.join(config.main_clan);
+    },
     do: function() {
       (0, import_kolmafia29.retrieveItem)($item(_templateObject4111 || (_templateObject4111 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
       checkAvailable($item(_templateObject427 || (_templateObject427 = _taggedTemplateLiteral19(["sombrero-mounted sparkler"]))));
