@@ -27,7 +27,6 @@ export const WeaponDamageQuest: Quest<Task> = {
       completed: () => have($effect`Meteor Showered`),
       prepare: () => use($item`tiny bottle of absinthe`),
       do: () => mapMonster($location`The Stately Pleasure Dome`, $monster`toothless mastiff bitch`),
-      post: () => use($item`disintegrating spiky collar`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
