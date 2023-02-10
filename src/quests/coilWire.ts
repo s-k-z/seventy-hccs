@@ -30,6 +30,7 @@ import {
   $skill,
   $slot,
   AutumnAton,
+  Clan,
   CommunityService,
   CrimboShrub,
   DNALab,
@@ -151,6 +152,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Acquire Sombrero",
       completed: () => have($item`sombrero-mounted sparkler`),
+      prepare: () => Clan.join(config.main_clan),
       do: () => {
         retrieveItem($item`sombrero-mounted sparkler`); // -450 meat
         checkAvailable($item`sombrero-mounted sparkler`);
