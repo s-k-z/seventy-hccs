@@ -12,7 +12,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { acquireEffect } from "../lib";
+import { acquireEffect, itemToEffect } from "../lib";
 import { runTest, tuneMoonPlatypus } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
@@ -39,6 +39,11 @@ export const FamiliarWeightQuest: Quest<Task> = {
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
         const needMore = (): boolean => weightAdjustment() < 275;
+        const haveUnused = (i: Item): boolean => have(i) && !have(itemToEffect(i));
+        if (needMore() && haveUnused($item`resolution: be kinder`)) {
+          use($item`resolution: be kinder`);
+        }
+        if (needMore() && haveUnused($item`green candy heart`)) use($item`green candy heart`);
         const librams: [number, Item][] = [
           [4, $item`love song of icy revenge`],
           [5, $item`pulled blue taffy`],

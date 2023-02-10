@@ -75,6 +75,7 @@ import { AdvReq, deepDarkVisions, innerElf, refreshGhost, selectBestFamiliar } f
 const levelingOutfit = {
   hat: $item`Daylight Shavings Helmet`,
   back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
+  shirt: $item`Jurassic Parka`,
   weapon: $item`Fourth of May Cosplay Saber`,
   offhand: $item`unbreakable umbrella`,
   pants: $item`Cargo Cultist Shorts`,
@@ -111,7 +112,7 @@ function getHowManySausagesToEat(): number {
   if (offset >= 23) return 0;
 
   const costsOfNext = [...Array(24).keys()].map((k) => k * 111).splice(1);
-  const mpRefills = (myMaxmp() - myMp()) / 999;
+  const mpRefills = Math.floor((myMaxmp() - myMp()) / 999);
   let toEat = 0;
   let totalCost = 0;
   while (toEat < mpRefills && toEat + offset < costsOfNext.length) {
@@ -176,7 +177,7 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Use Potions",
-      completed: () => getPotionsToUse().length === 0,
+      completed: () => get("_neverendingPartyFreeTurns") >= 10 || getPotionsToUse().length === 0,
       do: () => getPotionsToUse().forEach(([potion, count]) => use(count, potion)),
     },
     {
@@ -806,15 +807,25 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_latteRefillsUsed") >= 3,
       prepare: () => {
         if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
+        cliExecute("parka mp");
+        cliExecute("retrocape myst");
       },
       do: $location`The Dire Warren`,
       effects: $effects`Ode to Booze`,
       outfit: {
+        back: $item`unwrapped knock-off retro superhero cape`,
+        shirt: $item`Jurassic Parka`,
         offhand: $item`latte lovers member's mug`,
         pants: $item`Cargo Cultist Shorts`,
+        acc2: $items`battle broom`,
+        acc3: $item`"I Voted!" sticker`,
         familiar: $familiar`Frumious Bandersnatch`,
       },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill`Gulp Latte`).runaway()),
+      combat: new CombatStrategy().macro(() =>
+        Macro.trySkill($skill`Gulp Latte`)
+          .externalIf(get("_latteRefillsUsed") < 3, Macro.trySkill($skill`Throw Latte on Opponent`))
+          .runaway()
+      ),
     },
   ],
 };
