@@ -821,7 +821,8 @@ export const Leveling: Quest<Task> = {
       },
       combat: new CombatStrategy().macro(() =>
         Macro.trySkill($skill`Gulp Latte`)
-          .externalIf(get("_latteRefillsUsed") < 3, Macro.trySkill($skill`Throw Latte on Opponent`))
+          // 3rd refil occurs after macro is evaluated
+          .externalIf(get("_latteRefillsUsed") < 2, Macro.trySkill($skill`Throw Latte on Opponent`))
           .runaway()
       ),
     },
