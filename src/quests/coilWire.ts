@@ -1,4 +1,4 @@
-import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { CombatStrategy, OutfitSpec, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
   cliExecute,
@@ -58,7 +58,7 @@ const questHandlers = new Map([
   ["questM25Armorer", "shop.php?whichshop=armory&action=talk"],
 ]);
 
-const defaultOutfit = {
+const defaultOutfit: OutfitSpec = {
   hat: $item`Daylight Shavings Helmet`,
   back: $item`protonic accelerator pack`,
   shirt: $item`Jurassic Parka`,
@@ -68,6 +68,7 @@ const defaultOutfit = {
   acc1: $item`hewn moon-rune spoon`,
   acc2: $item`Powerful Glove`,
   acc3: $item`Kremlin's Greatest Briefcase`,
+  modes: { parka: "dilophosaur" },
 };
 
 function acquire(k: Effect | Item | Skill, callBack: () => void): Task {
@@ -175,7 +176,6 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Setup & Heal",
       completed: () => get("_hotTubSoaks") > 0,
-      prepare: () => cliExecute("parka acid"),
       do: () => {
         cliExecute("hottub");
         const target = toFamiliar(config.stillsuit);
@@ -236,7 +236,6 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Ninja Costume",
       completed: () => have($item`li'l ninja costume`),
-      prepare: () => cliExecute("parka acid"),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
       post: () => refreshGhost(),
@@ -244,6 +243,7 @@ export const CoilWire: Quest<Task> = {
         back: $item`protonic accelerator pack`,
         shirt: $item`Jurassic Parka`,
         familiar: selectBestFamiliar(AdvReq.NoAttack),
+        modes: { parka: "dilophosaur" },
       }),
       combat: new CombatStrategy()
         .macro(
@@ -308,12 +308,12 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Sausage Goblin",
       completed: () => get("_sausageFights") > 0,
-      prepare: () => cliExecute("retrocape heck thrill"),
       do: $location`Noob Cave`,
       outfit: () => ({
         back: $item`unwrapped knock-off retro superhero cape`,
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: selectBestFamiliar(),
+        modes: { retrocape: ["heck", "thrill"] },
       }),
       combat: DefaultCombat,
     },
@@ -337,11 +337,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Coil Wire",
       completed: () => CommunityService.CoilWire.isDone(),
-      prepare: () => {
-        spendAllMpOnLibrams();
-        cliExecute("parka mp");
-        cliExecute("retrocape heck thrill");
-      },
+      prepare: spendAllMpOnLibrams,
       do: () => runTest(CommunityService.CoilWire),
       effects: [$effect`[1458]Blood Sugar Sauce Magic`], // 1457 for other classes
       outfit: {
@@ -354,6 +350,7 @@ export const CoilWire: Quest<Task> = {
         acc1: $item`hewn moon-rune spoon`,
         acc2: $item`Retrospecs`,
         acc3: $item`Kremlin's Greatest Briefcase`,
+        modes: { parka: "ghostasaurus", retrocape: ["heck", "thrill"] },
       },
     },
   ],

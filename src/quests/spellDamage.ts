@@ -67,7 +67,6 @@ export const SpellDamageQuest: Quest<Task> = {
     {
       name: "Spell Damage Test",
       completed: () => CommunityService.SpellDamage.isDone(),
-      prepare: () => cliExecute("umbrella spell"),
       do: () => runTest(CommunityService.SpellDamage),
       post: () => equip($slot`familiar`, $item`none`),
       effects: [
@@ -110,6 +109,7 @@ export const SpellDamageQuest: Quest<Task> = {
         acc3: $item`Kremlin's Greatest Briefcase`,
         famequip: $items`Abracandalabra, unbreakable umbrella`,
         familiar: $familiar`Left-Hand Man`,
+        modes: { umbrella: "constantly twirling" },
       },
     },
   ],

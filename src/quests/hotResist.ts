@@ -1,5 +1,4 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -38,10 +37,6 @@ export const HotResistQuest: Quest<Task> = {
     {
       name: "Hot Resist Test",
       completed: () => CommunityService.HotRes.isDone(),
-      prepare: () => {
-        cliExecute("parka hot");
-        cliExecute("retrocape vampire hold");
-      },
       do: () => runTest(CommunityService.HotRes),
       effects: [
         $effect`Astral Shell`,
@@ -60,6 +55,7 @@ export const HotResistQuest: Quest<Task> = {
         acc2: $item`hewn moon-rune spoon`,
         acc3: $item`Beach Comb`,
         familiar: $familiar`Exotic Parrot`,
+        modes: { parka: "pterodactyl", retrocape: ["vampire", "hold"] },
       },
     },
   ],

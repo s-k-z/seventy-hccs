@@ -1,5 +1,4 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute } from "kolmafia";
 import { $effect, $effects, $item, $items, CommunityService } from "libram";
 import { runTest } from "./shared";
 
@@ -9,7 +8,6 @@ export const HPQuest: Quest<Task> = {
     {
       name: "HP Test",
       completed: () => CommunityService.HP.isDone(),
-      prepare: () => cliExecute("parka hp"),
       do: () => runTest(CommunityService.HP),
       acquire: [{ item: $item`wad of used tape` }],
       effects: $effects`Song of Starch`,
@@ -19,6 +17,7 @@ export const HPQuest: Quest<Task> = {
         shirt: $item`Jurassic Parka`,
         offhand: $item`unbreakable umbrella`,
         pants: $item`Cargo Cultist Shorts`,
+        modes: { parka: "kachungasaur" },
       },
     },
   ],
@@ -30,7 +29,6 @@ export const MoxieQuest: Quest<Task> = {
     {
       name: "Moxie Test",
       completed: () => CommunityService.Moxie.isDone(),
-      prepare: () => cliExecute("retrocape moxie"),
       do: () => runTest(CommunityService.Moxie),
       effects: $effects`Disco Fever, Quiet Desperation, Sparkly!`,
       outfit: {
@@ -41,6 +39,7 @@ export const MoxieQuest: Quest<Task> = {
         acc1: $item`your cowboy boots`,
         acc2: $item`Beach Comb`,
         acc3: $item`"I Voted!" sticker`,
+        modes: { retrocape: ["robot", undefined] },
       },
     },
   ],
@@ -52,7 +51,6 @@ export const MuscleQuest: Quest<Task> = {
     {
       name: "Muscle Test",
       completed: () => CommunityService.Muscle.isDone(),
-      prepare: () => cliExecute("retrocape muscle"),
       do: () => runTest(CommunityService.Muscle),
       acquire: [{ item: $item`wad of used tape` }],
       effects: [$effect`Giant Growth`, $effect`Quiet Determination`, $effect`Rage of the Reindeer`],
@@ -63,6 +61,7 @@ export const MuscleQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         acc1: $item`Brutal brogues`,
         acc3: $item`"I Voted!" sticker`,
+        modes: { retrocape: ["vampire", undefined] },
       },
     },
   ],
@@ -74,7 +73,6 @@ export const MysticalityQuest: Quest<Task> = {
     {
       name: "Mysticality Test",
       completed: () => CommunityService.Mysticality.isDone(),
-      prepare: () => cliExecute("retrocape myst"),
       do: () => runTest(CommunityService.Mysticality),
       acquire: [{ item: $item`wad of used tape` }],
       effects: $effects`Nanobrainy, Quiet Judgement, Witch Breaded`,
@@ -84,6 +82,7 @@ export const MysticalityQuest: Quest<Task> = {
         weapon: $item`Fourth of May Cosplay Saber`,
         acc1: $item`battle broom`,
         acc3: $item`"I Voted!" sticker`,
+        modes: { retrocape: ["heck", undefined] },
       },
     },
   ],

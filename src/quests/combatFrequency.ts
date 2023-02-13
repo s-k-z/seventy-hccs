@@ -1,5 +1,4 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { cliExecute } from "kolmafia";
 import { $effect, $familiar, $item, CommunityService } from "libram";
 import { darkHorse, runTest } from "./shared";
 
@@ -11,10 +10,6 @@ export const CombatFrequencyQuest: Quest<Task> = {
     {
       name: "Non-Combat Frequency Test",
       completed: () => CommunityService.Noncombat.isDone(),
-      prepare: () => {
-        cliExecute("parka nc");
-        cliExecute("umbrella nc");
-      },
       do: () => runTest(CommunityService.Noncombat),
       effects: [
         $effect`Feeling Lonely`,
@@ -33,6 +28,7 @@ export const CombatFrequencyQuest: Quest<Task> = {
         acc2: $item`atlas of local maps`,
         acc3: $item`Kremlin's Greatest Briefcase`,
         familiar: $familiar`Disgeist`,
+        modes: { parka: "pterodactyl", umbrella: "cocoon" },
       },
     },
   ],

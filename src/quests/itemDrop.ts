@@ -1,5 +1,4 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute } from "kolmafia";
 import {
   $effect,
   $effects,
@@ -28,7 +27,6 @@ export const ItemDropQuest: Quest<Task> = {
     {
       name: "Booze & Item Drop Test",
       completed: () => CommunityService.BoozeDrop.isDone(),
-      prepare: () => cliExecute("umbrella item"),
       do: () => runTest(CommunityService.BoozeDrop),
       acquire: [{ item: $item`wad of used tape` }],
       effects: [
@@ -63,6 +61,7 @@ export const ItemDropQuest: Quest<Task> = {
         acc3: $item`your cowboy boots`,
         famequip: $item`li'l ninja costume`,
         familiar: $familiar`Trick-or-Treating Tot`,
+        modes: { umbrella: "bucket style" },
       },
     },
   ],

@@ -1,4 +1,4 @@
-import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
+import { CombatStrategy, OutfitSpec, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
   autosell,
@@ -67,7 +67,7 @@ import {
 } from "../lib";
 import { AdvReq, deepDarkVisions, innerElf, refreshGhost, selectBestFamiliar } from "./shared";
 
-function levelingOutfit(cap?: number) {
+function levelingOutfit(cap?: number): OutfitSpec {
   const multiplyML = myBuffedstat(myPrimestat()) < (cap ?? Infinity);
   return {
     hat: $item`Daylight Shavings Helmet`,
@@ -79,10 +79,11 @@ function levelingOutfit(cap?: number) {
     acc1: $item`hewn moon-rune spoon`,
     acc2: $items`battle broom, gold detective badge`,
     acc3: $item`Beach Comb`,
+    modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
   };
 }
 
-const vintnerOutfit = () => ({
+const vintnerOutfit = (): OutfitSpec => ({
   hat: $item`Iunion Crown`,
   back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
   shirt: get("garbageShirtCharge") > 0 ? $item`makeshift garbage shirt` : $item`Jurassic Parka`,
@@ -93,6 +94,7 @@ const vintnerOutfit = () => ({
   acc2: $items`battle broom, gold detective badge`,
   acc3: get("_backUpUses") < 11 ? $item`backup camera` : $item`Kremlin's Greatest Briefcase`,
   familiar: selectBestFamiliar(AdvReq.Wine),
+  modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
 });
 
 function getHowManySausagesToEat(): number {
@@ -432,10 +434,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Tunnel of L.O.V.E.",
       completed: () => get("_loveTunnelUsed"),
-      prepare: () => {
-        spendAllMpOnLibrams();
-        cliExecute("retrocape heck thrill");
-      },
+      prepare: spendAllMpOnLibrams,
       // 1222 The Tunnel of L.O.V.E.: (1) enter the tunnel (2) leave
       // 1223 L.O.V. Entrance: (1) fight the enforcer (2) skip
       // 1224 L.O.V. Equipment Room: (1) take the cardigan (2) take the epaulettes (3) take the earrings (4) skip
@@ -453,11 +452,6 @@ export const Leveling: Quest<Task> = {
       },
       outfit: () => ({ ...levelingOutfit(10000), familiar: selectBestFamiliar(AdvReq.NoAttack) }),
       combat: DefaultCombat,
-    },
-    {
-      name: "Configure Umbrella",
-      completed: () => get("umbrellaState") === "broken",
-      do: () => cliExecute("umbrella ml"),
     },
     {
       name: "Witchess Rook",
@@ -780,8 +774,6 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_latteRefillsUsed") >= 3,
       prepare: () => {
         if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
-        cliExecute("parka mp");
-        cliExecute("retrocape myst");
       },
       do: $location`The Dire Warren`,
       effects: $effects`Ode to Booze`,
@@ -793,6 +785,7 @@ export const Leveling: Quest<Task> = {
         acc2: $items`battle broom`,
         acc3: $item`"I Voted!" sticker`,
         familiar: $familiar`Frumious Bandersnatch`,
+        modes: { parka: "ghostasaurus", retrocape: ["heck", "hold"] },
       },
       combat: new CombatStrategy().macro(() =>
         Macro.trySkill($skill`Gulp Latte`)

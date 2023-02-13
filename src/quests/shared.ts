@@ -94,10 +94,6 @@ export function deepDarkVisions(): Task {
     name: "Deep Dark Visions",
     ready: () => myMaxhp() > 500,
     completed: () => have($effect`Visions of the Deep Dark Deeps`),
-    prepare: () => {
-      cliExecute("parka spooky");
-      cliExecute("retrocape vampire hold");
-    },
     do: () => {
       if (myMaxhp() < safeHpLimit()) throw `Not enough HP for deep dark visions`;
       if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
@@ -113,6 +109,7 @@ export function deepDarkVisions(): Task {
       pants: $item`pantogram pants`,
       acc3: $item`Kremlin's Greatest Briefcase`,
       familiar: $familiar`Exotic Parrot`,
+      modes: { parka: "ghostasaurus", retrocape: ["vampire", "hold"] },
     },
   };
 }

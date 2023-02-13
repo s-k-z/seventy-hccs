@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, equip, use } from "kolmafia";
+import { equip, use } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -40,7 +40,6 @@ export const WeaponDamageQuest: Quest<Task> = {
     {
       name: "Weapon Damage Test",
       completed: () => CommunityService.WeaponDamage.isDone(),
-      prepare: () => cliExecute("umbrella weapon"),
       do: () => runTest(CommunityService.WeaponDamage),
       post: () => equip($slot`familiar`, $item`none`),
       acquire: [{ item: $item`broken champagne bottle` }],
@@ -74,6 +73,7 @@ export const WeaponDamageQuest: Quest<Task> = {
         acc2: $item`Brutal brogues`,
         famequip: $item`broken champagne bottle`,
         familiar: $familiar`Disembodied Hand`,
+        modes: { umbrella: "pitchfork style" },
       },
     },
   ],
