@@ -23,7 +23,6 @@ import {
   runChoice,
   soulsauceCost,
   sweetSynthesis,
-  toInt,
   totalFreeRests,
   use,
   useSkill,
@@ -62,7 +61,6 @@ import {
   checkAvailable,
   checkEffect,
   haveItemOrEffect,
-  tryUse,
   tuple,
   voterMonsterNow,
   wishEffect,
@@ -527,7 +525,6 @@ export const Leveling: Quest<Task> = {
         haveItemOrEffect($item`gingerbread spice latte`) || get("_gingerbreadCityTurns") >= 5,
       choices: { 1208: 3 }, // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
       do: $location`Gingerbread Upscale Retail District`,
-      post: () => tryUse($item`gingerbread spice latte`),
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: RunawayCombat,
@@ -543,22 +540,13 @@ export const Leveling: Quest<Task> = {
       },
       do: $location`The X-32-F Combat Training Snowman`,
       post: () => {
-        if (!have($effect`Human-Machine Hybrid`)) {
-          DNALab.makeTonic();
-          use($item`Gene Tonic: Construct`);
-        }
+        if (!haveItemOrEffect($item`Gene Tonic: Construct`)) DNALab.makeTonic();
       },
       outfit: () => ({ ...levelingOutfit(), familiar: selectBestFamiliar() }),
       combat: new CombatStrategy().macro(
-        Macro.if_(
-          `!haseffect ${toInt($effect`Human-Machine Hybrid`)}`,
-          Macro.item($item`DNA extraction syringe`)
-        )
-          .skill($skill`Curse of Weaksauce`)
+        Macro.item([$item`DNA extraction syringe`, $item`Time-Spinner`])
           .skill($skill`Micrometeorite`)
-          .item($item`Time-Spinner`)
           .skill($skill`Sing Along`)
-          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
           .attack()
           .repeat()
       ),
