@@ -121,10 +121,8 @@ export const CoilWire: Quest<Task> = {
     },
     {
       name: "Become an Insectologist",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => have($skill`Insectologist`),
       choices: { 1494: 2 },
-      // eslint-disable-next-line libram/verify-constants
       do: () => use($item`S.I.T. Course Completion Certificate`),
     },
     // prettier-ignore
@@ -292,7 +290,10 @@ export const CoilWire: Quest<Task> = {
         get("_saberForceUses") > 0 ||
         monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
-      post: () => DNALab.hybridize(),
+      post: () => {
+        DNALab.makeTonic();
+        DNALab.hybridize();
+      },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
         .ccs(
