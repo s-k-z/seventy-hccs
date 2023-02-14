@@ -12644,15 +12644,17 @@ var Leveling = {
     post: function() {
       return checkAvailable($item(_templateObject1932 || (_templateObject1932 = _taggedTemplateLiteral25(["sprinkles"]))), 50);
     },
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1e3)), {}, {
-      hat: $item(_templateObject1942 || (_templateObject1942 = _taggedTemplateLiteral25(["Daylight Shavings Helmet"]))),
-      weapon: $item(_templateObject1952 || (_templateObject1952 = _taggedTemplateLiteral25(["Fourth of May Cosplay Saber"]))),
-      offhand: $items(_templateObject1962 || (_templateObject1962 = _taggedTemplateLiteral25(["burning paper crane, rope, familiar scrapbook"]))),
-      acc1: $item(_templateObject1972 || (_templateObject1972 = _taggedTemplateLiteral25(["hewn moon-rune spoon"]))),
-      acc2: $item(_templateObject1982 || (_templateObject1982 = _taggedTemplateLiteral25(["Brutal brogues"]))),
-      acc3: $item(_templateObject1992 || (_templateObject1992 = _taggedTemplateLiteral25(["Beach Comb"]))),
-      familiar: $familiar(_templateObject200 || (_templateObject200 = _taggedTemplateLiteral25(["Chocolate Lab"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1e3)), {}, {
+        hat: $item(_templateObject1942 || (_templateObject1942 = _taggedTemplateLiteral25(["Daylight Shavings Helmet"]))),
+        weapon: $item(_templateObject1952 || (_templateObject1952 = _taggedTemplateLiteral25(["Fourth of May Cosplay Saber"]))),
+        offhand: $items(_templateObject1962 || (_templateObject1962 = _taggedTemplateLiteral25(["burning paper crane, rope, familiar scrapbook"]))),
+        acc1: $item(_templateObject1972 || (_templateObject1972 = _taggedTemplateLiteral25(["hewn moon-rune spoon"]))),
+        acc2: $item(_templateObject1982 || (_templateObject1982 = _taggedTemplateLiteral25(["Brutal brogues"]))),
+        acc3: $item(_templateObject1992 || (_templateObject1992 = _taggedTemplateLiteral25(["Beach Comb"]))),
+        familiar: $familiar(_templateObject200 || (_templateObject200 = _taggedTemplateLiteral25(["Chocolate Lab"])))
+      });
+    },
     combat: DefaultCombat
   }, {
     name: "Get Gingerbread Spice Latte",
@@ -12746,10 +12748,12 @@ var Leveling = {
     do: function() {
       return (0, import_kolmafia32.visitUrl)("main.php?fightgodlobster=1");
     },
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1500)), {}, {
-      famequip: $items(_templateObject2182 || (_templateObject2182 = _taggedTemplateLiteral25(["God Lobster's Ring, God Lobster's Scepter, none"]))),
-      familiar: $familiar(_templateObject2192 || (_templateObject2192 = _taggedTemplateLiteral25(["God Lobster"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1500)), {}, {
+        famequip: $items(_templateObject2182 || (_templateObject2182 = _taggedTemplateLiteral25(["God Lobster's Ring, God Lobster's Scepter, none"]))),
+        familiar: $familiar(_templateObject2192 || (_templateObject2192 = _taggedTemplateLiteral25(["God Lobster"])))
+      });
+    },
     combat: DefaultCombat
   }, {
     name: "Witchess Witch",
@@ -12822,9 +12826,11 @@ var Leveling = {
       1119: -1
     },
     do: $location(_templateObject2282 || (_templateObject2282 = _taggedTemplateLiteral25(["The Deep Machine Tunnels"]))),
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
-      familiar: $familiar(_templateObject2292 || (_templateObject2292 = _taggedTemplateLiteral25(["Machine Elf"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
+        familiar: $familiar(_templateObject2292 || (_templateObject2292 = _taggedTemplateLiteral25(["Machine Elf"])))
+      });
+    },
     combat: DefaultCombat
   }, {
     name: "Ensure Abstraction: Action",
@@ -12839,9 +12845,11 @@ var Leveling = {
     post: function() {
       return checkAvailable($item(_templateObject2332 || (_templateObject2332 = _taggedTemplateLiteral25(["abstraction: action"]))));
     },
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
-      familiar: $familiar(_templateObject2342 || (_templateObject2342 = _taggedTemplateLiteral25(["Machine Elf"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
+        familiar: $familiar(_templateObject2342 || (_templateObject2342 = _taggedTemplateLiteral25(["Machine Elf"])))
+      });
+    },
     combat: DefaultStrategy().macro(Macro.if_("!monsterid ".concat($monster(_templateObject2352 || (_templateObject2352 = _taggedTemplateLiteral25(["Performer of Actions"]))).id), Macro.skill($skill(_templateObject2362 || (_templateObject2362 = _taggedTemplateLiteral25(["Macrometeorite"]))))).skill($skill(_templateObject2372 || (_templateObject2372 = _taggedTemplateLiteral25(["Feel Envy"]))))).macro(DefaultMacro)
   }, {
     name: "Ensure Abstraction: Joy",
@@ -12859,9 +12867,11 @@ var Leveling = {
     post: function() {
       return checkAvailable($item(_templateObject2413 || (_templateObject2413 = _taggedTemplateLiteral25(["abstraction: joy"]))));
     },
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
-      familiar: $familiar(_templateObject2422 || (_templateObject2422 = _taggedTemplateLiteral25(["Machine Elf"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
+        familiar: $familiar(_templateObject2422 || (_templateObject2422 = _taggedTemplateLiteral25(["Machine Elf"])))
+      });
+    },
     combat: DefaultStrategy().macro(Macro.if_("!monsterid ".concat($monster(_templateObject2432 || (_templateObject2432 = _taggedTemplateLiteral25(["Thinker of Thoughts"]))).id), Macro.skill($skill(_templateObject2442 || (_templateObject2442 = _taggedTemplateLiteral25(["Macrometeorite"]))))).item($item(_templateObject2452 || (_templateObject2452 = _taggedTemplateLiteral25(["abstraction: action"]))))).macro(DefaultMacro)
   }, {
     name: "Remaining Deep Machine Tunnels Fights",
@@ -12873,9 +12883,11 @@ var Leveling = {
       1119: -1
     },
     do: $location(_templateObject2462 || (_templateObject2462 = _taggedTemplateLiteral25(["The Deep Machine Tunnels"]))),
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
-      familiar: $familiar(_templateObject2472 || (_templateObject2472 = _taggedTemplateLiteral25(["Machine Elf"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
+        familiar: $familiar(_templateObject2472 || (_templateObject2472 = _taggedTemplateLiteral25(["Machine Elf"])))
+      });
+    },
     combat: DefaultCombat
   }, {
     name: "Chest X-ray Fights",
@@ -12945,11 +12957,13 @@ var Leveling = {
     }],
     prepare: topOffHp,
     do: $location(_templateObject2562 || (_templateObject2562 = _taggedTemplateLiteral25(["The Toxic Teacups"]))),
-    outfit: _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
-      shirt: $item(_templateObject2572 || (_templateObject2572 = _taggedTemplateLiteral25(["makeshift garbage shirt"]))),
-      offhand: $item(_templateObject2582 || (_templateObject2582 = _taggedTemplateLiteral25(["Kramco Sausage-o-Matic\u2122"]))),
-      familiar: $familiar(_templateObject2592 || (_templateObject2592 = _taggedTemplateLiteral25(["Pocket Professor"])))
-    }),
+    outfit: function() {
+      return _objectSpread6(_objectSpread6({}, levelingOutfit(1e4)), {}, {
+        shirt: $item(_templateObject2572 || (_templateObject2572 = _taggedTemplateLiteral25(["makeshift garbage shirt"]))),
+        offhand: $item(_templateObject2582 || (_templateObject2582 = _taggedTemplateLiteral25(["Kramco Sausage-o-Matic\u2122"]))),
+        familiar: $familiar(_templateObject2592 || (_templateObject2592 = _taggedTemplateLiteral25(["Pocket Professor"])))
+      });
+    },
     combat: DefaultCombat
   }, deepDarkVisions(), {
     name: "Backup Camera Fights",
