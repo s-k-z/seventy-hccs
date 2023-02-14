@@ -129,6 +129,11 @@ export const Leveling: Quest<Task> = {
   completed: () => get("csServicesPerformed").includes(","),
   tasks: [
     {
+      name: "Cast Best Libram",
+      completed: () => myMp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT,
+      do: () => castBestLibram(),
+    },
+    {
       name: "Cast Soul Food",
       completed: () =>
         mySoulsauce() / soulsauceCost($skill`Soul Food`) < 1 || myMaxmp() - myMp() < 15,
@@ -147,11 +152,6 @@ export const Leveling: Quest<Task> = {
         create(toEat, $item`magical sausage`);
         eat(toEat, $item`magical sausage`);
       },
-    },
-    {
-      name: "Cast Best Libram",
-      completed: () => myMp() - mpCost($skill`Summon BRICKOs`) < config.MP_SAFE_LIMIT,
-      do: () => castBestLibram(),
     },
     {
       name: "Remove Temporary Blindness",
@@ -355,6 +355,20 @@ export const Leveling: Quest<Task> = {
         .macro(Macro.runaway()),
     },
     {
+      name: "Ten-percent Bonus",
+      completed: () => !have($item`a ten-percent bonus`),
+      do: () => use($item`a ten-percent bonus`),
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
+      outfit: { offhand: $item`familiar scrapbook` },
+    },
+    {
+      name: "Chateau Rest",
+      completed: () => get("timesRested") >= totalFreeRests(),
+      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
+      outfit: { offhand: $item`familiar scrapbook` },
+    },
+    {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 3,
       prepare: () => print(`Have ${myMp()} mp after buffing up.`),
@@ -401,36 +415,25 @@ export const Leveling: Quest<Task> = {
         $effect`Inscrutable Gaze`, // 10 mp, used above
         $effect`Ruthlessly Efficient`, // 10 mp
         $effect`Singer's Faithful Ocelot`, // 15 mp
+        $effect`Walberg's Dim Bulb`, // 5 mp
         // Class skills
         $effect`Astral Shell`, // 10 mp
+        $effect`Curiosity of Br'er Tarrypin`, // 10 mp
         $effect`Elemental Saucesphere`, // 10 mp
-        $effect`Flimsy Shield of the Pastalord`,
+        $effect`Flimsy Shield of the Pastalord`, // 20 mp
         $effect`Ghostly Shell`, // 6 mp
         $effect`Sauce Monocle`, // 20 mp
         $effect`Springy Fusilli`, // 10 mp
         // Song(s)
         $effect`Ode to Booze`, // 50 mp
         $effect`Polka of Plenty`, // 7 mp
+        $effect`Stevedave's Shanty of Superiority`, // 30 mp
         // Batteries
         $effect`AAA-Charged`, // +30 MP
         $effect`Lantern-Charged`, // +70 MP
         // Dread Song
         $effect`Song of Sauce`, // 100 mp
       ],
-    },
-    {
-      name: "Ten-percent Bonus",
-      completed: () => !have($item`a ten-percent bonus`),
-      do: () => use($item`a ten-percent bonus`),
-      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
-      outfit: { offhand: $item`familiar scrapbook` },
-    },
-    {
-      name: "Chateau Rest",
-      completed: () => get("timesRested") >= totalFreeRests(),
-      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
-      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
-      outfit: { offhand: $item`familiar scrapbook` },
     },
     {
       name: "Tunnel of L.O.V.E.",
