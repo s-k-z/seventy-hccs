@@ -357,6 +357,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 3,
+      prepare: () => print(`Have ${myMp()} mp after buffing up.`),
       do: $location`An Unusually Quiet Barroom Brawl`,
       post: () => visitUrl("place.php?whichplace=speakeasy"),
       outfit: { familiar: selectBestFamiliar() },
@@ -537,9 +538,11 @@ export const Leveling: Quest<Task> = {
         if (!haveItemOrEffect($item`Gene Tonic: Construct`)) DNALab.makeTonic();
       },
       outfit: () => ({ ...levelingOutfit(), familiar: selectBestFamiliar() }),
-      combat: new CombatStrategy().macro(
-        Macro.item([$item`DNA extraction syringe`, $item`Time-Spinner`])
-          .skill($skill`Micrometeorite`)
+      combat: new CombatStrategy().macro(() =>
+        Macro.externalIf(
+          !haveItemOrEffect($item`Gene Tonic: Construct`),
+          Macro.item([$item`DNA extraction syringe`, $item`Time-Spinner`])
+        )
           .skill($skill`Sing Along`)
           .attack()
           .repeat()
