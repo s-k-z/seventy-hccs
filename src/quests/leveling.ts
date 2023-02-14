@@ -504,7 +504,7 @@ export const Leveling: Quest<Task> = {
       },
       do: $location`Gingerbread Upscale Retail District`,
       post: () => checkAvailable($item`sprinkles`, 50),
-      outfit: {
+      outfit: () => ({
         ...levelingOutfit(1000),
         hat: $item`Daylight Shavings Helmet`,
         weapon: $item`Fourth of May Cosplay Saber`,
@@ -513,7 +513,7 @@ export const Leveling: Quest<Task> = {
         acc2: $item`Brutal brogues`,
         acc3: $item`Beach Comb`,
         familiar: $familiar`Chocolate Lab`,
-      },
+      }),
       combat: DefaultCombat,
     },
     {
@@ -576,11 +576,11 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_godLobsterFights") >= 3,
       choices: { 1310: () => (have($item`God Lobster's Ring`) ? 2 : 1) }, // Granted a Boon: (1) equipment (2) blessing (3) experience
       do: () => visitUrl("main.php?fightgodlobster=1"),
-      outfit: {
+      outfit: () => ({
         ...levelingOutfit(1500),
         famequip: $items`God Lobster's Ring, God Lobster's Scepter, none`,
         familiar: $familiar`God Lobster`,
-      },
+      }),
       combat: DefaultCombat,
     },
     {
@@ -623,10 +623,10 @@ export const Leveling: Quest<Task> = {
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
-      outfit: {
+      outfit: () => ({
         ...levelingOutfit(10000),
         familiar: $familiar`Machine Elf`,
-      },
+      }),
       combat: DefaultCombat,
     },
     {
@@ -639,7 +639,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
-      outfit: { ...levelingOutfit(10000), familiar: $familiar`Machine Elf` },
+      outfit: () => ({ ...levelingOutfit(10000), familiar: $familiar`Machine Elf` }),
       combat: DefaultStrategy()
         .macro(
           Macro.if_(
@@ -657,7 +657,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: joy`),
-      outfit: { ...levelingOutfit(10000), familiar: $familiar`Machine Elf` },
+      outfit: () => ({ ...levelingOutfit(10000), familiar: $familiar`Machine Elf` }),
       combat: DefaultStrategy()
         .macro(
           Macro.if_(
@@ -673,7 +673,7 @@ export const Leveling: Quest<Task> = {
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
-      outfit: { ...levelingOutfit(10000), familiar: $familiar`Machine Elf` },
+      outfit: () => ({ ...levelingOutfit(10000), familiar: $familiar`Machine Elf` }),
       combat: DefaultCombat,
     },
     {
@@ -724,12 +724,12 @@ export const Leveling: Quest<Task> = {
       acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: topOffHp,
       do: $location`The Toxic Teacups`,
-      outfit: {
+      outfit: () => ({
         ...levelingOutfit(10000),
         shirt: $item`makeshift garbage shirt`,
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: $familiar`Pocket Professor`,
-      },
+      }),
       combat: DefaultCombat,
     },
     deepDarkVisions(),
