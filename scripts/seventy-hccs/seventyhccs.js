@@ -12465,6 +12465,9 @@ var Leveling = {
     completed: function() {
       return get("_speakeasyFreeFights") >= 3;
     },
+    prepare: function() {
+      return (0, import_kolmafia32.print)("Have ".concat((0, import_kolmafia32.myMp)(), " mp after buffing up."));
+    },
     do: $location(_templateObject1202 || (_templateObject1202 = _taggedTemplateLiteral25(["An Unusually Quiet Barroom Brawl"]))),
     post: function() {
       return (0, import_kolmafia32.visitUrl)("place.php?whichplace=speakeasy");
@@ -12683,7 +12686,9 @@ var Leveling = {
         familiar: selectBestFamiliar()
       });
     },
-    combat: new CombatStrategy().macro(Macro.item([$item(_templateObject2062 || (_templateObject2062 = _taggedTemplateLiteral25(["DNA extraction syringe"]))), $item(_templateObject2072 || (_templateObject2072 = _taggedTemplateLiteral25(["Time-Spinner"])))]).skill($skill(_templateObject2082 || (_templateObject2082 = _taggedTemplateLiteral25(["Micrometeorite"])))).skill($skill(_templateObject2092 || (_templateObject2092 = _taggedTemplateLiteral25(["Sing Along"])))).attack().repeat())
+    combat: new CombatStrategy().macro(function() {
+      return Macro.externalIf(!haveItemOrEffect($item(_templateObject2062 || (_templateObject2062 = _taggedTemplateLiteral25(["Gene Tonic: Construct"])))), Macro.item([$item(_templateObject2072 || (_templateObject2072 = _taggedTemplateLiteral25(["DNA extraction syringe"]))), $item(_templateObject2082 || (_templateObject2082 = _taggedTemplateLiteral25(["Time-Spinner"])))])).skill($skill(_templateObject2092 || (_templateObject2092 = _taggedTemplateLiteral25(["Sing Along"])))).attack().repeat();
+    })
   }, {
     name: "BRICKOS",
     ready: function() {
