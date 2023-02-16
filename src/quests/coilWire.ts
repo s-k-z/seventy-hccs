@@ -14,7 +14,6 @@ import {
   retrieveItem,
   runChoice,
   Skill,
-  toFamiliar,
   use,
   useFamiliar,
   useSkill,
@@ -176,12 +175,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Setup & Heal",
       completed: () => get("_hotTubSoaks") > 0,
-      do: () => {
-        cliExecute("hottub");
-        const target = toFamiliar(config.stillsuit);
-        const canUseStillsuit = target !== $familiar`none` && itemAmount($item`tiny stillsuit`) > 0;
-        if (canUseStillsuit) equip(target, $item`tiny stillsuit`);
-      },
+      do: () => cliExecute("hottub"),
       effects: [
         $effect`Feeling Excited`,
         $effect`Feeling Peaceful`,
@@ -212,7 +206,7 @@ export const CoilWire: Quest<Task> = {
       post: () => {
         if (get("_speakeasyFreeFights") < 1) throw `Didn't increment oliver place fights?`;
       },
-      outfit: { familiar: selectBestFamiliar() },
+      outfit: () => selectBestFamiliar(),
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Curse of Weaksauce`)
           .skill($skill`Micrometeorite`)
@@ -242,7 +236,7 @@ export const CoilWire: Quest<Task> = {
       outfit: () => ({
         back: $item`protonic accelerator pack`,
         shirt: $item`Jurassic Parka`,
-        familiar: selectBestFamiliar(AdvReq.NoAttack),
+        ...selectBestFamiliar(AdvReq.NoAttack),
         modes: { parka: "dilophosaur" },
       }),
       combat: new CombatStrategy()
@@ -268,8 +262,8 @@ export const CoilWire: Quest<Task> = {
       },
       outfit: {
         back: $item`protonic accelerator pack`,
-        famequip: $item`none`,
         familiar: $familiar`Stocking Mimic`,
+        famequip: $item`none`,
       },
       combat: DefaultCombat,
     },
@@ -312,7 +306,7 @@ export const CoilWire: Quest<Task> = {
       outfit: () => ({
         back: $item`unwrapped knock-off retro superhero cape`,
         offhand: $item`Kramco Sausage-o-Matic™`,
-        familiar: selectBestFamiliar(),
+        ...selectBestFamiliar(),
         modes: { retrocape: ["heck", "thrill"] },
       }),
       combat: DefaultCombat,
@@ -325,7 +319,7 @@ export const CoilWire: Quest<Task> = {
       outfit: () => ({
         offhand: defaultOutfit.offhand,
         acc3: $item`"I Voted!" sticker`,
-        familiar: selectBestFamiliar(),
+        ...selectBestFamiliar(),
       }),
       combat: DefaultCombat,
     },

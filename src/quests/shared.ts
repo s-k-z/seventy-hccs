@@ -1,8 +1,7 @@
-import { Task } from "grimoire-kolmafia";
+import { OutfitSpec, Task } from "grimoire-kolmafia";
 import {
   cliExecute,
   elementalResistance,
-  Familiar,
   myHp,
   myLevel,
   myMaxhp,
@@ -54,24 +53,38 @@ export const enum AdvReq {
   Normal,
   Toxic,
   Wine,
+  DMT,
 }
 
-export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): Familiar {
-  const wine = $item`1950 Vampire Vintner wine`;
-  if (req === AdvReq.Wine && !haveItemOrEffect(wine)) return $familiar`Vampire Vintner`;
+export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): OutfitSpec {
+  if (req === AdvReq.DMT) {
+    return { familiar: $familiar`Machine Elf`, famequip: $item`tiny stillsuit` };
+  }
 
-  if (req === AdvReq.Toxic && get("_hipsterAdv") < 7) return $familiar`Artistic Goth Kid`;
+  const wine = $item`1950 Vampire Vintner wine`;
+  if (req === AdvReq.Wine && !haveItemOrEffect(wine)) {
+    return { familiar: $familiar`Vampire Vintner`, famequip: $item`none` };
+  }
+
+  if (req === AdvReq.Toxic && get("_hipsterAdv") < 7) {
+    return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
+  }
 
   const pancake = $item`short stack of pancakes`;
-  if (req === AdvReq.Normal && !haveItemOrEffect(pancake)) return $familiar`Shorter-Order Cook`;
+  if (req === AdvReq.Normal && !haveItemOrEffect(pancake)) {
+    return { familiar: $familiar`Shorter-Order Cook`, famequip: $item`none` };
+  }
 
   const absinthe = $item`tiny bottle of absinthe`;
-  if (req === AdvReq.Normal && !haveItemOrEffect(absinthe)) return $familiar`Green Pixie`;
+  if (req === AdvReq.Normal && !haveItemOrEffect(absinthe)) {
+    return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
+  }
 
-  if (!$items`rope, burning newspaper, burning paper crane`.some((i) => have(i)))
-    return $familiar`Garbage Fire`;
+  if (!$items`rope, burning newspaper, burning paper crane`.some((i) => have(i))) {
+    return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
+  }
 
-  return $familiar`Baby Sandworm`;
+  return { familiar: $familiar`Baby Sandworm`, famequip: $item`tiny stillsuit` };
 }
 
 export function darkHorse(): Task {

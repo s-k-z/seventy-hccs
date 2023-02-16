@@ -54,7 +54,6 @@ The script can be run either in Aftercore, or in Community Service provided that
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge
    - seventyhccs_side_clan - Must be a name of a clan with a fax machine and slimetube
-   - seventyhccs_stillsuit - Optional familiar name to be equipped with the tiny stillsuit
 
 3. Run the script file named **seventyhccs.js** using KoLMafia
 

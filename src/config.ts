@@ -8,7 +8,6 @@ export const config = Args.create("seventyhccs", "Automate 1/70 Community Servic
   // preferences
   main_clan: Args.string({ help: "Clan with a fully stocked VIP lounge", default: "" }),
   side_clan: Args.string({ help: "Clan with a Mother Slime and Ungulith", default: "" }),
-  stillsuit: Args.string({ help: "A familiar to equip the stillsuit on", default: "" }),
   // hidden preferences
   MEAT_SAFE_LIMIT: Args.number({
     help: "Don't spend meat on sausages below this value",

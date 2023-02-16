@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, create, equip, retrieveItem, use, useSkill, visitUrl } from "kolmafia";
+import { cliExecute, create, equip, retrieveItem, use, visitUrl } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -34,10 +34,7 @@ export const SpellDamageQuest: Quest<Task> = {
     {
       name: "Cook cordial of concentration",
       completed: () => have($item`cordial of concentration`),
-      do: () => {
-        useSkill($skill`Advanced Saucecrafting`); // 10 mp
-        create($item`cordial of concentration`);
-      },
+      do: () => create($item`cordial of concentration`),
     },
     innerElf(),
     deepDarkVisions(),

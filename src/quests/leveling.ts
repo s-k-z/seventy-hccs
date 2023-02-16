@@ -67,7 +67,7 @@ import {
 } from "../lib";
 import { AdvReq, deepDarkVisions, innerElf, refreshGhost, selectBestFamiliar } from "./shared";
 
-function levelingOutfit(cap?: number): OutfitSpec {
+function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
   const multiplyML = myBuffedstat(myPrimestat()) < (cap ?? Infinity);
   return {
     hat: $item`Daylight Shavings Helmet`,
@@ -79,6 +79,7 @@ function levelingOutfit(cap?: number): OutfitSpec {
     acc1: $item`hewn moon-rune spoon`,
     acc2: $items`battle broom, gold detective badge`,
     acc3: $item`Beach Comb`,
+    ...selectBestFamiliar(req),
     modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
   };
 }
@@ -93,7 +94,7 @@ const vintnerOutfit = (): OutfitSpec => ({
   acc1: $item`Powerful Glove`,
   acc2: $items`battle broom, gold detective badge`,
   acc3: get("_backUpUses") < 11 ? $item`backup camera` : $item`Kremlin's Greatest Briefcase`,
-  familiar: selectBestFamiliar(AdvReq.Wine),
+  ...selectBestFamiliar(AdvReq.Wine),
   modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
 });
 
@@ -180,6 +181,15 @@ export const Leveling: Quest<Task> = {
       name: "Summon Alice's Army",
       completed: () => get("grimoire3Summons") > 0,
       do: () => useSkill($skill`Summon Alice's Army Cards`), // 5 mp
+    },
+    {
+      name: "Ointment of the Occult",
+      completed: () => have($item`ointment of the occult`),
+      do: () => {
+        useSkill($skill`Prevent Scurvy and Sobriety`); // 50 mp
+        useSkill($skill`Advanced Saucecrafting`); // 10 mp
+        create($item`ointment of the occult`);
+      },
     },
     {
       name: "Synthesize Learning",
@@ -374,7 +384,7 @@ export const Leveling: Quest<Task> = {
       prepare: () => print(`Have ${myMp()} mp after buffing up.`),
       do: $location`An Unusually Quiet Barroom Brawl`,
       post: () => visitUrl("place.php?whichplace=speakeasy"),
-      outfit: { familiar: selectBestFamiliar() },
+      outfit: () => levelingOutfit(),
       combat: new CombatStrategy().macro(DefaultMacro), // Don't abort on unexpected monsters
       effects: [
         $effect`Broad-Spectrum Vaccine`,
@@ -382,6 +392,7 @@ export const Leveling: Quest<Task> = {
         $effect`Grumpy and Ornery`,
         $effect`Hustlin'`,
         $effect`Mental A-cue-ity`,
+        $effect`Mystically Oiled`,
         $effect`Pisces in the Skyces`,
         $effect`Sigils of Yeg`,
         $effect`Starry-Eyed`,
@@ -454,7 +465,7 @@ export const Leveling: Quest<Task> = {
         use($item`LOV Elixir #3`);
         use($item`LOV Elixir #6`);
       },
-      outfit: () => ({ ...levelingOutfit(10000), familiar: selectBestFamiliar(AdvReq.NoAttack) }),
+      outfit: () => levelingOutfit(10000, AdvReq.NoAttack),
       combat: DefaultCombat,
     },
     {
@@ -474,7 +485,6 @@ export const Leveling: Quest<Task> = {
       outfit: () => ({
         ...levelingOutfit(600),
         back: $item`protonic accelerator pack`,
-        familiar: selectBestFamiliar(),
       }),
       combat: DefaultCombat,
     },
@@ -488,9 +498,8 @@ export const Leveling: Quest<Task> = {
       },
       post: () => visitUrl("questlog.php?which=1"),
       outfit: () => ({
-        ...levelingOutfit(),
+        ...levelingOutfit(undefined, AdvReq.NoAttack),
         back: $item`protonic accelerator pack`,
-        familiar: selectBestFamiliar(AdvReq.NoAttack),
       }),
       combat: DefaultCombat,
     },
@@ -513,6 +522,7 @@ export const Leveling: Quest<Task> = {
         acc2: $item`Brutal brogues`,
         acc3: $item`Beach Comb`,
         familiar: $familiar`Chocolate Lab`,
+        famequip: $item`tiny stillsuit`,
       }),
       combat: DefaultCombat,
     },
@@ -540,7 +550,7 @@ export const Leveling: Quest<Task> = {
       post: () => {
         if (!haveItemOrEffect($item`Gene Tonic: Construct`)) DNALab.makeTonic();
       },
-      outfit: () => ({ ...levelingOutfit(), familiar: selectBestFamiliar() }),
+      outfit: () => levelingOutfit(),
       combat: new CombatStrategy().macro(() =>
         Macro.externalIf(
           !haveItemOrEffect($item`Gene Tonic: Construct`),
@@ -557,7 +567,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_brickoFights") >= 3,
       acquire: [{ item: BRICKO_TARGET_ITEM }],
       do: () => use(BRICKO_TARGET_ITEM),
-      outfit: () => ({ ...levelingOutfit(), familiar: selectBestFamiliar() }),
+      outfit: () => levelingOutfit(),
       combat: DefaultCombat,
     },
     {
@@ -568,7 +578,7 @@ export const Leveling: Quest<Task> = {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
       },
-      outfit: () => ({ ...levelingOutfit(400), familiar: selectBestFamiliar() }),
+      outfit: () => levelingOutfit(400),
       combat: DefaultCombat,
     },
     {
@@ -588,21 +598,21 @@ export const Leveling: Quest<Task> = {
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       post: () => equip($item`battle broom`),
-      outfit: () => ({ ...levelingOutfit(7000), familiar: selectBestFamiliar() }),
+      outfit: () => levelingOutfit(7000),
       combat: DefaultCombat,
     },
     {
       name: "Witchess King",
       completed: () => have($item`dented scepter`),
       do: () => Witchess.fightPiece($monster`Witchess King`),
-      outfit: () => ({ ...levelingOutfit(6000), familiar: selectBestFamiliar() }),
+      outfit: () => levelingOutfit(6000),
       combat: DefaultCombat,
     },
     {
       name: "Remaining Witchess Fights",
       completed: () => Witchess.fightsDone() >= 5,
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      outfit: () => ({ ...levelingOutfit(8000), familiar: selectBestFamiliar() }),
+      outfit: () => levelingOutfit(8000),
       combat: DefaultCombat,
     },
     {
@@ -611,9 +621,8 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_voteFreeFights") >= 1,
       do: $location`The Toxic Teacups`,
       outfit: () => ({
-        ...levelingOutfit(10000),
+        ...levelingOutfit(10000, AdvReq.Toxic),
         acc3: $item`"I Voted!" sticker`,
-        familiar: selectBestFamiliar(AdvReq.Toxic),
       }),
       combat: DefaultCombat,
     },
@@ -623,10 +632,7 @@ export const Leveling: Quest<Task> = {
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
-      outfit: () => ({
-        ...levelingOutfit(10000),
-        familiar: $familiar`Machine Elf`,
-      }),
+      outfit: () => levelingOutfit(10000, AdvReq.DMT),
       combat: DefaultCombat,
     },
     {
@@ -639,7 +645,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: action`),
-      outfit: () => ({ ...levelingOutfit(10000), familiar: $familiar`Machine Elf` }),
+      outfit: () => levelingOutfit(10000, AdvReq.DMT),
       combat: DefaultStrategy()
         .macro(
           Macro.if_(
@@ -657,7 +663,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       post: () => checkAvailable($item`abstraction: joy`),
-      outfit: () => ({ ...levelingOutfit(10000), familiar: $familiar`Machine Elf` }),
+      outfit: () => levelingOutfit(10000, AdvReq.DMT),
       combat: DefaultStrategy()
         .macro(
           Macro.if_(
@@ -673,7 +679,7 @@ export const Leveling: Quest<Task> = {
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
-      outfit: () => ({ ...levelingOutfit(10000), familiar: $familiar`Machine Elf` }),
+      outfit: () => levelingOutfit(10000, AdvReq.DMT),
       combat: DefaultCombat,
     },
     {
@@ -681,9 +687,8 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_chestXRayUsed") >= 3,
       do: $location`The Toxic Teacups`,
       outfit: () => ({
-        ...levelingOutfit(11111),
+        ...levelingOutfit(11111, AdvReq.Toxic),
         acc3: $item`Lil' Doctor™ bag`,
-        familiar: selectBestFamiliar(AdvReq.Toxic),
       }),
       combat: DefaultCombat,
     },
@@ -691,14 +696,17 @@ export const Leveling: Quest<Task> = {
       name: "Shattering Punch Fights",
       completed: () => get("_shatteringPunchUsed") >= 3,
       do: $location`The Toxic Teacups`,
-      outfit: () => ({ ...levelingOutfit(11111), familiar: selectBestFamiliar(AdvReq.Toxic) }),
+      outfit: () => levelingOutfit(11111, AdvReq.Toxic),
       combat: DefaultCombat,
     },
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
       do: $location`The Toxic Teacups`,
-      outfit: () => ({ ...levelingOutfit(11111), familiar: selectBestFamiliar(AdvReq.Toxic) }),
+      outfit: () => ({
+        ...levelingOutfit(11111, AdvReq.Toxic),
+        shirt: $item`makeshift garbage shirt`,
+      }),
       combat: DefaultCombat,
     },
     {
@@ -712,9 +720,8 @@ export const Leveling: Quest<Task> = {
         }
       },
       outfit: () => ({
-        ...levelingOutfit(11111),
+        ...levelingOutfit(11111, AdvReq.Toxic),
         shirt: $item`makeshift garbage shirt`,
-        familiar: selectBestFamiliar(AdvReq.Toxic),
       }),
       combat: DefaultCombat,
     },
@@ -729,6 +736,7 @@ export const Leveling: Quest<Task> = {
         shirt: $item`makeshift garbage shirt`,
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: $familiar`Pocket Professor`,
+        famequip: $item`tiny stillsuit`,
       }),
       combat: DefaultCombat,
     },
@@ -748,7 +756,6 @@ export const Leveling: Quest<Task> = {
         ...levelingOutfit(10000),
         shirt: $item`makeshift garbage shirt`,
         acc3: $item`backup camera`,
-        familiar: selectBestFamiliar(AdvReq.Normal),
       }),
       combat: DefaultCombat,
     },
@@ -763,7 +770,7 @@ export const Leveling: Quest<Task> = {
         }
       },
       effects: $effects`Wizard Squint`,
-      outfit: vintnerOutfit,
+      outfit: () => vintnerOutfit(),
       combat: StenchCombat,
     },
     {
@@ -772,7 +779,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
       effects: $effects`Wizard Squint`,
-      outfit: vintnerOutfit,
+      outfit: () => vintnerOutfit(),
       combat: StenchCombat,
     },
     {

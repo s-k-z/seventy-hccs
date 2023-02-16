@@ -26,7 +26,6 @@ export function main(command = ""): void {
   const toCheck = {
     main_clan: { prop: config.main_clan, return: true },
     side_clan: { prop: config.side_clan, return: true },
-    stillsuit: { prop: config.stillsuit, return: false },
   };
   for (const name of Object.keys(toCheck)) {
     const key = name as keyof typeof toCheck;

@@ -1,6 +1,7 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import {
   currentRound,
+  equip,
   Familiar,
   haveFamiliar,
   itemAmount,
@@ -9,7 +10,6 @@ import {
   setAutoAttack,
   storageAmount,
   takeStorage,
-  toFamiliar,
   toUrl,
   use,
   visitUrl,
@@ -25,7 +25,6 @@ import {
   Macro,
   set,
 } from "libram";
-import { config } from "../config";
 
 function runChoices(...choices: number[]): void {
   for (const c of choices) runChoice(c);
@@ -44,17 +43,19 @@ export const DonateQuest: Quest<Task> = {
     {
       name: "Enter the Batfellow",
       completed: () => !have($item`Batfellow comic`) || get("_batfellowToday", false),
+      acquire: [{ item: $item`tiny stillsuit` }],
       prepare: () =>
         Macro.skill($skill`Bat-Kick`)
           .repeat()
           .setAutoAttack(),
       choices: { 1133: 1 },
-      do: () => use(1, $item`Batfellow comic`), // Batfellow Begins
+      do: () => use(1, $item`Batfellow comic`),
       post: () => set("_batfellowToday", true),
       outfit: () => {
-        const stillSuitFam = toFamiliar(config.stillsuit);
+        const stillFam = $familiar`Shorter-Order Cook`;
+        equip(stillFam, $item`tiny stillsuit`);
         const myFams = Familiar.all().filter(
-          (f) => !f.attributes.includes("pokefam") && haveFamiliar(f) && f !== stillSuitFam
+          (f) => !f.attributes.includes("pokefam") && haveFamiliar(f) && f !== stillFam
         );
         const randomFam = myFams[Math.floor(Math.random() * myFams.length)];
         if (!randomFam || randomFam === $familiar`none` || !haveFamiliar(randomFam)) {
