@@ -188,7 +188,7 @@ export const Leveling: Quest<Task> = {
       do: () => {
         useSkill($skill`Prevent Scurvy and Sobriety`); // 50 mp
         useSkill($skill`Advanced Saucecrafting`); // 10 mp
-        create($item`ointment of the occult`);
+        create($item`ointment of the occult`); // -900 meat
       },
     },
     {
@@ -300,7 +300,7 @@ export const Leveling: Quest<Task> = {
         // Skills
         $effect`Blood Bond`,
         // Class skills
-        $effect`Empathy`,
+        $effect`Empathy`, // -720 meat
         $effect`Leash of Linguini`,
       ],
     },

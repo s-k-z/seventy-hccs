@@ -295,7 +295,7 @@ export const CoilWire: Quest<Task> = {
           skill ${$skill`Open a Big Red Present`}
           twiddle your thumbs
           skill ${$skill`Use the Force`}`,
-          $monster`cocktail shrimp`
+          $monster`cocktail shrimp` // + 2000 meat
         )
         .macro(Macro.abort()),
     },

@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, create, equip, retrieveItem, use, visitUrl } from "kolmafia";
+import { cliExecute, create, equip, use, visitUrl } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -10,7 +10,6 @@ import {
   $slot,
   Clan,
   CommunityService,
-  get,
   have,
   Macro,
 } from "libram";
@@ -22,15 +21,6 @@ export const SpellDamageQuest: Quest<Task> = {
   name: "Make Sausage",
   completed: () => CommunityService.SpellDamage.isDone(),
   tasks: [
-    {
-      name: "Install Dynamic Range",
-      completed: () => get("hasRange"),
-      do: () => {
-        const range = $item`Dramatic™ range`;
-        retrieveItem(range); // -900 meat
-        use(range);
-      },
-    },
     {
       name: "Cook cordial of concentration",
       completed: () => have($item`cordial of concentration`),

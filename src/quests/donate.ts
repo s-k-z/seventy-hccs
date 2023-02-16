@@ -25,6 +25,7 @@ import {
   Macro,
   set,
 } from "libram";
+import { spendAllMpOnLibrams } from "../iotms";
 
 function runChoices(...choices: number[]): void {
   for (const c of choices) runChoice(c);
@@ -44,10 +45,12 @@ export const DonateQuest: Quest<Task> = {
       name: "Enter the Batfellow",
       completed: () => !have($item`Batfellow comic`) || get("_batfellowToday", false),
       acquire: [{ item: $item`tiny stillsuit` }],
-      prepare: () =>
+      prepare: () => {
+        spendAllMpOnLibrams();
         Macro.skill($skill`Bat-Kick`)
           .repeat()
-          .setAutoAttack(),
+          .setAutoAttack();
+      },
       choices: { 1133: 1 },
       do: () => use(1, $item`Batfellow comic`),
       post: () => set("_batfellowToday", true),
