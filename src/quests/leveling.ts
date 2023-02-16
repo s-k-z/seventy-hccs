@@ -702,6 +702,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
       outfit: () => ({
         ...levelingOutfit(11111, AdvReq.Toxic),
