@@ -32,11 +32,9 @@ export function refreshGhost(): void {
 }
 
 export function runTest(test: CommunityService): void {
-  const famWeight = test.statName === "Familiar Weight";
-  if (famWeight && test.actualCost() > 1) throw `Can't do ${test.statName} in 1 turn?`;
   const coilWire = test.name === "Coil Wire";
   if (coilWire) visitUrl("council.php");
-  switch (test.run(() => undefined, coilWire || famWeight ? 60 : 1)) {
+  switch (test.run(() => undefined, coilWire ? 60 : 1)) {
     case "completed":
       return;
     case "already completed":
