@@ -9983,6 +9983,7 @@ var _templateObject151;
 var _templateObject1522;
 var _templateObject1532;
 var _templateObject1542;
+var _templateObject1552;
 function _taggedTemplateLiteral16(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -10082,14 +10083,14 @@ var StenchCombat = new CombatStrategy().macro(function() {
   var bonus = get2("Familiar Damage");
   var maxVintnerDamage = 3 + weight + bonus;
   var safe = maxVintnerDamage + 25;
-  return Macro.if_("monsterid ".concat($monster(_templateObject1442 || (_templateObject1442 = _taggedTemplateLiteral16(["toxic beastie"]))).id), Macro.if_("hasskill ".concat((0, import_kolmafia26.toInt)($skill(_templateObject1452 || (_templateObject1452 = _taggedTemplateLiteral16(["Back-Up to your Last Enemy"]))))), Macro.skill($skill(_templateObject1462 || (_templateObject1462 = _taggedTemplateLiteral16(["Back-Up to your Last Enemy"])))))).if_("monsterid ".concat($monster(_templateObject1472 || (_templateObject1472 = _taggedTemplateLiteral16(["toxic beastie"]))).id), Macro.abort()).skill($skill(_templateObject148 || (_templateObject148 = _taggedTemplateLiteral16(["Saucy Salve"])))).if_("monsterhpabove ".concat(safe, " && snarfblat ").concat($location(_templateObject149 || (_templateObject149 = _taggedTemplateLiteral16(["The Neverending Party"]))).id), Macro.trySkill($skill(_templateObject150 || (_templateObject150 = _taggedTemplateLiteral16(["Bowl Sideways"]))))).externalIf(get("garbageShirtCharge") <= 3, Macro.if_("monsterhpabove ".concat(safe), Macro.trySkill($skill(_templateObject151 || (_templateObject151 = _taggedTemplateLiteral16(["Feel Pride"])))))).if_("monsterhpabove ".concat(safe), Macro.skill($skill(_templateObject1522 || (_templateObject1522 = _taggedTemplateLiteral16(["Sing Along"]))))).skill($skill(_templateObject1532 || (_templateObject1532 = _taggedTemplateLiteral16(["Garbage Nova"]))));
+  return Macro.if_("monsterid ".concat($monster(_templateObject1442 || (_templateObject1442 = _taggedTemplateLiteral16(["toxic beastie"]))).id), Macro.if_("hasskill ".concat((0, import_kolmafia26.toInt)($skill(_templateObject1452 || (_templateObject1452 = _taggedTemplateLiteral16(["Back-Up to your Last Enemy"]))))), Macro.skill($skill(_templateObject1462 || (_templateObject1462 = _taggedTemplateLiteral16(["Back-Up to your Last Enemy"])))))).if_("monsterid ".concat($monster(_templateObject1472 || (_templateObject1472 = _taggedTemplateLiteral16(["toxic beastie"]))).id), Macro.abort()).skill($skill(_templateObject148 || (_templateObject148 = _taggedTemplateLiteral16(["Saucy Salve"])))).if_("monsterhpabove ".concat(safe, " && snarfblat ").concat($location(_templateObject149 || (_templateObject149 = _taggedTemplateLiteral16(["The Neverending Party"]))).id), Macro.trySkill($skill(_templateObject150 || (_templateObject150 = _taggedTemplateLiteral16(["Bowl Sideways"]))))).externalIf(get("garbageShirtCharge") <= 3, Macro.if_("monsterhpabove ".concat(safe), Macro.trySkill($skill(_templateObject151 || (_templateObject151 = _taggedTemplateLiteral16(["Feel Pride"])))))).if_("monsterhpabove ".concat(safe), Macro.skill($skill(_templateObject1522 || (_templateObject1522 = _taggedTemplateLiteral16(["Sing Along"]))))).if_("monsterhpabove ".concat(safe), Macro.trySkill($skill(_templateObject1532 || (_templateObject1532 = _taggedTemplateLiteral16(["Silent Treatment"]))))).skill($skill(_templateObject1542 || (_templateObject1542 = _taggedTemplateLiteral16(["Garbage Nova"]))));
 });
 var RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 function mapMonster(location, monster) {
   if (get("_monstersMapped") >= 3)
     throw "Trying to map too many monsters";
   if (!get("mappingMonsters"))
-    (0, import_kolmafia26.useSkill)($skill(_templateObject1542 || (_templateObject1542 = _taggedTemplateLiteral16(["Map the Monsters"]))));
+    (0, import_kolmafia26.useSkill)($skill(_templateObject1552 || (_templateObject1552 = _taggedTemplateLiteral16(["Map the Monsters"]))));
   var expectedTurnCount = (0, import_kolmafia26.myTurncount)();
   var mapPage = "";
   while (!mapPage.includes("Leading Yourself Right to Them")) {
@@ -11943,7 +11944,7 @@ var _templateObject1516;
 var _templateObject1523;
 var _templateObject1533;
 var _templateObject1543;
-var _templateObject1552;
+var _templateObject1553;
 var _templateObject1562;
 var _templateObject1572;
 var _templateObject1582;
@@ -12632,7 +12633,7 @@ var Leveling = {
       $effect(_templateObject1523 || (_templateObject1523 = _taggedTemplateLiteral25(["Pomp & Circumsands"]))),
       $effect(_templateObject1533 || (_templateObject1533 = _taggedTemplateLiteral25(["Resting Beach Face"]))),
       $effect(_templateObject1543 || (_templateObject1543 = _taggedTemplateLiteral25(["We're All Made of Starfish"]))),
-      $effect(_templateObject1552 || (_templateObject1552 = _taggedTemplateLiteral25(["You Learned Something Maybe!"]))),
+      $effect(_templateObject1553 || (_templateObject1553 = _taggedTemplateLiteral25(["You Learned Something Maybe!"]))),
       $effect(_templateObject1562 || (_templateObject1562 = _taggedTemplateLiteral25(["Big"]))),
       $effect(_templateObject1572 || (_templateObject1572 = _taggedTemplateLiteral25(["Blessing of the Bird"]))),
       $effect(_templateObject1582 || (_templateObject1582 = _taggedTemplateLiteral25(["Blessing of your favorite Bird"]))),
