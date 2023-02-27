@@ -183,11 +183,6 @@ export const Leveling: Quest<Task> = {
       do: () => useSkill($skill`Summon Alice's Army Cards`), // 5 mp
     },
     {
-      name: "Summon Confiscated Things",
-      completed: () => get("_grimoireConfiscatorSummons") > 0,
-      do: () => useSkill($skill`Summon Confiscated Things`), // 5 mp
-    },
-    {
       name: "Ointment of the Occult",
       completed: () => have($item`ointment of the occult`),
       do: () => {
