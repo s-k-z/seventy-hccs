@@ -379,6 +379,11 @@ export const Leveling: Quest<Task> = {
       outfit: { offhand: $item`familiar scrapbook` },
     },
     {
+      name: "Glitter",
+      completed: () => have($effect`Glittering Eyelashes`),
+      do: () => use($item`glittery mascara`), // -21 meat
+    },
+    {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 3,
       prepare: () => print(`Have ${myMp()} mp after buffing up.`),
@@ -732,6 +737,9 @@ export const Leveling: Quest<Task> = {
       acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: topOffHp,
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (get("_pocketProfessorLectures") < 1) throw `Failed to lecture?`;
+      },
       outfit: () => ({
         ...levelingOutfit(10000),
         shirt: $item`makeshift garbage shirt`,

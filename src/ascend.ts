@@ -67,6 +67,7 @@ export function prepareToAscend() {
 export function prepAndAscendIfNecessary() {
   if (myPath() !== $path`Community Service`) {
     prepareToAscend();
+    visitUrl("council.php");
     visitUrl("charsheet.php");
     ascend(
       $path`Community Service`,
