@@ -161,7 +161,10 @@ export const DefaultCombat = DefaultStrategy()
   )
   .macro(
     Macro.skill($skill`Sing Along`)
-      .trySkill($skill`Meteor Shower`)
+      .if_(
+        `monsterid ${toInt($monster`gingerbread gentrifier`)}`,
+        Macro.trySkill($skill`Meteor Shower`)
+      )
       .trySkill($skill`Chest X-Ray`)
       .trySkill($skill`Shattering Punch`)
       .trySkill($skill`Gingerbread Mob Hit`)
