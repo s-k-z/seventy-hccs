@@ -109,13 +109,13 @@ const notAllowList = [
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
 
-export const FastMacro = Macro.skill($skill`Sing Along`)
+const Fast = Macro.skill($skill`Sing Along`)
   .item($item`Time-Spinner`)
   .skill($skill`Micrometeorite`)
   .attack()
   .repeat();
 
-export const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
+const Slow = Macro.skill($skill`Curse of Weaksauce`)
   .item($item`Time-Spinner`)
   .skill($skill`Micrometeorite`)
   .if_(
@@ -126,6 +126,8 @@ export const DefaultMacro = Macro.skill($skill`Curse of Weaksauce`)
   .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
   .attack()
   .repeat();
+
+export const DefaultMacro = (): Macro => (myFamiliar().combat ? Fast : Slow);
 
 export const DefaultStrategy = () => {
   return new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort()));
@@ -230,7 +232,7 @@ export const DefaultCombat = DefaultStrategy()
       .repeat(),
     $monster`Witchess Witch`
   )
-  .macro(() => (myFamiliar().combat ? FastMacro : DefaultMacro));
+  .macro(DefaultMacro);
 
 export const StenchCombat = new CombatStrategy().macro(() => {
   const weight = 20 + weightAdjustment();

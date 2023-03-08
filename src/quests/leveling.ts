@@ -51,6 +51,7 @@ import {
   DefaultCombat,
   DefaultMacro,
   DefaultStrategy,
+  mapMonster,
   RunawayCombat,
   StenchCombat,
 } from "../combat";
@@ -210,12 +211,6 @@ export const Leveling: Quest<Task> = {
       },
     },
     {
-      name: "Eat a donut",
-      completed: () => have($effect`Filled with Magic`),
-      do: () => eat($item`occult jelly donut`), // 3-4 adventures, 1 full
-      effects: $effects`Inscrutable Gaze`, // 10 mp
-    },
-    {
       name: "Drink Speakeasy",
       completed: () => have($effect`In a Lather`),
       prepare: () => Clan.join(config.main_clan),
@@ -300,8 +295,8 @@ export const Leveling: Quest<Task> = {
         // Skills
         $effect`Blood Bond`,
         // Class skills
-        $effect`Empathy`, // -720 meat
-        $effect`Leash of Linguini`,
+        $effect`Empathy`, // 15 mp, -720 meat
+        $effect`Leash of Linguini`, // 12 mp
       ],
     },
     {
@@ -348,7 +343,7 @@ export const Leveling: Quest<Task> = {
         DNALab.makeTonic();
         use($item`Gene Tonic: Elf`);
       },
-      effects: $effects`Ode to Booze`,
+      effects: $effects`Inscrutable Gaze, Ode to Booze`, // 10 + 50 mp
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: new CombatStrategy()
         .startingMacro(Macro.item($item`DNA extraction syringe`))
@@ -384,9 +379,27 @@ export const Leveling: Quest<Task> = {
       do: () => use($item`glittery mascara`), // -21 meat
     },
     {
+      name: "Ensure Imported Taffy",
+      ready: () => get("_speakeasyFreeFights") === 2,
+      completed: () => haveItemOrEffect($item`imported taffy`) || get("_speakeasyFreeFights") >= 3,
+      do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
+      post: () => visitUrl("place.php?whichplace=speakeasy"),
+      outfit: () => ({
+        ...levelingOutfit(),
+        acc3: $item`Lil' Doctor™ bag`,
+      }),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Otoscope`)
+            .skill($skill`Sing Along`)
+            .attack(),
+          $monster`goblin flapper`
+        )
+        .macro(Macro.abort()),
+    },
+    {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 3,
-      prepare: () => print(`Have ${myMp()} mp after buffing up.`),
       do: $location`An Unusually Quiet Barroom Brawl`,
       post: () => visitUrl("place.php?whichplace=speakeasy"),
       outfit: () => levelingOutfit(),
@@ -445,7 +458,6 @@ export const Leveling: Quest<Task> = {
         $effect`Polka of Plenty`, // 7 mp
         $effect`Stevedave's Shanty of Superiority`, // 30 mp
         // Batteries
-        $effect`AAA-Charged`, // +30 MP
         $effect`Lantern-Charged`, // +70 MP
         // Dread Song
         $effect`Song of Sauce`, // 100 mp
@@ -483,6 +495,7 @@ export const Leveling: Quest<Task> = {
       },
       effects: [
         $effect`Drescher's Annoying Noise`,
+        $effect`Imported Strength`,
         $effect`Pride of the Puffin`,
         // Song(s)
         $effect`Ur-Kel's Aria of Annoyance`,

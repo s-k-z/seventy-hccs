@@ -8,7 +8,6 @@ import {
   getWorkshed,
   Item,
   itemAmount,
-  mpCost,
   myMaxmp,
   myMp,
   retrieveItem,
@@ -134,7 +133,6 @@ export const CoilWire: Quest<Task> = {
         [$item`battery (AAA)`,         () => harvestBatteries()],
         [$item`battery (lantern)`,     () => create($item`battery (lantern)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
-        [$item`occult jelly donut`,    () => create($item`occult jelly donut`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
         [$item`green mana`,            () => cliExecute("cheat forest")],
@@ -198,24 +196,6 @@ export const CoilWire: Quest<Task> = {
       name: "Install Workshed",
       completed: () => getWorkshed() === $item`Little Geneticist DNA-Splicing Lab`,
       do: () => use($item`Little Geneticist DNA-Splicing Lab`),
-    },
-    {
-      name: "Wanderer Sweep",
-      completed: () => get("_speakeasyFreeFights") >= 1,
-      do: $location`An Unusually Quiet Barroom Brawl`,
-      post: () => {
-        if (get("_speakeasyFreeFights") < 1) throw `Didn't increment oliver place fights?`;
-      },
-      outfit: () => selectBestFamiliar(),
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Curse of Weaksauce`)
-          .skill($skill`Micrometeorite`)
-          .item($item`Time-Spinner`)
-          .skill($skill`Sing Along`)
-          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-          .attack()
-          .repeat()
-      ),
     },
     {
       name: "Reminisce pterodactyl",

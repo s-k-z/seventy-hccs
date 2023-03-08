@@ -75,7 +75,7 @@ export function prepAndAscendIfNecessary() {
       Lifestyle.hardcore,
       "blender",
       $item`astral six-pack`,
-      $item`astral trousers`,
+      $item`astral chapeau`,
       {
         permSkills: new Map(toPerm.filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])),
         neverAbort: true,

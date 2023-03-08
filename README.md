@@ -41,7 +41,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## Requirements in Valhalla
 
-1. Astral Trousers from Pet Heaven
+1. Astral Chapeau from Pet Heaven
 2. Sauceror class
 3. Blender moon sign
 
