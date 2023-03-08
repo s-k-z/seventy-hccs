@@ -38,7 +38,6 @@ export const ItemDropQuest: Quest<Task> = {
         $effect`Feeling Lost`,
         $effect`Hustlin'`,
         $effect`items.enh`,
-        $effect`Lantern-Charged`,
         $effect`Nearly All-Natural`,
         $effect`Singer's Faithful Ocelot`,
         $effect`Steely-Eyed Squint`,

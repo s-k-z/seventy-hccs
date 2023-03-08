@@ -40,14 +40,8 @@ import {
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
 import { config } from "../config";
-import {
-  getPantogramPants,
-  harvestBatteries,
-  scavengeDaycare,
-  spendAllMpOnLibrams,
-  vote,
-} from "../iotms";
-import { checkAvailable, voterMonsterNow } from "../lib";
+import { getPantogramPants, scavengeDaycare, spendAllMpOnLibrams, vote } from "../iotms";
+import { assert, checkAvailable, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
@@ -130,8 +124,6 @@ export const CoilWire: Quest<Task> = {
         [$effect`The Odour of Magick`, () => use($item`natural magick candle`)],
         [$item`"I Voted!" sticker`,    () => vote()],
         [$item`pantogram pants`,       () => getPantogramPants()],
-        [$item`battery (AAA)`,         () => harvestBatteries()],
-        [$item`battery (lantern)`,     () => create($item`battery (lantern)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
@@ -202,7 +194,7 @@ export const CoilWire: Quest<Task> = {
       completed: () => monstersReminisced().includes($monster`pterodactyl`),
       do: () => reminisce($monster`pterodactyl`),
       post: () => {
-        if (!monstersReminisced().includes($monster`pterodactyl`)) throw `Failed to reminisce?`;
+        assert(monstersReminisced().includes($monster`pterodactyl`), "Failed to reminisce?");
       },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
       combat: RunawayCombat,

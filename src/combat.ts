@@ -14,7 +14,18 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { $item, $location, $monster, $skill, get, getModifier, have, Macro } from "libram";
+import {
+  $effect,
+  $item,
+  $location,
+  $monster,
+  $monsters,
+  $skill,
+  get,
+  getModifier,
+  have,
+  Macro,
+} from "libram";
 import { haveItemOrEffect } from "./lib";
 
 const notAllowList = [
@@ -103,8 +114,33 @@ const notAllowList = [
   $monster`"plain" girl`,
   // toxic teacups
   $monster`toxic beastie`,
+  // shadow rifts
+  $monster`shadow bat`,
+  $monster`shadow cow`,
+  $monster`shadow devil`,
+  $monster`shadow guy`,
+  $monster`shadow hexagon`,
+  $monster`shadow orb`,
+  $monster`shadow prism`,
+  $monster`shadow slab`,
+  $monster`shadow snake`,
+  $monster`shadow spider`,
+  $monster`shadow stalk`,
+  $monster`shadow tree`,
   // Boss(es)
   $monster`Mother Slime`,
+  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow cauldron`,
+  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow matrix`,
+  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow orery`,
+  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow scythe`,
+  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow spire`,
+  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow tongue`,
 ]
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
@@ -122,6 +158,7 @@ const Slow = Macro.skill($skill`Curse of Weaksauce`)
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
+  .trySkill($skill`%fn\, spit on me!`)
   .skill($skill`Sing Along`)
   .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
   .attack()
@@ -172,11 +209,14 @@ export const DefaultCombat = DefaultStrategy()
       .trySkill($skill`Gingerbread Mob Hit`)
       .trySkill($skill`Shocking Lick`)
       .abort(),
-    [
-      $monster`gingerbread finance bro`,
-      $monster`gingerbread gentrifier`,
-      $monster`gingerbread tech bro`,
-    ]
+    $monsters`gingerbread finance bro, gingerbread gentrifier, gingerbread tech bro`
+  )
+  .macro(
+    // eslint-disable-next-line libram/verify-constants
+    Macro.if_(`!haseffect ${$effect`Shadow Affinity`} || !snarfblat 567`, Macro.abort()).trySkill(
+      $skill`Portscan`
+    ),
+    $monster`Government agent`
   )
   .macro(Macro.attack().repeat(), $monster`LOV Enforcer`)
   .macro(Macro.skill($skill`Candyblast`).repeat(), $monster`LOV Engineer`)
@@ -185,6 +225,21 @@ export const DefaultCombat = DefaultStrategy()
       .skill($skill`Snokebomb`)
       .abort(),
     $monster`Mother Slime`
+  )
+  .macro(
+    // eslint-disable-next-line libram/verify-constants
+    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort()).skill($skill`Garbage Nova`),
+    // eslint-disable-next-line libram/verify-constants
+    $monsters`shadow cauldron, shadow matrix, shadow scythe, shadow spire, shadow tongue`
+  )
+  .macro(
+    // eslint-disable-next-line libram/verify-constants
+    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
+      .skill($skill`Sing Along`)
+      .attack()
+      .repeat(),
+    // eslint-disable-next-line libram/verify-constants
+    $monster`shadow orrery`
   )
   .macro(
     () =>
@@ -210,6 +265,7 @@ export const DefaultCombat = DefaultStrategy()
       `monsterid ${$monster`toxic beastie`.id}`,
       Macro.skill($skill`Summon Love Gnats`)
         .trySkill($skill`Bowl Sideways`)
+        .trySkill($skill`Portscan`)
         .skill($skill`Sing Along`)
         .trySkill($skill`Chest X-Ray`)
         .trySkill($skill`Shattering Punch`)

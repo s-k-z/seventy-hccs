@@ -10,6 +10,10 @@ import {
 } from "kolmafia";
 import { get, have } from "libram";
 
+export function assert(expectTrue: boolean, messageIfFalse: string): void {
+  if (!expectTrue) throw messageIfFalse;
+}
+
 export function acquireEffect(e: Effect): void {
   if (!have(e) && e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
   if (!have(e)) cliExecute(e.default);
