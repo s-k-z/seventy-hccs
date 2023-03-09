@@ -23,7 +23,6 @@ import {
 } from "libram";
 import { DefaultCombat } from "../combat";
 import { config } from "../config";
-import { MoonSign, tuneMoon } from "../iotms";
 import { haveItemOrEffect } from "../lib";
 
 export function refreshGhost(): void {
@@ -73,13 +72,12 @@ export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): OutfitSpec {
     return { familiar: $familiar`Shorter-Order Cook`, famequip: $item`none` };
   }
 
-  const absinthe = $item`tiny bottle of absinthe`;
-  if (req === AdvReq.Normal && !haveItemOrEffect(absinthe)) {
-    return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
-  }
-
   if (!$items`rope, burning newspaper, burning paper crane`.some((i) => have(i))) {
     return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
+  }
+
+  if (!have($effect`Spit Upon`) && get("camelSpit") < 100) {
+    return { familiar: $familiar`Melodramedary`, famequip: $item`tiny stillsuit` };
   }
 
   return { familiar: $familiar`Baby Sandworm`, famequip: $item`tiny stillsuit` };
@@ -139,13 +137,5 @@ export function innerElf(): Task {
     post: () => Clan.join(config.main_clan),
     outfit: { acc3: $item`Kremlin's Greatest Briefcase`, familiar: $familiar`Machine Elf` },
     combat: DefaultCombat,
-  };
-}
-
-export function tuneMoonPlatypus(): Task {
-  return {
-    name: "Tune Moon",
-    completed: () => get("moonTuned"),
-    do: () => tuneMoon(MoonSign.Platypus),
   };
 }

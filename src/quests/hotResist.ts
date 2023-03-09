@@ -40,9 +40,11 @@ export const HotResistQuest: Quest<Task> = {
       do: () => runTest(CommunityService.HotRes),
       effects: [
         $effect`Astral Shell`,
+        $effect`Blood Bond`,
         $effect`Elemental Saucesphere`,
         $effect`Empathy`,
         $effect`Fireproof Foam Suit`,
+        $effect`Leash of Linguini`,
       ],
       outfit: {
         hat: $item`Daylight Shavings Helmet`,

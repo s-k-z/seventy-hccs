@@ -14,13 +14,12 @@ import {
   Macro,
 } from "libram";
 import { mapMonster } from "../combat";
-import { innerElf, runTest, tuneMoonPlatypus } from "./shared";
+import { innerElf, runTest } from "./shared";
 
 export const WeaponDamageQuest: Quest<Task> = {
   name: "Reduce Gazelle Population",
   completed: () => CommunityService.WeaponDamage.isDone(),
   tasks: [
-    tuneMoonPlatypus(),
     innerElf(),
     {
       name: "Meteor Showered",

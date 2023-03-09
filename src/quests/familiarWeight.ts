@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { chew, drink, Item, itemAmount, use, weightAdjustment } from "kolmafia";
+import { autosell, chew, drink, Item, itemAmount, use, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -12,14 +12,14 @@ import {
   have,
   Macro,
 } from "libram";
+import { MoonSign, tuneMoon } from "../iotms";
 import { acquireEffect, itemToEffect } from "../lib";
-import { runTest, tuneMoonPlatypus } from "./shared";
+import { runTest } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
   name: "Breed More Collies",
   completed: () => CommunityService.FamiliarWeight.isDone(),
   tasks: [
-    tuneMoonPlatypus(),
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
@@ -55,7 +55,12 @@ export const FamiliarWeightQuest: Quest<Task> = {
           acquireEffect($effect`Ode to Booze`);
           drink($item`1950 Vampire Vintner wine`); // 3-5 adventures, 1 drunk
         }
-        if (needMore()) chew($item`abstraction: joy`);
+        tuneMoon(MoonSign.Platypus);
+        if (needMore() && have($item`abstraction: joy`)) chew($item`abstraction: joy`);
+        if (needMore()) {
+          autosell(1, $item`space blanket`); // +5000 meat
+          drink($item`Hot Socks`);
+        }
       },
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [

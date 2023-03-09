@@ -166,11 +166,8 @@ const Slow = Macro.skill($skill`Curse of Weaksauce`)
 
 export const DefaultMacro = (): Macro => (myFamiliar().combat ? Fast : Slow);
 
-export const DefaultStrategy = () => {
-  return new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort()));
-};
-
-export const DefaultCombat = DefaultStrategy()
+export const DefaultCombat = new CombatStrategy()
+  .startingMacro(Macro.if_(notAllowList, Macro.abort()))
   .macro(
     Macro.if_(
       `hasskill ${toInt($skill`Shoot Ghost`)}`,

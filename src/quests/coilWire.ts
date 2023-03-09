@@ -256,10 +256,7 @@ export const CoilWire: Quest<Task> = {
         get("_saberForceUses") > 0 ||
         monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
-      post: () => {
-        DNALab.makeTonic();
-        DNALab.hybridize();
-      },
+      post: () => DNALab.hybridize(),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
         .ccs(
@@ -299,6 +296,7 @@ export const CoilWire: Quest<Task> = {
       name: "Send autumn-aton",
       completed: () => !AutumnAton.available(),
       do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
+      post: () => assert(!AutumnAton.available(), "Autumn-aton is still here?"),
     },
     {
       name: "Coil Wire",

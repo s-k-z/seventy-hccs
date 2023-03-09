@@ -22,7 +22,11 @@ export const ItemDropQuest: Quest<Task> = {
       do: $location`The Dire Warren`,
       effects: $effects`Ode to Booze`,
       outfit: { back: $item`vampyric cloake`, familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill`Become a Bat`).runaway()),
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Become a Bat`)
+          .trySkill($skill`Bowl Straight Up`)
+          .runaway()
+      ),
     },
     {
       name: "Booze & Item Drop Test",
@@ -33,9 +37,12 @@ export const ItemDropQuest: Quest<Task> = {
         $effect`Bat-Adjacent Form`,
         $effect`Blessing of the Bird`,
         $effect`Blessing of your favorite Bird`,
+        $effect`Cosmic Ball in the Air`,
         $effect`Crunching Leaves`,
+        $effect`El Aroma de Salsa`,
         $effect`Fat Leon's Phat Loot Lyric`,
         $effect`Feeling Lost`,
+        $effect`Human-Pirate Hybrid`,
         $effect`Hustlin'`,
         $effect`items.enh`,
         $effect`Nearly All-Natural`,

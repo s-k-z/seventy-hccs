@@ -1,7 +1,6 @@
 import { CombatStrategy, OutfitSpec, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
-  autosell,
   cliExecute,
   create,
   eat,
@@ -38,6 +37,7 @@ import {
   $items,
   $location,
   $monster,
+  $monsters,
   $skill,
   $slot,
   $stat,
@@ -48,14 +48,7 @@ import {
   SourceTerminal,
   Witchess,
 } from "libram";
-import {
-  DefaultCombat,
-  DefaultMacro,
-  DefaultStrategy,
-  mapMonster,
-  RunawayCombat,
-  StenchCombat,
-} from "../combat";
+import { DefaultCombat, DefaultMacro, mapMonster, RunawayCombat, StenchCombat } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import {
@@ -224,11 +217,6 @@ export const Leveling: Quest<Task> = {
       do: () => use($item`MayDay™ supply package`),
     },
     {
-      name: "Sell space blanket",
-      completed: () => !have($item`space blanket`),
-      do: () => autosell(1, $item`space blanket`), // +5000 meat
-    },
-    {
       name: "Configure KGB",
       completed: () => get("_kgbClicksUsed") > 0,
       do: () => cliExecute("Briefcase e spell spooky -combat"),
@@ -240,6 +228,27 @@ export const Leveling: Quest<Task> = {
         equip($slot`acc2`, $item`Powerful Glove`);
         acquireEffect($effect`Triple-Sized`);
       },
+    },
+    {
+      name: "Spit On a Pirate",
+      ready: () => get("camelSpit") >= 100,
+      completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
+      do: $location`Pirates of the Garbage Barges`,
+      post: () => DNALab.makeTonic(),
+      effects: $effects`Ode to Booze`,
+      outfit: { familiar: $familiar`Melodramedary`, acc3: $item`Kremlin's Greatest Briefcase` },
+      combat: new CombatStrategy()
+        .macro(
+          Macro.tryItem($item`DNA extraction syringe`)
+            .trySkill($skill`%fn\, spit on me!`)
+            .trySkill($skill`Throw Latte on Opponent`)
+            .trySkill($skill`KGB tranquilizer dart`)
+            .trySkill($skill`Reflex Hammer`)
+            .trySkill($skill`Feel Hatred`)
+            .abort(),
+          $monsters`filthy pirate, fishy pirate, flashy pirate, funky pirate`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Advance Clock",
@@ -264,7 +273,6 @@ export const Leveling: Quest<Task> = {
           .trySkill($skill`Throw Latte on Opponent`)
           .trySkill($skill`KGB tranquilizer dart`)
           .trySkill($skill`Reflex Hammer`)
-          .trySkill($skill`Bowl a Curveball`)
           .trySkill($skill`Feel Hatred`)
           .abort()
       ),
@@ -668,54 +676,7 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Deep Machine Tunnels Fights",
-      completed: () => get("_machineTunnelsAdv") >= 3,
-      prepare: topOffHp,
-      choices: { 1119: -1 }, // Shining Mauve Backwards In Time
-      do: $location`The Deep Machine Tunnels`,
-      outfit: () => levelingOutfit(10000, AdvReq.DMT),
-      combat: DefaultCombat,
-    },
-    {
-      name: "Ensure Abstraction: Action",
-      completed: () =>
-        haveItemOrEffect($item`abstraction: joy`) ||
-        have($item`abstraction: action`) ||
-        get("_machineTunnelsAdv") >= 4,
-      prepare: topOffHp,
-      choices: { 1119: -1 }, // Shining Mauve Backwards In Time
-      do: $location`The Deep Machine Tunnels`,
-      post: () => checkAvailable($item`abstraction: action`),
-      outfit: () => levelingOutfit(10000, AdvReq.DMT),
-      combat: DefaultStrategy()
-        .macro(
-          Macro.if_(
-            `!monsterid ${$monster`Performer of Actions`.id}`,
-            Macro.skill($skill`Macrometeorite`)
-          ).skill($skill`Feel Envy`)
-        )
-        .macro(DefaultMacro),
-    },
-    {
-      name: "Ensure Abstraction: Joy",
-      ready: () => have($item`abstraction: action`),
-      completed: () => haveItemOrEffect($item`abstraction: joy`) || get("_machineTunnelsAdv") >= 5,
-      prepare: topOffHp,
-      choices: { 1119: -1 }, // Shining Mauve Backwards In Time
-      do: $location`The Deep Machine Tunnels`,
-      post: () => checkAvailable($item`abstraction: joy`),
-      outfit: () => levelingOutfit(10000, AdvReq.DMT),
-      combat: DefaultStrategy()
-        .macro(
-          Macro.if_(
-            `!monsterid ${$monster`Thinker of Thoughts`.id}`,
-            Macro.skill($skill`Macrometeorite`)
-          ).item($item`abstraction: action`)
-        )
-        .macro(DefaultMacro),
-    },
-    {
-      name: "Remaining Deep Machine Tunnels Fights",
+      name: "Deep Machine Tunnels",
       completed: () => get("_machineTunnelsAdv") >= 5,
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
@@ -724,7 +685,7 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Chest X-ray Fights",
+      name: "Chest X-Ray",
       completed: () => get("_chestXRayUsed") >= 3,
       do: $location`The Toxic Teacups`,
       outfit: () => ({
@@ -734,7 +695,7 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Shattering Punch Fights",
+      name: "Shattering Punch",
       completed: () => get("_shatteringPunchUsed") >= 3,
       do: $location`The Toxic Teacups`,
       outfit: () => levelingOutfit(11111, AdvReq.Toxic),

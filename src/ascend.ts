@@ -1,6 +1,5 @@
 import {
   canInteract,
-  isBanished,
   myPath,
   print,
   pvpAttacksLeft,
@@ -9,7 +8,7 @@ import {
   userConfirm,
   visitUrl,
 } from "kolmafia";
-import { $class, $item, $monster, $path, ascend, have, Lifestyle, prepareAscension } from "libram";
+import { $class, $item, $path, ascend, have, Lifestyle, prepareAscension } from "libram";
 
 export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
   if (myPath() === $path`Community Service`) return true;
@@ -17,14 +16,6 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
   const inWrongPath = !canInteract();
   if (inWrongPath) {
     print("Nope", "red");
-    return false;
-  }
-
-  const banish = $monster`Perceiver of Sensations`;
-  const found = () => isBanished(banish);
-  if (!found()) visitUrl("museum.php?action=icehouse");
-  if (!found()) {
-    print(`Need to ice house ${banish}`, "red");
     return false;
   }
 
