@@ -387,13 +387,10 @@ export const Leveling: Quest<Task> = {
       completed: () => haveItemOrEffect($item`imported taffy`) || get("_speakeasyFreeFights") >= 3,
       do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
       post: () => visitUrl("place.php?whichplace=speakeasy"),
-      outfit: () => ({
-        ...levelingOutfit(),
-        acc3: $item`Lil' Doctor™ bag`,
-      }),
+      outfit: () => levelingOutfit(),
       combat: new CombatStrategy()
         .macro(
-          Macro.skill($skill`Otoscope`)
+          Macro.skill($skill`Feel Envy`)
             .skill($skill`Sing Along`)
             .attack(),
           $monster`goblin flapper`

@@ -5,13 +5,13 @@ import {
   $familiar,
   $item,
   $items,
-  $location,
   $monster,
   $skill,
   CommunityService,
   have,
   Macro,
 } from "libram";
+import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { MoonSign, tuneMoon } from "../iotms";
 import { acquireEffect, itemToEffect } from "../lib";
 import { runTest } from "./shared";
@@ -23,14 +23,14 @@ export const FamiliarWeightQuest: Quest<Task> = {
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      do: $location`The Dire Warren`,
+      do: () => reminisce($monster`toothless mastiff bitch`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
           `skill ${$skill`Meteor Shower`}
           twiddle your thumbs
           skill ${$skill`Use the Force`}`,
-          $monster`fluffy bunny`
+          $monster`toothless mastiff bitch`
         )
         .macro(Macro.abort()),
     },

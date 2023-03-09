@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { equip, use } from "kolmafia";
+import { equip } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -13,7 +13,6 @@ import {
   have,
   Macro,
 } from "libram";
-import { mapMonster } from "../combat";
 import { innerElf, runTest } from "./shared";
 
 export const WeaponDamageQuest: Quest<Task> = {
@@ -24,15 +23,14 @@ export const WeaponDamageQuest: Quest<Task> = {
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      prepare: () => use($item`tiny bottle of absinthe`),
-      do: () => mapMonster($location`The Stately Pleasure Dome`, $monster`toothless mastiff bitch`),
+      do: $location`The Dire Warren`,
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
           `skill ${$skill`Meteor Shower`}
           twiddle your thumbs
           skill ${$skill`Use the Force`}`,
-          $monster`toothless mastiff bitch`
+          $monster`fluffy bunny`
         )
         .macro(Macro.abort()),
     },

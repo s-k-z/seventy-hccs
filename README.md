@@ -24,8 +24,9 @@ git checkout https://github.com/s-k-z/seventy-hccs.git release
    - foreign language tapes
    - a piggy bank
 7. [Combat lover's locket](https://kol.coldfront.net/thekolwiki/index.php/Combat_lover%27s_locket) containing:
-   - cocktail shrimp
-   - pterodactyl
+   - [cocktail shrimp](https://kol.coldfront.net/thekolwiki/index.php/Cocktail_shrimp)
+   - [pterodactyl](https://kol.coldfront.net/thekolwiki/index.php/Pterodactyl)
+   - [toothless mastiff](https://kol.coldfront.net/thekolwiki/index.php/Toothless_mastiff_bitch)
 8. [Little Geneticist DNA-Splicing Lab](https://kol.coldfront.net/thekolwiki/index.php/Little_Geneticist_DNA-Splicing_Lab) installed into your workshed
 9. [Gingerbread City fully upgraded](https://kol.coldfront.net/thekolwiki/index.php/Civic_Planning_Office) with access to the Upscale Retail District, Sewers, Digital Clock and Thickened Walls
 10. A [Gold detective badge](https://kol.coldfront.net/thekolwiki/index.php/Gold_detective_badge) purchased from the [11th Precinct](https://kol.coldfront.net/thekolwiki/index.php/The_Precinct)
