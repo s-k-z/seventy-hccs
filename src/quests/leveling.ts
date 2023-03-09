@@ -582,9 +582,16 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Runaway",
-      completed: () => $location`Shadow Rift`.turnsSpent > 0,
-      do: $location`Shadow Rift`,
-      post: () => assert($location`Shadow Rift`.turnsSpent > 0, "Shadow Rift turns spent still 0?"),
+      // eslint-disable-next-line libram/verify-constants
+      completed: () => $location`Shadow Rift (The Nearby Plains)`.turnsSpent > 0,
+      // eslint-disable-next-line libram/verify-constants
+      do: $location`Shadow Rift (The Nearby Plains)`,
+      post: () =>
+        assert(
+          // eslint-disable-next-line libram/verify-constants
+          $location`Shadow Rift (The Nearby Plains)`.turnsSpent > 0,
+          "Shadow Rift turns spent still 0?"
+        ),
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: RunawayCombat,
     },
@@ -729,17 +736,35 @@ export const Leveling: Quest<Task> = {
         ...levelingOutfit(10000),
         shirt: $item`makeshift garbage shirt`,
       }),
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.if_(
+            // eslint-disable-next-line libram/verify-constants
+            `!haseffect ${$effect`Shadow Affinity`} || !snarfblat ${$location`Shadow Rift`.id}`,
+            Macro.abort()
+          )
+            .skill($skill`Curse of Weaksauce`)
+            .item($item`Time-Spinner`)
+            .skill($skill`Micrometeorite`)
+            .skill($skill`Sing Along`)
+            .trySkill($skill`Portscan`)
+            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+            .attack()
+            .repeat(),
+          $monster`Government agent`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Shadow Entity",
       // eslint-disable-next-line libram/verify-constants
       completed: () => !have($effect`Shadow Affinity`),
-      prepare: () => {
-        assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "Don't have Portscan?");
-      },
       do: () => $location`Shadow Rift`,
-      outfit: () => levelingOutfit(),
+      outfit: () => ({
+        ...levelingOutfit(),
+        familiar: $familiar`Machine Elf`,
+        famequip: $item`tiny stillsuit`,
+      }),
       combat: DefaultCombat,
     },
     {

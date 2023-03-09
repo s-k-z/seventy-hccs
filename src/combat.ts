@@ -104,6 +104,7 @@ const notAllowList = [
   $monster`slime blob`,
   $monster`terrible mutant`,
   // deep machine tunnels
+  $monster`Perceiver of Sensations`,
   $monster`Performer of Actions`,
   $monster`Thinker of Thoughts`,
   // neverending party
@@ -158,7 +159,6 @@ const Slow = Macro.skill($skill`Curse of Weaksauce`)
     `hasskill ${toInt($skill`lecture on relativity`)}`,
     Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
   )
-  .trySkill($skill`%fn\, spit on me!`)
   .skill($skill`Sing Along`)
   .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
   .attack()
@@ -207,13 +207,6 @@ export const DefaultCombat = new CombatStrategy()
       .trySkill($skill`Shocking Lick`)
       .abort(),
     $monsters`gingerbread finance bro, gingerbread gentrifier, gingerbread tech bro`
-  )
-  .macro(
-    // eslint-disable-next-line libram/verify-constants
-    Macro.if_(`!haseffect ${$effect`Shadow Affinity`} || !snarfblat 567`, Macro.abort()).trySkill(
-      $skill`Portscan`
-    ),
-    $monster`Government agent`
   )
   .macro(Macro.attack().repeat(), $monster`LOV Enforcer`)
   .macro(Macro.skill($skill`Candyblast`).repeat(), $monster`LOV Engineer`)
