@@ -579,13 +579,10 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Runaway",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => $location`Shadow Rift (The Nearby Plains)`.turnsSpent > 0,
-      // eslint-disable-next-line libram/verify-constants
       do: $location`Shadow Rift (The Nearby Plains)`,
       post: () =>
         assert(
-          // eslint-disable-next-line libram/verify-constants
           $location`Shadow Rift (The Nearby Plains)`.turnsSpent > 0,
           "Shadow Rift turns spent still 0?"
         ),
@@ -594,21 +591,17 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Become Shadow Affine",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => get("questRufus") !== "unstarted",
       // Calling Rufus: (1) I'll fight the entity (2) I'll find the artifact (3) I'll collect the goods (4) Hang up
       choices: { 1497: 2 },
       post: () => {
-        // eslint-disable-next-line libram/verify-constants
         assert(have($effect`Shadow Affinity`), "Failed to get shadow affinity?");
         assert(get("questRufus") !== "unstarted", "Failed to start Rufus quest?");
       },
-      // eslint-disable-next-line libram/verify-constants
       do: () => use($item`closed-circuit pay phone`),
     },
     {
       name: "Shadow Monster",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => haveEffect($effect`Shadow Affinity`) <= 4,
       do: () => $location`Shadow Rift`,
       outfit: () => levelingOutfit(),
@@ -722,7 +715,6 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Agent",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => haveEffect($effect`Shadow Affinity`) < 2,
       acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: () => {
@@ -736,7 +728,6 @@ export const Leveling: Quest<Task> = {
       combat: new CombatStrategy()
         .macro(
           Macro.if_(
-            // eslint-disable-next-line libram/verify-constants
             `!haseffect ${$effect`Shadow Affinity`} || !snarfblat ${$location`Shadow Rift`.id}`,
             Macro.abort()
           )
@@ -754,7 +745,6 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Entity",
-      // eslint-disable-next-line libram/verify-constants
       completed: () => !have($effect`Shadow Affinity`),
       do: () => $location`Shadow Rift`,
       outfit: () => ({

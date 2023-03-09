@@ -130,17 +130,11 @@ const notAllowList = [
   $monster`shadow tree`,
   // Boss(es)
   $monster`Mother Slime`,
-  // eslint-disable-next-line libram/verify-constants
   $monster`shadow cauldron`,
-  // eslint-disable-next-line libram/verify-constants
   $monster`shadow matrix`,
-  // eslint-disable-next-line libram/verify-constants
-  $monster`shadow orery`,
-  // eslint-disable-next-line libram/verify-constants
+  $monster`shadow orrery`,
   $monster`shadow scythe`,
-  // eslint-disable-next-line libram/verify-constants
   $monster`shadow spire`,
-  // eslint-disable-next-line libram/verify-constants
   $monster`shadow tongue`,
 ]
   .map((m: Monster): string => `!monsterid ${m.id}`)
@@ -217,18 +211,14 @@ export const DefaultCombat = new CombatStrategy()
     $monster`Mother Slime`
   )
   .macro(
-    // eslint-disable-next-line libram/verify-constants
     Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort()).skill($skill`Garbage Nova`),
-    // eslint-disable-next-line libram/verify-constants
     $monsters`shadow cauldron, shadow matrix, shadow scythe, shadow spire, shadow tongue`
   )
   .macro(
-    // eslint-disable-next-line libram/verify-constants
     Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
       .skill($skill`Sing Along`)
       .attack()
       .repeat(),
-    // eslint-disable-next-line libram/verify-constants
     $monster`shadow orrery`
   )
   .macro(
