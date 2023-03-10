@@ -70,7 +70,7 @@ jobs:
         working-directory: ${{ env.path }}
 
       - name: Commit & Push
-        uses: s0/git-publish-subdir-action@develop
+        uses: s0/git-publish-subdir-action@92faf786f11dfa44fc366ac3eb274d193ca1af7e
         env:
           REPO: self
           BRANCH: release
