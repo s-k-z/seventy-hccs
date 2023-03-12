@@ -245,18 +245,20 @@ export const DefaultCombat = new CombatStrategy()
     const safe = maxShortyDamage + 25;
     return Macro.if_(
       `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
-      Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
-    ).if_(
-      `monsterid ${$monster`toxic beastie`.id}`,
-      Macro.if_(`monsterhpabove ${2 * safe}`, Macro.skill($skill`Summon Love Gnats`))
-        .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Bowl Sideways`))
-        .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
-        .trySkill($skill`Chest X-Ray`)
-        .trySkill($skill`Shattering Punch`)
-        .trySkill($skill`Gingerbread Mob Hit`)
-        .trySkill($skill`Shocking Lick`)
-        .abort()
-    );
+      Macro.skill($skill`Back-Up to your Last Enemy`)
+    )
+      .skill($skill`Saucy Salve`)
+      .if_(
+        `monsterid ${$monster`toxic beastie`.id}`,
+        Macro.if_(`monsterhpabove ${2 * safe}`, Macro.skill($skill`Summon Love Gnats`))
+          .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Bowl Sideways`))
+          .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
+          .trySkill($skill`Chest X-Ray`)
+          .trySkill($skill`Shattering Punch`)
+          .trySkill($skill`Gingerbread Mob Hit`)
+          .trySkill($skill`Shocking Lick`)
+          .abort()
+      );
   }, $monster`toxic beastie`)
   .macro(
     Macro.item($item`Time-Spinner`)
@@ -285,8 +287,8 @@ export const StenchCombat = new CombatStrategy().macro(() => {
       Macro.skill($skill`Back-Up to your Last Enemy`)
     )
   )
-    .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
     .skill($skill`Saucy Salve`)
+    .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
     .if_(
       `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
       Macro.trySkill($skill`Bowl Sideways`)
