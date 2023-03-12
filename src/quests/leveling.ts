@@ -399,7 +399,7 @@ export const Leveling: Quest<Task> = {
       combat: new CombatStrategy()
         .macro(
           Macro.tryItem($item`DNA extraction syringe`)
-            .trySkill($skill`%fn\, spit on me!`)
+            .trySkill($skill`%fn, spit on me!`)
             .trySkill($skill`Throw Latte on Opponent`)
             .trySkill($skill`KGB tranquilizer dart`)
             .trySkill($skill`Reflex Hammer`)
@@ -628,11 +628,11 @@ export const Leveling: Quest<Task> = {
       completed: () => get("questRufus") !== "unstarted",
       // Calling Rufus: (1) I'll fight the entity (2) I'll find the artifact (3) I'll collect the goods (4) Hang up
       choices: { 1497: 1 },
+      do: () => use($item`closed-circuit pay phone`),
       post: () => {
         assert($effect`Shadow Affinity`);
         assert(get("questRufus") !== "unstarted", "Failed to start Rufus quest?");
       },
-      do: () => use($item`closed-circuit pay phone`),
     },
     {
       name: "Shadow Monster",
