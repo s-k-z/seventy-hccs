@@ -5,6 +5,7 @@ import {
   $familiar,
   $item,
   $items,
+  $location,
   $monster,
   $skill,
   CommunityService,
@@ -12,8 +13,9 @@ import {
   Macro,
 } from "libram";
 import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
+import { mapMonster } from "../combat";
 import { MoonSign, tuneMoon } from "../iotms";
-import { acquireEffect, itemToEffect } from "../lib";
+import { acquireEffect, itemToEffect, tryUse } from "../lib";
 import { runTest } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
@@ -23,13 +25,19 @@ export const FamiliarWeightQuest: Quest<Task> = {
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      do: () => reminisce($monster`toothless mastiff bitch`),
+      prepare: () => tryUse($item`tiny bottle of absinthe`),
+      do: () => {
+        const target = $monster`toothless mastiff bitch`;
+        have($effect`Absinthe-Minded`)
+          ? mapMonster($location`The Stately Pleasure Dome`, target)
+          : reminisce(target);
+      },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
           `skill ${$skill`Meteor Shower`}
-          twiddle your thumbs
-          skill ${$skill`Use the Force`}`,
+        twiddle your thumbs
+        skill ${$skill`Use the Force`}`,
           $monster`toothless mastiff bitch`
         )
         .macro(Macro.abort()),
