@@ -42,7 +42,10 @@ export const SpellDamageQuest: Quest<Task> = {
         );
       },
       do: () => use($item`photocopied monster`),
-      post: () => assert($item`corrupted marrow`),
+      post: () => {
+        assert($item`corrupted marrow`);
+        assert($effect`Meteor Showered`);
+      },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
@@ -78,7 +81,7 @@ export const SpellDamageQuest: Quest<Task> = {
         $effect`Sigils of Yeg`,
         $effect`Song of Sauce`,
         $effect`Sparkly!`,
-        $effect`Spirit of Peppermint`,
+        $effect`Spirit of Garlic`,
         $effect`Spit Upon`,
         $effect`The Magic of LOV`,
         $effect`Toxic Vengeance`,

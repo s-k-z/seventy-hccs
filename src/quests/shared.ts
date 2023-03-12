@@ -97,7 +97,10 @@ export function deepDarkVisions(): Task {
       assert(myHp() > safeHpLimit(), "Failed to heal enough for Deep Dark Visions?");
       useSkill($skill`Deep Dark Visions`);
     },
-    post: () => useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`),
+    post: () => {
+      assert($effect`Visions of the Deep Dark Deeps`);
+      useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
+    },
     outfit: {
       back: $item`unwrapped knock-off retro superhero cape`,
       shirt: $item`Jurassic Parka`,
@@ -122,7 +125,10 @@ export function innerElf(): Task {
     },
     choices: { 326: 1 }, // Showdown: (1) fight mother slime (2) leave
     do: $location`The Slime Tube`,
-    post: () => Clan.join(config.main_clan),
+    post: () => {
+      Clan.join(config.main_clan);
+      assert($effect`Inner Elf`);
+    },
     outfit: { acc3: $item`Kremlin's Greatest Briefcase`, familiar: $familiar`Machine Elf` },
     combat: DefaultCombat,
   };

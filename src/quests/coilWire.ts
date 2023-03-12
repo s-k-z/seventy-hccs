@@ -171,7 +171,7 @@ export const CoilWire: Quest<Task> = {
         $effect`Feeling Excited`,
         $effect`Feeling Peaceful`,
         $effect`Inscrutable Gaze`,
-        $effect`Spirit of Peppermint`,
+        $effect`Spirit of Garlic`,
         $effect`Triple-Sized`,
         $effect`Uncucumbered`,
       ],

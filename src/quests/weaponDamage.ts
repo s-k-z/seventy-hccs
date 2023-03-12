@@ -13,6 +13,7 @@ import {
   have,
   Macro,
 } from "libram";
+import { assert } from "../lib";
 import { innerElf, runTest } from "./shared";
 
 export const WeaponDamageQuest: Quest<Task> = {
@@ -24,6 +25,7 @@ export const WeaponDamageQuest: Quest<Task> = {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
       do: $location`The Dire Warren`,
+      post: () => assert($effect`Meteor Showered`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(

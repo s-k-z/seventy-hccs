@@ -217,14 +217,16 @@ export const DefaultCombat = new CombatStrategy()
     $monster`Mother Slime`
   )
   .macro(
-    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort()).skill($skill`Garbage Nova`),
+    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
+      .skill($skill`Saucegeyser`)
+      .abort(),
     $monsters`shadow cauldron, shadow matrix, shadow scythe, shadow spire, shadow tongue`
   )
   .macro(
     Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
-      .skill($skill`Sing Along`)
+      .skill($skill`Northern Explosion`)
       .attack()
-      .repeat(),
+      .abort(),
     $monster`shadow orrery`
   )
   .macro(
@@ -235,14 +237,7 @@ export const DefaultCombat = new CombatStrategy()
       ),
     $monster`Performer of Actions`
   )
-  .macro(
-    () =>
-      Macro.externalIf(
-        !haveItemOrEffect($item`abstraction: joy`),
-        Macro.tryItem($item`abstraction: action`)
-      ),
-    $monster`Thinker of Thoughts`
-  )
+  .macro(Macro.tryItem($item`abstraction: action`), $monster`Thinker of Thoughts`)
   .macro(
     Macro.if_(
       `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
@@ -279,7 +274,7 @@ export const StenchCombat = new CombatStrategy().macro(() => {
   const weight = 20 + weightAdjustment();
   const bonus = getModifier("Familiar Damage");
   const maxVintnerDamage = 3 + weight + bonus;
-  const safe = maxVintnerDamage + 25;
+  const safe = 2 * (maxVintnerDamage + 25);
   return Macro.if_(
     `monsterid ${$monster`toxic beastie`.id}`,
     Macro.if_(
@@ -298,8 +293,9 @@ export const StenchCombat = new CombatStrategy().macro(() => {
       Macro.if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Feel Pride`))
     )
     .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
-    .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Silent Treatment`))
-    .skill($skill`Garbage Nova`);
+    .skill($skill`Stuffed Mortar Shell`)
+    .skill($skill`Silent Treatment`)
+    .abort();
 });
 
 export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());

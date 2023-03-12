@@ -10,6 +10,7 @@ import {
   have,
   Macro,
 } from "libram";
+import { assert } from "../lib";
 import { runTest } from "./shared";
 
 export const HotResistQuest: Quest<Task> = {
@@ -20,6 +21,7 @@ export const HotResistQuest: Quest<Task> = {
       name: "Fireproof Foam Suit",
       completed: () => have($effect`Fireproof Foam Suit`),
       do: $location`The Dire Warren`,
+      post: () => assert($effect`Fireproof Foam Suit`),
       outfit: {
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $item`industrial fire extinguisher`,

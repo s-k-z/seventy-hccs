@@ -10,6 +10,7 @@ import {
   have,
   Macro,
 } from "libram";
+import { assert } from "../lib";
 import { runTest } from "./shared";
 
 export const ItemDropQuest: Quest<Task> = {
@@ -20,11 +21,12 @@ export const ItemDropQuest: Quest<Task> = {
       name: "Become a Bat",
       completed: () => have($effect`Bat-Adjacent Form`),
       do: $location`The Dire Warren`,
+      post: () => $effects`Bat-Adjacent Form, Cosmic Ball in the Air`.forEach((e) => assert(e)),
       effects: $effects`Ode to Booze`,
       outfit: { back: $item`vampyric cloake`, familiar: $familiar`Frumious Bandersnatch` },
       combat: new CombatStrategy().macro(
-        Macro.trySkill($skill`Become a Bat`)
-          .trySkill($skill`Bowl Straight Up`)
+        Macro.skill($skill`Become a Bat`)
+          .skill($skill`Bowl Straight Up`)
           .runaway()
       ),
     },
