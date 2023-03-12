@@ -79,6 +79,22 @@ function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
   };
 }
 
+function lightweightOutfit(req?: AdvReq): OutfitSpec {
+  return {
+    hat: $item`Iunion Crown`,
+    back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
+    shirt: get("garbageShirtCharge") > 0 ? $item`makeshift garbage shirt` : $item`Jurassic Parka`,
+    weapon: $item`June cleaver`,
+    offhand: $item`unbreakable umbrella`,
+    pants: $item`Cargo Cultist Shorts`,
+    acc1: $item`Eight Days a Week Pill Keeper`,
+    acc2: $items`battle broom, gold detective badge`,
+    acc3: $item`combat lover's locket`,
+    ...selectBestFamiliar(req),
+    modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
+  };
+}
+
 const vintnerOutfit = (): OutfitSpec => ({
   hat: $item`Iunion Crown`,
   back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
@@ -323,6 +339,10 @@ export const Leveling: Quest<Task> = {
       post: () => {
         DNALab.makeTonic();
         use($item`Gene Tonic: Elf`);
+        assert(
+          get("_deckCardsSeen").includes("Christmas Card"),
+          "Failed to record christmas card draw?"
+        );
       },
       effects: $effects`Inscrutable Gaze, Ode to Booze`, // 10 + 50 mp
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
@@ -742,7 +762,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?"),
       outfit: () => ({
-        ...levelingOutfit(10000),
+        ...lightweightOutfit(),
         acc3: $item`"I Voted!" sticker`,
       }),
       combat: DefaultCombat,
@@ -752,7 +772,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_chestXRayUsed") >= 3,
       do: $location`The Toxic Teacups`,
       outfit: () => ({
-        ...levelingOutfit(11111),
+        ...lightweightOutfit(),
         acc3: $item`Lil' Doctor™ bag`,
       }),
       combat: DefaultCombat,
@@ -760,15 +780,19 @@ export const Leveling: Quest<Task> = {
     {
       name: "Shattering Punch",
       completed: () => get("_shatteringPunchUsed") >= 3,
+      acquire: () => {
+        return get("_shatteringPunchUsed") === 2 ? [{ item: $item`makeshift garbage shirt` }] : [];
+      },
       do: $location`The Toxic Teacups`,
-      outfit: () => levelingOutfit(11111),
+      outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
     },
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: $location`The Toxic Teacups`,
-      outfit: () => levelingOutfit(11111),
+      outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
     },
     {
