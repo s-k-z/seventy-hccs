@@ -38,6 +38,7 @@ import {
   $location,
   $monster,
   $monsters,
+  $phylum,
   $skill,
   $slot,
   $stat,
@@ -391,7 +392,11 @@ export const Leveling: Quest<Task> = {
       completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
       do: $location`Pirates of the Garbage Barges`,
       post: () => {
-        DNALab.makeTonic();
+        if (get("lastEncounter") === "Dead Men Smell No Tales") return;
+        if (get("dnaSyringe") === $phylum`pirate`) {
+          DNALab.makeTonic();
+        }
+        assert($item`Gene Tonic: Pirate`);
         assert($effect`Spit Upon`);
       },
       effects: $effects`Ode to Booze`,
