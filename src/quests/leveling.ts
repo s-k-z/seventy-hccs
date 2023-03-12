@@ -637,7 +637,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Shadow Monster",
       completed: () => haveEffect($effect`Shadow Affinity`) <= 4,
-      do: () => config.RIFT,
+      do: config.RIFT,
       outfit: () => levelingOutfit(),
       combat: DefaultCombat,
     },
@@ -691,7 +691,7 @@ export const Leveling: Quest<Task> = {
       name: "Shadow Agent",
       completed: () => haveEffect($effect`Shadow Affinity`) <= 1,
       prepare: () => print(`Have portscan? ${SourceTerminal.isCurrentSkill($skill`Portscan`)}`),
-      do: () => config.RIFT,
+      do: config.RIFT,
       outfit: () => levelingOutfit(10000),
       combat: new CombatStrategy()
         .macro(
@@ -712,7 +712,7 @@ export const Leveling: Quest<Task> = {
       name: "Shadow Entity",
       completed: () => !have($effect`Shadow Affinity`),
       prepare: topOffHp,
-      do: () => config.RIFT,
+      do: config.RIFT,
       outfit: () => ({
         ...levelingOutfit(),
         familiar: $familiar`Machine Elf`,
