@@ -34,7 +34,14 @@ export function main(command = ""): void {
       if (toCheck[key].return) return;
     }
   }
-
+  if (
+    !config.RIFT.toString().match(
+      /Shadow Rift (\(The Right Side of the Tracks\)|\(The Nearby Plains\))/
+    )
+  ) {
+    print(`Bad shadow rift location: ${config.RIFT}`);
+    return;
+  }
   if (config.prep) {
     prepareToAscend();
     return;
