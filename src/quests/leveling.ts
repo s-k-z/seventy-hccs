@@ -626,14 +626,9 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Educate Portscan",
-      completed: () => SourceTerminal.isCurrentSkill($skill`Portscan`),
-      do: () => SourceTerminal.educate($skill`Portscan`),
-    },
-    {
       name: "Eldritch Tentacle",
       completed: () => get("_eldritchHorrorEvoked"),
-      prepare: () => assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "No portscan?"),
+      prepare: () => SourceTerminal.educate($skill`Portscan`),
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
@@ -671,15 +666,10 @@ export const Leveling: Quest<Task> = {
       completed: () => haveEffect($effect`Shadow Affinity`) <= 1,
       prepare: () => print(`Have portscan? ${SourceTerminal.isCurrentSkill($skill`Portscan`)}`),
       do: () => config.RIFT,
-      outfit: () => ({
-        ...levelingOutfit(10000),
-      }),
+      outfit: () => levelingOutfit(10000),
       combat: new CombatStrategy()
         .macro(
-          Macro.if_(
-            `!haseffect ${$effect`Shadow Affinity`} || !snarfblat ${$location`Shadow Rift`.id}`,
-            Macro.abort()
-          )
+          Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
             .trySkill($skill`Portscan`)
             .skill($skill`Curse of Weaksauce`)
             .item($item`Time-Spinner`)
