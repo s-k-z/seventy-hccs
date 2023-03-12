@@ -158,8 +158,12 @@ const Slow = Macro.skill($skill`Curse of Weaksauce`)
   .attack()
   .repeat();
 
+function isAttackFamiliar(): boolean {
+  return myFamiliar().physicalDamage || myFamiliar().elementalDamage;
+}
+
 export const DefaultMacro = (): Macro => {
-  return !myFamiliar().physicalDamage && !myFamiliar().elementalDamage ? Fast : Slow;
+  return isAttackFamiliar() ? Fast : Slow;
 };
 
 export const DefaultCombat = new CombatStrategy()
@@ -247,7 +251,6 @@ export const DefaultCombat = new CombatStrategy()
       `monsterid ${$monster`toxic beastie`.id}`,
       Macro.skill($skill`Summon Love Gnats`)
         .trySkill($skill`Bowl Sideways`)
-        .trySkill($skill`Portscan`)
         .skill($skill`Sing Along`)
         .trySkill($skill`Chest X-Ray`)
         .trySkill($skill`Shattering Punch`)
