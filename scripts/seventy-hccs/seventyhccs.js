@@ -13089,7 +13089,7 @@ var Leveling = {
       familiar: $familiar(_templateObject1418 || (_templateObject1418 = _taggedTemplateLiteral26(["Melodramedary"]))),
       acc3: $item(_templateObject1423 || (_templateObject1423 = _taggedTemplateLiteral26(["Kremlin's Greatest Briefcase"])))
     },
-    combat: new CombatStrategy().macro(Macro.tryItem($item(_templateObject1433 || (_templateObject1433 = _taggedTemplateLiteral26(["DNA extraction syringe"])))).trySkill($skill(_templateObject1443 || (_templateObject1443 = _taggedTemplateLiteral26(["%fn, spit on me!"], ["%fn\\, spit on me!"])))).trySkill($skill(_templateObject1453 || (_templateObject1453 = _taggedTemplateLiteral26(["Throw Latte on Opponent"])))).trySkill($skill(_templateObject1463 || (_templateObject1463 = _taggedTemplateLiteral26(["KGB tranquilizer dart"])))).trySkill($skill(_templateObject1473 || (_templateObject1473 = _taggedTemplateLiteral26(["Reflex Hammer"])))).trySkill($skill(_templateObject1483 || (_templateObject1483 = _taggedTemplateLiteral26(["Feel Hatred"])))).abort(), $monsters(_templateObject1492 || (_templateObject1492 = _taggedTemplateLiteral26(["filthy pirate, fishy pirate, flashy pirate, funky pirate"])))).macro(Macro.abort())
+    combat: new CombatStrategy().macro(Macro.tryItem($item(_templateObject1433 || (_templateObject1433 = _taggedTemplateLiteral26(["DNA extraction syringe"])))).trySkill($skill(_templateObject1443 || (_templateObject1443 = _taggedTemplateLiteral26(["%fn, spit on me!"])))).trySkill($skill(_templateObject1453 || (_templateObject1453 = _taggedTemplateLiteral26(["Throw Latte on Opponent"])))).trySkill($skill(_templateObject1463 || (_templateObject1463 = _taggedTemplateLiteral26(["KGB tranquilizer dart"])))).trySkill($skill(_templateObject1473 || (_templateObject1473 = _taggedTemplateLiteral26(["Reflex Hammer"])))).trySkill($skill(_templateObject1483 || (_templateObject1483 = _taggedTemplateLiteral26(["Feel Hatred"])))).abort(), $monsters(_templateObject1492 || (_templateObject1492 = _taggedTemplateLiteral26(["filthy pirate, fishy pirate, flashy pirate, funky pirate"])))).macro(Macro.abort())
   }, {
     name: "Ensure Imported Taffy",
     ready: function() {
@@ -13333,12 +13333,12 @@ var Leveling = {
     choices: {
       1497: 1
     },
-    post: function() {
-      assert($effect(_templateObject2462 || (_templateObject2462 = _taggedTemplateLiteral26(["Shadow Affinity"]))));
-      assert(get("questRufus") !== "unstarted", "Failed to start Rufus quest?");
-    },
     do: function() {
-      return (0, import_kolmafia34.use)($item(_templateObject2472 || (_templateObject2472 = _taggedTemplateLiteral26(["closed-circuit pay phone"]))));
+      return (0, import_kolmafia34.use)($item(_templateObject2462 || (_templateObject2462 = _taggedTemplateLiteral26(["closed-circuit pay phone"]))));
+    },
+    post: function() {
+      assert($effect(_templateObject2472 || (_templateObject2472 = _taggedTemplateLiteral26(["Shadow Affinity"]))));
+      assert(get("questRufus") !== "unstarted", "Failed to start Rufus quest?");
     }
   }, {
     name: "Shadow Monster",
