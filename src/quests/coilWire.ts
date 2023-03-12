@@ -273,6 +273,7 @@ export const CoilWire: Quest<Task> = {
       name: "Sausage Goblin",
       completed: () => get("_sausageFights") > 0,
       do: $location`Noob Cave`,
+      post: () => assert(get("_sausageFights") > 0, "Didn't increment sausage counter?"),
       outfit: () => ({
         back: $item`unwrapped knock-off retro superhero cape`,
         offhand: $item`Kramco Sausage-o-Matic™`,
@@ -282,10 +283,11 @@ export const CoilWire: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Voter Monster",
+      name: "Voting Booth Monster",
       ready: () => voterMonsterNow(),
-      completed: () => get("_voteFreeFights") >= 1,
+      completed: () => get("_voteFreeFights") > 0,
       do: $location`Noob Cave`,
+      post: () => assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?"),
       outfit: () => ({
         offhand: defaultOutfit.offhand,
         acc3: $item`"I Voted!" sticker`,

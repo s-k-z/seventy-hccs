@@ -19,6 +19,7 @@ import {
   myMp,
   myPrimestat,
   mySoulsauce,
+  print,
   runChoice,
   soulsauceCost,
   sweetSynthesis,
@@ -228,27 +229,6 @@ export const Leveling: Quest<Task> = {
       },
     },
     {
-      name: "Spit On a Pirate",
-      ready: () => get("camelSpit") >= 100,
-      completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
-      do: $location`Pirates of the Garbage Barges`,
-      post: () => DNALab.makeTonic(),
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Melodramedary`, acc3: $item`Kremlin's Greatest Briefcase` },
-      combat: new CombatStrategy()
-        .macro(
-          Macro.tryItem($item`DNA extraction syringe`)
-            .trySkill($skill`%fn\, spit on me!`)
-            .trySkill($skill`Throw Latte on Opponent`)
-            .trySkill($skill`KGB tranquilizer dart`)
-            .trySkill($skill`Reflex Hammer`)
-            .trySkill($skill`Feel Hatred`)
-            .abort(),
-          $monsters`filthy pirate, fishy pirate, flashy pirate, funky pirate`
-        )
-        .macro(Macro.abort()),
-    },
-    {
       name: "Advance Clock",
       completed: () => get("_gingerbreadClockAdvanced"),
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
@@ -377,6 +357,30 @@ export const Leveling: Quest<Task> = {
       name: "Glitter",
       completed: () => have($effect`Glittering Eyelashes`),
       do: () => use($item`glittery mascara`), // -21 meat
+    },
+    {
+      name: "Spit On a Pirate",
+      ready: () => get("camelSpit") >= 100,
+      completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
+      do: $location`Pirates of the Garbage Barges`,
+      post: () => {
+        DNALab.makeTonic();
+        assert($effect`Spit Upon`);
+      },
+      effects: $effects`Ode to Booze`,
+      outfit: { familiar: $familiar`Melodramedary`, acc3: $item`Kremlin's Greatest Briefcase` },
+      combat: new CombatStrategy()
+        .macro(
+          Macro.tryItem($item`DNA extraction syringe`)
+            .trySkill($skill`%fn\, spit on me!`)
+            .trySkill($skill`Throw Latte on Opponent`)
+            .trySkill($skill`KGB tranquilizer dart`)
+            .trySkill($skill`Reflex Hammer`)
+            .trySkill($skill`Feel Hatred`)
+            .abort(),
+          $monsters`filthy pirate, fishy pirate, flashy pirate, funky pirate`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Ensure Imported Taffy",
@@ -518,8 +522,9 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Get Sprinkles",
-      completed: () =>
-        haveItemOrEffect($item`gingerbread spice latte`) || have($item`sprinkles`, 50),
+      completed: () => {
+        return haveItemOrEffect($item`gingerbread spice latte`) || have($item`sprinkles`, 50);
+      },
       prepare: () => {
         const minWeight = (50 / 18 - 1) * 100;
         const meteor = 20;
@@ -547,8 +552,11 @@ export const Leveling: Quest<Task> = {
     {
       name: "Get Gingerbread Spice Latte",
       ready: () => have($item`sprinkles`, 50),
-      completed: () =>
-        haveItemOrEffect($item`gingerbread spice latte`) || get("_gingerbreadCityTurns") >= 5,
+      completed: () => {
+        return (
+          haveItemOrEffect($item`gingerbread spice latte`) || get("_gingerbreadCityTurns") >= 5
+        );
+      },
       choices: { 1208: 3 }, // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
       do: $location`Gingerbread Upscale Retail District`,
       effects: $effects`Ode to Booze`,
@@ -594,7 +602,7 @@ export const Leveling: Quest<Task> = {
       // Calling Rufus: (1) I'll fight the entity (2) I'll find the artifact (3) I'll collect the goods (4) Hang up
       choices: { 1497: 2 },
       post: () => {
-        assert(have($effect`Shadow Affinity`), "Failed to get shadow affinity?");
+        assert($effect`Shadow Affinity`);
         assert(get("questRufus") !== "unstarted", "Failed to start Rufus quest?");
       },
       do: () => use($item`closed-circuit pay phone`),
@@ -627,15 +635,39 @@ export const Leveling: Quest<Task> = {
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
-        if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
+        if (myHp() / myMaxhp() < 0.5) {
+          useSkill($skill`Tongue of the Walrus`);
+          useSkill($skill`Cannelloni Cocoon`);
+        }
       },
       outfit: () => levelingOutfit(400),
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Portscan`)
+          .skill($skill`Curse of Weaksauce`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Micrometeorite`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
+    },
+    {
+      name: "God Lobster",
+      completed: () => get("_godLobsterFights") >= 3,
+      choices: { 1310: () => (have($item`God Lobster's Ring`) ? 2 : 1) }, // Granted a Boon: (1) equipment (2) blessing (3) experience
+      do: () => visitUrl("main.php?fightgodlobster=1"),
+      outfit: () => ({
+        ...levelingOutfit(1500),
+        famequip: $items`God Lobster's Ring, God Lobster's Scepter, none`,
+        familiar: $familiar`God Lobster`,
+      }),
       combat: DefaultCombat,
     },
     {
       name: "Shadow Agent",
       completed: () => haveEffect($effect`Shadow Affinity`) <= 1,
-      prepare: () => assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "No portscan?"),
+      prepare: () => print(`Have portscan? ${SourceTerminal.isCurrentSkill($skill`Portscan`)}`),
       do: () => config.RIFT,
       outfit: () => ({
         ...levelingOutfit(10000),
@@ -646,11 +678,11 @@ export const Leveling: Quest<Task> = {
             `!haseffect ${$effect`Shadow Affinity`} || !snarfblat ${$location`Shadow Rift`.id}`,
             Macro.abort()
           )
+            .trySkill($skill`Portscan`)
             .skill($skill`Curse of Weaksauce`)
             .item($item`Time-Spinner`)
             .skill($skill`Micrometeorite`)
             .skill($skill`Sing Along`)
-            .trySkill($skill`Portscan`)
             .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
             .attack()
             .repeat(),
@@ -667,18 +699,6 @@ export const Leveling: Quest<Task> = {
         ...levelingOutfit(),
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
-      }),
-      combat: DefaultCombat,
-    },
-    {
-      name: "God Lobster",
-      completed: () => get("_godLobsterFights") >= 3,
-      choices: { 1310: () => (have($item`God Lobster's Ring`) ? 2 : 1) }, // Granted a Boon: (1) equipment (2) blessing (3) experience
-      do: () => visitUrl("main.php?fightgodlobster=1"),
-      outfit: () => ({
-        ...levelingOutfit(1500),
-        famequip: $items`God Lobster's Ring, God Lobster's Scepter, none`,
-        familiar: $familiar`God Lobster`,
       }),
       combat: DefaultCombat,
     },
@@ -705,17 +725,6 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Voter Wandering Monster",
-      ready: () => voterMonsterNow(),
-      completed: () => get("_voteFreeFights") >= 1,
-      do: $location`The Toxic Teacups`,
-      outfit: () => ({
-        ...levelingOutfit(10000),
-        acc3: $item`"I Voted!" sticker`,
-      }),
-      combat: DefaultCombat,
-    },
-    {
       name: "Deep Machine Tunnels",
       completed: () => get("_machineTunnelsAdv") >= 5,
       prepare: topOffHp,
@@ -725,6 +734,18 @@ export const Leveling: Quest<Task> = {
         ...levelingOutfit(10000),
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
+      }),
+      combat: DefaultCombat,
+    },
+    {
+      name: "Voting Booth Monster",
+      ready: () => voterMonsterNow(),
+      completed: () => get("_voteFreeFights") > 0,
+      do: $location`The Toxic Teacups`,
+      post: () => assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?"),
+      outfit: () => ({
+        ...levelingOutfit(10000),
+        acc3: $item`"I Voted!" sticker`,
       }),
       combat: DefaultCombat,
     },
@@ -748,9 +769,6 @@ export const Leveling: Quest<Task> = {
     {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
-      prepare: () => {
-        assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "Don't have Portscan?");
-      },
       do: $location`The Toxic Teacups`,
       outfit: () => levelingOutfit(11111),
       combat: DefaultCombat,
