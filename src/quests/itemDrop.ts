@@ -10,6 +10,7 @@ import {
   have,
   Macro,
 } from "libram";
+import { assert } from "../lib";
 import { runTest } from "./shared";
 
 export const ItemDropQuest: Quest<Task> = {
@@ -20,9 +21,14 @@ export const ItemDropQuest: Quest<Task> = {
       name: "Become a Bat",
       completed: () => have($effect`Bat-Adjacent Form`),
       do: $location`The Dire Warren`,
+      post: () => $effects`Bat-Adjacent Form, Cosmic Ball in the Air`.forEach((e) => assert(e)),
       effects: $effects`Ode to Booze`,
       outfit: { back: $item`vampyric cloake`, familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(Macro.trySkill($skill`Become a Bat`).runaway()),
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Become a Bat`)
+          .skill($skill`Bowl Straight Up`)
+          .runaway()
+      ),
     },
     {
       name: "Booze & Item Drop Test",
@@ -33,12 +39,14 @@ export const ItemDropQuest: Quest<Task> = {
         $effect`Bat-Adjacent Form`,
         $effect`Blessing of the Bird`,
         $effect`Blessing of your favorite Bird`,
+        $effect`Cosmic Ball in the Air`,
         $effect`Crunching Leaves`,
+        $effect`El Aroma de Salsa`,
         $effect`Fat Leon's Phat Loot Lyric`,
         $effect`Feeling Lost`,
+        $effect`Human-Pirate Hybrid`,
         $effect`Hustlin'`,
         $effect`items.enh`,
-        $effect`Lantern-Charged`,
         $effect`Nearly All-Natural`,
         $effect`Singer's Faithful Ocelot`,
         $effect`Steely-Eyed Squint`,

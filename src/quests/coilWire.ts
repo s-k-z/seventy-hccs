@@ -40,14 +40,8 @@ import {
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
 import { config } from "../config";
-import {
-  getPantogramPants,
-  harvestBatteries,
-  scavengeDaycare,
-  spendAllMpOnLibrams,
-  vote,
-} from "../iotms";
-import { checkAvailable, voterMonsterNow } from "../lib";
+import { getPantogramPants, scavengeDaycare, spendAllMpOnLibrams, vote } from "../iotms";
+import { assert, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
@@ -74,6 +68,7 @@ function acquire(k: Effect | Item | Skill, callBack: () => void): Task {
     name: `Acquire ${k.name}`,
     completed: () => have(k),
     do: callBack,
+    post: () => assert(k),
   };
 }
 
@@ -130,8 +125,6 @@ export const CoilWire: Quest<Task> = {
         [$effect`The Odour of Magick`, () => use($item`natural magick candle`)],
         [$item`"I Voted!" sticker`,    () => vote()],
         [$item`pantogram pants`,       () => getPantogramPants()],
-        [$item`battery (AAA)`,         () => harvestBatteries()],
-        [$item`battery (lantern)`,     () => create($item`battery (lantern)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
@@ -151,7 +144,7 @@ export const CoilWire: Quest<Task> = {
       prepare: () => Clan.join(config.main_clan),
       do: () => {
         retrieveItem($item`sombrero-mounted sparkler`); // -450 meat
-        checkAvailable($item`sombrero-mounted sparkler`);
+        assert($item`sombrero-mounted sparkler`);
       },
     },
     {
@@ -178,7 +171,7 @@ export const CoilWire: Quest<Task> = {
         $effect`Feeling Excited`,
         $effect`Feeling Peaceful`,
         $effect`Inscrutable Gaze`,
-        $effect`Spirit of Peppermint`,
+        $effect`Spirit of Garlic`,
         $effect`Triple-Sized`,
         $effect`Uncucumbered`,
       ],
@@ -202,7 +195,7 @@ export const CoilWire: Quest<Task> = {
       completed: () => monstersReminisced().includes($monster`pterodactyl`),
       do: () => reminisce($monster`pterodactyl`),
       post: () => {
-        if (!monstersReminisced().includes($monster`pterodactyl`)) throw `Failed to reminisce?`;
+        assert(monstersReminisced().includes($monster`pterodactyl`), "Failed to reminisce?");
       },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
       combat: RunawayCombat,
@@ -264,10 +257,7 @@ export const CoilWire: Quest<Task> = {
         get("_saberForceUses") > 0 ||
         monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
-      post: () => {
-        DNALab.makeTonic();
-        DNALab.hybridize();
-      },
+      post: () => DNALab.hybridize(),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
         .ccs(
@@ -283,6 +273,7 @@ export const CoilWire: Quest<Task> = {
       name: "Sausage Goblin",
       completed: () => get("_sausageFights") > 0,
       do: $location`Noob Cave`,
+      post: () => assert(get("_sausageFights") > 0, "Didn't increment sausage counter?"),
       outfit: () => ({
         back: $item`unwrapped knock-off retro superhero cape`,
         offhand: $item`Kramco Sausage-o-Matic™`,
@@ -292,10 +283,11 @@ export const CoilWire: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Voter Monster",
+      name: "Voting Booth Monster",
       ready: () => voterMonsterNow(),
-      completed: () => get("_voteFreeFights") >= 1,
+      completed: () => get("_voteFreeFights") > 0,
       do: $location`Noob Cave`,
+      post: () => assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?"),
       outfit: () => ({
         offhand: defaultOutfit.offhand,
         acc3: $item`"I Voted!" sticker`,

@@ -1,5 +1,5 @@
 import { Args } from "grimoire-kolmafia";
-import { $item } from "libram";
+import { $item, $location } from "libram";
 
 export const config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
   nofites: Args.flag({ help: "Skip warning for unspent pvp fites.", setting: "", default: false }),
@@ -10,14 +10,22 @@ export const config = Args.create("seventyhccs", "Automate 1/70 Community Servic
   side_clan: Args.string({ help: "Clan with a Mother Slime and Ungulith", default: "" }),
   // hidden preferences
   MEAT_SAFE_LIMIT: Args.number({
+    default: 2000,
     help: "Don't spend meat on sausages below this value",
     hidden: true,
-    default: 2000,
+    setting: "",
   }),
   MP_SAFE_LIMIT: Args.number({
+    default: 500,
     help: "Don't spend MP on librams below this value unless right before a full MP refill",
     hidden: true,
-    default: 500,
+    setting: "",
+  }),
+  RIFT: Args.location({
+    default: $location`Shadow Rift (The Right Side of the Tracks)`,
+    help: "Default Shadow Rift Location",
+    hidden: true,
+    setting: "",
   }),
 });
 

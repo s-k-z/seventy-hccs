@@ -14,8 +14,19 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { $item, $location, $monster, $skill, get, getModifier, have, Macro } from "libram";
-import { haveItemOrEffect } from "./lib";
+import {
+  $effect,
+  $item,
+  $location,
+  $monster,
+  $monsters,
+  $skill,
+  get,
+  getModifier,
+  have,
+  Macro,
+} from "libram";
+import { assert, haveItemOrEffect } from "./lib";
 
 const notAllowList = [
   // protonic ghosts
@@ -93,6 +104,7 @@ const notAllowList = [
   $monster`slime blob`,
   $monster`terrible mutant`,
   // deep machine tunnels
+  $monster`Perceiver of Sensations`,
   $monster`Performer of Actions`,
   $monster`Thinker of Thoughts`,
   // neverending party
@@ -103,8 +115,27 @@ const notAllowList = [
   $monster`"plain" girl`,
   // toxic teacups
   $monster`toxic beastie`,
+  // shadow rifts
+  $monster`shadow bat`,
+  $monster`shadow cow`,
+  $monster`shadow devil`,
+  $monster`shadow guy`,
+  $monster`shadow hexagon`,
+  $monster`shadow orb`,
+  $monster`shadow prism`,
+  $monster`shadow slab`,
+  $monster`shadow snake`,
+  $monster`shadow spider`,
+  $monster`shadow stalk`,
+  $monster`shadow tree`,
   // Boss(es)
   $monster`Mother Slime`,
+  $monster`shadow cauldron`,
+  $monster`shadow matrix`,
+  $monster`shadow orrery`,
+  $monster`shadow scythe`,
+  $monster`shadow spire`,
+  $monster`shadow tongue`,
 ]
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
@@ -127,13 +158,16 @@ const Slow = Macro.skill($skill`Curse of Weaksauce`)
   .attack()
   .repeat();
 
-export const DefaultMacro = (): Macro => (myFamiliar().combat ? Fast : Slow);
+function isAttackFamiliar(): boolean {
+  return myFamiliar().physicalDamage || myFamiliar().elementalDamage;
+}
 
-export const DefaultStrategy = () => {
-  return new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort()));
+export const DefaultMacro = (): Macro => {
+  return isAttackFamiliar() ? Fast : Slow;
 };
 
-export const DefaultCombat = DefaultStrategy()
+export const DefaultCombat = new CombatStrategy()
+  .startingMacro(Macro.if_(notAllowList, Macro.abort()))
   .macro(
     Macro.if_(
       `hasskill ${toInt($skill`Shoot Ghost`)}`,
@@ -172,11 +206,7 @@ export const DefaultCombat = DefaultStrategy()
       .trySkill($skill`Gingerbread Mob Hit`)
       .trySkill($skill`Shocking Lick`)
       .abort(),
-    [
-      $monster`gingerbread finance bro`,
-      $monster`gingerbread gentrifier`,
-      $monster`gingerbread tech bro`,
-    ]
+    $monsters`gingerbread finance bro, gingerbread gentrifier, gingerbread tech bro`
   )
   .macro(Macro.attack().repeat(), $monster`LOV Enforcer`)
   .macro(Macro.skill($skill`Candyblast`).repeat(), $monster`LOV Engineer`)
@@ -187,6 +217,19 @@ export const DefaultCombat = DefaultStrategy()
     $monster`Mother Slime`
   )
   .macro(
+    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
+      .skill($skill`Saucegeyser`)
+      .abort(),
+    $monsters`shadow cauldron, shadow matrix, shadow scythe, shadow spire, shadow tongue`
+  )
+  .macro(
+    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
+      .skill($skill`Northern Explosion`)
+      .attack()
+      .abort(),
+    $monster`shadow orrery`
+  )
+  .macro(
     () =>
       Macro.externalIf(
         !haveItemOrEffect($item`abstraction: joy`) && !have($item`abstraction: action`),
@@ -194,31 +237,29 @@ export const DefaultCombat = DefaultStrategy()
       ),
     $monster`Performer of Actions`
   )
-  .macro(
-    () =>
-      Macro.externalIf(
-        !haveItemOrEffect($item`abstraction: joy`),
-        Macro.tryItem($item`abstraction: action`)
-      ),
-    $monster`Thinker of Thoughts`
-  )
-  .macro(
-    Macro.if_(
+  .macro(Macro.tryItem($item`abstraction: action`), $monster`Thinker of Thoughts`)
+  .macro(() => {
+    const weight = 20 + weightAdjustment();
+    const bonus = getModifier("Familiar Damage");
+    const maxShortyDamage = ((1 + weight + bonus) * 7) / 4;
+    const safe = maxShortyDamage + 25;
+    return Macro.if_(
       `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
-      Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
-    ).if_(
-      `monsterid ${$monster`toxic beastie`.id}`,
-      Macro.skill($skill`Summon Love Gnats`)
-        .trySkill($skill`Bowl Sideways`)
-        .skill($skill`Sing Along`)
-        .trySkill($skill`Chest X-Ray`)
-        .trySkill($skill`Shattering Punch`)
-        .trySkill($skill`Gingerbread Mob Hit`)
-        .trySkill($skill`Shocking Lick`)
-        .abort()
-    ),
-    $monster`toxic beastie`
-  )
+      Macro.skill($skill`Back-Up to your Last Enemy`)
+    )
+      .skill($skill`Saucy Salve`)
+      .if_(
+        `monsterid ${$monster`toxic beastie`.id}`,
+        Macro.if_(`monsterhpabove ${2 * safe}`, Macro.skill($skill`Summon Love Gnats`))
+          .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Bowl Sideways`))
+          .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
+          .trySkill($skill`Chest X-Ray`)
+          .trySkill($skill`Shattering Punch`)
+          .trySkill($skill`Gingerbread Mob Hit`)
+          .trySkill($skill`Shocking Lick`)
+          .abort()
+      );
+  }, $monster`toxic beastie`)
   .macro(
     Macro.item($item`Time-Spinner`)
       .attack()
@@ -238,7 +279,7 @@ export const StenchCombat = new CombatStrategy().macro(() => {
   const weight = 20 + weightAdjustment();
   const bonus = getModifier("Familiar Damage");
   const maxVintnerDamage = 3 + weight + bonus;
-  const safe = maxVintnerDamage + 25;
+  const safe = 2 * (maxVintnerDamage + 25);
   return Macro.if_(
     `monsterid ${$monster`toxic beastie`.id}`,
     Macro.if_(
@@ -246,8 +287,8 @@ export const StenchCombat = new CombatStrategy().macro(() => {
       Macro.skill($skill`Back-Up to your Last Enemy`)
     )
   )
-    .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
     .skill($skill`Saucy Salve`)
+    .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
     .if_(
       `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
       Macro.trySkill($skill`Bowl Sideways`)
@@ -257,24 +298,25 @@ export const StenchCombat = new CombatStrategy().macro(() => {
       Macro.if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Feel Pride`))
     )
     .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
-    .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Silent Treatment`))
-    .skill($skill`Garbage Nova`);
+    .skill($skill`Stuffed Mortar Shell`)
+    .skill($skill`Silent Treatment`)
+    .abort();
 });
 
 export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 
 export function mapMonster(location: Location, monster: Monster): void {
-  if (get("_monstersMapped") >= 3) throw "Trying to map too many monsters";
+  assert(get("_monstersMapped") < 3, "Trying to map too many monsters");
   if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
   const expectedTurnCount = myTurncount();
   let mapPage = "";
   while (!mapPage.includes("Leading Yourself Right to Them")) {
     mapPage = visitUrl(toUrl(location));
     if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat();
-    if (myTurncount() > expectedTurnCount) throw "Wasted a turn somehow mapping monsters?";
+    assert(myTurncount() === expectedTurnCount, "Wasted a turn somehow mapping monsters?");
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
   runCombat();
   if (handlingChoice()) runChoice(-1);
-  if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
+  assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
 }

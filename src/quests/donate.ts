@@ -26,6 +26,7 @@ import {
   set,
 } from "libram";
 import { spendAllMpOnLibrams } from "../iotms";
+import { assert } from "../lib";
 
 function runChoices(...choices: number[]): void {
   for (const c of choices) runChoice(c);
@@ -61,9 +62,10 @@ export const DonateQuest: Quest<Task> = {
           (f) => !f.attributes.includes("pokefam") && haveFamiliar(f) && f !== stillFam
         );
         const randomFam = myFams[Math.floor(Math.random() * myFams.length)];
-        if (!randomFam || randomFam === $familiar`none` || !haveFamiliar(randomFam)) {
-          throw "Failed to select a valid familiar?";
-        }
+        assert(
+          randomFam && randomFam !== $familiar`none` && haveFamiliar(randomFam),
+          "Failed to select a valid familiar?"
+        );
         return { familiar: randomFam };
       },
     },

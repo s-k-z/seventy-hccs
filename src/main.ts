@@ -15,7 +15,7 @@ import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/sta
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(27146);
+  sinceKolmafiaRevision(27265);
 
   Args.fill(config, command);
   if (config.help) {
@@ -34,7 +34,14 @@ export function main(command = ""): void {
       if (toCheck[key].return) return;
     }
   }
-
+  if (
+    !config.RIFT.toString().match(
+      /Shadow Rift (\(The Right Side of the Tracks\)|\(The Nearby Plains\))/
+    )
+  ) {
+    print(`Bad shadow rift location: ${config.RIFT}`);
+    return;
+  }
   if (config.prep) {
     prepareToAscend();
     return;

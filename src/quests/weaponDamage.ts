@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { equip, use } from "kolmafia";
+import { equip } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -13,27 +13,26 @@ import {
   have,
   Macro,
 } from "libram";
-import { mapMonster } from "../combat";
-import { innerElf, runTest, tuneMoonPlatypus } from "./shared";
+import { assert } from "../lib";
+import { innerElf, runTest } from "./shared";
 
 export const WeaponDamageQuest: Quest<Task> = {
   name: "Reduce Gazelle Population",
   completed: () => CommunityService.WeaponDamage.isDone(),
   tasks: [
-    tuneMoonPlatypus(),
     innerElf(),
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      prepare: () => use($item`tiny bottle of absinthe`),
-      do: () => mapMonster($location`The Stately Pleasure Dome`, $monster`toothless mastiff bitch`),
+      do: $location`The Dire Warren`,
+      post: () => assert($effect`Meteor Showered`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
           `skill ${$skill`Meteor Shower`}
           twiddle your thumbs
           skill ${$skill`Use the Force`}`,
-          $monster`toothless mastiff bitch`
+          $monster`fluffy bunny`
         )
         .macro(Macro.abort()),
     },
@@ -53,7 +52,6 @@ export const WeaponDamageQuest: Quest<Task> = {
         $effect`Frenzied, Bloody`,
         $effect`Grumpy and Ornery`,
         $effect`Imported Strength`,
-        $effect`In a Lather`,
         $effect`Inner Elf`,
         $effect`Jackasses' Symphony of Destruction`,
         $effect`Lack of Body-Building`,
@@ -62,6 +60,7 @@ export const WeaponDamageQuest: Quest<Task> = {
         $effect`Ready to Survive`,
         $effect`Scowl of the Auk`,
         $effect`Song of the North`,
+        $effect`Spit Upon`,
         $effect`Tenacity of the Snapper`,
         $effect`The Power of LOV`,
       ],

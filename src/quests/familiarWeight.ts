@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { chew, drink, Item, itemAmount, use, weightAdjustment } from "kolmafia";
+import { autosell, chew, drink, Item, itemAmount, use, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -12,25 +12,33 @@ import {
   have,
   Macro,
 } from "libram";
-import { acquireEffect, itemToEffect } from "../lib";
-import { runTest, tuneMoonPlatypus } from "./shared";
+import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
+import { mapMonster } from "../combat";
+import { MoonSign, tuneMoon } from "../iotms";
+import { acquireEffect, itemToEffect, tryUse } from "../lib";
+import { runTest } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
   name: "Breed More Collies",
   completed: () => CommunityService.FamiliarWeight.isDone(),
   tasks: [
-    tuneMoonPlatypus(),
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      do: $location`The Dire Warren`,
+      prepare: () => tryUse($item`tiny bottle of absinthe`),
+      do: () => {
+        const target = $monster`toothless mastiff bitch`;
+        have($effect`Absinthe-Minded`)
+          ? mapMonster($location`The Stately Pleasure Dome`, target)
+          : reminisce(target);
+      },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(
           `skill ${$skill`Meteor Shower`}
-          twiddle your thumbs
-          skill ${$skill`Use the Force`}`,
-          $monster`fluffy bunny`
+        twiddle your thumbs
+        skill ${$skill`Use the Force`}`,
+          $monster`toothless mastiff bitch`
         )
         .macro(Macro.abort()),
     },
@@ -55,7 +63,12 @@ export const FamiliarWeightQuest: Quest<Task> = {
           acquireEffect($effect`Ode to Booze`);
           drink($item`1950 Vampire Vintner wine`); // 3-5 adventures, 1 drunk
         }
-        if (needMore()) chew($item`abstraction: joy`);
+        tuneMoon(MoonSign.Platypus);
+        if (needMore() && have($item`abstraction: joy`)) chew($item`abstraction: joy`);
+        if (needMore()) {
+          autosell(1, $item`space blanket`); // +5000 meat
+          drink($item`Hot Socks`);
+        }
       },
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [
