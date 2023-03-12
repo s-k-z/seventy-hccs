@@ -238,23 +238,26 @@ export const DefaultCombat = new CombatStrategy()
     $monster`Performer of Actions`
   )
   .macro(Macro.tryItem($item`abstraction: action`), $monster`Thinker of Thoughts`)
-  .macro(
-    Macro.if_(
+  .macro(() => {
+    const weight = 20 + weightAdjustment();
+    const bonus = getModifier("Familiar Damage");
+    const maxShortyDamage = ((1 + weight + bonus) * 7) / 4;
+    const safe = maxShortyDamage + 25;
+    return Macro.if_(
       `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
       Macro.skill($skill`Back-Up to your Last Enemy`).skill($skill`Saucy Salve`)
     ).if_(
       `monsterid ${$monster`toxic beastie`.id}`,
-      Macro.skill($skill`Summon Love Gnats`)
-        .trySkill($skill`Bowl Sideways`)
-        .skill($skill`Sing Along`)
+      Macro.if_(`monsterhpabove ${2 * safe}`, Macro.skill($skill`Summon Love Gnats`))
+        .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Bowl Sideways`))
+        .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
         .trySkill($skill`Chest X-Ray`)
         .trySkill($skill`Shattering Punch`)
         .trySkill($skill`Gingerbread Mob Hit`)
         .trySkill($skill`Shocking Lick`)
         .abort()
-    ),
-    $monster`toxic beastie`
-  )
+    );
+  }, $monster`toxic beastie`)
   .macro(
     Macro.item($item`Time-Spinner`)
       .attack()
