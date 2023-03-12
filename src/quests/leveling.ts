@@ -246,6 +246,20 @@ export const Leveling: Quest<Task> = {
       },
     },
     {
+      name: "Ten-percent Bonus",
+      completed: () => !have($item`a ten-percent bonus`),
+      do: () => use($item`a ten-percent bonus`),
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
+      outfit: { offhand: $item`familiar scrapbook` },
+    },
+    {
+      name: "Chateau Rest",
+      completed: () => get("timesRested") >= totalFreeRests(),
+      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
+      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
+      outfit: { offhand: $item`familiar scrapbook` },
+    },
+    {
       name: "Advance Clock",
       completed: () => get("_gingerbreadClockAdvanced"),
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
@@ -359,20 +373,6 @@ export const Leveling: Quest<Task> = {
           $monster`Black Crayon Crimbo Elf`
         )
         .macro(Macro.runaway()),
-    },
-    {
-      name: "Ten-percent Bonus",
-      completed: () => !have($item`a ten-percent bonus`),
-      do: () => use($item`a ten-percent bonus`),
-      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
-      outfit: { offhand: $item`familiar scrapbook` },
-    },
-    {
-      name: "Chateau Rest",
-      completed: () => get("timesRested") >= totalFreeRests(),
-      do: () => visitUrl("place.php?whichplace=chateau&action=chateau_restlabelfree"),
-      effects: $effects`Inscrutable Gaze, Synthesis: Learning`,
-      outfit: { offhand: $item`familiar scrapbook` },
     },
     {
       name: "Glitter",
