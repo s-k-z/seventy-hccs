@@ -821,7 +821,7 @@ export const Leveling: Quest<Task> = {
           `Encountered a ${get("lastCopyableMonster")}?`
         ),
       effects: $effects`Spirit of Garlic, Wizard Squint`,
-      outfit: vintnerOutfit,
+      outfit: () => vintnerOutfit(),
       combat: StenchCombat,
     },
     {
@@ -830,7 +830,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
       effects: $effects`Spirit of Garlic, Wizard Squint`,
-      outfit: vintnerOutfit,
+      outfit: () => vintnerOutfit(),
       combat: StenchCombat,
     },
     {
