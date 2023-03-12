@@ -602,7 +602,7 @@ export const Leveling: Quest<Task> = {
       name: "Become Shadow Affine",
       completed: () => get("questRufus") !== "unstarted",
       // Calling Rufus: (1) I'll fight the entity (2) I'll find the artifact (3) I'll collect the goods (4) Hang up
-      choices: { 1497: 2 },
+      choices: { 1497: 1 },
       post: () => {
         assert($effect`Shadow Affinity`);
         assert(get("questRufus") !== "unstarted", "Failed to start Rufus quest?");
