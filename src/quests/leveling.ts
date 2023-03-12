@@ -818,7 +818,7 @@ export const Leveling: Quest<Task> = {
           get("lastCopyableMonster") === $monster`sausage goblin`,
           `Encountered a ${get("lastCopyableMonster")}?`
         ),
-      effects: $effects`Wizard Squint`,
+      effects: $effects`Spirit of Garlic, Wizard Squint`,
       outfit: vintnerOutfit,
       combat: StenchCombat,
     },
@@ -827,7 +827,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
-      effects: $effects`Wizard Squint`,
+      effects: $effects`Spirit of Garlic, Wizard Squint`,
       outfit: vintnerOutfit,
       combat: StenchCombat,
     },
