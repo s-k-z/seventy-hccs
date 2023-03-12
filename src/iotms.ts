@@ -12,7 +12,7 @@ import {
 } from "kolmafia";
 import { $class, $item, $skill, $stat, get, have } from "libram";
 import { BRICKO_COST, BRICKO_DROP, BRICKO_TARGET_ITEM } from "./config";
-import { haveItemOrEffect } from "./lib";
+import { assert, haveItemOrEffect } from "./lib";
 
 export function castBestLibram(): void {
   const owned = itemAmount(BRICKO_TARGET_ITEM);
@@ -57,7 +57,7 @@ export function getPantogramPants(): void {
   const s3 = "-1,0"; // Monsters will be less attracted to you
   visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`portable pantogram`)}`);
   visitUrl(`choice.php?pwd=&whichchoice=1270&option=1&m=${m}&e=${e}&s1=${s1}&s2=${s2}&s3=${s3}`);
-  if (!have($item`pantogram pants`)) throw "Failed to create pantogram pants";
+  assert($item`pantogram pants`);
 }
 
 export function scavengeDaycare(): void {
@@ -90,8 +90,8 @@ export function tuneMoon(moon: MoonSign): void {
 }
 
 export function vote(): void {
-  if (myClass() !== $class`Sauceror`) throw `Don't yet know how to run this as a ${myClass()}`;
+  assert(myClass() === $class`Sauceror`, `Don't yet know how to run this as a ${myClass()}`);
   visitUrl("place.php?whichplace=town_right&action=townright_vote");
   visitUrl(`choice.php?pwd=&option=1&whichchoice=1331&g=2&local[]=1&local[]=3`);
-  if (!have($item`"I Voted!" sticker`)) throw "Voting failed";
+  assert($item`"I Voted!" sticker`);
 }

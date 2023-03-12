@@ -4,29 +4,25 @@ import {
   effectModifier,
   Item,
   numericModifier,
-  toInt,
+  Skill,
   totalTurnsPlayed,
   use,
 } from "kolmafia";
 import { get, have } from "libram";
 
-export function assert(expectTrue: boolean, messageIfFalse: string): void {
-  if (!expectTrue) throw messageIfFalse;
+export function assert(expectTrue: Effect | Item | Skill): void;
+export function assert(expectTrue: boolean, messageIfFalse: string): void;
+export function assert(expectTrue: Effect | Item | Skill | boolean, messageIfFalse?: string): void {
+  if (typeof expectTrue === "boolean") {
+    if (!expectTrue) throw messageIfFalse ?? "Unknown error";
+    return;
+  }
+  if (!have(expectTrue)) throw `Missing ${expectTrue}`;
 }
 
 export function acquireEffect(e: Effect): void {
-  if (!have(e) && e.default.startsWith("cargo")) throw `Can't obtain ${e}?`;
+  assert(have(e) || !e.default.startsWith("cargo"), `Can't obtain ${e}?`);
   if (!have(e)) cliExecute(e.default);
-}
-
-export function checkAvailable(i: Item, n = 1): void {
-  if (!have(i, n)) {
-    throw `Why don't we have at least ${n} ${n > 1 ? i.plural : i} (id: ${toInt(i)})?`;
-  }
-}
-
-export function checkEffect(e: Effect): void {
-  if (!have(e)) throw `Missing effect ${e}`;
 }
 
 export function effectDuration(i: Item): number {

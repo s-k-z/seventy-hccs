@@ -19,7 +19,6 @@ import {
   myMp,
   myPrimestat,
   mySoulsauce,
-  print,
   runChoice,
   soulsauceCost,
   sweetSynthesis,
@@ -54,14 +53,12 @@ import { castBestLibram, spendAllMpOnLibrams } from "../iotms";
 import {
   acquireEffect,
   assert,
-  checkAvailable,
-  checkEffect,
   haveItemOrEffect,
   tuple,
   voterMonsterNow,
   wishEffect,
 } from "../lib";
-import { AdvReq, deepDarkVisions, innerElf, refreshGhost, selectBestFamiliar } from "./shared";
+import { AdvReq, deepDarkVisions, refreshGhost, selectBestFamiliar } from "./shared";
 
 function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
   const multiplyML = myBuffedstat(myPrimestat()) < (cap ?? Infinity);
@@ -90,7 +87,8 @@ const vintnerOutfit = (): OutfitSpec => ({
   acc1: $item`Powerful Glove`,
   acc2: $items`battle broom, gold detective badge`,
   acc3: get("_backUpUses") < 11 ? $item`backup camera` : $item`Kremlin's Greatest Briefcase`,
-  ...selectBestFamiliar(AdvReq.Wine),
+  familiar: $familiar`Vampire Vintner`,
+  famequip: $item`none`,
   modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
 });
 
@@ -263,7 +261,7 @@ export const Leveling: Quest<Task> = {
       name: "Nanobrainy",
       completed: () => have($effect`Nanobrainy`),
       do: $location`Gingerbread Upscale Retail District`,
-      post: () => checkEffect($effect`Nanobrainy`),
+      post: () => assert($effect`Nanobrainy`),
       outfit: {
         offhand: $item`latte lovers member's mug`,
         familiar: $familiar`Nanorhino`,
@@ -307,7 +305,6 @@ export const Leveling: Quest<Task> = {
       completed: () => $effects`All Is Forgiven, Sparkly!, Witch Breaded`.every((e) => have(e)),
       do: () => $effects`All Is Forgiven, Sparkly!, Witch Breaded`.forEach(wishEffect),
     },
-    innerElf(),
     {
       name: "Crimbo Carol",
       completed: () =>
@@ -319,7 +316,7 @@ export const Leveling: Quest<Task> = {
           $effect`Let It Snow/Boil/Stink/Frighten/Grease`,
         ].some((carol) => have(carol)),
       do: $location`The Dire Warren`,
-      post: () => checkEffect($effect`Do You Crush What I Crush?`),
+      post: () => assert($effect`Do You Crush What I Crush?`),
       outfit: {
         back: $item`vampyric cloake`,
         acc3: $item`Kremlin's Greatest Briefcase`,
@@ -475,8 +472,8 @@ export const Leveling: Quest<Task> = {
       choices: { 1222: 1, 1223: 1, 1224: 2, 1225: 1, 1226: 2, 1227: 1, 1228: 3 },
       do: $location`The Tunnel of L.O.V.E.`,
       post: () => {
-        checkEffect($effect`Open Heart Surgery`);
-        $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((l) => checkAvailable(l));
+        assert($effect`Open Heart Surgery`);
+        $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((l) => assert(l));
         use($item`LOV Elixir #3`);
         use($item`LOV Elixir #6`);
       },
@@ -524,11 +521,16 @@ export const Leveling: Quest<Task> = {
       completed: () =>
         haveItemOrEffect($item`gingerbread spice latte`) || have($item`sprinkles`, 50),
       prepare: () => {
-        print(`Getting sprinkles, have ${familiarWeight(myFamiliar()) + weightAdjustment()} lbs`);
+        const minWeight = (50 / 18 - 1) * 100;
+        const meteor = 20;
+        assert(
+          familiarWeight(myFamiliar()) + weightAdjustment() + meteor > minWeight,
+          "Not enough weight?"
+        );
         assert(get("_gingerbreadCityTurns") < 5, "Failed to get gingerbread spice latte?");
       },
       do: $location`Gingerbread Upscale Retail District`,
-      post: () => checkAvailable($item`sprinkles`, 50),
+      post: () => assert(have($item`sprinkles`, 50), "Failed to get 50 sprinkles"),
       outfit: () => ({
         ...levelingOutfit(1000),
         hat: $item`Daylight Shavings Helmet`,
@@ -579,13 +581,10 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Runaway",
-      completed: () => $location`Shadow Rift (The Nearby Plains)`.turnsSpent > 0,
-      do: $location`Shadow Rift (The Nearby Plains)`,
-      post: () =>
-        assert(
-          $location`Shadow Rift (The Nearby Plains)`.turnsSpent > 0,
-          "Shadow Rift turns spent still 0?"
-        ),
+      completed: () => config.RIFT.turnsSpent > 0,
+      do: config.RIFT,
+      post: () => assert(config.RIFT.turnsSpent > 0, "Shadow Rift turns spent still 0?"),
+      effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
       combat: RunawayCombat,
     },
@@ -603,7 +602,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Shadow Monster",
       completed: () => haveEffect($effect`Shadow Affinity`) <= 4,
-      do: () => $location`Shadow Rift`,
+      do: () => config.RIFT,
       outfit: () => levelingOutfit(),
       combat: DefaultCombat,
     },
@@ -617,14 +616,58 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
+      name: "Educate Portscan",
+      completed: () => SourceTerminal.isCurrentSkill($skill`Portscan`),
+      do: () => SourceTerminal.educate($skill`Portscan`),
+    },
+    {
       name: "Eldritch Tentacle",
       completed: () => get("_eldritchHorrorEvoked"),
+      prepare: () => assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "No portscan?"),
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
       },
       outfit: () => levelingOutfit(400),
+      combat: DefaultCombat,
+    },
+    {
+      name: "Shadow Agent",
+      completed: () => haveEffect($effect`Shadow Affinity`) <= 1,
+      prepare: () => assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "No portscan?"),
+      do: () => config.RIFT,
+      outfit: () => ({
+        ...levelingOutfit(10000),
+      }),
+      combat: new CombatStrategy()
+        .macro(
+          Macro.if_(
+            `!haseffect ${$effect`Shadow Affinity`} || !snarfblat ${$location`Shadow Rift`.id}`,
+            Macro.abort()
+          )
+            .skill($skill`Curse of Weaksauce`)
+            .item($item`Time-Spinner`)
+            .skill($skill`Micrometeorite`)
+            .skill($skill`Sing Along`)
+            .trySkill($skill`Portscan`)
+            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+            .attack()
+            .repeat(),
+          $monster`Government agent`
+        )
+        .macro(Macro.abort()),
+    },
+    {
+      name: "Shadow Entity",
+      completed: () => !have($effect`Shadow Affinity`),
+      prepare: topOffHp,
+      do: () => config.RIFT,
+      outfit: () => ({
+        ...levelingOutfit(),
+        familiar: $familiar`Machine Elf`,
+        famequip: $item`tiny stillsuit`,
+      }),
       combat: DefaultCombat,
     },
     {
@@ -667,7 +710,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_voteFreeFights") >= 1,
       do: $location`The Toxic Teacups`,
       outfit: () => ({
-        ...levelingOutfit(10000, AdvReq.Toxic),
+        ...levelingOutfit(10000),
         acc3: $item`"I Voted!" sticker`,
       }),
       combat: DefaultCombat,
@@ -678,7 +721,11 @@ export const Leveling: Quest<Task> = {
       prepare: topOffHp,
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
-      outfit: () => levelingOutfit(10000, AdvReq.DMT),
+      outfit: () => ({
+        ...levelingOutfit(10000),
+        familiar: $familiar`Machine Elf`,
+        famequip: $item`tiny stillsuit`,
+      }),
       combat: DefaultCombat,
     },
     {
@@ -686,7 +733,7 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_chestXRayUsed") >= 3,
       do: $location`The Toxic Teacups`,
       outfit: () => ({
-        ...levelingOutfit(11111, AdvReq.Toxic),
+        ...levelingOutfit(11111),
         acc3: $item`Lil' Doctor™ bag`,
       }),
       combat: DefaultCombat,
@@ -695,13 +742,8 @@ export const Leveling: Quest<Task> = {
       name: "Shattering Punch",
       completed: () => get("_shatteringPunchUsed") >= 3,
       do: $location`The Toxic Teacups`,
-      outfit: () => levelingOutfit(11111, AdvReq.Toxic),
+      outfit: () => levelingOutfit(11111),
       combat: DefaultCombat,
-    },
-    {
-      name: "Educate Portscan",
-      completed: () => SourceTerminal.isCurrentSkill($skill`Portscan`),
-      do: () => SourceTerminal.educate($skill`Portscan`),
     },
     {
       name: "Mob Hit",
@@ -710,48 +752,7 @@ export const Leveling: Quest<Task> = {
         assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "Don't have Portscan?");
       },
       do: $location`The Toxic Teacups`,
-      outfit: () => levelingOutfit(11111, AdvReq.Toxic),
-      combat: DefaultCombat,
-    },
-    {
-      name: "Shadow Agent",
-      completed: () => haveEffect($effect`Shadow Affinity`) < 2,
-      acquire: [{ item: $item`makeshift garbage shirt` }],
-      prepare: () => {
-        assert(SourceTerminal.isCurrentSkill($skill`Portscan`), "Don't have Portscan?");
-      },
-      do: () => $location`Shadow Rift`,
-      outfit: () => ({
-        ...levelingOutfit(10000),
-        shirt: $item`makeshift garbage shirt`,
-      }),
-      combat: new CombatStrategy()
-        .macro(
-          Macro.if_(
-            `!haseffect ${$effect`Shadow Affinity`} || !snarfblat ${$location`Shadow Rift`.id}`,
-            Macro.abort()
-          )
-            .skill($skill`Curse of Weaksauce`)
-            .item($item`Time-Spinner`)
-            .skill($skill`Micrometeorite`)
-            .skill($skill`Sing Along`)
-            .trySkill($skill`Portscan`)
-            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-            .attack()
-            .repeat(),
-          $monster`Government agent`
-        )
-        .macro(Macro.abort()),
-    },
-    {
-      name: "Shadow Entity",
-      completed: () => !have($effect`Shadow Affinity`),
-      do: () => $location`Shadow Rift`,
-      outfit: () => ({
-        ...levelingOutfit(),
-        familiar: $familiar`Machine Elf`,
-        famequip: $item`tiny stillsuit`,
-      }),
+      outfit: () => levelingOutfit(11111),
       combat: DefaultCombat,
     },
     {
@@ -800,7 +801,7 @@ export const Leveling: Quest<Task> = {
           `Encountered a ${get("lastCopyableMonster")}?`
         ),
       effects: $effects`Wizard Squint`,
-      outfit: () => vintnerOutfit(),
+      outfit: vintnerOutfit,
       combat: StenchCombat,
     },
     {
@@ -809,7 +810,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
       effects: $effects`Wizard Squint`,
-      outfit: () => vintnerOutfit(),
+      outfit: vintnerOutfit,
       combat: StenchCombat,
     },
     {

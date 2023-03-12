@@ -23,11 +23,11 @@ import {
 } from "libram";
 import { DefaultCombat } from "../combat";
 import { config } from "../config";
-import { haveItemOrEffect } from "../lib";
+import { assert, haveItemOrEffect } from "../lib";
 
 export function refreshGhost(): void {
   visitUrl("questlog.php?which=1");
-  if (!get("ghostLocation")) throw `Failed to get protonic ghost notice`;
+  assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
 }
 
 export function runTest(test: CommunityService): void {
@@ -48,23 +48,11 @@ export function runTest(test: CommunityService): void {
 export const enum AdvReq {
   NoAttack,
   Normal,
-  Toxic,
-  Wine,
-  DMT,
 }
 
-export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): OutfitSpec {
-  if (req === AdvReq.DMT) {
-    return { familiar: $familiar`Machine Elf`, famequip: $item`tiny stillsuit` };
-  }
-
-  const wine = $item`1950 Vampire Vintner wine`;
-  if (req === AdvReq.Wine && !haveItemOrEffect(wine)) {
-    return { familiar: $familiar`Vampire Vintner`, famequip: $item`none` };
-  }
-
-  if (req === AdvReq.Toxic && get("_hipsterAdv") < 7) {
-    return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
+export function selectBestFamiliar(req = AdvReq.Normal): OutfitSpec {
+  if (!have($effect`Spit Upon`) && get("camelSpit") < 100) {
+    return { familiar: $familiar`Melodramedary`, famequip: $item`tiny stillsuit` };
   }
 
   const pancake = $item`short stack of pancakes`;
@@ -76,8 +64,8 @@ export function selectBestFamiliar(req: AdvReq = AdvReq.Normal): OutfitSpec {
     return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
   }
 
-  if (!have($effect`Spit Upon`) && get("camelSpit") < 100) {
-    return { familiar: $familiar`Melodramedary`, famequip: $item`tiny stillsuit` };
+  if (req === AdvReq.Normal && !have($item`tiny bottle of absinthe`)) {
+    return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
   }
 
   return { familiar: $familiar`Baby Sandworm`, famequip: $item`tiny stillsuit` };
@@ -94,7 +82,7 @@ export function darkHorse(): Task {
 export function deepDarkVisions(): Task {
   const safeHpLimit = (): number => {
     const resist = 1 - elementalResistance($element`spooky`) / 100;
-    if (resist <= 0) throw `invalid resist value ${resist} calculated?`;
+    assert(resist > 0, `invalid resist value ${resist} calculated`);
     const maxMultiplier = 4;
     return myMaxhp() * maxMultiplier * resist;
   };
@@ -104,9 +92,9 @@ export function deepDarkVisions(): Task {
     ready: () => myMaxhp() > 500,
     completed: () => have($effect`Visions of the Deep Dark Deeps`),
     do: () => {
-      if (myMaxhp() < safeHpLimit()) throw `Not enough HP for deep dark visions`;
+      assert(myMaxhp() > safeHpLimit(), "Not enough HP for deep dark visions");
       if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
-      if (myHp() < safeHpLimit()) throw `Failed to heal enough for Deep Dark Visions?`;
+      assert(myHp() > safeHpLimit(), "Failed to heal enough for Deep Dark Visions?");
       useSkill($skill`Deep Dark Visions`);
     },
     post: () => useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`),
@@ -129,7 +117,7 @@ export function innerElf(): Task {
     ready: () => myLevel() >= 13,
     completed: () => have($effect`Inner Elf`),
     prepare: () => {
-      if (get("_snokebombUsed") >= 3) throw "Can't banish Mother Slime?";
+      assert(get("_snokebombUsed") < 3, "Can't banish Mother Slime?");
       Clan.join(config.side_clan);
     },
     choices: { 326: 1 }, // Showdown: (1) fight mother slime (2) leave

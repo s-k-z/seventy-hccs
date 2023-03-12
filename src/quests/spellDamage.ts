@@ -14,7 +14,7 @@ import {
   Macro,
 } from "libram";
 import { config } from "../config";
-import { checkAvailable, haveItemOrEffect } from "../lib";
+import { assert, haveItemOrEffect } from "../lib";
 import { deepDarkVisions, innerElf, runTest } from "./shared";
 
 export const SpellDamageQuest: Quest<Task> = {
@@ -24,7 +24,8 @@ export const SpellDamageQuest: Quest<Task> = {
     {
       name: "Cook cordial of concentration",
       completed: () => have($item`cordial of concentration`),
-      do: () => create($item`cordial of concentration`),
+      do: () => create($item`cordial of concentration`), // -63 meat
+      post: () => assert($item`cordial of concentration`),
     },
     innerElf(),
     deepDarkVisions(),
@@ -35,12 +36,13 @@ export const SpellDamageQuest: Quest<Task> = {
         const fax = $item`photocopied monster`;
         const faxMon = $monster`ungulith`;
         if (!have(fax)) Clan.with(config.side_clan, () => cliExecute("fax receive"));
-        if (!visitUrl(`desc_item.php?whichitem=${fax.descid}`).includes(`${faxMon}`)) {
-          throw `Failed to retrieve fax of ${faxMon}`;
-        }
+        assert(
+          visitUrl(`desc_item.php?whichitem=${fax.descid}`).includes(`${faxMon}`),
+          `Failed to retrieve fax of ${faxMon}`
+        );
       },
       do: () => use($item`photocopied monster`),
-      post: () => checkAvailable($item`corrupted marrow`),
+      post: () => assert($item`corrupted marrow`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(

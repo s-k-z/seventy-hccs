@@ -26,7 +26,7 @@ import {
   have,
   Macro,
 } from "libram";
-import { haveItemOrEffect } from "./lib";
+import { assert, haveItemOrEffect } from "./lib";
 
 const notAllowList = [
   // protonic ghosts
@@ -158,7 +158,9 @@ const Slow = Macro.skill($skill`Curse of Weaksauce`)
   .attack()
   .repeat();
 
-export const DefaultMacro = (): Macro => (myFamiliar().combat ? Fast : Slow);
+export const DefaultMacro = (): Macro => {
+  return !myFamiliar().physicalDamage && !myFamiliar().elementalDamage ? Fast : Slow;
+};
 
 export const DefaultCombat = new CombatStrategy()
   .startingMacro(Macro.if_(notAllowList, Macro.abort()))
@@ -300,17 +302,17 @@ export const StenchCombat = new CombatStrategy().macro(() => {
 export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 
 export function mapMonster(location: Location, monster: Monster): void {
-  if (get("_monstersMapped") >= 3) throw "Trying to map too many monsters";
+  assert(get("_monstersMapped") < 3, "Trying to map too many monsters");
   if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
   const expectedTurnCount = myTurncount();
   let mapPage = "";
   while (!mapPage.includes("Leading Yourself Right to Them")) {
     mapPage = visitUrl(toUrl(location));
     if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat();
-    if (myTurncount() > expectedTurnCount) throw "Wasted a turn somehow mapping monsters?";
+    assert(myTurncount() === expectedTurnCount, "Wasted a turn somehow mapping monsters?");
   }
   visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
   runCombat();
   if (handlingChoice()) runChoice(-1);
-  if (get("mappingMonsters")) throw "Failed to unset map the monsters?";
+  assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
 }

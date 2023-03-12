@@ -41,7 +41,7 @@ import { monstersReminisced, reminisce } from "libram/dist/resources/2022/Combat
 import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
 import { config } from "../config";
 import { getPantogramPants, scavengeDaycare, spendAllMpOnLibrams, vote } from "../iotms";
-import { assert, checkAvailable, voterMonsterNow } from "../lib";
+import { assert, voterMonsterNow } from "../lib";
 import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
@@ -68,6 +68,7 @@ function acquire(k: Effect | Item | Skill, callBack: () => void): Task {
     name: `Acquire ${k.name}`,
     completed: () => have(k),
     do: callBack,
+    post: () => assert(k),
   };
 }
 
@@ -143,7 +144,7 @@ export const CoilWire: Quest<Task> = {
       prepare: () => Clan.join(config.main_clan),
       do: () => {
         retrieveItem($item`sombrero-mounted sparkler`); // -450 meat
-        checkAvailable($item`sombrero-mounted sparkler`);
+        assert($item`sombrero-mounted sparkler`);
       },
     },
     {
@@ -296,7 +297,6 @@ export const CoilWire: Quest<Task> = {
       name: "Send autumn-aton",
       completed: () => !AutumnAton.available(),
       do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
-      post: () => assert(!AutumnAton.available(), "Autumn-aton is still here?"),
     },
     {
       name: "Coil Wire",
