@@ -261,6 +261,15 @@ export const Leveling: Quest<Task> = {
       outfit: { offhand: $item`familiar scrapbook` },
     },
     {
+      name: "Forcefully eat the first sausage of the day",
+      completed: () => get("_sausagesEaten") > 0,
+      do: () => {
+        create(1, $item`magical sausage`);
+        eat(1, $item`magical sausage`);
+      },
+      post: () => assert(get("_sausagesEaten") > 0, "Failed to eat a sausage?"),
+    },
+    {
       name: "Advance Clock",
       completed: () => get("_gingerbreadClockAdvanced"),
       choices: { 1215: 1 }, // Setting the Clock: (1) set the clock forward 5 turns (2) skip
