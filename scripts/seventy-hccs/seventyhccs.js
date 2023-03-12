@@ -13345,9 +13345,7 @@ var Leveling = {
     completed: function() {
       return (0, import_kolmafia34.haveEffect)($effect(_templateObject2482 || (_templateObject2482 = _taggedTemplateLiteral26(["Shadow Affinity"])))) <= 4;
     },
-    do: function() {
-      return config.RIFT;
-    },
+    do: config.RIFT,
     outfit: function() {
       return levelingOutfit();
     },
@@ -13420,9 +13418,7 @@ var Leveling = {
     prepare: function() {
       return (0, import_kolmafia34.print)("Have portscan? ".concat(SourceTerminal_exports.isCurrentSkill($skill(_templateObject2662 || (_templateObject2662 = _taggedTemplateLiteral26(["Portscan"]))))));
     },
-    do: function() {
-      return config.RIFT;
-    },
+    do: config.RIFT,
     outfit: function() {
       return levelingOutfit(1e4);
     },
@@ -13433,9 +13429,7 @@ var Leveling = {
       return !have($effect(_templateObject2762 || (_templateObject2762 = _taggedTemplateLiteral26(["Shadow Affinity"]))));
     },
     prepare: topOffHp,
-    do: function() {
-      return config.RIFT;
-    },
+    do: config.RIFT,
     outfit: function() {
       return _objectSpread7(_objectSpread7({}, levelingOutfit()), {}, {
         familiar: $familiar(_templateObject2772 || (_templateObject2772 = _taggedTemplateLiteral26(["Machine Elf"]))),
