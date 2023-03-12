@@ -41,6 +41,7 @@ import {
   $skill,
   $slot,
   $stat,
+  Counter,
   DNALab,
   get,
   have,
@@ -361,7 +362,11 @@ export const Leveling: Quest<Task> = {
     {
       name: "Spit On a Pirate",
       ready: () => {
-        return get("camelSpit") >= 100 && get("lastCopyableMonster") !== $monster`sausage goblin`;
+        return (
+          get("camelSpit") >= 100 &&
+          get("lastCopyableMonster") !== $monster`sausage goblin` &&
+          !Counter.exists("portscan.edu")
+        );
       },
       completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
       do: $location`Pirates of the Garbage Barges`,
@@ -631,6 +636,7 @@ export const Leveling: Quest<Task> = {
       prepare: () => SourceTerminal.educate($skill`Portscan`),
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
+        assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
         if (myHp() / myMaxhp() < 0.5) {
           useSkill($skill`Tongue of the Walrus`);
