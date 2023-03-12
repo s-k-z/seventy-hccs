@@ -360,7 +360,9 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Spit On a Pirate",
-      ready: () => get("camelSpit") >= 100,
+      ready: () => {
+        return get("camelSpit") >= 100 && get("lastCopyableMonster") !== $monster`sausage goblin`;
+      },
       completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
       do: $location`Pirates of the Garbage Barges`,
       post: () => {
