@@ -1,9 +1,11 @@
 import {
+  haveEquipped,
   itemAmount,
   mpCost,
   myClass,
   myMp,
   myPrimestat,
+  retrieveItem,
   runChoice,
   Skill,
   toInt,
@@ -86,6 +88,7 @@ export const enum MoonSign {
 }
 
 export function tuneMoon(moon: MoonSign): void {
+  if (haveEquipped($item`hewn moon-rune spoon`)) retrieveItem($item`hewn moon-rune spoon`);
   visitUrl(`inv_use.php?whichitem=${toInt($item`hewn moon-rune spoon`)}&doit=96&whichsign=${moon}`);
 }
 
