@@ -294,8 +294,11 @@ export const StenchCombat = new CombatStrategy().macro(() => {
       Macro.trySkill($skill`Bowl Sideways`)
     )
     .externalIf(
-      get("garbageShirtCharge") <= 3,
-      Macro.if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Feel Pride`))
+      get("cosmicBowlingBallReturnCombats") > 1,
+      Macro.if_(
+        `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
+        Macro.trySkill($skill`Feel Pride`)
+      )
     )
     .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
     .skill($skill`Stuffed Mortar Shell`)
