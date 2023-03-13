@@ -80,7 +80,7 @@ function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
   };
 }
 
-function lightweightOutfit(req?: AdvReq): OutfitSpec {
+function lightweightOutfit(): OutfitSpec {
   return {
     hat: $item`Iunion Crown`,
     back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
@@ -91,7 +91,7 @@ function lightweightOutfit(req?: AdvReq): OutfitSpec {
     acc1: $item`Eight Days a Week Pill Keeper`,
     acc2: $items`battle broom, gold detective badge`,
     acc3: $item`combat lover's locket`,
-    ...selectBestFamiliar(req),
+    ...selectBestFamiliar(),
     modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
   };
 }
@@ -267,7 +267,6 @@ export const Leveling: Quest<Task> = {
         create(1, $item`magical sausage`);
         eat(1, $item`magical sausage`);
       },
-      post: () => assert(get("_sausagesEaten") > 0, "Failed to eat a sausage?"),
     },
     {
       name: "Advance Clock",
@@ -300,6 +299,7 @@ export const Leveling: Quest<Task> = {
       name: "Visit the Looking Glass",
       completed: () => get("_lookingGlass"),
       do: () => visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2"),
+      outfit: { pants: $item`designer sweatpants` },
     },
     {
       name: "Buff Familiar Weight",
@@ -388,40 +388,6 @@ export const Leveling: Quest<Task> = {
       name: "Glitter",
       completed: () => have($effect`Glittering Eyelashes`),
       do: () => use($item`glittery mascara`), // -21 meat
-    },
-    {
-      name: "Spit On a Pirate",
-      ready: () => {
-        return (
-          get("camelSpit") >= 100 &&
-          get("lastCopyableMonster") !== $monster`sausage goblin` &&
-          !Counter.exists("portscan.edu")
-        );
-      },
-      completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
-      do: $location`Pirates of the Garbage Barges`,
-      post: () => {
-        if (get("lastEncounter") === "Dead Men Smell No Tales") return;
-        if (get("dnaSyringe") === $phylum`pirate`) {
-          DNALab.makeTonic();
-        }
-        assert($item`Gene Tonic: Pirate`);
-        assert($effect`Spit Upon`);
-      },
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Melodramedary`, acc3: $item`Kremlin's Greatest Briefcase` },
-      combat: new CombatStrategy()
-        .macro(
-          Macro.tryItem($item`DNA extraction syringe`)
-            .trySkill($skill`%fn, spit on me!`)
-            .trySkill($skill`Throw Latte on Opponent`)
-            .trySkill($skill`KGB tranquilizer dart`)
-            .trySkill($skill`Reflex Hammer`)
-            .trySkill($skill`Feel Hatred`)
-            .abort(),
-          $monsters`filthy pirate, fishy pirate, flashy pirate, funky pirate`
-        )
-        .macro(Macro.abort()),
     },
     {
       name: "Ensure Imported Taffy",
@@ -524,6 +490,40 @@ export const Leveling: Quest<Task> = {
       },
       outfit: () => levelingOutfit(10000, AdvReq.NoAttack),
       combat: DefaultCombat,
+    },
+    {
+      name: "Spit On a Pirate",
+      ready: () => {
+        return (
+          get("camelSpit") >= 100 &&
+          get("lastCopyableMonster") !== $monster`sausage goblin` &&
+          !Counter.exists("portscan.edu")
+        );
+      },
+      completed: () => have($effect`Spit Upon`) || haveItemOrEffect($item`Gene Tonic: Pirate`),
+      do: $location`Pirates of the Garbage Barges`,
+      post: () => {
+        if (get("lastEncounter") === "Dead Men Smell No Tales") return;
+        if (get("dnaSyringe") === $phylum`pirate`) {
+          DNALab.makeTonic();
+        }
+        assert($item`Gene Tonic: Pirate`);
+        assert($effect`Spit Upon`);
+      },
+      effects: $effects`Ode to Booze`,
+      outfit: { familiar: $familiar`Melodramedary`, acc3: $item`Kremlin's Greatest Briefcase` },
+      combat: new CombatStrategy()
+        .macro(
+          Macro.tryItem($item`DNA extraction syringe`)
+            .trySkill($skill`%fn, spit on me!`)
+            .trySkill($skill`Throw Latte on Opponent`)
+            .trySkill($skill`KGB tranquilizer dart`)
+            .trySkill($skill`Reflex Hammer`)
+            .trySkill($skill`Feel Hatred`)
+            .abort(),
+          $monsters`filthy pirate, fishy pirate, flashy pirate, funky pirate`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Witchess Rook",
@@ -773,8 +773,21 @@ export const Leveling: Quest<Task> = {
       name: "Voting Booth Monster",
       ready: () => voterMonsterNow(),
       completed: () => get("_voteFreeFights") > 0,
+      // 1467 Poetic Justice: (1) Moxie stats (2) Myst stats (3) 5 Adventures & Beaten up
+      // 1468 Aunts not Ants: (1) Moxie stats (2) Muscle stats (3) +10 stats per fight, -20% to all stats
+      // 1469 Beware of Aligator: (1) +20 ML (2) Awesome booze (3) 1500 meat
+      // 1470 Teacher's Pet: (1) Sleaze Res + DA (2) Teacher's pen (3)  Muscle stats
+      // 1471 Lost and Found: (1) Meat potion (2) Myst stats (3) Meat, Muscle stats + Beaten up
+      // 1472 Summer Days: (1) -5% Combat Frequency potion (2) Good food (3) Moxie stats
+      // 1473 Bath Time: (1) Muscle + gob of wet hair (2) Resists + DA (3) Hot res + Init
+      // 1474 Delicious Sprouts: (1) Myst stats (2) Good food (3) Muscle stats
+      // 1475 Hypnotic Master: (1) Mother's necklace (2) Muscle stats (3) random effects
+      choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
       do: $location`The Toxic Teacups`,
-      post: () => assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?"),
+      post: () => {
+        assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?");
+        if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+      },
       outfit: () => ({
         ...lightweightOutfit(),
         acc3: $item`"I Voted!" sticker`,
@@ -784,7 +797,11 @@ export const Leveling: Quest<Task> = {
     {
       name: "Chest X-Ray",
       completed: () => get("_chestXRayUsed") >= 3,
+      choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+      },
       outfit: () => ({
         ...lightweightOutfit(),
         acc3: $item`Lil' Doctor™ bag`,
@@ -797,7 +814,11 @@ export const Leveling: Quest<Task> = {
       acquire: () => {
         return get("_shatteringPunchUsed") === 2 ? [{ item: $item`makeshift garbage shirt` }] : [];
       },
+      choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+      },
       outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
     },
@@ -805,7 +826,11 @@ export const Leveling: Quest<Task> = {
       name: "Mob Hit",
       completed: () => get("_gingerbreadMobHitUsed"),
       acquire: [{ item: $item`makeshift garbage shirt` }],
+      choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
       do: $location`The Toxic Teacups`,
+      post: () => {
+        if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+      },
       outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
     },
