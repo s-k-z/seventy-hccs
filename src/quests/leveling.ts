@@ -23,6 +23,7 @@ import {
   runChoice,
   soulsauceCost,
   sweetSynthesis,
+  toInt,
   totalFreeRests,
   use,
   useSkill,
@@ -68,7 +69,7 @@ function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
   return {
     hat: $item`Daylight Shavings Helmet`,
     back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
-    shirt: $item`Jurassic Parka`,
+    shirt: get("garbageShirtCharge") > 0 ? $item`makeshift garbage shirt` : $item`Jurassic Parka`,
     weapon: $item`Fourth of May Cosplay Saber`,
     offhand: multiplyML ? $item`unbreakable umbrella` : $item`familiar scrapbook`,
     pants: $item`Cargo Cultist Shorts`,
@@ -843,12 +844,23 @@ export const Leveling: Quest<Task> = {
       post: () => assert(get("_pocketProfessorLectures") > 0, "Failed to lecture?"),
       outfit: () => ({
         ...levelingOutfit(10000),
-        shirt: $item`makeshift garbage shirt`,
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: $familiar`Pocket Professor`,
         famequip: $item`tiny stillsuit`,
       }),
-      combat: DefaultCombat,
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Curse of Weaksauce`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Micrometeorite`)
+          .if_(
+            `hasskill ${toInt($skill`lecture on relativity`)}`,
+            Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
+          )
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
     },
     deepDarkVisions(),
     {

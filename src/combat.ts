@@ -149,10 +149,6 @@ const Fast = Macro.skill($skill`Sing Along`)
 const Slow = Macro.skill($skill`Curse of Weaksauce`)
   .item($item`Time-Spinner`)
   .skill($skill`Micrometeorite`)
-  .if_(
-    `hasskill ${toInt($skill`lecture on relativity`)}`,
-    Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
-  )
   .skill($skill`Sing Along`)
   .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
   .attack()
