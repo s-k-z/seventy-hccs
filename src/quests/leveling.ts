@@ -9,6 +9,7 @@ import {
   haveEffect,
   itemAmount,
   mpCost,
+  myAdventures,
   myBasestat,
   myBuffedstat,
   myFamiliar,
@@ -488,6 +489,7 @@ export const Leveling: Quest<Task> = {
         $items`LOV Elixir #3, LOV Elixir #6, LOV Epaulettes`.forEach((l) => assert(l));
         use($item`LOV Elixir #3`);
         use($item`LOV Elixir #6`);
+        use($item`LOV Extraterrestrial Chocolate`);
       },
       outfit: () => levelingOutfit(10000, AdvReq.NoAttack),
       combat: DefaultCombat,
@@ -839,7 +841,10 @@ export const Leveling: Quest<Task> = {
       name: "Lectures on Relativity",
       completed: () => get("_pocketProfessorLectures") > 0,
       acquire: [{ item: $item`makeshift garbage shirt` }],
-      prepare: topOffHp,
+      prepare: () => {
+        topOffHp();
+        assert(myAdventures() > 1, "Can't cast relativity");
+      },
       do: $location`The Toxic Teacups`,
       post: () => assert(get("_pocketProfessorLectures") > 0, "Failed to lecture?"),
       outfit: () => ({
