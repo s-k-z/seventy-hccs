@@ -15,7 +15,6 @@ import {
   weightAdjustment,
 } from "kolmafia";
 import {
-  $effect,
   $item,
   $location,
   $monster,
@@ -130,12 +129,6 @@ const notAllowList = [
   $monster`shadow tree`,
   // Boss(es)
   $monster`Mother Slime`,
-  $monster`shadow cauldron`,
-  $monster`shadow matrix`,
-  $monster`shadow orrery`,
-  $monster`shadow scythe`,
-  $monster`shadow spire`,
-  $monster`shadow tongue`,
 ]
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
@@ -211,19 +204,6 @@ export const DefaultCombat = new CombatStrategy()
       .skill($skill`Snokebomb`)
       .abort(),
     $monster`Mother Slime`
-  )
-  .macro(
-    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
-      .skill($skill`Saucegeyser`)
-      .abort(),
-    $monsters`shadow cauldron, shadow matrix, shadow scythe, shadow spire, shadow tongue`
-  )
-  .macro(
-    Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
-      .skill($skill`Northern Explosion`)
-      .attack()
-      .abort(),
-    $monster`shadow orrery`
   )
   .macro(
     () =>

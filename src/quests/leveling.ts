@@ -20,7 +20,6 @@ import {
   myMp,
   myPrimestat,
   mySoulsauce,
-  print,
   runChoice,
   soulsauceCost,
   sweetSynthesis,
@@ -632,15 +631,6 @@ export const Leveling: Quest<Task> = {
       ),
     },
     {
-      name: "Shadow Runaway",
-      completed: () => config.RIFT.turnsSpent > 0,
-      do: config.RIFT,
-      post: () => assert(config.RIFT.turnsSpent > 0, "Shadow Rift turns spent still 0?"),
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: RunawayCombat,
-    },
-    {
       name: "Become Shadow Affine",
       completed: () => get("questRufus") !== "unstarted",
       // Calling Rufus: (1) I'll fight the entity (2) I'll find the artifact (3) I'll collect the goods (4) Hang up
@@ -653,8 +643,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Monster",
-      completed: () => haveEffect($effect`Shadow Affinity`) <= 4,
-      do: config.RIFT,
+      completed: () => haveEffect($effect`Shadow Affinity`) <= 3,
+      do: $location`Shadow Rift (The Right Side of the Tracks)`,
       outfit: () => levelingOutfit(),
       combat: DefaultCombat,
     },
@@ -706,9 +696,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Agent",
-      completed: () => haveEffect($effect`Shadow Affinity`) <= 1,
-      prepare: () => print(`Have portscan? ${SourceTerminal.isCurrentSkill($skill`Portscan`)}`),
-      do: config.RIFT,
+      completed: () => !have($effect`Shadow Affinity`),
+      do: $location`Shadow Rift (The Right Side of the Tracks)`,
       outfit: () => levelingOutfit(10000),
       combat: new CombatStrategy()
         .macro(
@@ -727,15 +716,26 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Entity",
-      completed: () => !have($effect`Shadow Affinity`),
+      completed: () => get("_shadowRiftCombats", 12) >= 12 || have($effect`Inner Elf`),
       prepare: topOffHp,
-      do: config.RIFT,
+      do: $location`Shadow Rift (The Right Side of the Tracks)`,
+      post: () =>
+        assert(
+          get("_shadowRiftCombats", 12) >= 12,
+          "Spent fewer shadow rift combats than expected?"
+        ),
       outfit: () => ({
         ...levelingOutfit(),
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
       }),
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Saucegeyser`),
+          $monsters`shadow cauldron, shadow matrix, shadow scythe, shadow spire, shadow tongue`
+        )
+        .macro(Macro.skill($skill`Northern Explosion`), $monster`shadow orrery`)
+        .macro(Macro.abort()),
     },
     {
       name: "Witchess Witch",

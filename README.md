@@ -48,7 +48,7 @@ The script can be run either in Aftercore, or in Community Service provided that
 
 ## To run the script
 
-1. Ensure you have KoLMafia r27265 or later [available here](https://github.com/kolmafia/kolmafia/releases)
+1. Ensure you have KoLMafia r27291 or later [available here](https://github.com/kolmafia/kolmafia/releases)
 2. Set properties in kolmafia to appropriate values:
 
    - seventyhccs_main_clan - Must be a name of a clan with a fully stocked VIP lounge

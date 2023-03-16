@@ -1,5 +1,5 @@
 import { Args } from "grimoire-kolmafia";
-import { $item, $location } from "libram";
+import { $item } from "libram";
 
 export const config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
   nofites: Args.flag({ help: "Skip warning for unspent pvp fites.", setting: "", default: false }),
@@ -18,12 +18,6 @@ export const config = Args.create("seventyhccs", "Automate 1/70 Community Servic
   MP_SAFE_LIMIT: Args.number({
     default: 500,
     help: "Don't spend MP on librams below this value unless right before a full MP refill",
-    hidden: true,
-    setting: "",
-  }),
-  RIFT: Args.location({
-    default: $location`Shadow Rift (The Right Side of the Tracks)`,
-    help: "Default Shadow Rift Location",
     hidden: true,
     setting: "",
   }),
