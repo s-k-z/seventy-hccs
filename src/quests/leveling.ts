@@ -43,6 +43,7 @@ import {
   $skill,
   $slot,
   $stat,
+  AutumnAton,
   Counter,
   DNALab,
   get,
@@ -649,6 +650,11 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
+      name: "Send autumn-aton",
+      completed: () => !AutumnAton.available(),
+      do: () => AutumnAton.sendTo($location`Shadow Rift`),
+    },
+    {
       name: "BRICKOS",
       ready: () => have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKO_COST),
       completed: () => get("_brickoFights") >= 3,
@@ -719,11 +725,13 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_shadowRiftCombats", 12) >= 12 || have($effect`Inner Elf`),
       prepare: topOffHp,
       do: $location`Shadow Rift (The Right Side of the Tracks)`,
-      post: () =>
+      post: () => {
         assert(
           get("_shadowRiftCombats", 12) >= 12,
           "Spent fewer shadow rift combats than expected?"
-        ),
+        );
+        assert($effect`Inner Elf`);
+      },
       outfit: () => ({
         ...levelingOutfit(),
         familiar: $familiar`Machine Elf`,

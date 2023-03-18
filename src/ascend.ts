@@ -1,14 +1,17 @@
 import {
   canInteract,
+  equippedItem,
+  Item,
   myPath,
   print,
   pvpAttacksLeft,
   Skill,
+  Slot,
   totalTurnsPlayed,
   userConfirm,
   visitUrl,
 } from "kolmafia";
-import { $class, $item, $path, ascend, have, Lifestyle, prepareAscension } from "libram";
+import { $class, $item, $path, $slot, ascend, have, Lifestyle, prepareAscension } from "libram";
 
 export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
   if (myPath() === $path`Community Service`) return true;
@@ -16,6 +19,17 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
   const inWrongPath = !canInteract();
   if (inWrongPath) {
     print("Nope", "red");
+    return false;
+  }
+
+  const bootsReady = (
+    [
+      [$slot`bootspur`, $item`nicksilver spurs`],
+      [$slot`bootskin`, $item`mountain lion skin`],
+    ] as [Slot, Item][]
+  ).every(([slot, item]) => equippedItem(slot) === item);
+  if (!bootsReady) {
+    print("Equip your cowboy boots with nicksilver spurs and mountain lion skin", "red");
     return false;
   }
 
