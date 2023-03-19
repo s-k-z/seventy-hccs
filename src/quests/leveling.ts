@@ -44,6 +44,7 @@ import {
   $slot,
   $stat,
   AutumnAton,
+  Clan,
   Counter,
   DNALab,
   get,
@@ -306,6 +307,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Buff Familiar Weight",
       completed: () => get("_saberMod") !== 0,
+      prepare: () => Clan.join(config.main_clan),
       do: () => cliExecute("saber familiar"),
       effects: [
         $effect`A Girl Named Sue`,
@@ -796,7 +798,10 @@ export const Leveling: Quest<Task> = {
       choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
       do: $location`The Toxic Teacups`,
       post: () => {
-        assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?");
+        assert(
+          get("lastEncounter") !== "In Your Cups" && get("_voteFreeFights") > 0,
+          "Didn't increment vote counter?"
+        );
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
       },
       outfit: () => ({

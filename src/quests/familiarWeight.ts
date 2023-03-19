@@ -8,12 +8,14 @@ import {
   $location,
   $monster,
   $skill,
+  Clan,
   CommunityService,
   have,
   Macro,
 } from "libram";
 import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { mapMonster } from "../combat";
+import { config } from "../config";
 import { MoonSign, tuneMoon } from "../iotms";
 import { acquireEffect, itemToEffect, tryUse } from "../lib";
 import { runTest } from "./shared";
@@ -67,6 +69,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
         if (needMore() && have($item`abstraction: joy`)) chew($item`abstraction: joy`);
         if (needMore()) {
           autosell(1, $item`space blanket`); // +5000 meat
+          Clan.join(config.main_clan);
           drink($item`Hot Socks`);
         }
       },
