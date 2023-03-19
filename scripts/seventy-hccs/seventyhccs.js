@@ -12087,6 +12087,7 @@ var FamiliarWeightQuest = {
         (0, import_kolmafia33.chew)($item(_templateObject2011 || (_templateObject2011 = _taggedTemplateLiteral23(["abstraction: joy"]))));
       if (needMore()) {
         (0, import_kolmafia33.autosell)(1, $item(_templateObject2116 || (_templateObject2116 = _taggedTemplateLiteral23(["space blanket"]))));
+        Clan.join(config.main_clan);
         (0, import_kolmafia33.drink)($item(_templateObject2214 || (_templateObject2214 = _taggedTemplateLiteral23(["Hot Socks"]))));
       }
     },
@@ -13088,6 +13089,9 @@ var Leveling = {
     completed: function() {
       return get("_saberMod") !== 0;
     },
+    prepare: function() {
+      return Clan.join(config.main_clan);
+    },
     do: function() {
       return (0, import_kolmafia34.cliExecute)("saber familiar");
     },
@@ -13601,7 +13605,7 @@ var Leveling = {
     },
     do: $location(_templateObject301 || (_templateObject301 = _taggedTemplateLiteral26(["The Toxic Teacups"]))),
     post: function() {
-      assert(get("_voteFreeFights") > 0, "Didn't increment vote counter?");
+      assert(get("lastEncounter") !== "In Your Cups" && get("_voteFreeFights") > 0, "Didn't increment vote counter?");
       if (have($effect(_templateObject3022 || (_templateObject3022 = _taggedTemplateLiteral26(["Beaten Up"])))))
         (0, import_kolmafia34.useSkill)($skill(_templateObject3032 || (_templateObject3032 = _taggedTemplateLiteral26(["Tongue of the Walrus"]))));
     },
