@@ -673,10 +673,7 @@ export const Leveling: Quest<Task> = {
       post: () => {
         assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
-        if (myHp() / myMaxhp() < 0.5) {
-          useSkill($skill`Tongue of the Walrus`);
-          useSkill($skill`Cannelloni Cocoon`);
-        }
+        if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
       },
       outfit: () => levelingOutfit(400),
       combat: new CombatStrategy().macro(
