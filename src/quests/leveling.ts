@@ -796,7 +796,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         assert(
-          get("lastEncounter") !== "In Your Cups" && get("_voteFreeFights") > 0,
+          get("lastEncounter") === "In Your Cups" || get("_voteFreeFights") > 0,
           "Didn't increment vote counter?"
         );
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
