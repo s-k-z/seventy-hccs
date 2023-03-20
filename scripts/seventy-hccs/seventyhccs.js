@@ -13602,7 +13602,7 @@ var Leveling = {
     },
     do: $location(_templateObject300 || (_templateObject300 = _taggedTemplateLiteral26(["The Toxic Teacups"]))),
     post: function() {
-      assert(get("lastEncounter") !== "In Your Cups" && get("_voteFreeFights") > 0, "Didn't increment vote counter?");
+      assert(get("lastEncounter") === "In Your Cups" || get("_voteFreeFights") > 0, "Didn't increment vote counter?");
       if (have($effect(_templateObject301 || (_templateObject301 = _taggedTemplateLiteral26(["Beaten Up"])))))
         (0, import_kolmafia34.useSkill)($skill(_templateObject3022 || (_templateObject3022 = _taggedTemplateLiteral26(["Tongue of the Walrus"]))));
     },
