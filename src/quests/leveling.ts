@@ -401,12 +401,7 @@ export const Leveling: Quest<Task> = {
       post: () => visitUrl("place.php?whichplace=speakeasy"),
       outfit: () => levelingOutfit(),
       combat: new CombatStrategy()
-        .macro(
-          Macro.skill($skill`Feel Envy`)
-            .skill($skill`Sing Along`)
-            .attack(),
-          $monster`goblin flapper`
-        )
+        .macro(() => Macro.skill($skill`Feel Envy`).step(DefaultMacro()), $monster`goblin flapper`)
         .macro(Macro.abort()),
     },
     {
@@ -414,8 +409,23 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_speakeasyFreeFights") >= 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
       post: () => visitUrl("place.php?whichplace=speakeasy"),
-      outfit: () => levelingOutfit(),
-      combat: new CombatStrategy().macro(DefaultMacro), // Don't abort on unexpected monsters
+      outfit: () => {
+        const noPredict = get("crystalBallPredictions") === "";
+        const orbed = get("crystalBallPredictions").includes("goblin flapper");
+        const outfit = levelingOutfit();
+        if (noPredict || orbed) outfit.famequip = $item`miniature crystal ball`;
+        return outfit;
+      },
+      combat: new CombatStrategy()
+        .macro(
+          () =>
+            Macro.externalIf(
+              !haveItemOrEffect($item`imported taffy`),
+              Macro.skill($skill`Feel Envy`)
+            ),
+          $monster`goblin flapper`
+        )
+        .macro(DefaultMacro), // Don't abort on unexpected monsters
       effects: [
         $effect`Broad-Spectrum Vaccine`,
         $effect`Favored by Lyle`,
