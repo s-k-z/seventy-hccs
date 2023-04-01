@@ -35,6 +35,10 @@ export function runTest(test: CommunityService): void {
   if (coilWire) visitUrl("council.php");
   switch (test.run(() => undefined, coilWire ? 60 : 1)) {
     case "completed":
+      assert(
+        get("csServicesPerformed").includes(test.name),
+        `Did not record completion of ${test.name}`
+      );
       return;
     case "already completed":
       throw `Re-ran test ${test.statName}`;

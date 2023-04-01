@@ -17,7 +17,7 @@ import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { mapMonster } from "../combat";
 import { config } from "../config";
 import { MoonSign, tuneMoon } from "../iotms";
-import { acquireEffect, itemToEffect, tryUse } from "../lib";
+import { acquireEffect, assert, itemToEffect, tryUse } from "../lib";
 import { runTest } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
@@ -34,6 +34,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
           ? mapMonster($location`The Stately Pleasure Dome`, target)
           : reminisce(target);
       },
+      post: () => assert($effect`Meteor Showered`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
         .ccs(

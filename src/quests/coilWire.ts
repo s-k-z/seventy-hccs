@@ -118,6 +118,7 @@ export const CoilWire: Quest<Task> = {
       completed: () => have($skill`Insectologist`),
       choices: { 1494: 2 },
       do: () => use($item`S.I.T. Course Completion Certificate`),
+      post: () => assert($skill`Insectologist`),
     },
     // prettier-ignore
     ...(
@@ -156,12 +157,14 @@ export const CoilWire: Quest<Task> = {
       name: "Scavenge Daycare",
       completed: () => get("_daycareGymScavenges") > 0,
       do: () => scavengeDaycare(),
+      post: () => assert(get("_daycareGymScavenges") > 0, "Failed to scavenge"),
     },
     {
       name: "Borrow Time",
       completed: () => get("_borrowedTimeUsed"),
       acquire: [{ item: $item`borrowed time`, get: () => create($item`borrowed time`) }],
       do: () => use($item`borrowed time`),
+      post: () => assert(get("_borrowedTimeUsed"), "Failed to borrow time"),
     },
     {
       name: "Setup & Heal",
@@ -195,7 +198,10 @@ export const CoilWire: Quest<Task> = {
       completed: () => monstersReminisced().includes($monster`pterodactyl`),
       do: () => reminisce($monster`pterodactyl`),
       post: () => {
-        assert(monstersReminisced().includes($monster`pterodactyl`), "Failed to reminisce?");
+        assert(
+          monstersReminisced().includes($monster`pterodactyl`),
+          "Failed to reminisce pterodactyl?"
+        );
       },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
       combat: RunawayCombat,
@@ -205,7 +211,11 @@ export const CoilWire: Quest<Task> = {
       completed: () => have($item`li'l ninja costume`),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
-      post: () => refreshGhost(),
+      post: () => {
+        refreshGhost();
+        assert($item`Friendliness Beverage`);
+        assert($item`li'l ninja costume`);
+      },
       outfit: () => ({
         back: $item`protonic accelerator pack`,
         shirt: $item`Jurassic Parka`,
@@ -232,6 +242,7 @@ export const CoilWire: Quest<Task> = {
       post: () => {
         visitUrl("questlog.php?which=1");
         equip($slot`familiar`, $item`none`);
+        assert($item`bag of many confections`);
       },
       outfit: {
         back: $item`protonic accelerator pack`,
@@ -257,7 +268,15 @@ export const CoilWire: Quest<Task> = {
         get("_saberForceUses") > 0 ||
         monstersReminisced().includes($monster`cocktail shrimp`),
       do: () => reminisce($monster`cocktail shrimp`),
-      post: () => DNALab.hybridize(),
+      post: () => {
+        assert(
+          monstersReminisced().includes($monster`cocktail shrimp`),
+          "Failed to reminisce cocktail shrimp?"
+        );
+        assert(get("_saberForceUses") > 0, "Failed to increment force uses");
+        DNALab.hybridize();
+        assert(DNALab.isHybridized(), "Failed to hybridize");
+      },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
         .ccs(

@@ -4,7 +4,6 @@ import {
   cliExecute,
   create,
   eat,
-  equip,
   familiarWeight,
   haveEffect,
   itemAmount,
@@ -41,7 +40,6 @@ import {
   $monsters,
   $phylum,
   $skill,
-  $slot,
   $stat,
   AutumnAton,
   Clan,
@@ -172,8 +170,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Remove Temporary Blindness",
-      ready: () => get("_hotTubSoaks") < 5,
       completed: () => !have($effect`Temporary Blindness`),
+      prepare: () => assert(get("_hotTubSoaks") < 5, "Don't have hot tub available?"),
       do: () => cliExecute("hottub"),
     },
     {
@@ -244,10 +242,8 @@ export const Leveling: Quest<Task> = {
     {
       name: "Triple-Size",
       completed: () => have($effect`Triple-Sized`),
-      do: () => {
-        equip($slot`acc2`, $item`Powerful Glove`);
-        acquireEffect($effect`Triple-Sized`);
-      },
+      do: () => acquireEffect($effect`Triple-Sized`),
+      outfit: { acc2: $item`Powerful Glove` },
     },
     {
       name: "Ten-percent Bonus",
@@ -392,6 +388,7 @@ export const Leveling: Quest<Task> = {
       name: "Glitter",
       completed: () => have($effect`Glittering Eyelashes`),
       do: () => use($item`glittery mascara`), // -21 meat
+      post: () => assert($effect`Glittering Eyelashes`),
     },
     {
       name: "Ensure Imported Taffy",
@@ -410,10 +407,11 @@ export const Leveling: Quest<Task> = {
       do: $location`An Unusually Quiet Barroom Brawl`,
       post: () => visitUrl("place.php?whichplace=speakeasy"),
       outfit: () => {
-        const noPredict = get("crystalBallPredictions") === "";
-        const orbed = get("crystalBallPredictions").includes("goblin flapper");
         const outfit = levelingOutfit();
-        if (noPredict || orbed) outfit.famequip = $item`miniature crystal ball`;
+        const wantOrb =
+          get("crystalBallPredictions") === "" ||
+          get("crystalBallPredictions").includes("goblin flapper");
+        if (wantOrb) outfit.famequip = $item`miniature crystal ball`;
         return outfit;
       },
       combat: new CombatStrategy()
@@ -758,7 +756,6 @@ export const Leveling: Quest<Task> = {
       name: "Witchess Witch",
       completed: () => have($item`battle broom`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
-      post: () => equip($item`battle broom`),
       outfit: () => levelingOutfit(7000),
       combat: DefaultCombat,
     },
@@ -925,6 +922,12 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
+      post: () => {
+        const pre = get("_neverendingPartyFreeTurns");
+        visitUrl("place.php?whichplace=town_wrong");
+        const delta = get("_neverendingPartyFreeTurns") - pre;
+        assert(delta === 0, `Miscounted ${delta} turn(s) at the Neverending Party?`);
+      },
       effects: $effects`Spirit of Garlic, Wizard Squint`,
       outfit: () => vintnerOutfit(),
       combat: StenchCombat,
@@ -933,6 +936,7 @@ export const Leveling: Quest<Task> = {
       name: "Drink Lattes",
       completed: () => get("_latteRefillsUsed") >= 3,
       prepare: () => {
+        assert(get("_banderRunaways") < weightAdjustment() / 5, "Used too many runaways?");
         if (get("_latteDrinkUsed")) cliExecute("latte refill pumpkin cinnamon vanilla");
       },
       do: $location`The Dire Warren`,
