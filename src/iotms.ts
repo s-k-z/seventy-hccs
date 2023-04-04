@@ -1,5 +1,4 @@
 import {
-  cliExecute,
   Effect,
   haveEquipped,
   itemAmount,
@@ -109,7 +108,14 @@ export function vote(): void {
 }
 
 export function wish(e: Effect): void {
-  if (!have(e)) cliExecute(`genie effect ${e}`);
+  if (!have(e)) {
+    const regexp = /<blockquote>(.+)<\/blockquote>/;
+    const desc = visitUrl(`desc_effect.php?whicheffect=${e.descid}`).match(regexp);
+    if (!desc) throw `Failed to find description text for ${e}`;
+    if (!desc[1]) throw `Failed to match blockquote for ${e}`;
+    visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
+    runChoice(1, `wish=to be ${desc[1]}`);
+  }
   assert(e);
 }
 

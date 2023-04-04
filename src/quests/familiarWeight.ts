@@ -63,7 +63,6 @@ export const FamiliarWeightQuest: Quest<Task> = {
         if (needMore()) wishMonkey($effect`All Is Forgiven`);
         if (needMore()) wishMonkey($effect`Bureaucratized`);
         if (needMore()) wishMonkey($effect`Healthy Green Glow`);
-        if (needMore()) wishMonkey($effect`Spookyravin'`);
       },
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [
