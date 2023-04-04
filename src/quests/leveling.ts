@@ -658,16 +658,7 @@ export const Leveling: Quest<Task> = {
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
       },
       outfit: () => levelingOutfit(400),
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Portscan`)
-          .skill($skill`Curse of Weaksauce`)
-          .item($item`Time-Spinner`)
-          .skill($skill`Micrometeorite`)
-          .skill($skill`Sing Along`)
-          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-          .attack()
-          .repeat()
-      ),
+      combat: DefaultCombat,
     },
     {
       name: "Piranha Plant",
@@ -675,7 +666,19 @@ export const Leveling: Quest<Task> = {
       do: $location`Your Mushroom Garden`,
       post: () => assert(get("_mushroomGardenFights") > 0, "Didn't fight a piranha plant?"),
       outfit: () => levelingOutfit(1000),
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Portscan`)
+            .skill($skill`Curse of Weaksauce`)
+            .item($item`Time-Spinner`)
+            .skill($skill`Micrometeorite`)
+            .skill($skill`Sing Along`)
+            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+            .attack()
+            .repeat(),
+          $monster`piranha plant`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "God Lobster",

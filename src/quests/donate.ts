@@ -37,6 +37,18 @@ export const DonateQuest: Quest<Task> = {
   completed: () => get("kingLiberated"),
   tasks: [
     {
+      name: "Finish Rufus Quest",
+      ready: () => get("questRufus") === "step1",
+      completed: () => have($item`Rufus's shadow lodestone`),
+      // Calling Rufus Back: (1) "Yes!" (6) Hang up
+      choices: { 1498: 1 },
+      do: () => use($item`closed-circuit pay phone`),
+      post: () => {
+        assert($item`Rufus's shadow lodestone`);
+        assert(get("questRufus") === "unstarted", "Failed to finish Rufus quest?");
+      },
+    },
+    {
       name: "Grab Comic",
       ready: () => storageAmount($item`Batfellow comic`) > 0,
       completed: () => itemAmount($item`Batfellow comic`) > 0 || get("_batfellowToday", false),
