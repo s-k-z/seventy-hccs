@@ -12,8 +12,9 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $class, $item, $path, $slot, ascend, have, Lifestyle, prepareAscension } from "libram";
+import { config } from "./config";
 
-export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolean {
+export function isReadyToContinue(): boolean {
   if (myPath() === $path`Community Service`) return true;
 
   const inWrongPath = !canInteract();
@@ -33,23 +34,23 @@ export function isReadyToContinue(skipFites: boolean, skipVote: boolean): boolea
     return false;
   }
 
-  if (!skipFites && pvpAttacksLeft() > 0) {
+  if (!config.nofites && pvpAttacksLeft() > 0) {
     print("Spend your pvp fites", "red");
     return false;
   }
 
   const voterPreCoilNotReady = totalTurnsPlayed() % 11 !== 1;
   const voterPostCoilNotReady = (totalTurnsPlayed() + 60) % 11 !== 1;
-  if (!skipVote && voterPreCoilNotReady && voterPostCoilNotReady) {
+  if (!config.novote && voterPreCoilNotReady && voterPostCoilNotReady) {
     const turnsA = 11 - (((totalTurnsPlayed() % 11) + 10) % 11);
     const turnsB = 11 - ((((totalTurnsPlayed() + 60) % 11) + 10) % 11);
     print(`Spend more ${turnsA} or ${turnsB} turns for voter monster`, "red");
     return false;
   }
 
-  if (!userConfirm(`Ready to Ascend into Community Service?`)) return false;
+  if (config.noprompt || userConfirm(`Ready to Ascend into Community Service?`)) return true;
 
-  return true;
+  return false;
 }
 
 const toPerm: Skill[] = [];

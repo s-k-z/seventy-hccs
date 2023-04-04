@@ -3,6 +3,7 @@ import { $item } from "libram";
 
 export const config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
   nofites: Args.flag({ help: "Skip warning for unspent pvp fites.", setting: "", default: false }),
+  noprompt: Args.flag({ help: "Skip prompt before ascending.", setting: "", default: false }),
   novote: Args.flag({ help: "Skip guaranteed vote wanderer check.", setting: "", default: false }),
   prep: Args.flag({ help: "Switch chateau, eudora, and garden", setting: "", default: false }),
   // preferences
