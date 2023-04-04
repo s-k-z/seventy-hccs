@@ -14,17 +14,7 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import {
-  $item,
-  $location,
-  $monster,
-  $monsters,
-  $skill,
-  get,
-  getModifier,
-  have,
-  Macro,
-} from "libram";
+import { $item, $monster, $monsters, $skill, get, getModifier, have, Macro } from "libram";
 import { assert, haveItemOrEffect } from "./lib";
 
 const notAllowList = [
@@ -61,10 +51,11 @@ const notAllowList = [
   $monster`Witchess Queen`,
   // more free combats
   $monster`sausage goblin`,
+  $monster`X-32-F Combat Training Snowman`,
   $monster`Eldritch Tentacle`,
   $monster`Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl`,
+  $monster`piranha plant`,
   $monster`God Lobster`,
-  $monster`X-32-F Combat Training Snowman`,
   // Goth Kid Wanderers
   $monster`Black Crayon Beast`,
   $monster`Black Crayon Beetle`,
@@ -250,37 +241,6 @@ export const DefaultCombat = new CombatStrategy()
     $monster`Witchess Witch`
   )
   .macro(DefaultMacro);
-
-export const StenchCombat = new CombatStrategy().macro(() => {
-  const weight = 20 + weightAdjustment();
-  const bonus = getModifier("Familiar Damage");
-  const maxVintnerDamage = 3 + weight + bonus;
-  const safe = 2 * (maxVintnerDamage + 25);
-  return Macro.if_(
-    `monsterid ${$monster`toxic beastie`.id}`,
-    Macro.if_(
-      `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
-      Macro.skill($skill`Back-Up to your Last Enemy`)
-    )
-  )
-    .skill($skill`Saucy Salve`)
-    .if_(`monsterid ${$monster`toxic beastie`.id}`, Macro.abort())
-    .if_(
-      `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
-      Macro.trySkill($skill`Bowl Sideways`)
-    )
-    .externalIf(
-      get("cosmicBowlingBallReturnCombats") > 1,
-      Macro.if_(
-        `monsterhpabove ${safe} && snarfblat ${$location`The Neverending Party`.id}`,
-        Macro.trySkill($skill`Feel Pride`)
-      )
-    )
-    .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
-    .skill($skill`Stuffed Mortar Shell`)
-    .skill($skill`Silent Treatment`)
-    .abort();
-});
 
 export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 

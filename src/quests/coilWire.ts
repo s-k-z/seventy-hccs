@@ -4,7 +4,6 @@ import {
   cliExecute,
   create,
   Effect,
-  equip,
   getWorkshed,
   Item,
   itemAmount,
@@ -26,7 +25,6 @@ import {
   $location,
   $monster,
   $skill,
-  $slot,
   AutumnAton,
   Clan,
   CommunityService,
@@ -40,9 +38,15 @@ import {
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
 import { config } from "../config";
-import { getPantogramPants, scavengeDaycare, spendAllMpOnLibrams, vote } from "../iotms";
+import {
+  getPantogramPants,
+  harvestBatteries,
+  scavengeDaycare,
+  spendAllMpOnLibrams,
+  vote,
+} from "../iotms";
 import { assert, voterMonsterNow } from "../lib";
-import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
+import { AdvReq, darkHorse, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
   ["questM23Meatsmith", "shop.php?whichshop=meatsmith&action=talk"],
@@ -126,7 +130,10 @@ export const CoilWire: Quest<Task> = {
         [$effect`The Odour of Magick`, () => use($item`natural magick candle`)],
         [$item`"I Voted!" sticker`,    () => vote()],
         [$item`pantogram pants`,       () => getPantogramPants()],
+        [$item`battery (AAA)`,         () => harvestBatteries()],
+        [$item`battery (AA)`,          () => create($item`battery (AA)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
+        [$item`cold-filtered water`,   () => create($item`cold-filtered water`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
         [$item`green mana`,            () => cliExecute("cheat forest")],
@@ -212,7 +219,8 @@ export const CoilWire: Quest<Task> = {
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
       post: () => {
-        refreshGhost();
+        visitUrl("questlog.php?which=1");
+        assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
         assert($item`Friendliness Beverage`);
         assert($item`li'l ninja costume`);
       },
@@ -232,8 +240,8 @@ export const CoilWire: Quest<Task> = {
         .macro(Macro.abort()),
     },
     {
-      name: "Stocking Mimic Candy",
-      completed: () => get("_bagOfCandy"),
+      name: "Protonic Ghost",
+      completed: () => !get("ghostLocation"),
       do: () => {
         const ghostZone = get("ghostLocation");
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
@@ -241,14 +249,12 @@ export const CoilWire: Quest<Task> = {
       },
       post: () => {
         visitUrl("questlog.php?which=1");
-        equip($slot`familiar`, $item`none`);
-        assert($item`bag of many confections`);
+        assert(!get("ghostLocation"), "Still have a ghost location");
       },
-      outfit: {
+      outfit: () => ({
         back: $item`protonic accelerator pack`,
-        familiar: $familiar`Stocking Mimic`,
-        famequip: $item`none`,
-      },
+        ...selectBestFamiliar(AdvReq.NoAttack),
+      }),
       combat: DefaultCombat,
     },
     {

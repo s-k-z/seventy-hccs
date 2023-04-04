@@ -1,4 +1,6 @@
 import {
+  cliExecute,
+  Effect,
   haveEquipped,
   itemAmount,
   mpCost,
@@ -62,6 +64,13 @@ export function getPantogramPants(): void {
   assert($item`pantogram pants`);
 }
 
+export function harvestBatteries(): void {
+  visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`potted power plant`)}`);
+  for (let i = 0; i < 7; i++) {
+    visitUrl(`choice.php?pwd=&whichchoice=1448&option=1&pp=${i + 1}`);
+  }
+}
+
 export function scavengeDaycare(): void {
   visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
   if (!get("_daycareNap")) runChoice(1);
@@ -97,4 +106,17 @@ export function vote(): void {
   visitUrl("place.php?whichplace=town_right&action=townright_vote");
   visitUrl(`choice.php?pwd=&option=1&whichchoice=1331&g=2&local[]=1&local[]=3`);
   assert($item`"I Voted!" sticker`);
+}
+
+export function wish(e: Effect): void {
+  if (!have(e)) cliExecute(`genie effect ${e}`);
+  assert(e);
+}
+
+export function wishMonkey(e: Effect): void {
+  assert(!have(e), `Already have ${e}`);
+  visitUrl("main.php?action=cmonk&pwd=");
+  runChoice(1, `wish=${e}`);
+  assert(e);
+  visitUrl("main.php");
 }

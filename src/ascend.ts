@@ -57,7 +57,7 @@ const toPerm: Skill[] = [];
 export function prepareToAscend() {
   if (myPath() !== $path`Community Service`) {
     prepareAscension({
-      garden: "Peppermint Pip Packet",
+      garden: "packet of mushroom spores",
       eudora: "Our Daily Candles™ order form",
       chateau: {
         desk: "Swiss piggy bank",
@@ -78,7 +78,7 @@ export function prepAndAscendIfNecessary() {
       $path`Community Service`,
       $class`Sauceror`,
       Lifestyle.hardcore,
-      "blender",
+      "platypus",
       $item`astral six-pack`,
       $item`astral chapeau`,
       {

@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { autosell, chew, drink, Item, itemAmount, use, weightAdjustment } from "kolmafia";
+import { Item, itemAmount, use, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -8,16 +8,14 @@ import {
   $location,
   $monster,
   $skill,
-  Clan,
   CommunityService,
   have,
   Macro,
 } from "libram";
 import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { mapMonster } from "../combat";
-import { config } from "../config";
-import { MoonSign, tuneMoon } from "../iotms";
-import { acquireEffect, assert, itemToEffect, tryUse } from "../lib";
+import { wishMonkey } from "../iotms";
+import { assert, itemToEffect, tryUse } from "../lib";
 import { runTest } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
@@ -50,11 +48,11 @@ export const FamiliarWeightQuest: Quest<Task> = {
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
         const needMore = (): boolean => weightAdjustment() < 275;
-        const haveUnused = (i: Item): boolean => have(i) && !have(itemToEffect(i));
-        if (needMore() && haveUnused($item`resolution: be kinder`)) {
-          use($item`resolution: be kinder`);
-        }
-        if (needMore() && haveUnused($item`green candy heart`)) use($item`green candy heart`);
+        const useIfUnused = (i: Item): void => {
+          if (have(i) && !have(itemToEffect(i))) use(i);
+        };
+        if (needMore()) useIfUnused($item`resolution: be kinder`);
+        if (needMore()) useIfUnused($item`green candy heart`);
         const librams: [number, Item][] = [
           [4, $item`love song of icy revenge`],
           [5, $item`pulled blue taffy`],
@@ -62,22 +60,15 @@ export const FamiliarWeightQuest: Quest<Task> = {
         librams.forEach(([n, i]) => {
           if (needMore()) use(Math.min(n, itemAmount(i)), i);
         });
-        if (needMore()) {
-          acquireEffect($effect`Ode to Booze`);
-          drink($item`1950 Vampire Vintner wine`); // 3-5 adventures, 1 drunk
-        }
-        tuneMoon(MoonSign.Platypus);
-        if (needMore() && have($item`abstraction: joy`)) chew($item`abstraction: joy`);
-        if (needMore()) {
-          autosell(1, $item`space blanket`); // +5000 meat
-          Clan.join(config.main_clan);
-          drink($item`Hot Socks`);
-        }
+        if (needMore()) wishMonkey($effect`All Is Forgiven`);
+        if (needMore()) wishMonkey($effect`Bureaucratized`);
+        if (needMore()) wishMonkey($effect`Healthy Green Glow`);
+        if (needMore()) wishMonkey($effect`Spookyravin'`);
       },
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [
+        $effect`[1701]Hip to the Jive`,
         $effect`A Girl Named Sue`,
-        $effect`All Is Forgiven`,
         $effect`Billiards Belligerence`,
         $effect`Blood Bond`,
         $effect`Do I Know You From Somewhere?`,

@@ -1,21 +1,11 @@
 import { OutfitSpec, Task } from "grimoire-kolmafia";
-import {
-  cliExecute,
-  elementalResistance,
-  myHp,
-  myLevel,
-  myMaxhp,
-  useSkill,
-  visitUrl,
-} from "kolmafia";
+import { cliExecute, myLevel, visitUrl } from "kolmafia";
 import {
   $effect,
-  $element,
   $familiar,
   $item,
   $items,
   $location,
-  $skill,
   Clan,
   CommunityService,
   get,
@@ -24,11 +14,6 @@ import {
 import { DefaultCombat } from "../combat";
 import { config } from "../config";
 import { assert, haveItemOrEffect } from "../lib";
-
-export function refreshGhost(): void {
-  visitUrl("questlog.php?which=1");
-  assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
-}
 
 export function runTest(test: CommunityService): void {
   const coilWire = test.name === "Coil Wire";
@@ -80,41 +65,6 @@ export function darkHorse(): Task {
     name: "Dark Horse",
     completed: () => get("_horsery").toLowerCase() === "dark horse",
     do: () => cliExecute("horsery dark"),
-  };
-}
-
-export function deepDarkVisions(): Task {
-  const safeHpLimit = (): number => {
-    const resist = 1 - elementalResistance($element`spooky`) / 100;
-    assert(resist > 0, `invalid resist value ${resist} calculated`);
-    const maxMultiplier = 4;
-    return myMaxhp() * maxMultiplier * resist;
-  };
-
-  return {
-    name: "Deep Dark Visions",
-    ready: () => myMaxhp() > 500,
-    completed: () => have($effect`Visions of the Deep Dark Deeps`),
-    do: () => {
-      assert(myMaxhp() > safeHpLimit(), "Not enough HP for deep dark visions");
-      if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
-      assert(myHp() > safeHpLimit(), "Failed to heal enough for Deep Dark Visions?");
-      useSkill($skill`Deep Dark Visions`);
-    },
-    post: () => {
-      assert($effect`Visions of the Deep Dark Deeps`);
-      useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
-    },
-    outfit: {
-      back: $item`unwrapped knock-off retro superhero cape`,
-      shirt: $item`Jurassic Parka`,
-      weapon: $item`Fourth of May Cosplay Saber`,
-      offhand: $items`burning paper crane, unbreakable umbrella`,
-      pants: $item`pantogram pants`,
-      acc3: $item`Kremlin's Greatest Briefcase`,
-      familiar: $familiar`Exotic Parrot`,
-      modes: { parka: "ghostasaurus", retrocape: ["vampire", "hold"] },
-    },
   };
 }
 
