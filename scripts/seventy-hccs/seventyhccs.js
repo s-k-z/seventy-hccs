@@ -11470,6 +11470,14 @@ var CoilWire = {
       return (0, import_kolmafia31.use)($item(_templateObject573 || (_templateObject573 = _taggedTemplateLiteral20(["Little Geneticist DNA-Splicing Lab"]))));
     }
   }, {
+    name: "MCD On",
+    completed: function() {
+      return (0, import_kolmafia31.currentMcd)() > 0;
+    },
+    do: function() {
+      return (0, import_kolmafia31.changeMcd)(11);
+    }
+  }, {
     name: "Reminisce cocktail shrimp",
     completed: function() {
       return DNALab_exports.isHybridized() || monstersReminisced().includes($monster(_templateObject583 || (_templateObject583 = _taggedTemplateLiteral20(["cocktail shrimp"]))));
