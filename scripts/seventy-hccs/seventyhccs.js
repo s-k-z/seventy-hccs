@@ -11549,7 +11549,7 @@ var CoilWire = {
       return get("_shrubDecorated");
     },
     do: function() {
-      return CrimboShrub_exports.decorate("Mysticality", "Sleaze Damage", "Blocking", "Red Ray");
+      return CrimboShrub_exports.decorate("Mysticality", "Spooky Damage", "Blocking", "Red Ray");
     }
   }, {
     name: "Map novelty tropical skeleton",
