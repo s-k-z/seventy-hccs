@@ -57,7 +57,7 @@ export function selectBestFamiliar(req = AdvReq.Normal): OutfitSpec {
     return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
   }
 
-  return { familiar: $familiar`Baby Sandworm`, famequip: $item`tiny stillsuit` };
+  return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
 }
 
 export function darkHorse(): Task {
