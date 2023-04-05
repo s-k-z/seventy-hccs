@@ -275,7 +275,6 @@ export const Leveling: Quest<Task> = {
         $effect`Billiards Belligerence`,
         $effect`Fidoxene`,
         $effect`Loyal Tea`,
-        $effect`Over-Familiar With Dactyls`,
         $effect`Puzzle Champ`,
         $effect`Shrimpin' Ain't Easy`,
         $effect`You Can Really Taste the Dormouse`,
