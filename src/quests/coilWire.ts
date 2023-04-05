@@ -1,8 +1,10 @@
 import { CombatStrategy, OutfitSpec, Quest, Task } from "grimoire-kolmafia";
 import {
   adv1,
+  changeMcd,
   cliExecute,
   create,
+  currentMcd,
   Effect,
   getWorkshed,
   Item,
@@ -199,6 +201,11 @@ export const CoilWire: Quest<Task> = {
       name: "Install Workshed",
       completed: () => getWorkshed() === $item`Little Geneticist DNA-Splicing Lab`,
       do: () => use($item`Little Geneticist DNA-Splicing Lab`),
+    },
+    {
+      name: "MCD On",
+      completed: () => currentMcd() > 0,
+      do: () => changeMcd(11),
     },
     {
       name: "Reminisce cocktail shrimp",
