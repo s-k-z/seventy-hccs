@@ -1,7 +1,18 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { cliExecute, create, equip, use, visitUrl } from "kolmafia";
+import {
+  cliExecute,
+  create,
+  elementalResistance,
+  equip,
+  myHp,
+  myMaxhp,
+  use,
+  useSkill,
+  visitUrl,
+} from "kolmafia";
 import {
   $effect,
+  $element,
   $familiar,
   $item,
   $items,
@@ -15,7 +26,14 @@ import {
 } from "libram";
 import { config } from "../config";
 import { assert, haveItemOrEffect } from "../lib";
-import { deepDarkVisions, innerElf, runTest } from "./shared";
+import { innerElf, runTest } from "./shared";
+
+function safeHpLimit(): number {
+  const resist = 1 - elementalResistance($element`spooky`) / 100;
+  assert(resist > 0, `invalid resist value ${resist} calculated`);
+  const maxMultiplier = 4;
+  return myMaxhp() * maxMultiplier * resist;
+}
 
 export const SpellDamageQuest: Quest<Task> = {
   name: "Make Sausage",
@@ -28,7 +46,31 @@ export const SpellDamageQuest: Quest<Task> = {
       post: () => assert($item`cordial of concentration`),
     },
     innerElf(),
-    deepDarkVisions(),
+    {
+      name: "Deep Dark Visions",
+      ready: () => myMaxhp() > 500,
+      completed: () => have($effect`Visions of the Deep Dark Deeps`),
+      do: () => {
+        assert(myMaxhp() > safeHpLimit(), "Not enough HP for deep dark visions");
+        if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
+        assert(myHp() > safeHpLimit(), "Failed to heal enough for Deep Dark Visions?");
+        useSkill($skill`Deep Dark Visions`);
+      },
+      post: () => {
+        assert($effect`Visions of the Deep Dark Deeps`);
+        useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
+      },
+      outfit: {
+        back: $item`unwrapped knock-off retro superhero cape`,
+        shirt: $item`Jurassic Parka`,
+        weapon: $item`Fourth of May Cosplay Saber`,
+        offhand: $items`burning paper crane, unbreakable umbrella`,
+        pants: $item`pantogram pants`,
+        acc3: $item`Kremlin's Greatest Briefcase`,
+        familiar: $familiar`Exotic Parrot`,
+        modes: { parka: "ghostasaurus", retrocape: ["vampire", "hold"] },
+      },
+    },
     {
       name: "Cowrruption",
       completed: () => haveItemOrEffect($item`corrupted marrow`),
@@ -62,6 +104,8 @@ export const SpellDamageQuest: Quest<Task> = {
       do: () => runTest(CommunityService.SpellDamage),
       post: () => equip($slot`familiar`, $item`none`),
       effects: [
+        $effect`AA-Charged`,
+        $effect`AAA-Charged`,
         $effect`Arched Eyebrow of the Archmage`,
         $effect`Carol of the Hells`,
         $effect`Concentration`,

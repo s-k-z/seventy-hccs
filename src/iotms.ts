@@ -1,5 +1,7 @@
 import {
+  Effect,
   haveEquipped,
+  Item,
   itemAmount,
   mpCost,
   myClass,
@@ -26,10 +28,8 @@ export function castBestLibram(): void {
   for (const [summon, check] of new Map<Skill, boolean>([
     [$skill`Summon BRICKOs`,      wantBrickos],
     [$skill`Summon Candy Heart`, !haveItemOrEffect($item`green candy heart`)],
-    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 2)],
+    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 4)],
     [$skill`Summon Resolutions`, get("_resolutionRareSummons") < 3],
-    [$skill`Summon Taffy`,       !have($item`pulled blue taffy`, 4)],
-    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 4)]
   ])) {
     if (check) {
       useSkill(summon);
@@ -60,6 +60,13 @@ export function getPantogramPants(): void {
   visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`portable pantogram`)}`);
   visitUrl(`choice.php?pwd=&whichchoice=1270&option=1&m=${m}&e=${e}&s1=${s1}&s2=${s2}&s3=${s3}`);
   assert($item`pantogram pants`);
+}
+
+export function harvestBatteries(): void {
+  visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`potted power plant`)}`);
+  for (let i = 0; i < 7; i++) {
+    visitUrl(`choice.php?pwd=&whichchoice=1448&option=1&pp=${i + 1}`);
+  }
 }
 
 export function scavengeDaycare(): void {
@@ -97,4 +104,24 @@ export function vote(): void {
   visitUrl("place.php?whichplace=town_right&action=townright_vote");
   visitUrl(`choice.php?pwd=&option=1&whichchoice=1331&g=2&local[]=1&local[]=3`);
   assert($item`"I Voted!" sticker`);
+}
+
+export function wish(effect: Effect): void {
+  if (!have(effect)) {
+    const regexp = /<blockquote>(.+)<\/blockquote>/;
+    const desc = visitUrl(`desc_effect.php?whicheffect=${effect.descid}`).match(regexp);
+    if (!desc) throw `Failed to find description text for ${effect}`;
+    if (!desc[1]) throw `Failed to match blockquote for ${effect}`;
+    visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
+    runChoice(1, `wish=to be ${desc[1]}`);
+  }
+  assert(effect);
+}
+
+export function wishMonkey(thing: Effect | Item): void {
+  assert(!have(thing), `Already have ${thing}`);
+  visitUrl("main.php?action=cmonk&pwd=");
+  runChoice(1, `wish=${thing}`);
+  visitUrl("main.php");
+  assert(thing);
 }

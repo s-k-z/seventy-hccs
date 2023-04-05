@@ -39,7 +39,7 @@ export function main(command = ""): void {
     return;
   }
 
-  if (!isReadyToContinue(config.nofites, config.novote)) return;
+  if (!isReadyToContinue()) return;
   prepAndAscendIfNecessary();
   setAutoAttack(0);
 

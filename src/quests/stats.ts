@@ -1,6 +1,8 @@
 import { Quest, Task } from "grimoire-kolmafia";
 import { $effect, $effects, $item, $items, CommunityService } from "libram";
 import { runTest } from "./shared";
+import { create } from "kolmafia";
+import { acquireEffect, haveItemOrEffect } from "../lib";
 
 export const HPQuest: Quest<Task> = {
   name: "Donate Blood",
@@ -29,7 +31,15 @@ export const MoxieQuest: Quest<Task> = {
     {
       name: "Moxie Test",
       completed: () => CommunityService.Moxie.isDone(),
-      do: () => runTest(CommunityService.Moxie),
+      do: () => {
+        if (CommunityService.Moxie.actualCost() > 1) {
+          if (!haveItemOrEffect($item`oil of expertise`)) {
+            create($item`oil of expertise`);
+          }
+          acquireEffect($effect`Expert Oiliness`);
+        }
+        runTest(CommunityService.Moxie);
+      },
       effects: $effects`Disco Fever, Quiet Desperation, Sparkly!`,
       outfit: {
         hat: $item`very pointy crown`,
@@ -51,7 +61,15 @@ export const MuscleQuest: Quest<Task> = {
     {
       name: "Muscle Test",
       completed: () => CommunityService.Muscle.isDone(),
-      do: () => runTest(CommunityService.Muscle),
+      do: () => {
+        if (CommunityService.Muscle.actualCost() > 1) {
+          if (!haveItemOrEffect($item`oil of expertise`)) {
+            create($item`oil of expertise`);
+          }
+          acquireEffect($effect`Expert Oiliness`);
+        }
+        runTest(CommunityService.Muscle);
+      },
       acquire: [{ item: $item`wad of used tape` }],
       effects: [$effect`Giant Growth`, $effect`Quiet Determination`, $effect`Rage of the Reindeer`],
       outfit: {

@@ -4,7 +4,6 @@ import {
   cliExecute,
   create,
   Effect,
-  equip,
   getWorkshed,
   Item,
   itemAmount,
@@ -26,7 +25,6 @@ import {
   $location,
   $monster,
   $skill,
-  $slot,
   AutumnAton,
   Clan,
   CommunityService,
@@ -38,11 +36,17 @@ import {
   SongBoom,
 } from "libram";
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
-import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
+import { DefaultCombat, mapMonster } from "../combat";
 import { config } from "../config";
-import { getPantogramPants, scavengeDaycare, spendAllMpOnLibrams, vote } from "../iotms";
+import {
+  getPantogramPants,
+  harvestBatteries,
+  scavengeDaycare,
+  spendAllMpOnLibrams,
+  vote,
+} from "../iotms";
 import { assert, voterMonsterNow } from "../lib";
-import { AdvReq, darkHorse, refreshGhost, runTest, selectBestFamiliar } from "./shared";
+import { AdvReq, darkHorse, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
   ["questM23Meatsmith", "shop.php?whichshop=meatsmith&action=talk"],
@@ -126,7 +130,10 @@ export const CoilWire: Quest<Task> = {
         [$effect`The Odour of Magick`, () => use($item`natural magick candle`)],
         [$item`"I Voted!" sticker`,    () => vote()],
         [$item`pantogram pants`,       () => getPantogramPants()],
+        [$item`battery (AAA)`,         () => harvestBatteries()],
+        [$item`battery (AA)`,          () => create($item`battery (AA)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
+        [$item`cold-filtered water`,   () => create($item`cold-filtered water`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
         [$item`green mana`,            () => cliExecute("cheat forest")],
@@ -194,17 +201,22 @@ export const CoilWire: Quest<Task> = {
       do: () => use($item`Little Geneticist DNA-Splicing Lab`),
     },
     {
-      name: "Reminisce pterodactyl",
-      completed: () => monstersReminisced().includes($monster`pterodactyl`),
-      do: () => reminisce($monster`pterodactyl`),
+      name: "Reminisce cocktail shrimp",
+      completed: () =>
+        DNALab.isHybridized() || monstersReminisced().includes($monster`cocktail shrimp`),
+      do: () => reminisce($monster`cocktail shrimp`),
       post: () => {
         assert(
-          monstersReminisced().includes($monster`pterodactyl`),
-          "Failed to reminisce pterodactyl?"
+          monstersReminisced().includes($monster`cocktail shrimp`),
+          "Failed to reminisce cocktail shrimp?"
         );
+        DNALab.hybridize();
+        assert(DNALab.isHybridized(), "Failed to hybridize");
       },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: RunawayCombat,
+      combat: new CombatStrategy()
+        .macro(Macro.item($item`DNA extraction syringe`).runaway(), $monster`cocktail shrimp`)
+        .macro(Macro.abort()),
     },
     {
       name: "Ninja Costume",
@@ -212,8 +224,9 @@ export const CoilWire: Quest<Task> = {
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
       do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
       post: () => {
-        refreshGhost();
-        assert($item`Friendliness Beverage`);
+        visitUrl("questlog.php?which=1");
+        assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
+        assert($item`shrimp cocktail`);
         assert($item`li'l ninja costume`);
       },
       outfit: () => ({
@@ -232,8 +245,8 @@ export const CoilWire: Quest<Task> = {
         .macro(Macro.abort()),
     },
     {
-      name: "Stocking Mimic Candy",
-      completed: () => get("_bagOfCandy"),
+      name: "Protonic Ghost",
+      completed: () => !get("ghostLocation"),
       do: () => {
         const ghostZone = get("ghostLocation");
         if (!ghostZone) throw `Failed to get protonic ghost notice`;
@@ -241,14 +254,12 @@ export const CoilWire: Quest<Task> = {
       },
       post: () => {
         visitUrl("questlog.php?which=1");
-        equip($slot`familiar`, $item`none`);
-        assert($item`bag of many confections`);
+        assert(!get("ghostLocation"), "Still have a ghost location");
       },
-      outfit: {
+      outfit: () => ({
         back: $item`protonic accelerator pack`,
-        familiar: $familiar`Stocking Mimic`,
-        famequip: $item`none`,
-      },
+        ...selectBestFamiliar(AdvReq.NoAttack),
+      }),
       combat: DefaultCombat,
     },
     {
@@ -262,29 +273,21 @@ export const CoilWire: Quest<Task> = {
       do: () => CrimboShrub.decorate("Mysticality", "Sleaze Damage", "Blocking", "Red Ray"),
     },
     {
-      name: "Reminisce cocktail shrimp",
-      completed: () =>
-        DNALab.isHybridized() ||
-        get("_saberForceUses") > 0 ||
-        monstersReminisced().includes($monster`cocktail shrimp`),
-      do: () => reminisce($monster`cocktail shrimp`),
+      name: "Map novelty tropical skeleton",
+      completed: () => have($item`cherry`) || get("_saberForceUses") > 0,
+      do: () => mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`),
       post: () => {
-        assert(
-          monstersReminisced().includes($monster`cocktail shrimp`),
-          "Failed to reminisce cocktail shrimp?"
-        );
+        assert($item`cherry`);
+        assert($item`grapefruit`);
         assert(get("_saberForceUses") > 0, "Failed to increment force uses");
-        DNALab.hybridize();
-        assert(DNALab.isHybridized(), "Failed to hybridize");
       },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
         .ccs(
-          `item ${$item`DNA extraction syringe`}
-          skill ${$skill`Open a Big Red Present`}
-          twiddle your thumbs
-          skill ${$skill`Use the Force`}`,
-          $monster`cocktail shrimp` // + 2000 meat
+          `skill ${$skill`Open a Big Red Present`}
+           twiddle your thumbs
+           skill ${$skill`Use the Force`}`,
+          $monster`novelty tropical skeleton` // + 2000 meat
         )
         .macro(Macro.abort()),
     },
