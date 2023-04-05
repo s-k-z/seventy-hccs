@@ -10925,7 +10925,7 @@ function selectBestFamiliar() {
     };
   }
   return {
-    familiar: $familiar(_templateObject1311 || (_templateObject1311 = _taggedTemplateLiteral19(["Baby Sandworm"]))),
+    familiar: $familiar(_templateObject1311 || (_templateObject1311 = _taggedTemplateLiteral19(["Artistic Goth Kid"]))),
     famequip: $item(_templateObject1411 || (_templateObject1411 = _taggedTemplateLiteral19(["tiny stillsuit"])))
   };
 }
