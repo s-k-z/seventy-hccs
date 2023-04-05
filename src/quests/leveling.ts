@@ -177,7 +177,7 @@ export const Leveling: Quest<Task> = {
       name: "Ointment of the Occult",
       completed: () => have($item`ointment of the occult`),
       do: () => {
-        useSkill($skill`Prevent Scurvy and Sobriety`); // 50 mp
+        // useSkill($skill`Prevent Scurvy and Sobriety`); // 50 mp
         useSkill($skill`Advanced Saucecrafting`); // 10 mp
         create($item`ointment of the occult`); // -900 meat
       },
@@ -229,6 +229,7 @@ export const Leveling: Quest<Task> = {
       do: () => {
         create(1, $item`magical sausage`);
         eat(1, $item`magical sausage`);
+        assert(get("_sausagesEaten") > 0, "Didn't eat a sausage?");
       },
     },
     {
@@ -441,8 +442,8 @@ export const Leveling: Quest<Task> = {
         $effect`Sauce Monocle`, // 20 mp
         $effect`Springy Fusilli`, // 10 mp
         // Batteries
-        $effect`AA-Charged`, // +30 MP
-        $effect`AAA-Charged`, // +40 MP
+        $effect`AA-Charged`, // +40 MP
+        $effect`AAA-Charged`, // +30 MP
         // Song(s)
         $effect`Ode to Booze`, // 50 mp
         $effect`Polka of Plenty`, // 7 mp

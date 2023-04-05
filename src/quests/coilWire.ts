@@ -36,7 +36,7 @@ import {
   SongBoom,
 } from "libram";
 import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
-import { DefaultCombat, mapMonster, RunawayCombat } from "../combat";
+import { DefaultCombat, mapMonster } from "../combat";
 import { config } from "../config";
 import {
   getPantogramPants,
@@ -201,17 +201,22 @@ export const CoilWire: Quest<Task> = {
       do: () => use($item`Little Geneticist DNA-Splicing Lab`),
     },
     {
-      name: "Reminisce pterodactyl",
-      completed: () => monstersReminisced().includes($monster`pterodactyl`),
-      do: () => reminisce($monster`pterodactyl`),
+      name: "Reminisce cocktail shrimp",
+      completed: () =>
+        DNALab.isHybridized() || monstersReminisced().includes($monster`cocktail shrimp`),
+      do: () => reminisce($monster`cocktail shrimp`),
       post: () => {
         assert(
-          monstersReminisced().includes($monster`pterodactyl`),
-          "Failed to reminisce pterodactyl?"
+          monstersReminisced().includes($monster`cocktail shrimp`),
+          "Failed to reminisce cocktail shrimp?"
         );
+        DNALab.hybridize();
+        assert(DNALab.isHybridized(), "Failed to hybridize");
       },
       outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: RunawayCombat,
+      combat: new CombatStrategy()
+        .macro(Macro.item($item`DNA extraction syringe`).runaway(), $monster`cocktail shrimp`)
+        .macro(Macro.abort()),
     },
     {
       name: "Ninja Costume",
@@ -221,7 +226,7 @@ export const CoilWire: Quest<Task> = {
       post: () => {
         visitUrl("questlog.php?which=1");
         assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
-        assert($item`Friendliness Beverage`);
+        assert($item`shrimp cocktail`);
         assert($item`li'l ninja costume`);
       },
       outfit: () => ({
@@ -268,29 +273,21 @@ export const CoilWire: Quest<Task> = {
       do: () => CrimboShrub.decorate("Mysticality", "Sleaze Damage", "Blocking", "Red Ray"),
     },
     {
-      name: "Reminisce cocktail shrimp",
-      completed: () =>
-        DNALab.isHybridized() ||
-        get("_saberForceUses") > 0 ||
-        monstersReminisced().includes($monster`cocktail shrimp`),
-      do: () => reminisce($monster`cocktail shrimp`),
+      name: "Map novelty tropical skeleton",
+      completed: () => have($item`cherry`) || get("_saberForceUses") > 0,
+      do: () => mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`),
       post: () => {
-        assert(
-          monstersReminisced().includes($monster`cocktail shrimp`),
-          "Failed to reminisce cocktail shrimp?"
-        );
+        assert($item`cherry`);
+        assert($item`grapefruit`);
         assert(get("_saberForceUses") > 0, "Failed to increment force uses");
-        DNALab.hybridize();
-        assert(DNALab.isHybridized(), "Failed to hybridize");
       },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()
         .ccs(
-          `item ${$item`DNA extraction syringe`}
-          skill ${$skill`Open a Big Red Present`}
-          twiddle your thumbs
-          skill ${$skill`Use the Force`}`,
-          $monster`cocktail shrimp` // + 2000 meat
+          `skill ${$skill`Open a Big Red Present`}
+           twiddle your thumbs
+           skill ${$skill`Use the Force`}`,
+          $monster`novelty tropical skeleton` // + 2000 meat
         )
         .macro(Macro.abort()),
     },

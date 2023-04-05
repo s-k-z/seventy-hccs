@@ -1,6 +1,7 @@
 import {
   Effect,
   haveEquipped,
+  Item,
   itemAmount,
   mpCost,
   myClass,
@@ -27,10 +28,8 @@ export function castBestLibram(): void {
   for (const [summon, check] of new Map<Skill, boolean>([
     [$skill`Summon BRICKOs`,      wantBrickos],
     [$skill`Summon Candy Heart`, !haveItemOrEffect($item`green candy heart`)],
-    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 2)],
+    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 4)],
     [$skill`Summon Resolutions`, get("_resolutionRareSummons") < 3],
-    [$skill`Summon Taffy`,       !have($item`pulled blue taffy`, 4)],
-    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 4)]
   ])) {
     if (check) {
       useSkill(summon);
@@ -107,22 +106,22 @@ export function vote(): void {
   assert($item`"I Voted!" sticker`);
 }
 
-export function wish(e: Effect): void {
-  if (!have(e)) {
+export function wish(effect: Effect): void {
+  if (!have(effect)) {
     const regexp = /<blockquote>(.+)<\/blockquote>/;
-    const desc = visitUrl(`desc_effect.php?whicheffect=${e.descid}`).match(regexp);
-    if (!desc) throw `Failed to find description text for ${e}`;
-    if (!desc[1]) throw `Failed to match blockquote for ${e}`;
+    const desc = visitUrl(`desc_effect.php?whicheffect=${effect.descid}`).match(regexp);
+    if (!desc) throw `Failed to find description text for ${effect}`;
+    if (!desc[1]) throw `Failed to match blockquote for ${effect}`;
     visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
     runChoice(1, `wish=to be ${desc[1]}`);
   }
-  assert(e);
+  assert(effect);
 }
 
-export function wishMonkey(e: Effect): void {
-  assert(!have(e), `Already have ${e}`);
+export function wishMonkey(thing: Effect | Item): void {
+  assert(!have(thing), `Already have ${thing}`);
   visitUrl("main.php?action=cmonk&pwd=");
-  runChoice(1, `wish=${e}`);
-  assert(e);
+  runChoice(1, `wish=${thing}`);
   visitUrl("main.php");
+  assert(thing);
 }

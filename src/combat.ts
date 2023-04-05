@@ -245,7 +245,8 @@ export const DefaultCombat = new CombatStrategy()
 export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
 
 export function mapMonster(location: Location, monster: Monster): void {
-  assert(get("_monstersMapped") < 3, "Trying to map too many monsters");
+  const initial = get("_monstersMapped");
+  assert(initial < 3, "Trying to map too many monsters");
   if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
   const expectedTurnCount = myTurncount();
   let mapPage = "";
@@ -258,4 +259,5 @@ export function mapMonster(location: Location, monster: Monster): void {
   runCombat();
   if (handlingChoice()) runChoice(-1);
   assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
+  assert(get("_monstersMapped") === initial + 1, "Failed to increment map the monstesr?");
 }

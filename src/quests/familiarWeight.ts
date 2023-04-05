@@ -9,6 +9,7 @@ import {
   $monster,
   $skill,
   CommunityService,
+  get,
   have,
   Macro,
 } from "libram";
@@ -25,7 +26,9 @@ export const FamiliarWeightQuest: Quest<Task> = {
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      prepare: () => tryUse($item`tiny bottle of absinthe`),
+      prepare: () => {
+        if (get("_monstersMapped") < 3) tryUse($item`tiny bottle of absinthe`);
+      },
       do: () => {
         const target = $monster`toothless mastiff bitch`;
         have($effect`Absinthe-Minded`)
