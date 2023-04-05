@@ -653,7 +653,6 @@ export const Leveling: Quest<Task> = {
       prepare: () => SourceTerminal.educate($skill`Portscan`),
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
-        assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
       },
@@ -664,7 +663,10 @@ export const Leveling: Quest<Task> = {
       name: "Piranha Plant",
       completed: () => get("_mushroomGardenFights") > 0,
       do: $location`Your Mushroom Garden`,
-      post: () => assert(get("_mushroomGardenFights") > 0, "Didn't fight a piranha plant?"),
+      post: () => {
+        assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
+        assert(get("_mushroomGardenFights") > 0, "Didn't fight a piranha plant?");
+      },
       outfit: () => levelingOutfit(1000),
       combat: new CombatStrategy()
         .macro(
