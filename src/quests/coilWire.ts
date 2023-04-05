@@ -270,7 +270,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Decorate Crimbo Shrub",
       completed: () => get("_shrubDecorated"),
-      do: () => CrimboShrub.decorate("Mysticality", "Sleaze Damage", "Blocking", "Red Ray"),
+      do: () => CrimboShrub.decorate("Mysticality", "Spooky Damage", "Blocking", "Red Ray"),
     },
     {
       name: "Map novelty tropical skeleton",
