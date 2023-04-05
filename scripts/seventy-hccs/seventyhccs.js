@@ -13383,7 +13383,6 @@ var Leveling = {
       return (0, import_kolmafia34.useSkill)($skill(_templateObject2462 || (_templateObject2462 = _taggedTemplateLiteral26(["Evoke Eldritch Horror"]))));
     },
     post: function() {
-      assert(counter_exports.exists("portscan.edu"), "Failed to setup portscan?");
       if ((0, import_kolmafia34.myHp)() / (0, import_kolmafia34.myMaxhp)() < 0.5)
         (0, import_kolmafia34.useSkill)($skill(_templateObject2472 || (_templateObject2472 = _taggedTemplateLiteral26(["Cannelloni Cocoon"]))));
     },
@@ -13398,7 +13397,8 @@ var Leveling = {
     },
     do: $location(_templateObject2482 || (_templateObject2482 = _taggedTemplateLiteral26(["Your Mushroom Garden"]))),
     post: function() {
-      return assert(get("_mushroomGardenFights") > 0, "Didn't fight a piranha plant?");
+      assert(counter_exports.exists("portscan.edu"), "Failed to setup portscan?");
+      assert(get("_mushroomGardenFights") > 0, "Didn't fight a piranha plant?");
     },
     outfit: function() {
       return levelingOutfit(1e3);
