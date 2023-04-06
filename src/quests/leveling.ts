@@ -177,7 +177,9 @@ export const Leveling: Quest<Task> = {
       name: "Ointment of the Occult",
       completed: () => have($item`ointment of the occult`),
       do: () => {
-        // useSkill($skill`Prevent Scurvy and Sobriety`); // 50 mp
+        if (!have($item`grapefruit`)) {
+          useSkill($skill`Prevent Scurvy and Sobriety`); // 50 mp
+        }
         useSkill($skill`Advanced Saucecrafting`); // 10 mp
         create($item`ointment of the occult`); // -900 meat
       },

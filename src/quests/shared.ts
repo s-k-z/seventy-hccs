@@ -36,16 +36,16 @@ export function runTest(test: CommunityService): void {
 
 export const enum AdvReq {
   NoAttack,
-  Normal,
+  None,
 }
 
-export function selectBestFamiliar(req = AdvReq.Normal): OutfitSpec {
+export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
   if (!have($effect`Spit Upon`) && get("camelSpit") < 100) {
     return { familiar: $familiar`Melodramedary`, famequip: $item`tiny stillsuit` };
   }
 
   const pancake = $item`short stack of pancakes`;
-  if (req === AdvReq.Normal && !haveItemOrEffect(pancake)) {
+  if (req === AdvReq.None && !haveItemOrEffect(pancake)) {
     return { familiar: $familiar`Shorter-Order Cook`, famequip: $item`none` };
   }
 
@@ -53,7 +53,7 @@ export function selectBestFamiliar(req = AdvReq.Normal): OutfitSpec {
     return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
   }
 
-  if (req === AdvReq.Normal && !have($item`tiny bottle of absinthe`)) {
+  if (req === AdvReq.None && get("_monstersMapped") < 3 && !have($item`tiny bottle of absinthe`)) {
     return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
   }
 
