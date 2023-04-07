@@ -245,6 +245,7 @@ export const CoilWire: Quest<Task> = {
       combat: new CombatStrategy()
         .macro(
           Macro.skill($skill`Feel Nostalgic`)
+            .skill($skill`Feel Envy`)
             .skill($skill`Sing Along`)
             .skill($skill`Spit jurassic acid`),
           $monster`amateur ninja`
