@@ -12166,9 +12166,7 @@ var HotResistQuest = {
     completed: function() {
       return have($effect(_templateObject181 || (_templateObject181 = _taggedTemplateLiteral24(["Fireproof Foam Suit"]))));
     },
-    do: function() {
-      return $location(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral24(["The Dire Warren"])));
-    },
+    do: $location(_templateObject250 || (_templateObject250 = _taggedTemplateLiteral24(["The Dire Warren"]))),
     post: function() {
       return assert($effect(_templateObject339 || (_templateObject339 = _taggedTemplateLiteral24(["Fireproof Foam Suit"]))));
     },
@@ -13932,6 +13930,8 @@ var _templateObject3511;
 var _templateObject3610;
 var _templateObject3710;
 var _templateObject3810;
+var _templateObject399;
+var _templateObject409;
 function _taggedTemplateLiteral28(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -13973,22 +13973,27 @@ var MoxieQuest = {
     },
     do: function() {
       if (CommunityService.Moxie.actualCost() > 1) {
-        if (!haveItemOrEffect($item(_templateObject831 || (_templateObject831 = _taggedTemplateLiteral28(["oil of expertise"]))))) {
-          (0, import_kolmafia36.create)($item(_templateObject929 || (_templateObject929 = _taggedTemplateLiteral28(["oil of expertise"]))));
+        if (have($item(_templateObject831 || (_templateObject831 = _taggedTemplateLiteral28(["runproof mascara"])))))
+          (0, import_kolmafia36.use)($item(_templateObject929 || (_templateObject929 = _taggedTemplateLiteral28(["runproof mascara"]))));
+      }
+      if (CommunityService.Moxie.actualCost() > 1) {
+        if (!haveItemOrEffect($item(_templateObject1026 || (_templateObject1026 = _taggedTemplateLiteral28(["oil of expertise"]))))) {
+          assert($item(_templateObject1121 || (_templateObject1121 = _taggedTemplateLiteral28(["cherry"]))));
+          (0, import_kolmafia36.create)($item(_templateObject1221 || (_templateObject1221 = _taggedTemplateLiteral28(["oil of expertise"]))));
         }
-        acquireEffect($effect(_templateObject1026 || (_templateObject1026 = _taggedTemplateLiteral28(["Expert Oiliness"]))));
+        acquireEffect($effect(_templateObject1321 || (_templateObject1321 = _taggedTemplateLiteral28(["Expert Oiliness"]))));
       }
       runTest(CommunityService.Moxie);
     },
-    effects: $effects(_templateObject1121 || (_templateObject1121 = _taggedTemplateLiteral28(["Disco Fever, Quiet Desperation, Sparkly!"]))),
+    effects: $effects(_templateObject1421 || (_templateObject1421 = _taggedTemplateLiteral28(["Disco Fever, Big, Quiet Desperation, Sparkly!"]))),
     outfit: {
-      hat: $item(_templateObject1221 || (_templateObject1221 = _taggedTemplateLiteral28(["very pointy crown"]))),
-      back: $item(_templateObject1321 || (_templateObject1321 = _taggedTemplateLiteral28(["unwrapped knock-off retro superhero cape"]))),
-      weapon: $item(_templateObject1421 || (_templateObject1421 = _taggedTemplateLiteral28(["Fourth of May Cosplay Saber"]))),
-      offhand: $item(_templateObject1520 || (_templateObject1520 = _taggedTemplateLiteral28(["unbreakable umbrella"]))),
-      acc1: $item(_templateObject1617 || (_templateObject1617 = _taggedTemplateLiteral28(["your cowboy boots"]))),
-      acc2: $item(_templateObject1717 || (_templateObject1717 = _taggedTemplateLiteral28(["Beach Comb"]))),
-      acc3: $item(_templateObject1816 || (_templateObject1816 = _taggedTemplateLiteral28(['"I Voted!" sticker']))),
+      hat: $item(_templateObject1520 || (_templateObject1520 = _taggedTemplateLiteral28(["very pointy crown"]))),
+      back: $item(_templateObject1617 || (_templateObject1617 = _taggedTemplateLiteral28(["unwrapped knock-off retro superhero cape"]))),
+      weapon: $item(_templateObject1717 || (_templateObject1717 = _taggedTemplateLiteral28(["Fourth of May Cosplay Saber"]))),
+      offhand: $item(_templateObject1816 || (_templateObject1816 = _taggedTemplateLiteral28(["unbreakable umbrella"]))),
+      acc1: $item(_templateObject1916 || (_templateObject1916 = _taggedTemplateLiteral28(["your cowboy boots"]))),
+      acc2: $item(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral28(["Beach Comb"]))),
+      acc3: $item(_templateObject2121 || (_templateObject2121 = _taggedTemplateLiteral28(['"I Voted!" sticker']))),
       modes: {
         retrocape: ["robot", void 0]
       }
@@ -14004,24 +14009,25 @@ var MuscleQuest = {
     },
     do: function() {
       if (CommunityService.Muscle.actualCost() > 1) {
-        if (!haveItemOrEffect($item(_templateObject1916 || (_templateObject1916 = _taggedTemplateLiteral28(["oil of expertise"]))))) {
-          (0, import_kolmafia36.create)($item(_templateObject2014 || (_templateObject2014 = _taggedTemplateLiteral28(["oil of expertise"]))));
+        if (!haveItemOrEffect($item(_templateObject2219 || (_templateObject2219 = _taggedTemplateLiteral28(["oil of expertise"]))))) {
+          assert($item(_templateObject2317 || (_templateObject2317 = _taggedTemplateLiteral28(["cherry"]))));
+          (0, import_kolmafia36.create)($item(_templateObject2416 || (_templateObject2416 = _taggedTemplateLiteral28(["oil of expertise"]))));
         }
-        acquireEffect($effect(_templateObject2121 || (_templateObject2121 = _taggedTemplateLiteral28(["Expert Oiliness"]))));
+        acquireEffect($effect(_templateObject2515 || (_templateObject2515 = _taggedTemplateLiteral28(["Expert Oiliness"]))));
       }
       runTest(CommunityService.Muscle);
     },
     acquire: [{
-      item: $item(_templateObject2219 || (_templateObject2219 = _taggedTemplateLiteral28(["wad of used tape"])))
+      item: $item(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral28(["wad of used tape"])))
     }],
-    effects: [$effect(_templateObject2317 || (_templateObject2317 = _taggedTemplateLiteral28(["Giant Growth"]))), $effect(_templateObject2416 || (_templateObject2416 = _taggedTemplateLiteral28(["Quiet Determination"]))), $effect(_templateObject2515 || (_templateObject2515 = _taggedTemplateLiteral28(["Rage of the Reindeer"])))],
+    effects: $effects(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral28(["Big, Giant Growth, Quiet Determination, Rage of the Reindeer"]))),
     outfit: {
-      hat: $item(_templateObject2613 || (_templateObject2613 = _taggedTemplateLiteral28(["wad of used tape"]))),
-      back: $item(_templateObject2713 || (_templateObject2713 = _taggedTemplateLiteral28(["unwrapped knock-off retro superhero cape"]))),
-      weapon: $item(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral28(["dented scepter"]))),
-      offhand: $item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral28(["unbreakable umbrella"]))),
-      acc1: $item(_templateObject3011 || (_templateObject3011 = _taggedTemplateLiteral28(["Brutal brogues"]))),
-      acc3: $item(_templateObject3117 || (_templateObject3117 = _taggedTemplateLiteral28(['"I Voted!" sticker']))),
+      hat: $item(_templateObject2811 || (_templateObject2811 = _taggedTemplateLiteral28(["wad of used tape"]))),
+      back: $item(_templateObject2911 || (_templateObject2911 = _taggedTemplateLiteral28(["unwrapped knock-off retro superhero cape"]))),
+      weapon: $item(_templateObject3011 || (_templateObject3011 = _taggedTemplateLiteral28(["dented scepter"]))),
+      offhand: $item(_templateObject3117 || (_templateObject3117 = _taggedTemplateLiteral28(["unbreakable umbrella"]))),
+      acc1: $item(_templateObject3216 || (_templateObject3216 = _taggedTemplateLiteral28(["Brutal brogues"]))),
+      acc3: $item(_templateObject3313 || (_templateObject3313 = _taggedTemplateLiteral28(['"I Voted!" sticker']))),
       modes: {
         retrocape: ["vampire", void 0]
       }
@@ -14039,15 +14045,15 @@ var MysticalityQuest = {
       return runTest(CommunityService.Mysticality);
     },
     acquire: [{
-      item: $item(_templateObject3216 || (_templateObject3216 = _taggedTemplateLiteral28(["wad of used tape"])))
+      item: $item(_templateObject3411 || (_templateObject3411 = _taggedTemplateLiteral28(["wad of used tape"])))
     }],
-    effects: $effects(_templateObject3313 || (_templateObject3313 = _taggedTemplateLiteral28(["Nanobrainy, Quiet Judgement, Witch Breaded"]))),
+    effects: $effects(_templateObject3511 || (_templateObject3511 = _taggedTemplateLiteral28(["Nanobrainy, Quiet Judgement, Witch Breaded"]))),
     outfit: {
-      hat: $item(_templateObject3411 || (_templateObject3411 = _taggedTemplateLiteral28(["wad of used tape"]))),
-      back: $item(_templateObject3511 || (_templateObject3511 = _taggedTemplateLiteral28(["unwrapped knock-off retro superhero cape"]))),
-      weapon: $item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral28(["Fourth of May Cosplay Saber"]))),
-      acc1: $item(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral28(["battle broom"]))),
-      acc3: $item(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral28(['"I Voted!" sticker']))),
+      hat: $item(_templateObject3610 || (_templateObject3610 = _taggedTemplateLiteral28(["wad of used tape"]))),
+      back: $item(_templateObject3710 || (_templateObject3710 = _taggedTemplateLiteral28(["unwrapped knock-off retro superhero cape"]))),
+      weapon: $item(_templateObject3810 || (_templateObject3810 = _taggedTemplateLiteral28(["Fourth of May Cosplay Saber"]))),
+      acc1: $item(_templateObject399 || (_templateObject399 = _taggedTemplateLiteral28(["battle broom"]))),
+      acc3: $item(_templateObject409 || (_templateObject409 = _taggedTemplateLiteral28(['"I Voted!" sticker']))),
       modes: {
         retrocape: ["heck", void 0]
       }
