@@ -50,7 +50,7 @@ import {
   SourceTerminal,
   Witchess,
 } from "libram";
-import { DefaultCombat, DefaultMacro, mapMonster, RunawayCombat } from "../combat";
+import { DefaultCombat, DefaultMacro, mapMonster } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams, wish } from "../iotms";
 import { acquireEffect, assert, haveItemOrEffect, voterMonsterNow } from "../lib";
@@ -591,7 +591,7 @@ export const Leveling: Quest<Task> = {
       do: $location`Gingerbread Upscale Retail District`,
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: RunawayCombat,
+      combat: new CombatStrategy().macro(Macro.runaway()),
     },
     {
       name: "Snojo",

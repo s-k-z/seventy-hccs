@@ -242,8 +242,6 @@ export const DefaultCombat = new CombatStrategy()
   )
   .macro(DefaultMacro);
 
-export const RunawayCombat = new CombatStrategy().macro(Macro.runaway());
-
 export function mapMonster(location: Location, monster: Monster): void {
   const initial = get("_monstersMapped");
   assert(initial < 3, "Trying to map too many monsters");

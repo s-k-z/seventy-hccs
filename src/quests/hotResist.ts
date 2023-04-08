@@ -1,8 +1,17 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { $effect, $familiar, $item, $monster, $skill, CommunityService, have, Macro } from "libram";
+import {
+  $effect,
+  $familiar,
+  $item,
+  $location,
+  $monster,
+  $skill,
+  CommunityService,
+  have,
+  Macro,
+} from "libram";
 import { assert } from "../lib";
 import { runTest } from "./shared";
-import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 
 export const HotResistQuest: Quest<Task> = {
   name: "Clean Steam Tunnels",
@@ -11,15 +20,8 @@ export const HotResistQuest: Quest<Task> = {
     {
       name: "Fireproof Foam Suit",
       completed: () => have($effect`Fireproof Foam Suit`),
-      do: () => reminisce($monster`pterodactyl`),
-      post: () => {
-        assert($item`Friendliness Beverage`);
-        assert($effect`Fireproof Foam Suit`);
-        assert(
-          monstersReminisced().includes($monster`pterodactyl`),
-          "Failed to reminisce pterodactyl?"
-        );
-      },
+      do: () => $location`The Dire Warren`,
+      post: () => assert($effect`Fireproof Foam Suit`),
       outfit: {
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $item`industrial fire extinguisher`,
@@ -30,7 +32,7 @@ export const HotResistQuest: Quest<Task> = {
           `skill ${$skill`Fire Extinguisher: Foam Yourself`}
           twiddle your thumbs
           skill ${$skill`Use the Force`}`,
-          $monster`pterodactyl`
+          $monster`fluffy bunny`
         )
         .macro(Macro.abort()),
     },
