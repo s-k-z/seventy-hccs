@@ -20,7 +20,7 @@ export const HotResistQuest: Quest<Task> = {
     {
       name: "Fireproof Foam Suit",
       completed: () => have($effect`Fireproof Foam Suit`),
-      do: () => $location`The Dire Warren`,
+      do: $location`The Dire Warren`,
       post: () => assert($effect`Fireproof Foam Suit`),
       outfit: {
         weapon: $item`Fourth of May Cosplay Saber`,

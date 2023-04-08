@@ -1,8 +1,8 @@
 import { Quest, Task } from "grimoire-kolmafia";
-import { $effect, $effects, $item, $items, CommunityService } from "libram";
+import { $effect, $effects, $item, $items, CommunityService, have } from "libram";
 import { runTest } from "./shared";
-import { create } from "kolmafia";
-import { acquireEffect, haveItemOrEffect } from "../lib";
+import { create, use } from "kolmafia";
+import { acquireEffect, assert, haveItemOrEffect } from "../lib";
 
 export const HPQuest: Quest<Task> = {
   name: "Donate Blood",
@@ -33,14 +33,18 @@ export const MoxieQuest: Quest<Task> = {
       completed: () => CommunityService.Moxie.isDone(),
       do: () => {
         if (CommunityService.Moxie.actualCost() > 1) {
+          if (have($item`runproof mascara`)) use($item`runproof mascara`);
+        }
+        if (CommunityService.Moxie.actualCost() > 1) {
           if (!haveItemOrEffect($item`oil of expertise`)) {
+            assert($item`cherry`);
             create($item`oil of expertise`);
           }
           acquireEffect($effect`Expert Oiliness`);
         }
         runTest(CommunityService.Moxie);
       },
-      effects: $effects`Disco Fever, Quiet Desperation, Sparkly!`,
+      effects: $effects`Disco Fever, Big, Quiet Desperation, Sparkly!`,
       outfit: {
         hat: $item`very pointy crown`,
         back: $item`unwrapped knock-off retro superhero cape`,
@@ -64,6 +68,7 @@ export const MuscleQuest: Quest<Task> = {
       do: () => {
         if (CommunityService.Muscle.actualCost() > 1) {
           if (!haveItemOrEffect($item`oil of expertise`)) {
+            assert($item`cherry`);
             create($item`oil of expertise`);
           }
           acquireEffect($effect`Expert Oiliness`);
@@ -71,7 +76,7 @@ export const MuscleQuest: Quest<Task> = {
         runTest(CommunityService.Muscle);
       },
       acquire: [{ item: $item`wad of used tape` }],
-      effects: [$effect`Giant Growth`, $effect`Quiet Determination`, $effect`Rage of the Reindeer`],
+      effects: $effects`Big, Giant Growth, Quiet Determination, Rage of the Reindeer`,
       outfit: {
         hat: $item`wad of used tape`,
         back: $item`unwrapped knock-off retro superhero cape`,
