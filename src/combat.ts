@@ -14,8 +14,8 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { $item, $monster, $monsters, $skill, get, getModifier, have, Macro } from "libram";
-import { assert, haveItemOrEffect } from "./lib";
+import { $item, $monster, $monsters, $skill, get, getModifier, Macro } from "libram";
+import { assert } from "./lib";
 
 const notAllowList = [
   // protonic ghosts
@@ -195,14 +195,6 @@ export const DefaultCombat = new CombatStrategy()
       .skill($skill`Snokebomb`)
       .abort(),
     $monster`Mother Slime`
-  )
-  .macro(
-    () =>
-      Macro.externalIf(
-        !haveItemOrEffect($item`abstraction: joy`) && !have($item`abstraction: action`),
-        Macro.skill($skill`Feel Envy`)
-      ),
-    $monster`Performer of Actions`
   )
   .macro(Macro.tryItem($item`abstraction: action`), $monster`Thinker of Thoughts`)
   .macro(() => {

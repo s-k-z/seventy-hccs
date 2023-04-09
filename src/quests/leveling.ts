@@ -229,6 +229,7 @@ export const Leveling: Quest<Task> = {
       name: "Forcefully eat the first sausage of the day",
       completed: () => get("_sausagesEaten") > 0,
       do: () => {
+        spendAllMpOnLibrams();
         create(1, $item`magical sausage`);
         eat(1, $item`magical sausage`);
         assert(get("_sausagesEaten") > 0, "Didn't eat a sausage?");
