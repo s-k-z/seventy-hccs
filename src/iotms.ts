@@ -1,5 +1,6 @@
 import {
   Effect,
+  fileToBuffer,
   haveEquipped,
   Item,
   itemAmount,
@@ -107,14 +108,13 @@ export function vote(): void {
 }
 
 export function wish(effect: Effect): void {
-  if (!have(effect)) {
-    const regexp = /<blockquote>(.+)<\/blockquote>/;
-    const desc = visitUrl(`desc_effect.php?whicheffect=${effect.descid}`).match(regexp);
-    if (!desc) throw `Failed to find description text for ${effect}`;
-    if (!desc[1]) throw `Failed to match blockquote for ${effect}`;
-    visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
-    runChoice(1, `wish=to be ${desc[1]}`);
-  }
+  assert(!have(effect), `Already have ${effect}`);
+  const data: { [key: string]: string } = JSON.parse(fileToBuffer("data/wish_descriptions.json"));
+  const map = new Map(Object.entries(data).map(([key, val]) => [Effect.get(key), val]));
+  const desc = map.get(effect);
+  if (!desc) throw `Failed to find description text for ${effect}`;
+  visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
+  runChoice(1, `wish=to be ${desc}`);
   assert(effect);
 }
 
