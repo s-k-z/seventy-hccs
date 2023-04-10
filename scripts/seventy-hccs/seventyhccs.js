@@ -10818,16 +10818,17 @@ function vote() {
   assert($item(_templateObject2211 || (_templateObject2211 = _taggedTemplateLiteral18(['"I Voted!" sticker']))));
 }
 function wish(effect) {
-  if (!have(effect)) {
-    var regexp = /<blockquote>(.+)<\/blockquote>/;
-    var desc = (0, import_kolmafia29.visitUrl)("desc_effect.php?whicheffect=".concat(effect.descid)).match(regexp);
-    if (!desc)
-      throw "Failed to find description text for ".concat(effect);
-    if (!desc[1])
-      throw "Failed to match blockquote for ".concat(effect);
-    (0, import_kolmafia29.visitUrl)("inv_use.php?whichitem=".concat((0, import_kolmafia29.toInt)($item(_templateObject238 || (_templateObject238 = _taggedTemplateLiteral18(["genie bottle"]))))));
-    (0, import_kolmafia29.runChoice)(1, "wish=to be ".concat(desc[1]));
-  }
+  assert(!have(effect), "Already have ".concat(effect));
+  var data = JSON.parse((0, import_kolmafia29.fileToBuffer)("data/wish_descriptions.json"));
+  var map = new Map(Object.entries(data).map(function(_ref) {
+    var _ref2 = _slicedToArray11(_ref, 2), key = _ref2[0], val = _ref2[1];
+    return [import_kolmafia29.Effect.get(key), val];
+  }));
+  var desc = map.get(effect);
+  if (!desc)
+    throw "Failed to find description text for ".concat(effect);
+  (0, import_kolmafia29.visitUrl)("inv_use.php?whichitem=".concat((0, import_kolmafia29.toInt)($item(_templateObject238 || (_templateObject238 = _taggedTemplateLiteral18(["genie bottle"]))))));
+  (0, import_kolmafia29.runChoice)(1, "wish=to be ".concat(desc));
   assert(effect);
 }
 function wishMonkey(thing) {
