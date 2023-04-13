@@ -49,7 +49,7 @@ import {
   SourceTerminal,
   Witchess,
 } from "libram";
-import { DefaultCombat, DefaultMacro, mapMonster } from "../combat";
+import { DefaultCombat, DefaultMacro, mapMonster, notAllowList } from "../combat";
 import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams, wish } from "../iotms";
 import { acquireEffect, assert, haveItemOrEffect, voterMonsterNow } from "../lib";
@@ -83,7 +83,7 @@ function lightweightOutfit(): OutfitSpec {
     acc1: $item`Eight Days a Week Pill Keeper`,
     acc2: $items`battle broom, gold detective badge`,
     acc3: $item`combat lover's locket`,
-    ...selectBestFamiliar(),
+    ...selectBestFamiliar(AdvReq.NoHipster),
     modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
   };
 }
@@ -241,7 +241,7 @@ export const Leveling: Quest<Task> = {
       do: $location`Gingerbread Civic Center`,
       effects: $effects`Ode to Booze`,
       outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().startingMacro(Macro.abort()),
+      combat: new CombatStrategy().macro(Macro.abort()),
     },
     {
       name: "Nanobrainy",
@@ -879,7 +879,18 @@ export const Leveling: Quest<Task> = {
         assert(delta === 0, `Miscounted ${delta} turn(s) at the Neverending Party?`);
       },
       outfit: () => levelingOutfit(20000),
-      combat: DefaultCombat,
+      combat: new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort())).macro(
+        Macro.externalIf(
+          get("cosmicBowlingBallReturnCombats") > 1,
+          Macro.trySkill($skill`Feel Pride`)
+        )
+          .trySkill($skill`Bowl Sideways`)
+          .skill($skill`Curse of Weaksauce`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: "Drink Lattes",

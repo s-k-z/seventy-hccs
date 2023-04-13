@@ -36,6 +36,7 @@ export function runTest(test: CommunityService): void {
 
 export const enum AdvReq {
   NoAttack,
+  NoHipster,
   None,
 }
 
@@ -57,7 +58,11 @@ export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
     return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
   }
 
-  return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
+  if (req === AdvReq.NoHipster) {
+    return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
+  }
+
+  return { familiar: $familiar`Mini-Hipster`, famequip: $item`tiny stillsuit` };
 }
 
 export function darkHorse(): Task {

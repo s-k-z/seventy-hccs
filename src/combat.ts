@@ -17,7 +17,7 @@ import {
 import { $item, $monster, $monsters, $skill, get, getModifier, Macro } from "libram";
 import { assert } from "./lib";
 
-const notAllowList = [
+export const notAllowList = [
   // protonic ghosts
   $monster`boneless blobghost`,
   $monster`Emily Koops, a spooky lime`,
@@ -79,6 +79,12 @@ const notAllowList = [
   $monster`Black Crayon Slime`,
   $monster`Black Crayon Spiraling Shape`,
   $monster`Black Crayon Undead Thing`,
+  // Hipster Wanderers
+  $monster`angry bassist`,
+  $monster`blue-haired girl`,
+  $monster`evil ex-girlfriend`,
+  $monster`peeved roommate`,
+  $monster`random scenester`,
   // BRICKOS
   $monster`BRICKO ooze`,
   $monster`BRICKO bat`,
@@ -124,26 +130,22 @@ const notAllowList = [
   .map((m: Monster): string => `!monsterid ${m.id}`)
   .join(` && `);
 
-const Fast = Macro.skill($skill`Sing Along`)
-  .item($item`Time-Spinner`)
-  .skill($skill`Micrometeorite`)
-  .attack()
-  .repeat();
-
-const Slow = Macro.skill($skill`Curse of Weaksauce`)
-  .item($item`Time-Spinner`)
-  .skill($skill`Micrometeorite`)
-  .skill($skill`Sing Along`)
-  .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-  .attack()
-  .repeat();
-
-function isAttackFamiliar(): boolean {
-  return myFamiliar().physicalDamage || myFamiliar().elementalDamage;
-}
-
 export const DefaultMacro = (): Macro => {
-  return isAttackFamiliar() ? Fast : Slow;
+  const Fast = Macro.skill($skill`Sing Along`)
+    .item($item`Time-Spinner`)
+    .skill($skill`Micrometeorite`)
+    .attack()
+    .repeat();
+
+  const Slow = Macro.skill($skill`Curse of Weaksauce`)
+    .item($item`Time-Spinner`)
+    .skill($skill`Micrometeorite`)
+    .skill($skill`Sing Along`)
+    .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+    .attack()
+    .repeat();
+
+  return myFamiliar().physicalDamage || myFamiliar().elementalDamage ? Fast : Slow;
 };
 
 export const DefaultCombat = new CombatStrategy()
