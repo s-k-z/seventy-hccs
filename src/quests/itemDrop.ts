@@ -20,6 +20,7 @@ export const ItemDropQuest: Quest<Task> = {
     {
       name: "Become a Bat",
       completed: () => have($effect`Bat-Adjacent Form`),
+      prepare: () => assert($item`cosmic bowling ball`),
       do: $location`The Dire Warren`,
       post: () => $effects`Bat-Adjacent Form, Cosmic Ball in the Air`.forEach((e) => assert(e)),
       effects: $effects`Ode to Booze`,

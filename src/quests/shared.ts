@@ -46,7 +46,7 @@ export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
   }
 
   const pancake = $item`short stack of pancakes`;
-  if (req === AdvReq.None && !haveItemOrEffect(pancake)) {
+  if (req !== AdvReq.NoAttack && !haveItemOrEffect(pancake)) {
     return { familiar: $familiar`Shorter-Order Cook`, famequip: $item`none` };
   }
 
@@ -54,7 +54,11 @@ export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
     return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
   }
 
-  if (req === AdvReq.None && get("_monstersMapped") < 3 && !have($item`tiny bottle of absinthe`)) {
+  if (
+    req !== AdvReq.NoAttack &&
+    get("_monstersMapped") < 3 &&
+    !have($item`tiny bottle of absinthe`)
+  ) {
     return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
   }
 
