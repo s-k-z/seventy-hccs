@@ -1,6 +1,5 @@
 import { CombatStrategy, OutfitSpec, Quest, Task } from "grimoire-kolmafia";
 import {
-  adv1,
   changeMcd,
   cliExecute,
   create,
@@ -268,11 +267,7 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Protonic Ghost",
       completed: () => !get("ghostLocation"),
-      do: () => {
-        const ghostZone = get("ghostLocation");
-        if (!ghostZone) throw `Failed to get protonic ghost notice`;
-        adv1(ghostZone, -1);
-      },
+      do: () => get("ghostLocation"),
       post: () => {
         visitUrl("questlog.php?which=1");
         assert(!get("ghostLocation"), "Still have a ghost location");
@@ -350,7 +345,9 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Send autumn-aton",
       completed: () => !AutumnAton.available(),
-      do: () => AutumnAton.sendTo($location`The Sleazy Back Alley`),
+      do: (): void => {
+        AutumnAton.sendTo($location`The Sleazy Back Alley`);
+      },
     },
     {
       name: "Coil Wire",

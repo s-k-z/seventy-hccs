@@ -1,6 +1,5 @@
 import { CombatStrategy, OutfitSpec, Quest, Task } from "grimoire-kolmafia";
 import {
-  adv1,
   cliExecute,
   create,
   eat,
@@ -536,11 +535,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Protonic Ghost",
       completed: () => !get("ghostLocation"),
-      do: () => {
-        const ghostZone = get("ghostLocation");
-        if (!ghostZone) throw `Failed to get protonic ghost notice`;
-        adv1(ghostZone, -1);
-      },
+      do: () => get("ghostLocation"),
       post: () => {
         visitUrl("questlog.php?which=1");
         assert(!get("ghostLocation"), "Still have a ghost location");
@@ -639,7 +634,9 @@ export const Leveling: Quest<Task> = {
     {
       name: "Send autumn-aton",
       completed: () => !AutumnAton.available(),
-      do: () => AutumnAton.sendTo($location`Shadow Rift`),
+      do: (): void => {
+        AutumnAton.sendTo($location`Shadow Rift`);
+      },
     },
     {
       name: "BRICKOS",
@@ -653,7 +650,6 @@ export const Leveling: Quest<Task> = {
     {
       name: "Eldritch Tentacle",
       completed: () => get("_eldritchHorrorEvoked"),
-      prepare: () => SourceTerminal.educate($skill`Portscan`),
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
@@ -665,6 +661,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Piranha Plant",
       completed: () => get("_mushroomGardenFights") > 0,
+      prepare: () => SourceTerminal.educate($skill`Portscan`),
       do: $location`Your Mushroom Garden`,
       post: () => {
         assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
