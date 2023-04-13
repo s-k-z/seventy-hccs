@@ -58,11 +58,15 @@ export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
     return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
   }
 
-  if (req === AdvReq.NoHipster) {
+  if (req === AdvReq.NoHipster && get("_hipsterAdv") < 7) {
     return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
   }
 
-  return { familiar: $familiar`Mini-Hipster`, famequip: $item`tiny stillsuit` };
+  if (get("_hipsterAdv") < 7) {
+    return { familiar: $familiar`Mini-Hipster`, famequip: $item`tiny stillsuit` };
+  }
+
+  return { familiar: $familiar`Baby Sandworm`, famequip: $item`tiny stillsuit` };
 }
 
 export function darkHorse(): Task {
