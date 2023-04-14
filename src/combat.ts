@@ -14,7 +14,7 @@ import {
   visitUrl,
   weightAdjustment,
 } from "kolmafia";
-import { $item, $monster, $monsters, $skill, get, getModifier, Macro } from "libram";
+import { $item, $monster, $skill, get, getModifier, Macro } from "libram";
 import { assert } from "./lib";
 
 export const notAllowList = [
@@ -32,10 +32,6 @@ export const notAllowList = [
   $monster`The ghost of Waldo the Carpathian`,
   $monster`The Headless Horseman`,
   $monster`The Icewoman`,
-  // gingerbread city
-  $monster`gingerbread finance bro`,
-  $monster`gingerbread gentrifier`,
-  $monster`gingerbread tech bro`,
   // tunnel of L.O.V.E.
   $monster`LOV Enforcer`,
   $monster`LOV Engineer`,
@@ -109,8 +105,6 @@ export const notAllowList = [
   $monster`jock`,
   $monster`party girl`,
   $monster`"plain" girl`,
-  // toxic teacups
-  $monster`toxic beastie`,
   // shadow rifts
   $monster`shadow bat`,
   $monster`shadow cow`,
@@ -177,19 +171,6 @@ export const DefaultCombat = new CombatStrategy()
       $monster`The Icewoman`,
     ]
   )
-  .macro(
-    Macro.skill($skill`Sing Along`)
-      .if_(
-        `monsterid ${toInt($monster`gingerbread gentrifier`)}`,
-        Macro.trySkill($skill`Meteor Shower`)
-      )
-      .trySkill($skill`Chest X-Ray`)
-      .trySkill($skill`Shattering Punch`)
-      .trySkill($skill`Gingerbread Mob Hit`)
-      .trySkill($skill`Shocking Lick`)
-      .abort(),
-    $monsters`gingerbread finance bro, gingerbread gentrifier, gingerbread tech bro`
-  )
   .macro(Macro.attack().repeat(), $monster`LOV Enforcer`)
   .macro(Macro.skill($skill`Candyblast`).repeat(), $monster`LOV Engineer`)
   .macro(
@@ -204,22 +185,16 @@ export const DefaultCombat = new CombatStrategy()
     const bonus = getModifier("Familiar Damage");
     const maxShortyDamage = ((1 + weight + bonus) * 7) / 4;
     const safe = maxShortyDamage + 25;
-    return Macro.if_(
-      `hasskill ${toInt($skill`Back-Up to your Last Enemy`)}`,
-      Macro.skill($skill`Back-Up to your Last Enemy`)
-    )
-      .skill($skill`Saucy Salve`)
-      .if_(
-        `monsterid ${$monster`toxic beastie`.id}`,
-        Macro.if_(`monsterhpabove ${2 * safe}`, Macro.skill($skill`Summon Love Gnats`))
-          .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Bowl Sideways`))
-          .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
-          .trySkill($skill`Chest X-Ray`)
-          .trySkill($skill`Shattering Punch`)
-          .trySkill($skill`Gingerbread Mob Hit`)
-          .trySkill($skill`Shocking Lick`)
-          .abort()
-      );
+    return Macro.skill($skill`Saucy Salve`)
+      .if_(`monsterhpabove ${2 * safe}`, Macro.skill($skill`Summon Love Gnats`))
+      .if_(`monsterhpabove ${safe}`, Macro.trySkill($skill`Bowl Sideways`))
+      .if_(`monsterhpabove ${safe}`, Macro.skill($skill`Sing Along`))
+      .trySkill($skill`Chest X-Ray`)
+      .trySkill($skill`Shattering Punch`)
+      .trySkill($skill`Gingerbread Mob Hit`)
+      .trySkill($skill`Shocking Lick`)
+      .tryItem($item`groveling gravel`)
+      .abort();
   }, $monster`toxic beastie`)
   .macro(
     Macro.item($item`Time-Spinner`)

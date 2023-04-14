@@ -55,7 +55,7 @@ export function isReadyToContinue(): boolean {
 export function prepareToAscend() {
   if (myPath() !== $path`Community Service`) {
     prepareAscension({
-      garden: "packet of mushroom spores",
+      garden: "packet of rock seeds",
       eudora: "Our Daily Candles™ order form",
       chateau: {
         desk: "Swiss piggy bank",

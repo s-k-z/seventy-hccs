@@ -31,7 +31,7 @@ git checkout https://github.com/s-k-z/seventy-hccs.git release
 9. A [Gold detective badge](https://kol.coldfront.net/thekolwiki/index.php/Gold_detective_badge) purchased from the [11th Precinct](https://kol.coldfront.net/thekolwiki/index.php/The_Precinct)
 10. At least 196 bronze deliveries for the [Guzzlr tablet](https://kol.coldfront.net/thekolwiki/index.php/Guzzlr_tablet)
 11. [Your cowboy boots](https://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots) from the LT&T Office with nicksilver spurs and mountain lion skin applied (item drops and moxie stats)
-12. A [Mushroom Garden](https://kol.coldfront.net/thekolwiki/index.php/Your_Mushroom_Garden) growing in your campground
+12. A [Rock Garden](https://kol.coldfront.net/thekolwiki/index.php/Your_Rock_Garden) growing in your campground
 13. [Source Terminal](https://kol.coldfront.net/thekolwiki/index.php/Source_Terminal) fully upgraded
 14. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
 15. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed

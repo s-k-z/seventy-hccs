@@ -157,6 +157,7 @@ export const CoilWire: Quest<Task> = {
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
         [$item`green mana`,            () => cliExecute("cheat forest")],
+        [$item`groveling gravel`,      () => cliExecute("garden pick")],
         [$item`wrench`,                () => cliExecute("cheat wrench")],
         [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
         [$item`gold detective badge`,  () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
