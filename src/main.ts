@@ -24,14 +24,13 @@ export function main(command = ""): void {
   }
 
   const toCheck = {
-    main_clan: { prop: config.main_clan, return: true },
-    side_clan: { prop: config.side_clan, return: true },
+    main_clan: config.main_clan,
+    side_clan: config.side_clan,
   };
-  for (const name of Object.keys(toCheck)) {
-    const key = name as keyof typeof toCheck;
-    if (toCheck[key].prop === "") {
-      print(`seventyhccs_${name} property not set`, toCheck[key].return ? "red" : "orange");
-      if (toCheck[key].return) return;
+  for (const [key, val] of Object.entries(toCheck)) {
+    if (val === "") {
+      print(`seventyhccs_${key} property not set`, "red");
+      return;
     }
   }
   if (config.prep) {

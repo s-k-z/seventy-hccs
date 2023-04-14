@@ -395,7 +395,6 @@ export const Leveling: Quest<Task> = {
         $effect`Broad-Spectrum Vaccine`,
         $effect`Favored by Lyle`,
         $effect`Grumpy and Ornery`,
-        $effect`Hustlin'`,
         $effect`Mental A-cue-ity`,
         $effect`Mystically Oiled`,
         $effect`Pisces in the Skyces`,

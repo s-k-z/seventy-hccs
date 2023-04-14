@@ -5,7 +5,6 @@ import {
   myPath,
   print,
   pvpAttacksLeft,
-  Skill,
   Slot,
   totalTurnsPlayed,
   userConfirm,
@@ -53,8 +52,6 @@ export function isReadyToContinue(): boolean {
   return false;
 }
 
-const toPerm: Skill[] = [];
-
 export function prepareToAscend() {
   if (myPath() !== $path`Community Service`) {
     prepareAscension({
@@ -75,6 +72,11 @@ export function prepAndAscendIfNecessary() {
     prepareToAscend();
     visitUrl("council.php");
     visitUrl("charsheet.php");
+
+    const toPerm = new Map(
+      (config.skills_to_perm ?? []).filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])
+    );
+
     ascend(
       $path`Community Service`,
       $class`Sauceror`,
@@ -83,7 +85,7 @@ export function prepAndAscendIfNecessary() {
       $item`astral six-pack`,
       $item`astral chapeau`,
       {
-        permSkills: new Map(toPerm.filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])),
+        permSkills: toPerm,
         neverAbort: true,
       }
     );

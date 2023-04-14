@@ -46,7 +46,6 @@ export const ItemDropQuest: Quest<Task> = {
         $effect`Fat Leon's Phat Loot Lyric`,
         $effect`Feeling Lost`,
         $effect`Human-Pirate Hybrid`,
-        $effect`Hustlin'`,
         $effect`items.enh`,
         $effect`Nearly All-Natural`,
         $effect`Singer's Faithful Ocelot`,
