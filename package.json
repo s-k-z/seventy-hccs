@@ -25,7 +25,7 @@
   "dependencies": {
     "grimoire-kolmafia": "^0.3.16",
     "kolmafia": "^5.27323.0",
-    "libram": "^0.7.15"
+    "libram": "^0.7.16"
   },
   "author": "Skaazi",
   "license": "Apache-2.0",

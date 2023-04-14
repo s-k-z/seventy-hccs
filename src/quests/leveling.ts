@@ -560,7 +560,10 @@ export const Leveling: Quest<Task> = {
         assert(get("_gingerbreadCityTurns") < 5, "Failed to get gingerbread spice latte?");
       },
       do: $location`Gingerbread Upscale Retail District`,
-      post: () => assert(have($item`sprinkles`, 50), "Failed to get 50 sprinkles"),
+      post: () => {
+        assert(have($item`sprinkles`, 50), "Failed to get 50 sprinkles");
+        assert(get("_shatteringPunchUsed") === 1, "Didn't record shattering punch?");
+      },
       outfit: () => ({
         ...levelingOutfit(1000),
         hat: $item`Daylight Shavings Helmet`,
@@ -572,7 +575,18 @@ export const Leveling: Quest<Task> = {
         familiar: $familiar`Chocolate Lab`,
         famequip: $item`tiny stillsuit`,
       }),
-      combat: DefaultCombat,
+      combat: new CombatStrategy()
+        .macro(
+          Macro.skill($skill`Sing Along`)
+            .if_(
+              `monsterid ${toInt($monster`gingerbread gentrifier`)}`,
+              Macro.trySkill($skill`Meteor Shower`)
+            )
+            .trySkill($skill`Shattering Punch`)
+            .abort(),
+          $monsters`gingerbread finance bro, gingerbread gentrifier, gingerbread tech bro`
+        )
+        .macro(Macro.abort()),
     },
     {
       name: "Get Gingerbread Spice Latte",
@@ -649,37 +663,24 @@ export const Leveling: Quest<Task> = {
     {
       name: "Eldritch Tentacle",
       completed: () => get("_eldritchHorrorEvoked"),
+      prepare: () => SourceTerminal.educate($skill`Portscan`),
       do: () => useSkill($skill`Evoke Eldritch Horror`),
       post: () => {
         // In case Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl was summoned
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
+        assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
       },
       outfit: () => levelingOutfit(400),
-      combat: DefaultCombat,
-    },
-    {
-      name: "Piranha Plant",
-      completed: () => get("_mushroomGardenFights") > 0,
-      prepare: () => SourceTerminal.educate($skill`Portscan`),
-      do: $location`Your Mushroom Garden`,
-      post: () => {
-        assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
-        assert(get("_mushroomGardenFights") > 0, "Didn't fight a piranha plant?");
-      },
-      outfit: () => levelingOutfit(1000),
-      combat: new CombatStrategy()
-        .macro(
-          Macro.skill($skill`Portscan`)
-            .skill($skill`Curse of Weaksauce`)
-            .item($item`Time-Spinner`)
-            .skill($skill`Micrometeorite`)
-            .skill($skill`Sing Along`)
-            .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
-            .attack()
-            .repeat(),
-          $monster`piranha plant`
-        )
-        .macro(Macro.abort()),
+      combat: new CombatStrategy().macro(
+        Macro.skill($skill`Portscan`)
+          .skill($skill`Curse of Weaksauce`)
+          .item($item`Time-Spinner`)
+          .skill($skill`Micrometeorite`)
+          .skill($skill`Sing Along`)
+          .while_(`!mpbelow ${mpCost($skill`Saucestorm`)}`, Macro.skill($skill`Saucestorm`))
+          .attack()
+          .repeat()
+      ),
     },
     {
       name: "God Lobster",
@@ -794,6 +795,7 @@ export const Leveling: Quest<Task> = {
           "Didn't increment vote counter?"
         );
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+        assert($item`groveling gravel`);
       },
       outfit: () => ({
         ...lightweightOutfit(),
@@ -808,6 +810,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+        assert($item`groveling gravel`);
       },
       outfit: () => ({
         ...lightweightOutfit(),
@@ -822,6 +825,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+        assert($item`groveling gravel`);
       },
       outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
@@ -833,6 +837,23 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+        assert($item`groveling gravel`);
+      },
+      outfit: () => lightweightOutfit(),
+      combat: DefaultCombat,
+    },
+    {
+      name: "Throw groveling gravel",
+      completed: () => !have($item`groveling gravel`),
+      choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
+      do: $location`The Toxic Teacups`,
+      post: () => {
+        if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
+        assert(get("_chestXRayUsed") >= 3, "Have unused Chest X-ray?");
+        assert(get("_shatteringPunchUsed") >= 3, "Have unused Shattering Punch?");
+        assert(get("_gingerbreadMobHitUsed"), "Have unused Mob Hit?");
+        assert(get("shockingLickCharges") === 0, "Have unused Shocking Lick charges?");
+        assert(!have($item`groveling gravel`), "Still have groveling gravel");
       },
       outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
