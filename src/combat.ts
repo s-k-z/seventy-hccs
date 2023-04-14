@@ -105,6 +105,8 @@ export const notAllowList = [
   $monster`jock`,
   $monster`party girl`,
   $monster`"plain" girl`,
+  // toxic teacups
+  $monster`toxic beastie`,
   // shadow rifts
   $monster`shadow bat`,
   $monster`shadow cow`,
