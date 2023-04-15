@@ -7,7 +7,6 @@ import {
   haveEffect,
   itemAmount,
   mpCost,
-  myAdventures,
   myBasestat,
   myBuffedstat,
   myFamiliar,
@@ -19,6 +18,7 @@ import {
   myPrimestat,
   mySoulsauce,
   runChoice,
+  Skill,
   soulsauceCost,
   toInt,
   totalFreeRests,
@@ -112,7 +112,25 @@ function getHowManySausagesToEat(): number {
 }
 
 function topOffHp(): void {
-  if (myHp() < myMaxhp()) useSkill(Math.ceil(myMaxhp() / myHp()), $skill`Cannelloni Cocoon`);
+  const delta = myMaxhp() - myHp();
+  const restorers = new Map<Skill, number>([
+    [$skill`Cannelloni Cocoon`, 1000],
+    [$skill`Disco Nap`, 40],
+    [$skill`Lasagna Bandages`, 20],
+    [$skill`Tongue of the Walrus`, 35],
+  ]);
+  while (myHp() < myMaxhp()) {
+    const best = Array.from(restorers).reduce(
+      (target, [skill, restores]) => {
+        const rate = Math.min(delta, restores) / mpCost(skill);
+        if (rate > target[1]) return [skill, rate];
+        else return target;
+      },
+      [$skill`none`, 0]
+    )[0];
+    if (best === $skill`none`) throw `Couldn't find an restorer for ${myHp()}/${myMaxhp()} hp`;
+    useSkill(best);
+  }
 }
 
 export const Leveling: Quest<Task> = {
@@ -861,10 +879,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Lectures on Relativity",
       completed: () => get("_pocketProfessorLectures") > 0,
-      prepare: () => {
-        topOffHp();
-        assert(myAdventures() > 1, "Can't cast relativity");
-      },
+      prepare: topOffHp,
       do: $location`The Toxic Teacups`,
       post: () => assert(get("_pocketProfessorLectures") > 0, "Failed to lecture?"),
       outfit: () => ({
