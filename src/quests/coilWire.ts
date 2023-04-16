@@ -28,6 +28,7 @@ import {
   $skill,
   AutumnAton,
   Clan,
+  CombatLoversLocket,
   CommunityService,
   CrimboShrub,
   DNALab,
@@ -36,7 +37,6 @@ import {
   Macro,
   SongBoom,
 } from "libram";
-import { monstersReminisced, reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { DefaultCombat, mapMonster } from "../combat";
 import { config } from "../config";
 import {
@@ -228,11 +228,11 @@ export const CoilWire: Quest<Task> = {
     },
     {
       name: "Reminisce pterodactyl",
-      completed: () => monstersReminisced().includes($monster`pterodactyl`),
-      do: () => reminisce($monster`pterodactyl`),
+      completed: () => CombatLoversLocket.monstersReminisced().includes($monster`pterodactyl`),
+      do: () => CombatLoversLocket.reminisce($monster`pterodactyl`),
       post: () => {
         assert(
-          monstersReminisced().includes($monster`pterodactyl`),
+          CombatLoversLocket.monstersReminisced().includes($monster`pterodactyl`),
           "Failed to reminisce pterodactyl?"
         );
       },
@@ -294,12 +294,12 @@ export const CoilWire: Quest<Task> = {
       completed: () =>
         DNALab.isHybridized() ||
         get("_saberForceUses") > 0 ||
-        monstersReminisced().includes($monster`cocktail shrimp`),
-      do: () => reminisce($monster`cocktail shrimp`),
+        CombatLoversLocket.monstersReminisced().includes($monster`cocktail shrimp`),
+      do: () => CombatLoversLocket.reminisce($monster`cocktail shrimp`),
       post: () => {
         assert($item`shrimp cocktail`);
         assert(
-          monstersReminisced().includes($monster`cocktail shrimp`),
+          CombatLoversLocket.monstersReminisced().includes($monster`cocktail shrimp`),
           "Failed to reminisce cocktail shrimp?"
         );
         assert(get("_saberForceUses") > 0, "Failed to increment force uses");

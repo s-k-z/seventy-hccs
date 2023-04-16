@@ -8,12 +8,12 @@ import {
   $location,
   $monster,
   $skill,
+  CombatLoversLocket,
   CommunityService,
   get,
   have,
   Macro,
 } from "libram";
-import { reminisce } from "libram/dist/resources/2022/CombatLoversLocket";
 import { mapMonster } from "../combat";
 import { wishMonkey } from "../iotms";
 import { assert, itemToEffect, tryUse } from "../lib";
@@ -33,7 +33,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
         const target = $monster`toothless mastiff bitch`;
         have($effect`Absinthe-Minded`)
           ? mapMonster($location`The Stately Pleasure Dome`, target)
-          : reminisce(target);
+          : CombatLoversLocket.reminisce(target);
       },
       post: () => assert($effect`Meteor Showered`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
