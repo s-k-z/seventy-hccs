@@ -394,8 +394,9 @@ export const Leveling: Quest<Task> = {
       outfit: () => {
         const outfit = levelingOutfit();
         const wantOrb =
-          get("crystalBallPredictions") === "" ||
-          get("crystalBallPredictions").includes("goblin flapper");
+          !haveItemOrEffect($item`imported taffy`) &&
+          (get("crystalBallPredictions") === "" ||
+            get("crystalBallPredictions").includes("goblin flapper"));
         if (wantOrb) outfit.famequip = $item`miniature crystal ball`;
         return outfit;
       },
@@ -734,14 +735,11 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Entity",
-      completed: () => get("_shadowRiftCombats", 12) >= 12 || have($effect`Inner Elf`),
+      completed: () => get("_shadowRiftCombats") >= 12 || have($effect`Inner Elf`),
       prepare: topOffHp,
       do: $location`Shadow Rift (The Right Side of the Tracks)`,
       post: () => {
-        assert(
-          get("_shadowRiftCombats", 12) >= 12,
-          "Spent fewer shadow rift combats than expected?"
-        );
+        assert(get("_shadowRiftCombats") === 12, "Spent fewer shadow rift combats than expected?");
         assert($effect`Inner Elf`);
       },
       outfit: () => ({
