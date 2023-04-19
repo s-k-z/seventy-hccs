@@ -6,6 +6,7 @@ import {
   familiarWeight,
   haveEffect,
   itemAmount,
+  Location,
   mpCost,
   myBasestat,
   myBuffedstat,
@@ -54,6 +55,7 @@ import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams, wish } from "../iotms";
 import { acquireEffect, assert, haveItemOrEffect, voterMonsterNow } from "../lib";
 import { AdvReq, selectBestFamiliar } from "./shared";
+import { NumericProperty } from "libram/dist/propertyTypes";
 
 function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
   const multiplyML = myBuffedstat(myPrimestat()) < (cap ?? Infinity);
@@ -131,6 +133,13 @@ function topOffHp(): void {
     if (best === $skill`none`) throw `Couldn't find an restorer for ${myHp()}/${myMaxhp()} hp`;
     useSkill(best);
   }
+}
+
+function validateFreeFightCounter(prop: NumericProperty, url: string, location: Location): void {
+  const pre = get(prop);
+  visitUrl(url);
+  const delta = get(prop) - pre;
+  assert(delta === 0, `Miscounted ${delta} turn(s) at ${location}?`);
 }
 
 export const Leveling: Quest<Task> = {
@@ -380,7 +389,12 @@ export const Leveling: Quest<Task> = {
       ready: () => get("_speakeasyFreeFights") === 2,
       completed: () => haveItemOrEffect($item`imported taffy`) || get("_speakeasyFreeFights") >= 3,
       do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
-      post: () => visitUrl("place.php?whichplace=speakeasy"),
+      post: () =>
+        validateFreeFightCounter(
+          "_speakeasyFreeFights",
+          "place.php?whichplace=speakeasy",
+          $location`An Unusually Quiet Barroom Brawl`
+        ),
       outfit: () => levelingOutfit(),
       combat: new CombatStrategy()
         .macro(() => Macro.skill($skill`Feel Envy`).step(DefaultMacro()), $monster`goblin flapper`)
@@ -390,7 +404,12 @@ export const Leveling: Quest<Task> = {
       name: "Wanderer Sweep",
       completed: () => get("_speakeasyFreeFights") >= 3,
       do: $location`An Unusually Quiet Barroom Brawl`,
-      post: () => visitUrl("place.php?whichplace=speakeasy"),
+      post: () =>
+        validateFreeFightCounter(
+          "_speakeasyFreeFights",
+          "place.php?whichplace=speakeasy",
+          $location`An Unusually Quiet Barroom Brawl`
+        ),
       outfit: () => {
         const outfit = levelingOutfit();
         const wantOrb =
@@ -865,9 +884,6 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
-        assert(get("_chestXRayUsed") >= 3, "Have unused Chest X-ray?");
-        assert(get("_shatteringPunchUsed") >= 3, "Have unused Shattering Punch?");
-        assert(get("_gingerbreadMobHitUsed"), "Have unused Mob Hit?");
         assert(get("shockingLickCharges") === 0, "Have unused Shocking Lick charges?");
         assert(!have($item`groveling gravel`), "Still have groveling gravel");
       },
@@ -905,12 +921,12 @@ export const Leveling: Quest<Task> = {
       completed: () => get("_neverendingPartyFreeTurns") >= 10,
       choices: { 1322: 2, 1324: 5 },
       do: $location`The Neverending Party`,
-      post: () => {
-        const pre = get("_neverendingPartyFreeTurns");
-        visitUrl("place.php?whichplace=town_wrong");
-        const delta = get("_neverendingPartyFreeTurns") - pre;
-        assert(delta === 0, `Miscounted ${delta} turn(s) at the Neverending Party?`);
-      },
+      post: () =>
+        validateFreeFightCounter(
+          "_neverendingPartyFreeTurns",
+          "place.php?whichplace=town_wrong",
+          $location`The Neverending Party`
+        ),
       outfit: () => levelingOutfit(20000),
       combat: new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort())).macro(
         Macro.externalIf(
