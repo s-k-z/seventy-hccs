@@ -42,7 +42,6 @@ export const ItemDropQuest: Quest<Task> = {
         $effect`Blessing of your favorite Bird`,
         $effect`Cosmic Ball in the Air`,
         $effect`Crunching Leaves`,
-        $effect`El Aroma de Salsa`,
         $effect`Fat Leon's Phat Loot Lyric`,
         $effect`Feeling Lost`,
         $effect`Human-Pirate Hybrid`,
@@ -66,7 +65,8 @@ export const ItemDropQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         acc1: $item`Guzzlr tablet`,
         acc2: $item`gold detective badge`,
-        acc3: $item`your cowboy boots`,
+        // eslint-disable-next-line libram/verify-constants
+        acc3: $item`Cincho de Mayo`,
         famequip: $item`li'l ninja costume`,
         familiar: $familiar`Trick-or-Treating Tot`,
         modes: { umbrella: "bucket style" },

@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { Item, itemAmount, use, weightAdjustment } from "kolmafia";
+import { equip, Item, itemAmount, use, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -8,6 +8,7 @@ import {
   $location,
   $monster,
   $skill,
+  $slot,
   CombatLoversLocket,
   CommunityService,
   get,
@@ -50,7 +51,8 @@ export const FamiliarWeightQuest: Quest<Task> = {
       name: "Familiar Weight Test",
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
-        const needMore = (): boolean => weightAdjustment() < 275;
+        equip($slot`Familiar`, $item`homemade robot gear`);
+        const needMore = (): boolean => weightAdjustment() < 190;
         const useIfUnused = (i: Item): void => {
           if (have(i) && !have(itemToEffect(i))) use(i);
         };
@@ -75,7 +77,6 @@ export const FamiliarWeightQuest: Quest<Task> = {
         $effect`Blood Bond`,
         $effect`Do I Know You From Somewhere?`,
         $effect`Empathy`,
-        $effect`Fidoxene`,
         $effect`Human-Machine Hybrid`,
         $effect`Human-Fish Hybrid`,
         $effect`Leash of Linguini`,
@@ -98,8 +99,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
         acc1: $item`Brutal brogues`,
         acc2: $item`hewn moon-rune spoon`,
         acc3: $item`Beach Comb`,
-        famequip: $item`overloaded Yule battery`,
-        familiar: $familiar`Mini-Trainbot`,
+        familiar: $familiar`Comma Chameleon`,
       },
     },
   ],
