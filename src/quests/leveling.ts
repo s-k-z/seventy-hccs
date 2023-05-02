@@ -420,6 +420,7 @@ export const Leveling: Quest<Task> = {
         $effect`Mystically Oiled`,
         $effect`Pisces in the Skyces`,
         $effect`Plump and Chubby`,
+        $effect`Purity of Spirit`,
         $effect`Sigils of Yeg`,
         $effect`Starry-Eyed`,
         $effect`Total Protonic Reversal`,

@@ -153,6 +153,7 @@ export const CoilWire: Quest<Task> = {
         [$item`battery (AAA)`,         () => harvestBatteries()],
         [$item`battery (AA)`,          () => create($item`battery (AA)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
+        [$item`cold-filtered water`,   () => create($item`cold-filtered water`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
         [$item`green mana`,            () => cliExecute("cheat forest")],
         [$item`wrench`,                () => cliExecute("cheat wrench")],
