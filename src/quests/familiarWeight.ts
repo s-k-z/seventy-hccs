@@ -9,15 +9,11 @@ import {
   $monster,
   $skill,
   $slot,
-  CombatLoversLocket,
   CommunityService,
-  get,
   have,
   Macro,
 } from "libram";
-import { mapMonster } from "../combat";
-import { wishMonkey } from "../iotms";
-import { assert, itemToEffect, tryUse } from "../lib";
+import { assert, itemToEffect } from "../lib";
 import { runTest } from "./shared";
 
 export const FamiliarWeightQuest: Quest<Task> = {
@@ -27,15 +23,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
     {
       name: "Meteor Showered",
       completed: () => have($effect`Meteor Showered`),
-      prepare: () => {
-        if (get("_monstersMapped") < 3) tryUse($item`tiny bottle of absinthe`);
-      },
-      do: () => {
-        const target = $monster`toothless mastiff bitch`;
-        have($effect`Absinthe-Minded`)
-          ? mapMonster($location`The Stately Pleasure Dome`, target)
-          : CombatLoversLocket.reminisce(target);
-      },
+      do: $location`The Dire Warren`,
       post: () => assert($effect`Meteor Showered`),
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Machine Elf` },
       combat: new CombatStrategy()
@@ -56,8 +44,8 @@ export const FamiliarWeightQuest: Quest<Task> = {
         const useIfUnused = (i: Item): void => {
           if (have(i) && !have(itemToEffect(i))) use(i);
         };
-        if (needMore()) useIfUnused($item`resolution: be kinder`);
         if (needMore()) useIfUnused($item`green candy heart`);
+        if (needMore()) useIfUnused($item`resolution: be kinder`);
         const librams: [number, Item][] = [
           [4, $item`love song of icy revenge`],
           [5, $item`pulled blue taffy`],
@@ -65,13 +53,9 @@ export const FamiliarWeightQuest: Quest<Task> = {
         librams.forEach(([n, i]) => {
           if (needMore()) use(Math.min(n, itemAmount(i)), i);
         });
-        if (needMore()) wishMonkey($effect`All Is Forgiven`);
-        if (needMore()) wishMonkey($effect`Bureaucratized`);
-        if (needMore()) wishMonkey($effect`Healthy Green Glow`);
       },
       do: () => runTest(CommunityService.FamiliarWeight),
       effects: [
-        $effect`[1701]Hip to the Jive`,
         $effect`A Girl Named Sue`,
         $effect`Billiards Belligerence`,
         $effect`Blood Bond`,
@@ -80,16 +64,12 @@ export const FamiliarWeightQuest: Quest<Task> = {
         $effect`Human-Machine Hybrid`,
         $effect`Human-Fish Hybrid`,
         $effect`Leash of Linguini`,
-        $effect`Loyal Tea`,
-        $effect`Man's Worst Enemy`,
         $effect`Meteor Showered`,
         $effect`Open Heart Surgery`,
-        $effect`Over-Familiar With Dactyls`,
         $effect`Puzzle Champ`,
         $effect`Robot Friends`,
         $effect`Shortly Stacked`,
         $effect`Shrimpin' Ain't Easy`,
-        $effect`Whole Latte Love`,
         $effect`You Can Really Taste the Dormouse`,
       ],
       outfit: {

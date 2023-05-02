@@ -19,22 +19,15 @@ git checkout https://github.com/s-k-z/seventy-hccs.git release
 3. Access to a fully stocked clan [VIP Lounge](https://kol.coldfront.net/thekolwiki/index.php/VIP_Lounge)
 4. All 11 beach heads unlocked for the [Beach Comb](https://kol.coldfront.net/thekolwiki/index.php/Beach_Comb)
 5. A 50% Item drop and 100% Weapon damage favorite bird from the [Bird-a-Day calendar](https://kol.coldfront.net/thekolwiki/index.php/Bird-a-Day_calendar)
-6. [Chateau Mantegna](https://kol.coldfront.net/thekolwiki/index.php/Chateau_Mantegna) containing:
-   - ceiling fan
-   - foreign language tapes
-   - a piggy bank
+6. [Chateau Mantegna](https://kol.coldfront.net/thekolwiki/index.php/Chateau_Mantegna) containing a piggy bank
 7. [Combat lover's locket](https://kol.coldfront.net/thekolwiki/index.php/Combat_lover%27s_locket) containing:
    - [cocktail shrimp](https://kol.coldfront.net/thekolwiki/index.php/Cocktail_shrimp)
-   - [pterodactyl](https://kol.coldfront.net/thekolwiki/index.php/Pterodactyl)
-   - [toothless mastiff](https://kol.coldfront.net/thekolwiki/index.php/Toothless_mastiff_bitch)
-8. [Gingerbread City](https://kol.coldfront.net/thekolwiki/index.php/Civic_Planning_Office) fully upgraded with access to the Upscale Retail District, Sewers, Digital Clock and Thickened Walls
-9. A [Gold detective badge](https://kol.coldfront.net/thekolwiki/index.php/Gold_detective_badge) purchased from the [11th Precinct](https://kol.coldfront.net/thekolwiki/index.php/The_Precinct)
-10. At least 196 bronze deliveries for the [Guzzlr tablet](https://kol.coldfront.net/thekolwiki/index.php/Guzzlr_tablet)
-11. [Your cowboy boots](https://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots) from the LT&T Office with nicksilver spurs and mountain lion skin applied (item drops and moxie stats)
-12. A [Rock Garden](https://kol.coldfront.net/thekolwiki/index.php/Your_Rock_Garden) growing in your campground
-13. [Source Terminal](https://kol.coldfront.net/thekolwiki/index.php/Source_Terminal) fully upgraded
-14. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
-15. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed
+8. A [Gold detective badge](https://kol.coldfront.net/thekolwiki/index.php/Gold_detective_badge) purchased from the [11th Precinct](https://kol.coldfront.net/thekolwiki/index.php/The_Precinct)
+9. At least 196 bronze deliveries for the [Guzzlr tablet](https://kol.coldfront.net/thekolwiki/index.php/Guzzlr_tablet)
+10. [Your cowboy boots](https://kol.coldfront.net/thekolwiki/index.php/Your_cowboy_boots) from the LT&T Office with nicksilver spurs and mountain lion skin applied (item drops and moxie stats)
+11. [Source Terminal](https://kol.coldfront.net/thekolwiki/index.php/Source_Terminal) fully upgraded
+12. [Spacegate Vaccination Machine](https://kol.coldfront.net/thekolwiki/index.php/Spacegate_Vaccination_Machine) with the Broad-Spectrum Vaccine unlocked
+13. All 150 [Witchess puzzles](https://kol.coldfront.net/thekolwiki/index.php/Witchess_Puzzles) completed
 
 The script can be run either in Aftercore, or in Community Service provided that the following are selected:
 

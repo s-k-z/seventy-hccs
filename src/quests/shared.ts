@@ -54,14 +54,6 @@ export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
     return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
   }
 
-  if (
-    req !== AdvReq.NoAttack &&
-    get("_monstersMapped") < 3 &&
-    !have($item`tiny bottle of absinthe`)
-  ) {
-    return { familiar: $familiar`Green Pixie`, famequip: $item`none` };
-  }
-
   if (req === AdvReq.NoHipster && get("_hipsterAdv") < 7) {
     return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
   }

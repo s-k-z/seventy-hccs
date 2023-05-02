@@ -48,6 +48,7 @@ export function main(command = ""): void {
       Leveling,
       MuscleQuest,
       MoxieQuest,
+      MysticalityQuest,
       HPQuest,
       SpellDamageQuest,
       WeaponDamageQuest,
@@ -55,7 +56,6 @@ export function main(command = ""): void {
       HotResistQuest,
       FamiliarWeightQuest,
       ItemDropQuest,
-      MysticalityQuest,
       DonateQuest,
     ])
   );

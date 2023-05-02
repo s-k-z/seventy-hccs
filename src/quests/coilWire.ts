@@ -154,9 +154,7 @@ export const CoilWire: Quest<Task> = {
         [$item`battery (AA)`,          () => create($item`battery (AA)`)],
         [$item`box of Familiar Jacks`, () => create($item`box of Familiar Jacks`)],
         [$item`Brutal brogues`,        () => cliExecute("bastille bbq brutalist catapult")],
-        [$item`cuppa Loyal tea`,       () => cliExecute("teatree loyal")],
         [$item`green mana`,            () => cliExecute("cheat forest")],
-        [$item`groveling gravel`,      () => cliExecute("garden pick")],
         [$item`wrench`,                () => cliExecute("cheat wrench")],
         [$item`Yeg's Motel hand soap`, () => cliExecute(`cargo item ${$item`Yeg's Motel hand soap`}`)],
         [$item`gold detective badge`,  () => visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct")],
@@ -226,19 +224,6 @@ export const CoilWire: Quest<Task> = {
       do: () => changeMcd(11),
     },
     {
-      name: "Reminisce pterodactyl",
-      completed: () => CombatLoversLocket.monstersReminisced().includes($monster`pterodactyl`),
-      do: () => CombatLoversLocket.reminisce($monster`pterodactyl`),
-      post: () => {
-        assert(
-          CombatLoversLocket.monstersReminisced().includes($monster`pterodactyl`),
-          "Failed to reminisce pterodactyl?"
-        );
-      },
-      outfit: { familiar: $familiar`Pair of Stomping Boots` },
-      combat: new CombatStrategy().macro(Macro.runaway()),
-    },
-    {
       name: "Ninja Costume",
       completed: () => have($item`li'l ninja costume`),
       choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
@@ -246,7 +231,6 @@ export const CoilWire: Quest<Task> = {
       post: () => {
         visitUrl("questlog.php?which=1");
         assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
-        assert($item`Friendliness Beverage`);
         assert($item`li'l ninja costume`);
       },
       outfit: () => ({
@@ -257,9 +241,7 @@ export const CoilWire: Quest<Task> = {
       }),
       combat: new CombatStrategy()
         .macro(
-          Macro.skill($skill`Feel Nostalgic`)
-            .skill($skill`Sing Along`)
-            .skill($skill`Spit jurassic acid`),
+          Macro.skill($skill`Sing Along`).skill($skill`Spit jurassic acid`),
           $monster`amateur ninja`
         )
         .macro(Macro.abort()),

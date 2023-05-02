@@ -2,7 +2,6 @@ import {
   Effect,
   fileToBuffer,
   haveEquipped,
-  Item,
   itemAmount,
   mpCost,
   myClass,
@@ -116,12 +115,4 @@ export function wish(effect: Effect): void {
   visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
   runChoice(1, `wish=to be ${desc}`);
   assert(effect);
-}
-
-export function wishMonkey(thing: Effect | Item): void {
-  assert(!have(thing), `Already have ${thing}`);
-  visitUrl("main.php?action=cmonk&pwd=");
-  runChoice(1, `wish=${thing}`);
-  visitUrl("main.php");
-  assert(thing);
 }

@@ -3,14 +3,12 @@ import {
   cliExecute,
   create,
   eat,
-  familiarWeight,
   haveEffect,
   itemAmount,
   Location,
   mpCost,
   myBasestat,
   myBuffedstat,
-  myFamiliar,
   myHp,
   myMaxhp,
   myMaxmp,
@@ -293,11 +291,6 @@ export const Leveling: Quest<Task> = {
       do: () => cliExecute("saber familiar"),
       effects: [
         $effect`A Girl Named Sue`,
-        $effect`Billiards Belligerence`,
-        $effect`Loyal Tea`,
-        $effect`Puzzle Champ`,
-        $effect`Shrimpin' Ain't Easy`,
-        $effect`You Can Really Taste the Dormouse`,
         // Skills
         $effect`Blood Bond`,
         // Class skills
@@ -307,9 +300,8 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Wish Effects",
-      completed: () =>
-        $effects`[1701]Hip to the Jive, Sparkly!, Witch Breaded`.every((e) => have(e)),
-      do: () => $effects`[1701]Hip to the Jive, Sparkly!, Witch Breaded`.forEach(wish),
+      completed: () => $effects`Sparkly!, Witch Breaded`.every((e) => have(e)),
+      do: () => $effects`Sparkly!, Witch Breaded`.forEach(wish),
     },
     {
       name: "Crimbo Carol",
@@ -574,63 +566,6 @@ export const Leveling: Quest<Task> = {
       combat: DefaultCombat,
     },
     {
-      name: "Get Sprinkles",
-      completed: () => {
-        return haveItemOrEffect($item`gingerbread spice latte`) || have($item`sprinkles`, 50);
-      },
-      prepare: () => {
-        const minWeight = (50 / 18 - 1) * 100;
-        const meteor = 20;
-        assert(
-          familiarWeight(myFamiliar()) + weightAdjustment() + meteor > minWeight,
-          "Not enough weight?"
-        );
-        assert(get("_gingerbreadCityTurns") < 5, "Failed to get gingerbread spice latte?");
-      },
-      do: $location`Gingerbread Upscale Retail District`,
-      post: () => {
-        assert(have($item`sprinkles`, 50), "Failed to get 50 sprinkles");
-        assert(get("_shatteringPunchUsed") === 1, "Didn't record shattering punch?");
-      },
-      outfit: () => ({
-        ...levelingOutfit(1000),
-        hat: $item`Daylight Shavings Helmet`,
-        weapon: $item`Fourth of May Cosplay Saber`,
-        offhand: $items`burning paper crane, rope, familiar scrapbook`,
-        acc1: $item`hewn moon-rune spoon`,
-        acc2: $item`Brutal brogues`,
-        acc3: $item`Beach Comb`,
-        familiar: $familiar`Chocolate Lab`,
-        famequip: $item`tiny stillsuit`,
-      }),
-      combat: new CombatStrategy()
-        .macro(
-          Macro.skill($skill`Sing Along`)
-            .if_(
-              `monsterid ${toInt($monster`gingerbread gentrifier`)}`,
-              Macro.trySkill($skill`Meteor Shower`)
-            )
-            .trySkill($skill`Shattering Punch`)
-            .abort(),
-          $monsters`gingerbread finance bro, gingerbread gentrifier, gingerbread tech bro`
-        )
-        .macro(Macro.abort()),
-    },
-    {
-      name: "Get Gingerbread Spice Latte",
-      ready: () => have($item`sprinkles`, 50),
-      completed: () => {
-        return (
-          haveItemOrEffect($item`gingerbread spice latte`) || get("_gingerbreadCityTurns") >= 5
-        );
-      },
-      choices: { 1208: 3 }, // Upscale Noon: (3) buy gingerbread latte for 50 sprinkles
-      do: $location`Gingerbread Upscale Retail District`,
-      effects: $effects`Ode to Booze`,
-      outfit: { familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(Macro.runaway()),
-    },
-    {
       name: "Snojo",
       completed: () => get("_snojoFreeFights") >= 10,
       prepare: () => {
@@ -820,7 +755,6 @@ export const Leveling: Quest<Task> = {
           "Didn't increment vote counter?"
         );
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
-        assert($item`groveling gravel`);
       },
       outfit: () => ({
         ...lightweightOutfit(),
@@ -835,7 +769,6 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
-        assert($item`groveling gravel`);
       },
       outfit: () => ({
         ...lightweightOutfit(),
@@ -850,7 +783,6 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
-        assert($item`groveling gravel`);
       },
       outfit: () => lightweightOutfit(),
       combat: DefaultCombat,
@@ -862,20 +794,6 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => {
         if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
-        assert($item`groveling gravel`);
-      },
-      outfit: () => lightweightOutfit(),
-      combat: DefaultCombat,
-    },
-    {
-      name: "Throw groveling gravel",
-      completed: () => !have($item`groveling gravel`),
-      choices: { 1467: 3, 1468: 4, 1469: 3, 1470: 2, 1471: 1, 1472: 4, 1473: 4, 1474: 1, 1475: 1 },
-      do: $location`The Toxic Teacups`,
-      post: () => {
-        if (have($effect`Beaten Up`)) useSkill($skill`Tongue of the Walrus`);
-        assert(get("shockingLickCharges") === 0, "Have unused Shocking Lick charges?");
-        assert(!have($item`groveling gravel`), "Still have groveling gravel");
       },
       outfit: () => lightweightOutfit(),
       combat: DefaultCombat,

@@ -59,8 +59,6 @@ export function prepareToAscend() {
       eudora: "Our Daily Candles™ order form",
       chateau: {
         desk: "Swiss piggy bank",
-        ceiling: "ceiling fan",
-        nightstand: "foreign language tapes",
       },
       throwOnFail: true,
     });

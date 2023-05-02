@@ -195,7 +195,6 @@ export const DefaultCombat = new CombatStrategy()
       .trySkill($skill`Shattering Punch`)
       .trySkill($skill`Gingerbread Mob Hit`)
       .trySkill($skill`Shocking Lick`)
-      .tryItem($item`groveling gravel`)
       .abort();
   }, $monster`toxic beastie`)
   .macro(
