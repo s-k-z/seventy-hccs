@@ -12,7 +12,10 @@ export const CombatFrequencyQuest: Quest<Task> = {
       completed: () => CommunityService.Noncombat.isDone(),
       do: () => runTest(CommunityService.Noncombat),
       effects: [
+        $effect`Blood Bond`,
+        $effect`Empathy`,
         $effect`Feeling Lonely`,
+        $effect`Leash of Linguini`,
         $effect`Silence of the God Lobster`,
         $effect`Silent Running`,
         $effect`Smooth Movements`,
@@ -27,6 +30,7 @@ export const CombatFrequencyQuest: Quest<Task> = {
         pants: $item`pantogram pants`,
         acc2: $item`atlas of local maps`,
         acc3: $item`Kremlin's Greatest Briefcase`,
+        famequip: $item`tiny stillsuit`,
         familiar: $familiar`Disgeist`,
         modes: { parka: "pterodactyl", umbrella: "cocoon" },
       },

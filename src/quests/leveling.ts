@@ -679,11 +679,14 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "Shadow Entity",
-      completed: () => get("_shadowRiftCombats") >= 12 || have($effect`Inner Elf`),
+      completed: () => get("encountersUntilSRChoice") !== 0 || have($effect`Inner Elf`),
       prepare: topOffHp,
       do: $location`Shadow Rift (The Right Side of the Tracks)`,
       post: () => {
-        assert(get("_shadowRiftCombats") === 12, "Spent fewer shadow rift combats than expected?");
+        assert(
+          get("encountersUntilSRChoice") !== 0,
+          "Spent fewer shadow rift combats than expected?"
+        );
         assert($effect`Inner Elf`);
       },
       outfit: () => ({

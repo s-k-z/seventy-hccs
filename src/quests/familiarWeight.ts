@@ -28,9 +28,9 @@ export const FamiliarWeightQuest: Quest<Task> = {
       combat: new CombatStrategy()
         .ccs(
           `skill ${$skill`Meteor Shower`}
-        twiddle your thumbs
-        skill ${$skill`Use the Force`}`,
-          $monster`toothless mastiff bitch`
+           twiddle your thumbs
+           skill ${$skill`Use the Force`}`,
+          $monster`fluffy bunny`
         )
         .macro(Macro.abort()),
     },
