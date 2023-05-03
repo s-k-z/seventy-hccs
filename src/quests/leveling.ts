@@ -82,7 +82,7 @@ function lightweightOutfit(): OutfitSpec {
     acc1: $item`Eight Days a Week Pill Keeper`,
     acc2: $items`battle broom, gold detective badge`,
     acc3: $item`combat lover's locket`,
-    ...selectBestFamiliar(AdvReq.NoHipster),
+    ...selectBestFamiliar(),
     modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
   };
 }
@@ -685,7 +685,7 @@ export const Leveling: Quest<Task> = {
       do: $location`Shadow Rift (The Right Side of the Tracks)`,
       post: () => {
         assert(
-          get("encountersUntilSRChoice") !== 0,
+          get("encountersUntilSRChoice") > 0,
           "Spent fewer shadow rift combats than expected?"
         );
         assert($effect`Inner Elf`);
@@ -706,6 +706,7 @@ export const Leveling: Quest<Task> = {
     {
       name: "Witchess Witch",
       completed: () => have($item`battle broom`),
+      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       outfit: () => levelingOutfit(7000),
       combat: DefaultCombat,
@@ -720,7 +721,6 @@ export const Leveling: Quest<Task> = {
     {
       name: "Remaining Witchess Fights",
       completed: () => Witchess.fightsDone() >= 5,
-      acquire: [{ item: $item`makeshift garbage shirt` }],
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
       outfit: () => levelingOutfit(8000),
       combat: DefaultCombat,
@@ -839,11 +839,11 @@ export const Leveling: Quest<Task> = {
           "place.php?whichplace=town_wrong",
           $location`The Neverending Party`
         ),
-      outfit: () => levelingOutfit(20000),
+      outfit: () => ({ ...levelingOutfit(20000), acc3: $item`Cincho de Mayo` }),
       combat: new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort())).macro(
         Macro.externalIf(
           get("cosmicBowlingBallReturnCombats") > 1,
-          Macro.trySkill($skill`Feel Pride`)
+          Macro.trySkill($skill`Feel Pride`).trySkill($skill`Cincho: Confetti Extravaganza`)
         )
           .trySkill($skill`Bowl Sideways`)
           .skill($skill`Curse of Weaksauce`)

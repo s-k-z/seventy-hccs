@@ -51,7 +51,6 @@ export const MoxieQuest: Quest<Task> = {
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $item`unbreakable umbrella`,
         acc1: $item`Beach Comb`,
-        // eslint-disable-next-line libram/verify-constants
         acc2: $item`Cincho de Mayo`,
         acc3: $item`your cowboy boots`,
         modes: { retrocape: ["robot", undefined] },

@@ -65,7 +65,6 @@ export const ItemDropQuest: Quest<Task> = {
         offhand: $item`unbreakable umbrella`,
         acc1: $item`Guzzlr tablet`,
         acc2: $item`gold detective badge`,
-        // eslint-disable-next-line libram/verify-constants
         acc3: $item`Cincho de Mayo`,
         famequip: $item`li'l ninja costume`,
         familiar: $familiar`Trick-or-Treating Tot`,
