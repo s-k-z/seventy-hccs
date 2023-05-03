@@ -707,6 +707,7 @@ export const Leveling: Quest<Task> = {
       name: "Witchess Witch",
       completed: () => have($item`battle broom`),
       acquire: [{ item: $item`makeshift garbage shirt` }],
+      prepare: () => assert($effect`Inner Elf`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
       outfit: () => levelingOutfit(7000),
       combat: DefaultCombat,
@@ -841,9 +842,9 @@ export const Leveling: Quest<Task> = {
         ),
       outfit: () => ({ ...levelingOutfit(20000), acc3: $item`Cincho de Mayo` }),
       combat: new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort())).macro(
-        Macro.externalIf(
-          get("cosmicBowlingBallReturnCombats") > 1,
-          Macro.trySkill($skill`Feel Pride`).trySkill($skill`Cincho: Confetti Extravaganza`)
+        Macro.if_(
+          `!hasskill ${toInt($skill`Bowl Sideways`)} && hasskill ${toInt($skill`Feel Pride`)}`,
+          Macro.skill($skill`Feel Pride`).trySkill($skill`Cincho: Confetti Extravaganza`)
         )
           .trySkill($skill`Bowl Sideways`)
           .skill($skill`Curse of Weaksauce`)
