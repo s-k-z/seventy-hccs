@@ -463,7 +463,6 @@ export const Leveling: Quest<Task> = {
         $effect`Sauce Monocle`, // 20 mp
         $effect`Springy Fusilli`, // 10 mp
         // Batteries
-        $effect`AA-Charged`, // +40 MP
         $effect`AAA-Charged`, // +30 MP
         // Song(s)
         $effect`Ode to Booze`, // 50 mp

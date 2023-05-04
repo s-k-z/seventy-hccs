@@ -81,7 +81,7 @@ export function prepAndAscendIfNecessary() {
       Lifestyle.hardcore,
       "platypus",
       $item`astral six-pack`,
-      $item`astral chapeau`,
+      $item`astral statuette`,
       {
         permSkills: toPerm,
         neverAbort: true,
