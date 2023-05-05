@@ -58,6 +58,7 @@ export const HotResistQuest: Quest<Task> = {
         acc1: $item`Brutal brogues`,
         acc2: $item`hewn moon-rune spoon`,
         acc3: $item`Beach Comb`,
+        famequip: $item`tiny stillsuit`,
         familiar: $familiar`Exotic Parrot`,
         modes: { parka: "pterodactyl", retrocape: ["vampire", "hold"] },
       },

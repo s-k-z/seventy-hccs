@@ -67,6 +67,7 @@ export const SpellDamageQuest: Quest<Task> = {
         offhand: $items`burning paper crane, unbreakable umbrella`,
         pants: $item`pantogram pants`,
         acc3: $item`Kremlin's Greatest Briefcase`,
+        famequip: $item`tiny stillsuit`,
         familiar: $familiar`Exotic Parrot`,
         modes: { parka: "ghostasaurus", retrocape: ["vampire", "hold"] },
       },
