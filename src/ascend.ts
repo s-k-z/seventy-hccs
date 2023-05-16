@@ -58,7 +58,9 @@ export function prepareToAscend() {
       garden: "packet of rock seeds",
       eudora: "Our Daily Candles™ order form",
       chateau: {
+        ceiling: "ceiling fan",
         desk: "Swiss piggy bank",
+        nightstand: "foreign language tapes",
       },
       throwOnFail: true,
     });
