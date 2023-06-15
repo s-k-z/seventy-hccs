@@ -23,11 +23,10 @@ export function castBestLibram(): void {
   const remainingDrops = Math.max(0, 2 - get("_brickoFights"));
   const need = BRICKO_COST * remainingFights - BRICKO_DROP * remainingDrops - owned;
   const wantBrickos = get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, need);
-  // prettier-ignore
   for (const [summon, check] of new Map<Skill, boolean>([
-    [$skill`Summon BRICKOs`,      wantBrickos],
+    [$skill`Summon BRICKOs`, wantBrickos],
     [$skill`Summon Candy Heart`, !haveItemOrEffect($item`green candy heart`)],
-    [$skill`Summon Love Song`,   !have($item`love song of icy revenge`, 4)],
+    [$skill`Summon Love Song`, !have($item`love song of icy revenge`, 4)],
     [$skill`Summon Resolutions`, get("_resolutionRareSummons") < 3],
   ])) {
     if (check) {

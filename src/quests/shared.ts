@@ -17,12 +17,14 @@ import { assert, haveItemOrEffect } from "../lib";
 import { printModtrace } from "libram/dist/modifier";
 
 const statLookup = new Map<string, string | string[]>([
-  ["Donate Blood", ["Maximum HP"]],
-  ["Feed The Children", "Muscle Percent"],
-  ["Build Playground Mazes", "Mysticality Percent"],
-  ["Feed Conspirators", "Moxie Percent"],
   ["Be a Living Statue", "Combat Rate"],
+  ["Build Playground Mazes", "Mysticality Percent"],
+  ["Donate Blood", ["Maximum HP", "Maximum HP Percent"]],
+  ["Feed Conspirators", "Moxie Percent"],
+  ["Feed The Children", "Muscle Percent"],
   ["Make Margaritas", ["Item Drop", "Booze Drop"]],
+  ["Make Sausage", ["Spell Damage, Spell Damage Percent"]],
+  ["Reduce Gazelle Population", ["Weapon Damage", "Weapon Damage Percent"]],
 ]);
 
 export function runTest(test: CommunityService): void {
