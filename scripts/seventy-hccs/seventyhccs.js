@@ -9480,7 +9480,7 @@ function _taggedTemplateLiteral19(strings, raw) {
   }
   return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-var statLookup = /* @__PURE__ */ new Map([["Donate Blood", ["Maximum HP"]], ["Feed The Children", "Muscle Percent"], ["Build Playground Mazes", "Mysticality Percent"], ["Feed Conspirators", "Moxie Percent"], ["Be a Living Statue", "Combat Rate"], ["Make Margaritas", ["Item Drop", "Booze Drop"]]]);
+var statLookup = /* @__PURE__ */ new Map([["Be a Living Statue", "Combat Rate"], ["Build Playground Mazes", "Mysticality Percent"], ["Donate Blood", ["Maximum HP", "Maximum HP Percent"]], ["Feed Conspirators", "Moxie Percent"], ["Feed The Children", "Muscle Percent"], ["Make Margaritas", ["Item Drop", "Booze Drop"]], ["Make Sausage", ["Spell Damage, Spell Damage Percent"]], ["Reduce Gazelle Population", ["Weapon Damage", "Weapon Damage Percent"]]]);
 function runTest(test) {
   var _statLookup$get;
   var coilWire = test.name === "Coil Wire";
