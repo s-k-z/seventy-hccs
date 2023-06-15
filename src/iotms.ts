@@ -10,7 +10,6 @@ import {
   retrieveItem,
   runChoice,
   Skill,
-  toInt,
   useSkill,
   visitUrl,
 } from "kolmafia";
@@ -57,16 +56,14 @@ export function getPantogramPants(): void {
   const s1 = "-2,0";
   const s2 = "-2,0"; // Spell Damage +20%
   const s3 = "-1,0"; // Monsters will be less attracted to you
-  visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`portable pantogram`)}`);
+  visitUrl(`inv_use.php?pwd=&whichitem=${$item`portable pantogram`.id}`);
   visitUrl(`choice.php?pwd=&whichchoice=1270&option=1&m=${m}&e=${e}&s1=${s1}&s2=${s2}&s3=${s3}`);
   assert($item`pantogram pants`);
 }
 
 export function harvestBatteries(): void {
-  visitUrl(`inv_use.php?pwd=&whichitem=${toInt($item`potted power plant`)}`);
-  for (let i = 0; i < 7; i++) {
-    visitUrl(`choice.php?pwd=&whichchoice=1448&option=1&pp=${i + 1}`);
-  }
+  visitUrl(`inv_use.php?pwd=&whichitem=${$item`potted power plant`.id}`);
+  for (let i = 1; i < 8; i++) visitUrl(`choice.php?pwd=&whichchoice=1448&option=1&pp=${i}`);
 }
 
 export function scavengeDaycare(): void {
@@ -96,7 +93,7 @@ export const enum MoonSign {
 
 export function tuneMoon(moon: MoonSign): void {
   if (haveEquipped($item`hewn moon-rune spoon`)) retrieveItem($item`hewn moon-rune spoon`);
-  visitUrl(`inv_use.php?whichitem=${toInt($item`hewn moon-rune spoon`)}&doit=96&whichsign=${moon}`);
+  visitUrl(`inv_use.php?whichitem=${$item`hewn moon-rune spoon`.id}&doit=96&whichsign=${moon}`);
 }
 
 export function vote(): void {
@@ -112,7 +109,7 @@ export function wish(effect: Effect): void {
   const map = new Map(Object.entries(data).map(([key, val]) => [Effect.get(key), val]));
   const desc = map.get(effect);
   if (!desc) throw `Failed to find description text for ${effect}`;
-  visitUrl(`inv_use.php?whichitem=${toInt($item`genie bottle`)}`);
+  visitUrl(`inv_use.php?whichitem=${$item`genie bottle`.id}`);
   runChoice(1, `wish=to be ${desc}`);
   assert(effect);
 }

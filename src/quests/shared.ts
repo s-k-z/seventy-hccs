@@ -14,10 +14,21 @@ import {
 import { DefaultCombat } from "../combat";
 import { config } from "../config";
 import { assert, haveItemOrEffect } from "../lib";
+import { printModtrace } from "libram/dist/modifier";
+
+const statLookup = new Map<string, string | string[]>([
+  ["Donate Blood", ["Maximum HP"]],
+  ["Feed The Children", "Muscle Percent"],
+  ["Build Playground Mazes", "Mysticality Percent"],
+  ["Feed Conspirators", "Moxie Percent"],
+  ["Be a Living Statue", "Combat Rate"],
+  ["Make Margaritas", ["Item Drop", "Booze Drop"]],
+]);
 
 export function runTest(test: CommunityService): void {
   const coilWire = test.name === "Coil Wire";
   if (coilWire) visitUrl("council.php");
+  else printModtrace(statLookup.get(test.name) ?? test.statName);
   switch (test.run(() => undefined, coilWire ? 60 : 1)) {
     case "completed":
       assert(

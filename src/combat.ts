@@ -8,7 +8,6 @@ import {
   myTurncount,
   runChoice,
   runCombat,
-  toInt,
   toUrl,
   useSkill,
   visitUrl,
@@ -148,7 +147,7 @@ export const DefaultCombat = new CombatStrategy()
   .startingMacro(Macro.if_(notAllowList, Macro.abort()))
   .macro(
     Macro.if_(
-      `hasskill ${toInt($skill`Shoot Ghost`)}`,
+      $skill`Shoot Ghost`,
       Macro.skill($skill`Summon Love Gnats`)
         .skill($skill`Sing Along`)
         .skill($skill`Shoot Ghost`)

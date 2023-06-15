@@ -1,5 +1,5 @@
 import { CombatStrategy, Quest, Task } from "grimoire-kolmafia";
-import { Item, itemAmount, toInt, use, visitUrl, weightAdjustment } from "kolmafia";
+import { Item, itemAmount, use, visitUrl, weightAdjustment } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -38,7 +38,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
       name: "Familiar Weight Test",
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
-        visitUrl(`inv_equip.php?pwd=&action=equip&whichitem=${toInt($item`homemade robot gear`)}`);
+        visitUrl(`inv_equip.php?pwd=&action=equip&whichitem=${$item`homemade robot gear`.id}`);
         const needMore = (): boolean => weightAdjustment() < 190;
         const useIfUnused = (i: Item): void => {
           if (have(i) && !have(itemToEffect(i))) use(i);

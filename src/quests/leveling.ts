@@ -19,7 +19,6 @@ import {
   runChoice,
   Skill,
   soulsauceCost,
-  toInt,
   use,
   useSkill,
   visitUrl,
@@ -818,7 +817,7 @@ export const Leveling: Quest<Task> = {
           .item($item`Time-Spinner`)
           .skill($skill`Micrometeorite`)
           .if_(
-            `hasskill ${toInt($skill`lecture on relativity`)}`,
+            $skill`lecture on relativity`,
             Macro.skill($skill`lecture on relativity`).skill($skill`Saucy Salve`)
           )
           .skill($skill`Sing Along`)
@@ -841,7 +840,7 @@ export const Leveling: Quest<Task> = {
       outfit: () => ({ ...levelingOutfit(20000), acc3: $item`Cincho de Mayo` }),
       combat: new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort())).macro(
         Macro.if_(
-          `!hasskill ${toInt($skill`Bowl Sideways`)} && hasskill ${toInt($skill`Feel Pride`)}`,
+          `!hasskill ${$skill`Bowl Sideways`.id} && hasskill ${$skill`Feel Pride`.id}`,
           Macro.skill($skill`Feel Pride`).trySkill($skill`Cincho: Confetti Extravaganza`)
         )
           .trySkill($skill`Bowl Sideways`)

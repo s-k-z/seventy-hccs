@@ -7,6 +7,7 @@ import {
   $location,
   $skill,
   CommunityService,
+  get,
   have,
   Macro,
 } from "libram";
@@ -20,15 +21,15 @@ export const ItemDropQuest: Quest<Task> = {
     {
       name: "Become a Bat",
       completed: () => have($effect`Bat-Adjacent Form`),
-      prepare: () => assert($item`cosmic bowling ball`),
       do: $location`The Dire Warren`,
-      post: () => $effects`Bat-Adjacent Form, Cosmic Ball in the Air`.forEach((e) => assert(e)),
+      post: () => assert(get("_banderRunaways") < 10, "Didn't find cosmic bowling ball?"),
       effects: $effects`Ode to Booze`,
       outfit: { back: $item`vampyric cloake`, familiar: $familiar`Frumious Bandersnatch` },
-      combat: new CombatStrategy().macro(
-        Macro.skill($skill`Become a Bat`)
-          .skill($skill`Bowl Straight Up`)
-          .runaway()
+      combat: new CombatStrategy().macro(() =>
+        Macro.externalIf(
+          have($item`cosmic bowling ball`),
+          Macro.skill($skill`Become a Bat`).skill($skill`Bowl Straight Up`)
+        ).runaway()
       ),
     },
     {
