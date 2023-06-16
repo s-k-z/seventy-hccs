@@ -23,7 +23,7 @@ const statLookup = new Map<string, string | string[]>([
   ["Feed Conspirators", "Moxie Percent"],
   ["Feed The Children", "Muscle Percent"],
   ["Make Margaritas", ["Item Drop", "Booze Drop"]],
-  ["Make Sausage", ["Spell Damage, Spell Damage Percent"]],
+  ["Make Sausage", ["Spell Damage", "Spell Damage Percent"]],
   ["Reduce Gazelle Population", ["Weapon Damage", "Weapon Damage Percent"]],
 ]);
 
