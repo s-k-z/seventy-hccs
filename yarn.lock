@@ -1495,10 +1495,10 @@ eslint-config-prettier@^8.6.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.6.0.tgz#dec1d29ab728f4fa63061774e1672ac4e363d207"
   integrity sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==
 
-eslint-plugin-libram@^0.2.31:
-  version "0.2.31"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.31.tgz#de1c77ac699a20a3fe0fda137acca39ccd7491c3"
-  integrity sha512-DiYJKqc3cVAl+AOVRupfsSYlJDvgL0o/eQNokIndyAaSj2jSb+Zn832T6u/0ngGPPjtmPtdw70bUuPTJhM7D2Q==
+eslint-plugin-libram@^0.2.32:
+  version "0.2.32"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.32.tgz#2efb61952a3080b817934c68a11b3c83bff4ba39"
+  integrity sha512-cFY4rngI0nzY9tvffm43P6SeYccAb1bKHboaTeZKGqX+5OqNFA89Do0yjGk4fkvHeJ6c1nJSQV036eiytTM2gw==
   dependencies:
     html-entities "^2.3.2"
     requireindex "~1.1.0"
@@ -1893,10 +1893,10 @@ json5@^2.2.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-kolmafia@^5.27415.0:
-  version "5.27415.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27415.0.tgz#236cccdfd61e2f4ab21200646e56eabf8b40effb"
-  integrity sha512-3emK5UCC1wkIog292CxhL8kXGzxDOTAB4uhd8aw1r6eBWfjUNgHAaIj6ihDJbXAXg3qTZfm+VSuDCdutjaCF1g==
+kolmafia@^5.27452.0:
+  version "5.27452.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27452.0.tgz#a4f237f8e0b8c1c44fd193c305e3135de2123361"
+  integrity sha512-YZGlWUaGxndDvJJ9lGD0B5odcFIG8ztcwEhv+dEhNdAf48Tje5A8CKrgRxw4rlVswvDSsITWfwoq43yFLfgUfw==
 
 levn@^0.4.1:
   version "0.4.1"

@@ -286,6 +286,7 @@ export const CoilWire: Quest<Task> = {
         assert(get("_saberForceUses") > 0, "Failed to increment force uses");
         DNALab.hybridize();
         assert(DNALab.isHybridized(), "Failed to hybridize");
+        assert(DNALab.isHybridized($effect`Human-Fish Hybrid`), "Failed to hybridize with fish");
       },
       outfit: { weapon: $item`Fourth of May Cosplay Saber`, familiar: $familiar`Crimbo Shrub` },
       combat: new CombatStrategy()

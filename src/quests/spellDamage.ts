@@ -8,7 +8,6 @@ import {
   myMaxhp,
   use,
   useSkill,
-  visitUrl,
 } from "kolmafia";
 import {
   $effect,
@@ -21,6 +20,7 @@ import {
   $slot,
   Clan,
   CommunityService,
+  examine,
   have,
   Macro,
 } from "libram";
@@ -80,10 +80,7 @@ export const SpellDamageQuest: Quest<Task> = {
         const fax = $item`photocopied monster`;
         const faxMon = $monster`ungulith`;
         if (!have(fax)) Clan.with(config.side_clan, () => cliExecute("fax receive"));
-        assert(
-          visitUrl(`desc_item.php?whichitem=${fax.descid}`).includes(`${faxMon}`),
-          `Failed to retrieve fax of ${faxMon}`
-        );
+        assert(examine(fax).includes(`${faxMon}`), `Failed to retrieve fax of ${faxMon}`);
       },
       do: () => use($item`photocopied monster`),
       post: () => {
