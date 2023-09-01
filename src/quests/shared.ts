@@ -1,5 +1,5 @@
 import { OutfitSpec, Task } from "grimoire-kolmafia";
-import { cliExecute, myLevel, visitUrl } from "kolmafia";
+import { cliExecute, Familiar, myLevel, visitUrl } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -47,29 +47,19 @@ export function runTest(test: CommunityService): void {
   }
 }
 
-export const enum AdvReq {
-  NoAttack,
-  None,
-}
-
-export function selectBestFamiliar(req = AdvReq.None): OutfitSpec {
-  if (!have($effect`Spit Upon`) && get("camelSpit") < 100) {
-    return { familiar: $familiar`Melodramedary`, famequip: $item`tiny stillsuit` };
+export function selectBestFamiliar(canAttack = true): OutfitSpec {
+  // prettier-ignore
+  for (const [fam, check] of [
+    [$familiar`Melodramedary`,      () => !have($effect`Spit Upon`) && get("camelSpit") < 100],
+    [$familiar`Shorter-Order Cook`, () => !haveItemOrEffect($item`short stack of pancakes`)],
+    [$familiar`Garbage Fire`,       () => !$items`rope, burning newspaper, burning paper crane`.some((i) => have(i))],
+    [$familiar`Artistic Goth Kid`,  () => get("_hipsterAdv") < 7],
+  ] as [Familiar, () => boolean][]) {
+    const attacks = fam.physicalDamage || fam.elementalDamage;
+    if ((canAttack || !attacks) && check()) {
+      return { familiar: fam, famequip: attacks ? $item`none` : $item`tiny stillsuit` };
+    }
   }
-
-  const pancake = $item`short stack of pancakes`;
-  if (req !== AdvReq.NoAttack && !haveItemOrEffect(pancake)) {
-    return { familiar: $familiar`Shorter-Order Cook`, famequip: $item`none` };
-  }
-
-  if (!$items`rope, burning newspaper, burning paper crane`.some((i) => have(i))) {
-    return { familiar: $familiar`Garbage Fire`, famequip: $item`tiny stillsuit` };
-  }
-
-  if (get("_hipsterAdv") < 7) {
-    return { familiar: $familiar`Artistic Goth Kid`, famequip: $item`tiny stillsuit` };
-  }
-
   return { familiar: $familiar`Baby Sandworm`, famequip: $item`tiny stillsuit` };
 }
 

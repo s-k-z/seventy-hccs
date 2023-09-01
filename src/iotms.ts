@@ -14,14 +14,13 @@ import {
   visitUrl,
 } from "kolmafia";
 import { $class, $item, $skill, $stat, get, have } from "libram";
-import { BRICKO_COST, BRICKO_DROP, BRICKO_TARGET_ITEM } from "./config";
 import { assert, haveItemOrEffect } from "./lib";
 
 export function castBestLibram(): void {
-  const owned = itemAmount(BRICKO_TARGET_ITEM);
+  const owned = itemAmount($item`BRICKO bat`);
   const remainingFights = Math.max(0, 3 - get("_brickoFights"));
   const remainingDrops = Math.max(0, 2 - get("_brickoFights"));
-  const need = BRICKO_COST * remainingFights - BRICKO_DROP * remainingDrops - owned;
+  const need = 5 * remainingFights - 2 * remainingDrops - owned;
   const wantBrickos = get("_brickoEyeSummons") < 3 || !have($item`BRICKO brick`, need);
   for (const [summon, check] of new Map<Skill, boolean>([
     [$skill`Summon BRICKOs`, wantBrickos],
