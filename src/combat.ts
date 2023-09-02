@@ -195,4 +195,8 @@ export const DefaultCombat = new CombatStrategy()
       .repeat(),
     $monster`Witchess Witch`
   )
+  .macro(
+    Macro.trySkill($skill`Recall Facts: %phylum Circadian Rhythms`),
+    $monster`X-32-F Combat Training Snowman`
+  )
   .macro(DefaultMacro);
