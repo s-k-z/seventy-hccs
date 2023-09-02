@@ -1,20 +1,6 @@
 import { CombatStrategy } from "grimoire-kolmafia";
-import {
-  handlingChoice,
-  Location,
-  Monster,
-  mpCost,
-  myFamiliar,
-  myTurncount,
-  runChoice,
-  runCombat,
-  toUrl,
-  useSkill,
-  visitUrl,
-  weightAdjustment,
-} from "kolmafia";
-import { $item, $monster, $skill, get, getModifier, Macro } from "libram";
-import { assert } from "./lib";
+import { Monster, mpCost, myFamiliar, weightAdjustment } from "kolmafia";
+import { $item, $monster, $skill, getModifier, Macro } from "libram";
 
 export const notAllowList = [
   // protonic ghosts
@@ -209,22 +195,8 @@ export const DefaultCombat = new CombatStrategy()
       .repeat(),
     $monster`Witchess Witch`
   )
+  .macro(
+    Macro.trySkill($skill`Recall Facts: %phylum Circadian Rhythms`),
+    $monster`X-32-F Combat Training Snowman`
+  )
   .macro(DefaultMacro);
-
-export function mapMonster(location: Location, monster: Monster): void {
-  const initial = get("_monstersMapped");
-  assert(initial < 3, "Trying to map too many monsters");
-  if (!get("mappingMonsters")) useSkill($skill`Map the Monsters`);
-  const expectedTurnCount = myTurncount();
-  let mapPage = "";
-  while (!mapPage.includes("Leading Yourself Right to Them")) {
-    mapPage = visitUrl(toUrl(location));
-    if (mapPage.match(/<!-- MONSTERID: \d+ -->/)) runCombat();
-    assert(myTurncount() === expectedTurnCount, "Wasted a turn somehow mapping monsters?");
-  }
-  visitUrl(`choice.php?pwd=&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`);
-  runCombat();
-  if (handlingChoice()) runChoice(-1);
-  assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
-  assert(get("_monstersMapped") === initial + 1, "Failed to increment map the monstesr?");
-}

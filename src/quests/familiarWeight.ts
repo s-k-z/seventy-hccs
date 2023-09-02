@@ -39,6 +39,7 @@ export const FamiliarWeightQuest: Quest<Task> = {
       completed: () => CommunityService.FamiliarWeight.isDone(),
       prepare: () => {
         visitUrl(`inv_equip.php?pwd=&action=equip&whichitem=${$item`homemade robot gear`.id}`);
+        visitUrl("charpane.php");
         const needMore = (): boolean => weightAdjustment() < 190;
         const useIfUnused = (i: Item): void => {
           if (have(i) && !have(itemToEffect(i))) use(i);

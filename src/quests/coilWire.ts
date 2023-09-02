@@ -37,7 +37,7 @@ import {
   Macro,
   SongBoom,
 } from "libram";
-import { DefaultCombat, mapMonster } from "../combat";
+import { DefaultCombat } from "../combat";
 import { config } from "../config";
 import {
   getPantogramPants,
@@ -47,7 +47,7 @@ import {
   vote,
 } from "../iotms";
 import { assert, voterMonsterNow } from "../lib";
-import { AdvReq, darkHorse, runTest, selectBestFamiliar } from "./shared";
+import { darkHorse, runTest, selectBestFamiliar } from "./shared";
 
 const questHandlers = new Map([
   ["questM23Meatsmith", "shop.php?whichshop=meatsmith&action=talk"],
@@ -226,17 +226,23 @@ export const CoilWire: Quest<Task> = {
     {
       name: "Ninja Costume",
       completed: () => have($item`li'l ninja costume`),
-      choices: { 297: 3 }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
-      do: () => mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`),
+      prepare: () => {
+        useSkill($skill`Map the Monsters`);
+        assert(get("mappingMonsters"), "Failed to cast map the monsters?");
+      },
+      choices: { 297: 3, 1435: () => `1&heyscriptswhatsupwinkwink=${$monster`amateur ninja`.id}` }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
+      do: $location`The Haiku Dungeon`,
       post: () => {
+        assert($item`li'l ninja costume`);
         visitUrl("questlog.php?which=1");
         assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
-        assert($item`li'l ninja costume`);
+        assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
+        assert(get("_monstersMapped") === 1, "Failed to increment map the monstesr?");
       },
       outfit: () => ({
         back: $item`protonic accelerator pack`,
         shirt: $item`Jurassic Parka`,
-        ...selectBestFamiliar(AdvReq.NoAttack),
+        ...selectBestFamiliar(false),
         modes: { parka: "dilophosaur" },
       }),
       combat: new CombatStrategy()
@@ -256,7 +262,7 @@ export const CoilWire: Quest<Task> = {
       },
       outfit: () => ({
         back: $item`protonic accelerator pack`,
-        ...selectBestFamiliar(AdvReq.NoAttack),
+        ...selectBestFamiliar(false),
       }),
       combat: DefaultCombat,
     },

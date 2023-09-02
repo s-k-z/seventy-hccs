@@ -67,12 +67,11 @@ export const WeaponDamageQuest: Quest<Task> = {
       outfit: {
         hat: $items`extra-wide head candle, none`,
         weapon: $item`dented scepter`,
-        offhand: $item`unbreakable umbrella`,
+        offhand: $item`august scepter`,
         acc1: $item`Powerful Glove`,
         acc2: $item`Brutal brogues`,
         famequip: $item`broken champagne bottle`,
         familiar: $familiar`Disembodied Hand`,
-        modes: { umbrella: "pitchfork style" },
       },
     },
   ],

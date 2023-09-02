@@ -1495,10 +1495,10 @@ eslint-config-prettier@^8.6.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.6.0.tgz#dec1d29ab728f4fa63061774e1672ac4e363d207"
   integrity sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==
 
-eslint-plugin-libram@^0.2.32:
-  version "0.2.32"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.32.tgz#2efb61952a3080b817934c68a11b3c83bff4ba39"
-  integrity sha512-cFY4rngI0nzY9tvffm43P6SeYccAb1bKHboaTeZKGqX+5OqNFA89Do0yjGk4fkvHeJ6c1nJSQV036eiytTM2gw==
+eslint-plugin-libram@^0.2.35:
+  version "0.2.35"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-libram/-/eslint-plugin-libram-0.2.35.tgz#67e4bd68911c2fb022a14ed7a660e7e5b34da16d"
+  integrity sha512-VXcxljAxomsiIgcttfaQrmITDAM8/QWShReWI1PmO2YmhohhvVgKGlMltby+n4sg+xCNRG31xVEBeD1woIbRzg==
   dependencies:
     html-entities "^2.3.2"
     requireindex "~1.1.0"
@@ -1757,10 +1757,10 @@ grapheme-splitter@^1.0.4:
   resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
   integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
 
-grimoire-kolmafia@^0.3.18:
-  version "0.3.18"
-  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.18.tgz#363e5a5ca7fcb2c81a325c51ca100236491e4e70"
-  integrity sha512-+zVTiIPlS2MTNQcBNfto1C3g0B/8L00k+1HcUd09Ui3QwoCkdyA+0owMfbWUgfZxKHgDarPOdoVcLWRN12poag==
+grimoire-kolmafia@^0.3.22:
+  version "0.3.22"
+  resolved "https://registry.yarnpkg.com/grimoire-kolmafia/-/grimoire-kolmafia-0.3.22.tgz#b24bde2caa76c306fed6d815a62c7de9f71612b3"
+  integrity sha512-u+U6OHCAy69hJLw3DJkXPwFANa2oNiL1lcnM8245JT7FIDE5iRi9E04UqxLISnuJK51lwy3sM258hpNEvxlU7g==
   dependencies:
     core-js "^3.16.4"
 
@@ -1785,6 +1785,11 @@ html-entities@^2.3.2:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.3.3.tgz#117d7626bece327fc8baace8868fa6f5ef856e46"
   integrity sha512-DV5Ln36z34NNTDgnz0EWGBLZENelNAtkiFA4kyNOG2tDI6Mz1uSWiq1wAKdyjnJwyDiDO7Fa2SO1CTxPXL8VxA==
+
+html-entities@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-2.4.0.tgz#edd0cee70402584c8c76cc2c0556db09d1f45061"
+  integrity sha512-igBTJcNNNhvZFRtm8uA6xMY6xYleeDwn3PeBCkDz7tHttv4F2hsDI2aPgNERWzvRcNYHNT3ymRaQzllmXj4YsQ==
 
 ignore@^5.2.0:
   version "5.2.4"
@@ -1893,10 +1898,10 @@ json5@^2.2.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-kolmafia@^5.27452.0:
-  version "5.27452.0"
-  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27452.0.tgz#a4f237f8e0b8c1c44fd193c305e3135de2123361"
-  integrity sha512-YZGlWUaGxndDvJJ9lGD0B5odcFIG8ztcwEhv+dEhNdAf48Tje5A8CKrgRxw4rlVswvDSsITWfwoq43yFLfgUfw==
+kolmafia@^5.27567.0:
+  version "5.27567.0"
+  resolved "https://registry.yarnpkg.com/kolmafia/-/kolmafia-5.27567.0.tgz#3b83a1f05fdeca5863df67faca0f27262d63929b"
+  integrity sha512-srSyBtHtlkb1VhrgbwH10316g+IRafY/0eDy4u1DzY7Tgi3mE/nRsz/Txam1nmJAY+2r5TxQbQji4F/KFNqIeQ==
 
 levn@^0.4.1:
   version "0.4.1"
@@ -1906,10 +1911,12 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-libram@^0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/libram/-/libram-0.8.3.tgz#4cb960a2fc5ef2b4b48a05004b1d2f325f389520"
-  integrity sha512-TL7t/BdlaQdTtfkZCS4e1bOIgqq11O6I02xdzFhVQqNqjo3SvkbaH2vTusdSmyO7aUrCFgn4daL1RpIDjsJThQ==
+libram@^0.8.9:
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/libram/-/libram-0.8.9.tgz#06eec6137b514235f67187ad937ceb9f0858e756"
+  integrity sha512-Qbjz+F/Ij3lFg/eM9fqYJ62rHBFs/TdaGokeVJB2WtO32BQcr3ArtCxWN4UM1/ORqd8Ir8tEMKqFHnJZuGqD9Q==
+  dependencies:
+    html-entities "^2.4.0"
 
 locate-path@^6.0.0:
   version "6.0.0"

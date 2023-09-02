@@ -3,9 +3,11 @@ import {
   cliExecute,
   create,
   eat,
+  getMonsters,
   haveEffect,
   itemAmount,
   Location,
+  Monster,
   mpCost,
   myBasestat,
   myBuffedstat,
@@ -44,17 +46,37 @@ import {
   have,
   Macro,
   SourceTerminal,
+  sum,
   Witchess,
 } from "libram";
-import { DefaultCombat, DefaultMacro, mapMonster, notAllowList } from "../combat";
-import { BRICKO_COST, BRICKO_TARGET_ITEM, config } from "../config";
+import { DefaultCombat, DefaultMacro, notAllowList } from "../combat";
+import { config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams, wish } from "../iotms";
 import { acquireEffect, assert, haveItemOrEffect, voterMonsterNow } from "../lib";
-import { AdvReq, selectBestFamiliar } from "./shared";
+import { selectBestFamiliar } from "./shared";
 import { NumericProperty } from "libram/dist/propertyTypes";
 
-function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
-  const multiplyML = myBuffedstat(myPrimestat()) < (cap ?? Infinity);
+const combatData = new Map<Location | Monster, boolean>([
+  [$location`The Tunnel of L.O.V.E.`, false],
+]);
+
+const capFallback = new Map<Monster, number>([
+  [$monster`Government agent`, 10000],
+  [$monster`LOV Enforcer`, 10000],
+  [$monster`LOV Engineer`, 10000],
+  [$monster`LOV Equivocator`, 10000],
+  [$monster`toxic beastie`, 11111],
+]);
+
+function levelingOutfit(target: Location | Monster): OutfitSpec {
+  const monsters = target instanceof Location ? getMonsters(target) : [target];
+  const cap =
+    sum(monsters, (m) => {
+      const match = m.attributes.match(/Cap: (\d+)/);
+      const fallback = capFallback.get(m);
+      return match ? Number(match[1]) : fallback ? fallback : Infinity;
+    }) / monsters.length;
+  const multiplyML = myBuffedstat(myPrimestat()) < cap;
   return {
     hat: $item`Daylight Shavings Helmet`,
     back: $items`LOV Epaulettes, unwrapped knock-off retro superhero cape`,
@@ -65,7 +87,7 @@ function levelingOutfit(cap?: number, req?: AdvReq): OutfitSpec {
     acc1: $item`hewn moon-rune spoon`,
     acc2: $items`battle broom, gold detective badge`,
     acc3: $item`Beach Comb`,
-    ...selectBestFamiliar(req),
+    ...selectBestFamiliar(combatData.get(target)),
     modes: { parka: "kachungasaur", retrocape: ["heck", "thrill"], umbrella: "broken" },
   };
 }
@@ -370,14 +392,22 @@ export const Leveling: Quest<Task> = {
       name: "Ensure Imported Taffy",
       ready: () => get("_speakeasyFreeFights") === 2,
       completed: () => haveItemOrEffect($item`imported taffy`) || get("_speakeasyFreeFights") >= 3,
-      do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
-      post: () =>
+      prepare: () => {
+        useSkill($skill`Map the Monsters`);
+        assert(get("mappingMonsters"), "Failed to cast map the monsters?");
+      },
+      choices: { 1435: () => `1&heyscriptswhatsupwinkwink=${$monster`goblin flapper`.id}` }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
+      do: $location`An Unusually Quiet Barroom Brawl`,
+      post: () => {
         validateFreeFightCounter(
           "_speakeasyFreeFights",
           "place.php?whichplace=speakeasy",
           $location`An Unusually Quiet Barroom Brawl`
-        ),
-      outfit: () => levelingOutfit(),
+        );
+        assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
+        assert(get("_monstersMapped") === 2, "Failed to increment map the monsters?");
+      },
+      outfit: () => levelingOutfit($location`An Unusually Quiet Barroom Brawl`),
       combat: new CombatStrategy()
         .macro(() => Macro.skill($skill`Feel Envy`).step(DefaultMacro()), $monster`goblin flapper`)
         .macro(Macro.abort()),
@@ -393,7 +423,7 @@ export const Leveling: Quest<Task> = {
           $location`An Unusually Quiet Barroom Brawl`
         ),
       outfit: () => {
-        const outfit = levelingOutfit();
+        const outfit = levelingOutfit($location`An Unusually Quiet Barroom Brawl`);
         const wantOrb =
           !haveItemOrEffect($item`imported taffy`) &&
           (get("crystalBallPredictions") === "" ||
@@ -490,7 +520,8 @@ export const Leveling: Quest<Task> = {
         use($item`LOV Elixir #6`);
         use($item`LOV Extraterrestrial Chocolate`);
       },
-      outfit: () => levelingOutfit(10000, AdvReq.NoAttack),
+      effects: $effects`Imported Strength`,
+      outfit: () => levelingOutfit($location`The Tunnel of L.O.V.E.`),
       combat: DefaultCombat,
     },
     {
@@ -536,15 +567,8 @@ export const Leveling: Quest<Task> = {
         visitUrl("questlog.php?which=1");
         assert(!!get("ghostLocation"), `Failed to get protonic ghost notice`);
       },
-      effects: [
-        $effect`Drescher's Annoying Noise`,
-        $effect`Imported Strength`,
-        $effect`Pride of the Puffin`,
-        // Song(s)
-        $effect`Ur-Kel's Aria of Annoyance`,
-      ],
       outfit: () => ({
-        ...levelingOutfit(600),
+        ...levelingOutfit($monster`Witchess Rook`),
         back: $item`protonic accelerator pack`,
       }),
       combat: DefaultCombat,
@@ -558,7 +582,7 @@ export const Leveling: Quest<Task> = {
         assert(!get("ghostLocation"), "Still have a ghost location");
       },
       outfit: () => ({
-        ...levelingOutfit(undefined, AdvReq.NoAttack),
+        ...levelingOutfit($monster`the ghost of Monsieur Baguelle`),
         back: $item`protonic accelerator pack`,
       }),
       combat: DefaultCombat,
@@ -576,7 +600,7 @@ export const Leveling: Quest<Task> = {
       post: () => {
         if (!haveItemOrEffect($item`Gene Tonic: Construct`)) DNALab.makeTonic();
       },
-      outfit: () => levelingOutfit(),
+      outfit: () => levelingOutfit($location`The X-32-F Combat Training Snowman`),
       combat: new CombatStrategy().macro(() =>
         Macro.externalIf(
           !haveItemOrEffect($item`Gene Tonic: Construct`),
@@ -602,7 +626,7 @@ export const Leveling: Quest<Task> = {
       name: "Shadow Monster",
       completed: () => haveEffect($effect`Shadow Affinity`) <= 3,
       do: $location`Shadow Rift (The Right Side of the Tracks)`,
-      outfit: () => levelingOutfit(),
+      outfit: () => levelingOutfit($location`Shadow Rift`),
       combat: DefaultCombat,
     },
     {
@@ -614,11 +638,11 @@ export const Leveling: Quest<Task> = {
     },
     {
       name: "BRICKOS",
-      ready: () => have($item`BRICKO eye brick`) && have($item`BRICKO brick`, BRICKO_COST),
+      ready: () => have($item`BRICKO eye brick`) && have($item`BRICKO brick`, 5),
       completed: () => get("_brickoFights") >= 3,
-      acquire: [{ item: BRICKO_TARGET_ITEM }],
-      do: () => use(BRICKO_TARGET_ITEM),
-      outfit: () => levelingOutfit(),
+      acquire: [{ item: $item`BRICKO bat` }],
+      do: () => use($item`BRICKO bat`),
+      outfit: () => levelingOutfit($monster`BRICKO bat`),
       combat: DefaultCombat,
     },
     {
@@ -631,7 +655,7 @@ export const Leveling: Quest<Task> = {
         if (myHp() / myMaxhp() < 0.5) useSkill($skill`Cannelloni Cocoon`);
         assert(Counter.exists("portscan.edu"), "Failed to setup portscan?");
       },
-      outfit: () => levelingOutfit(400),
+      outfit: () => levelingOutfit($monster`Eldritch Tentacle`),
       combat: new CombatStrategy().macro(
         Macro.skill($skill`Portscan`)
           .skill($skill`Curse of Weaksauce`)
@@ -649,7 +673,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1310: () => (have($item`God Lobster's Ring`) ? 2 : 1) }, // Granted a Boon: (1) equipment (2) blessing (3) experience
       do: () => visitUrl("main.php?fightgodlobster=1"),
       outfit: () => ({
-        ...levelingOutfit(1500),
+        ...levelingOutfit($monster`God Lobster`),
         famequip: $items`God Lobster's Ring, God Lobster's Scepter, none`,
         familiar: $familiar`God Lobster`,
       }),
@@ -659,7 +683,7 @@ export const Leveling: Quest<Task> = {
       name: "Shadow Agent",
       completed: () => !have($effect`Shadow Affinity`),
       do: $location`Shadow Rift (The Right Side of the Tracks)`,
-      outfit: () => levelingOutfit(10000),
+      outfit: () => levelingOutfit($monster`Government agent`),
       combat: new CombatStrategy()
         .macro(
           Macro.if_(`!haseffect ${$effect`Shadow Affinity`}`, Macro.abort())
@@ -688,7 +712,7 @@ export const Leveling: Quest<Task> = {
         assert($effect`Inner Elf`);
       },
       outfit: () => ({
-        ...levelingOutfit(),
+        ...levelingOutfit($location`Shadow Rift`),
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
       }),
@@ -706,21 +730,21 @@ export const Leveling: Quest<Task> = {
       acquire: [{ item: $item`makeshift garbage shirt` }],
       prepare: () => assert($effect`Inner Elf`),
       do: () => Witchess.fightPiece($monster`Witchess Witch`),
-      outfit: () => levelingOutfit(7000),
+      outfit: () => levelingOutfit($monster`Witchess Witch`),
       combat: DefaultCombat,
     },
     {
       name: "Witchess King",
       completed: () => have($item`dented scepter`),
       do: () => Witchess.fightPiece($monster`Witchess King`),
-      outfit: () => levelingOutfit(6000),
+      outfit: () => levelingOutfit($monster`Witchess King`),
       combat: DefaultCombat,
     },
     {
       name: "Remaining Witchess Fights",
       completed: () => Witchess.fightsDone() >= 5,
       do: () => Witchess.fightPiece($monster`Witchess Queen`),
-      outfit: () => levelingOutfit(8000),
+      outfit: () => levelingOutfit($monster`Witchess Queen`),
       combat: DefaultCombat,
     },
     {
@@ -730,7 +754,7 @@ export const Leveling: Quest<Task> = {
       choices: { 1119: -1 }, // Shining Mauve Backwards In Time
       do: $location`The Deep Machine Tunnels`,
       outfit: () => ({
-        ...levelingOutfit(10000),
+        ...levelingOutfit($location`The Deep Machine Tunnels`),
         familiar: $familiar`Machine Elf`,
         famequip: $item`tiny stillsuit`,
       }),
@@ -807,7 +831,7 @@ export const Leveling: Quest<Task> = {
       do: $location`The Toxic Teacups`,
       post: () => assert(get("_pocketProfessorLectures") > 0, "Failed to lecture?"),
       outfit: () => ({
-        ...levelingOutfit(10000),
+        ...levelingOutfit($location`The Toxic Teacups`),
         offhand: $item`Kramco Sausage-o-Matic™`,
         familiar: $familiar`Pocket Professor`,
         famequip: $item`tiny stillsuit`,
@@ -837,7 +861,10 @@ export const Leveling: Quest<Task> = {
           "place.php?whichplace=town_wrong",
           $location`The Neverending Party`
         ),
-      outfit: () => ({ ...levelingOutfit(20000), acc3: $item`Cincho de Mayo` }),
+      outfit: () => ({
+        ...levelingOutfit($location`The Neverending Party`),
+        acc3: $item`Cincho de Mayo`,
+      }),
       combat: new CombatStrategy().startingMacro(Macro.if_(notAllowList, Macro.abort())).macro(
         Macro.if_(
           `!hasskill ${$skill`Bowl Sideways`.id} && hasskill ${$skill`Feel Pride`.id}`,

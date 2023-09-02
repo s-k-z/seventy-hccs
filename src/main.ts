@@ -15,7 +15,7 @@ import { HPQuest, MoxieQuest, MuscleQuest, MysticalityQuest } from "./quests/sta
 import { WeaponDamageQuest } from "./quests/weaponDamage";
 
 export function main(command = ""): void {
-  sinceKolmafiaRevision(27291);
+  sinceKolmafiaRevision(27567);
 
   Args.fill(config, command);
   if (config.help) {
