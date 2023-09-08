@@ -49,7 +49,7 @@ import {
   sum,
   Witchess,
 } from "libram";
-import { DefaultCombat, DefaultMacro, notAllowList } from "../combat";
+import { DefaultCombat, DefaultMacro, mapMonster, notAllowList } from "../combat";
 import { config } from "../config";
 import { castBestLibram, spendAllMpOnLibrams, wish } from "../iotms";
 import { acquireEffect, assert, haveItemOrEffect, voterMonsterNow } from "../lib";
@@ -392,21 +392,13 @@ export const Leveling: Quest<Task> = {
       name: "Ensure Imported Taffy",
       ready: () => get("_speakeasyFreeFights") === 2,
       completed: () => haveItemOrEffect($item`imported taffy`) || get("_speakeasyFreeFights") >= 3,
-      prepare: () => {
-        useSkill($skill`Map the Monsters`);
-        assert(get("mappingMonsters"), "Failed to cast map the monsters?");
-      },
-      choices: { 1435: () => `1&heyscriptswhatsupwinkwink=${$monster`goblin flapper`.id}` }, // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
-      do: $location`An Unusually Quiet Barroom Brawl`,
-      post: () => {
+      do: () => mapMonster($location`An Unusually Quiet Barroom Brawl`, $monster`goblin flapper`),
+      post: () =>
         validateFreeFightCounter(
           "_speakeasyFreeFights",
           "place.php?whichplace=speakeasy",
           $location`An Unusually Quiet Barroom Brawl`
-        );
-        assert(!get("mappingMonsters"), "Failed to unset map the monsters?");
-        assert(get("_monstersMapped") === 2, "Failed to increment map the monsters?");
-      },
+        ),
       outfit: () => levelingOutfit($location`An Unusually Quiet Barroom Brawl`),
       combat: new CombatStrategy()
         .macro(() => Macro.skill($skill`Feel Envy`).step(DefaultMacro()), $monster`goblin flapper`)
@@ -606,6 +598,7 @@ export const Leveling: Quest<Task> = {
           !haveItemOrEffect($item`Gene Tonic: Construct`),
           Macro.item([$item`DNA extraction syringe`, $item`Time-Spinner`])
         )
+          .trySkill($skill`Recall Facts: %phylum Circadian Rhythms`)
           .skill($skill`Sing Along`)
           .attack()
           .repeat()
