@@ -27,6 +27,10 @@ var __copyProps = function(to, from, except, desc) {
 };
 var __toESM = function(mod, isNodeMode, target) {
   return target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   );
@@ -4737,26 +4741,26 @@ function _arrayLikeToArray(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys(Object(source), true).forEach(function(key) {
-      _defineProperty(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys(Object(t), true).forEach(function(r2) {
+      _defineProperty(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty(obj, key, value) {
   key = _toPropertyKey(key);
@@ -4946,7 +4950,7 @@ var Args = /* @__PURE__ */ function() {
     }
   }, {
     key: "class",
-    value: function _class(spec) {
+    value: function _class2(spec) {
       return this.custom(spec, function(value) {
         var match = import_kolmafia.Class.get(value);
         if (match.toString().toUpperCase() === value.toString().toUpperCase())
@@ -5031,6 +5035,16 @@ var Args = /* @__PURE__ */ function() {
     value: function skills(spec) {
       return this.arrayFromArg(spec, this.skill);
     }
+    /**
+     * Create a group of arguments that will be printed separately in the help.
+     *
+     * Note that keys in the group must still be globally distinct.
+     *
+     * @param groupName The display name for the group in help.
+     * @param args A JS object specifying the script arguments. Its values should
+     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
+     *    or groups of arguments (created by Args.group).
+     */
   }, {
     key: "group",
     value: function group(groupName, args) {
@@ -5039,6 +5053,17 @@ var Args = /* @__PURE__ */ function() {
         args: args
       };
     }
+    /**
+     * Create a set of input arguments for a script.
+     * @param scriptName Prefix for property names; often the name of the script.
+     * @param scriptHelp Brief description of this script, for the help message.
+     * @param args A JS object specifying the script arguments. Its values should
+     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
+     *    or groups of arguments (created by Args.group).
+     * @param options Config options for the args and arg parser.
+     * @returns An object which can hold parsed argument values. The keys of this
+     *    object are identical to the keys in 'args'.
+     */
   }, {
     key: "create",
     value: function create5(scriptName, scriptHelp, args, options) {
@@ -5076,6 +5101,12 @@ var Args = /* @__PURE__ */ function() {
       }
       return res;
     }
+    /**
+     * Parse the command line input into the provided script arguments.
+     * @param args An object to hold the parsed argument values, from Args.create(*).
+     * @param command The command line input.
+     * @param includeSettings If true, parse values from settings as well.
+     */
   }, {
     key: "fill",
     value: function fill(args, command) {
@@ -5118,6 +5149,14 @@ var Args = /* @__PURE__ */ function() {
         return parseAndValidate(keySpec, "Argument ".concat(argKey), value_str);
       });
     }
+    /**
+     * Parse command line input into a new set of script arguments.
+     * @param scriptName Prefix to use in property names; typically the name of the script.
+     * @param scriptHelp Brief description of this script, for the help message.
+     * @param spec An object specifying the script arguments.
+     * @param command The command line input.
+     * @param options Config options for the args and arg parser.
+     */
   }, {
     key: "parse",
     value: function parse(scriptName, scriptHelp, spec, command, options) {
@@ -5125,6 +5164,16 @@ var Args = /* @__PURE__ */ function() {
       this.fill(args, command);
       return args;
     }
+    /**
+     * Print a description of the script arguments to the CLI.
+     *
+     * First, all top-level argument descriptions are printed in the order they
+     * were defined. Afterwards, descriptions for groups of arguments are printed
+     * in the order they were defined.
+     *
+     * @param args An object of parsed arguments, from Args.create(*).
+     * @param maxOptionsToDisplay If given, do not list more than this many options for each arg.
+     */
   }, {
     key: "showHelp",
     value: function showHelp(args, maxOptionsToDisplay) {
@@ -5166,6 +5215,14 @@ var Args = /* @__PURE__ */ function() {
         (0, import_kolmafia.printHtml)("<b>".concat(group.name, ":</b>"));
       });
     }
+    /**
+     * Load the metadata information for a set of arguments. Only for advanced usage.
+     *
+     * @param args A JS object specifying the script arguments. Its values should
+     *    be {@link Arg} objects (created by Args.string, Args.number, or others)
+     *    or groups of arguments (created by Args.group).
+     * @returns A class containing metadata information.
+     */
   }, {
     key: "getMetadata",
     value: function getMetadata(args) {
@@ -5208,11 +5265,24 @@ var WrappedArgMetadata = /* @__PURE__ */ function() {
     value: function loadDefaultValues() {
       return _loadDefaultValues(this.spec);
     }
+    /**
+     * Traverse the spec and possibly generate a value for each argument.
+     *
+     * @param result The object to hold the resulting argument values, typically
+     *    the result of loadDefaultValues().
+     * @param setTo A function to generate an argument value from each arg spec.
+     *    If this function returns undefined, then the argument value is unchanged.
+     */
   }, {
     key: "traverseAndMaybeSet",
     value: function traverseAndMaybeSet(result, setTo) {
       return _traverseAndMaybeSet(this.spec, result, setTo);
     }
+    /**
+     * Traverse the spec and call a method for each argument.
+     *
+     * @param process A function to call at each arg spec.
+     */
   }, {
     key: "traverse",
     value: function traverse(process, onGroup) {
@@ -5337,11 +5407,17 @@ var CommandParser = /* @__PURE__ */ function() {
       }
       return result;
     }
+    /**
+     * @returns True if the entire command has been parsed.
+     */
   }, {
     key: "finished",
     value: function finished() {
       return this.index >= this.command.length;
     }
+    /**
+     * @returns The next character to parse, if it exists.
+     */
   }, {
     key: "peek",
     value: function peek() {
@@ -5349,6 +5425,9 @@ var CommandParser = /* @__PURE__ */ function() {
         return void 0;
       return this.command.charAt(this.index);
     }
+    /**
+     * @returns The character just parsed, if it exists.
+     */
   }, {
     key: "prev",
     value: function prev() {
@@ -5358,6 +5437,12 @@ var CommandParser = /* @__PURE__ */ function() {
         return void 0;
       return this.command.charAt(this.index - 1);
     }
+    /**
+     * Advance the internal marker over the next expected character.
+     * Throws an error on unexpected characters.
+     *
+     * @param allowed Characters that are expected.
+     */
   }, {
     key: "consume",
     value: function consume(allowed) {
@@ -5368,6 +5453,12 @@ var CommandParser = /* @__PURE__ */ function() {
         this.index += 1;
       }
     }
+    /**
+     * Find the next occurance of one of the provided characters, or the end of
+     * the string if the characters never appear again.
+     *
+     * @param searchValue The characters to locate.
+     */
   }, {
     key: "findNext",
     value: function findNext(searchValue) {
@@ -5387,6 +5478,12 @@ var CommandParser = /* @__PURE__ */ function() {
       }
       return result;
     }
+    /**
+     * Starting from the internal marker, parse a single key.
+     * This also advances the internal marker.
+     *
+     * @returns The next key.
+     */
   }, {
     key: "parseKey",
     value: function parseKey() {
@@ -5395,6 +5492,17 @@ var CommandParser = /* @__PURE__ */ function() {
       this.index = keyEnd;
       return key;
     }
+    /**
+     * Starting from the internal marker, parse a single value.
+     * This also advances the internal marker.
+     *
+     * Values are a single word or enclosed in matching quotes, i.e. one of:
+     *    "[^"]*"
+     *    '[^']*"
+     *    [^'"][^ ]*
+     *
+     * @returns The next value.
+     */
   }, {
     key: "parseValue",
     value: function parseValue() {
@@ -5524,6 +5632,7 @@ var Logger = /* @__PURE__ */ function() {
     value: function setHandler(level, callback) {
       this.handlers[level] = callback;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }, {
     key: "log",
     value: function log(level, message) {
@@ -5561,8 +5670,8 @@ var import_kolmafia3 = require("kolmafia");
 
 // node_modules/libram/dist/propertyTypes.js
 var booleanProperties = ["abortOnChoiceWhenNotInChoice", "addChatCommandLine", "addCreationQueue", "addStatusBarToFrames", "allowCloseableDesktopTabs", "allowNegativeTally", "allowNonMoodBurning", "allowSummonBurning", "autoHighlightOnFocus", "broadcastEvents", "cacheMallSearches", "chatBeep", "chatLinksUseRelay", "compactChessboard", "copyAsHTML", "customizedTabs", "debugBuy", "debugConsequences", "debugFoxtrotRemoval", "debugPathnames", "debugTopMenuStyle", "gapProtection", "gitInstallDependencies", "gitShowCommitMessages", "gitUpdateOnLogin", "greenScreenProtection", "guiUsesOneWindow", "hideServerDebugText", "logAcquiredItems", "logBattleAction", "logBrowserInteractions", "logChatMessages", "logChatRequests", "logCleanedHTML", "logDecoratedResponses", "logFamiliarActions", "logGainMessages", "logReadableHTML", "logPreferenceChange", "logMonsterHealth", "logReverseOrder", "logStatGains", "logStatusEffects", "logStatusOnLogin", "macroDebug", "macroLens", "mementoListActive", "mergeHobopolisChat", "pingLogin", "pingStealthyTimein", "printStackOnAbort", "proxySet", "relayAddSounds", "relayAddsCustomCombat", "relayAddsDiscoHelper", "relayAddsGraphicalCLI", "relayAddsQuickScripts", "relayAddsRestoreLinks", "relayAddsUpArrowLinks", "relayAddsUseLinks", "relayAddsWikiLinks", "relayAllowRemoteAccess", "relayBrowserOnly", "relayCacheUncacheable", "relayFormatsChatText", "relayHidesJunkMallItems", "relayMaintainsEffects", "relayMaintainsHealth", "relayMaintainsMana", "relayOverridesImages", "relayRunsAfterAdventureScript", "relayRunsBeforeBattleScript", "relayRunsBeforePVPScript", "relayScriptButtonFirst", "relayTextualizesEffects", "relayTrimsZapList", "relayUsesInlineLinks", "relayUsesIntegratedChat", "relayWarnOnRecoverFailure", "removeMalignantEffects", "saveSettingsOnSet", "sharePriceData", "showAllRequests", "showExceptionalRequests", "stealthLogin", "svnInstallDependencies", "svnShowCommitMessages", "svnUpdateOnLogin", "switchEquipmentForBuffs", "syncAfterSvnUpdate", "useChatToolbar", "useContactsFrame", "useDevProxyServer", "useDockIconBadge", "useHugglerChannel", "useImageCache", "useLastUserAgent", "useSystemTrayIcon", "useTabbedChatFrame", "useToolbars", "useCachedVolcanoMaps", "useZoneComboBox", "verboseSpeakeasy", "verboseFloundry", "wrapLongLines", "_gitUpdated", "_svnRepoFileFetched", "_svnUpdated", "antagonisticSnowmanKitAvailable", "arcadeGameHints", "armoryUnlocked", "autoForbidIgnoringStores", "autoCraft", "autoQuest", "autoEntangle", "autoGarish", "autoManaRestore", "autoFillMayoMinder", "autoPinkyRing", "autoPlantHardcore", "autoPlantSoftcore", "autoPotionID", "autoRepairBoxServants", "autoSatisfyWithCloset", "autoSatisfyWithCoinmasters", "autoSatisfyWithMall", "autoSatisfyWithNPCs", "autoSatisfyWithStash", "autoSatisfyWithStorage", "autoSetConditions", "autoSteal", "autoTuxedo", "backupCameraReverserEnabled", "badMoonEncounter01", "badMoonEncounter02", "badMoonEncounter03", "badMoonEncounter04", "badMoonEncounter05", "badMoonEncounter06", "badMoonEncounter07", "badMoonEncounter08", "badMoonEncounter09", "badMoonEncounter10", "badMoonEncounter11", "badMoonEncounter12", "badMoonEncounter13", "badMoonEncounter14", "badMoonEncounter15", "badMoonEncounter16", "badMoonEncounter17", "badMoonEncounter18", "badMoonEncounter19", "badMoonEncounter20", "badMoonEncounter21", "badMoonEncounter22", "badMoonEncounter23", "badMoonEncounter24", "badMoonEncounter25", "badMoonEncounter26", "badMoonEncounter27", "badMoonEncounter28", "badMoonEncounter29", "badMoonEncounter30", "badMoonEncounter31", "badMoonEncounter32", "badMoonEncounter33", "badMoonEncounter34", "badMoonEncounter35", "badMoonEncounter36", "badMoonEncounter37", "badMoonEncounter38", "badMoonEncounter39", "badMoonEncounter40", "badMoonEncounter41", "badMoonEncounter42", "badMoonEncounter43", "badMoonEncounter44", "badMoonEncounter45", "badMoonEncounter46", "badMoonEncounter47", "badMoonEncounter48", "barrelShrineUnlocked", "bigBrotherRescued", "blackBartsBootyAvailable", "bondAdv", "bondBeach", "bondBeat", "bondBooze", "bondBridge", "bondDesert", "bondDR", "bondDrunk1", "bondDrunk2", "bondHoney", "bondHP", "bondInit", "bondItem1", "bondItem2", "bondItem3", "bondJetpack", "bondMartiniDelivery", "bondMartiniPlus", "bondMartiniTurn", "bondMeat", "bondMox1", "bondMox2", "bondMPregen", "bondMus1", "bondMus2", "bondMys1", "bondMys2", "bondSpleen", "bondStat", "bondStat2", "bondStealth", "bondStealth2", "bondSymbols", "bondWar", "bondWeapon2", "bondWpn", "booPeakLit", "bootsCharged", "breakfastCompleted", "burrowgrubHiveUsed", "calzoneOfLegendEaten", "canteenUnlocked", "chaosButterflyThrown", "chatbotScriptExecuted", "chateauAvailable", "chatLiterate", "chatServesUpdates", "checkJackassHardcore", "checkJackassSoftcore", "clanAttacksEnabled", "coldAirportAlways", "considerShadowNoodles", "controlRoomUnlock", "concertVisited", "controlPanel1", "controlPanel2", "controlPanel3", "controlPanel4", "controlPanel5", "controlPanel6", "controlPanel7", "controlPanel8", "controlPanel9", "corralUnlocked", "dailyDungeonDone", "dampOldBootPurchased", "daycareOpen", "deepDishOfLegendEaten", "demonSummoned", "dinseyAudienceEngagement", "dinseyGarbagePirate", "dinseyRapidPassEnabled", "dinseyRollercoasterNext", "dinseySafetyProtocolsLoose", "doghouseBoarded", "dontStopForCounters", "drippingHallUnlocked", "drippyShieldUnlocked", "edUsedLash", "eldritchFissureAvailable", "eldritchHorrorAvailable", "errorOnAmbiguousFold", "essenceOfAnnoyanceAvailable", "essenceOfBearAvailable", "expressCardUsed", "falloutShelterChronoUsed", "falloutShelterCoolingTankUsed", "fireExtinguisherBatHoleUsed", "fireExtinguisherChasmUsed", "fireExtinguisherCyrptUsed", "fireExtinguisherDesertUsed", "fireExtinguisherHaremUsed", "fistTeachingsHaikuDungeon", "fistTeachingsPokerRoom", "fistTeachingsBarroomBrawl", "fistTeachingsConservatory", "fistTeachingsBatHole", "fistTeachingsFunHouse", "fistTeachingsMenagerie", "fistTeachingsSlums", "fistTeachingsFratHouse", "fistTeachingsRoad", "fistTeachingsNinjaSnowmen", "flickeringPixel1", "flickeringPixel2", "flickeringPixel3", "flickeringPixel4", "flickeringPixel5", "flickeringPixel6", "flickeringPixel7", "flickeringPixel8", "floristFriarAvailable", "floristFriarChecked", "frAlways", "frCemetaryUnlocked", "friarsBlessingReceived", "frMountainsUnlocked", "frSwampUnlocked", "frVillageUnlocked", "frWoodUnlocked", "getawayCampsiteUnlocked", "ghostPencil1", "ghostPencil2", "ghostPencil3", "ghostPencil4", "ghostPencil5", "ghostPencil6", "ghostPencil7", "ghostPencil8", "ghostPencil9", "gingerAdvanceClockUnlocked", "gingerBlackmailAccomplished", "gingerbreadCityAvailable", "gingerExtraAdventures", "gingerNegativesDropped", "gingerSewersUnlocked", "gingerSubwayLineUnlocked", "gingerRetailUnlocked", "glitchItemAvailable", "grabCloversHardcore", "grabCloversSoftcore", "guideToSafariAvailable", "guyMadeOfBeesDefeated", "hallowienerDefiledNook", "hallowienerGuanoJunction", "hallowienerKnollGym", "hallowienerMadnessBakery", "hallowienerMiddleChamber", "hallowienerOvergrownLot", "hallowienerSkeletonStore", "hallowienerSmutOrcs", "hallowienerSonofaBeach", "hallowienerVolcoino", "hardcorePVPWarning", "harvestBatteriesHardcore", "harvestBatteriesSoftcore", "hasAutumnaton", "hasBartender", "hasChef", "hasCocktailKit", "hasCosmicBowlingBall", "hasDetectiveSchool", "hasMaydayContract", "hasOven", "hasRange", "hasShaker", "hasSushiMat", "haveBoxingDaydreamHardcore", "haveBoxingDaydreamSoftcore", "hermitHax0red", "holidayHalsBookAvailable", "horseryAvailable", "hotAirportAlways", "implementGlitchItem", "intenseCurrents", "itemBoughtPerAscension637", "itemBoughtPerAscension8266", "itemBoughtPerAscension10790", "itemBoughtPerAscension10794", "itemBoughtPerAscension10795", "itemBoughtPerCharacter6423", "itemBoughtPerCharacter6428", "itemBoughtPerCharacter6429", "kingLiberated", "lastPirateInsult1", "lastPirateInsult2", "lastPirateInsult3", "lastPirateInsult4", "lastPirateInsult5", "lastPirateInsult6", "lastPirateInsult7", "lastPirateInsult8", "lawOfAveragesAvailable", "leafletCompleted", "libraryCardUsed", "lockPicked", "logBastilleBattalionBattles", "loginRecoveryHardcore", "loginRecoverySoftcore", "lovebugsUnlocked", "loveTunnelAvailable", "lowerChamberUnlock", "madnessBakeryAvailable", "makePocketWishesHardcore", "makePocketWishesSoftcore", "manualOfNumberologyAvailable", "mappingMonsters", "mapToAnemoneMinePurchased", "mapToKokomoAvailable", "mapToMadnessReefPurchased", "mapToTheDiveBarPurchased", "mapToTheMarinaraTrenchPurchased", "mapToTheSkateParkPurchased", "maraisBeaverUnlock", "maraisCorpseUnlock", "maraisDarkUnlock", "maraisVillageUnlock", "maraisWildlifeUnlock", "maraisWizardUnlock", "maximizerAlwaysCurrent", "maximizerCreateOnHand", "maximizerCurrentMallPrices", "maximizerFoldables", "maximizerIncludeAll", "maximizerNoAdventures", "middleChamberUnlock", "milkOfMagnesiumActive", "moonTuned", "neverendingPartyAlways", "noncombatForcerActive", "oasisAvailable", "odeBuffbotCheck", "oilPeakLit", "oscusSodaUsed", "outrageousSombreroUsed", "overgrownLotAvailable", "ownsFloristFriar", "ownsSpeakeasy", "pathedSummonsHardcore", "pathedSummonsSoftcore", "pizzaOfLegendEaten", "popularTartUnlocked", "potatoAlarmClockUsed", "prAlways", "prayedForGlamour", "prayedForProtection", "prayedForVigor", "primaryLabCheerCoreGrabbed", "pyramidBombUsed", "rageGlandVented", "readManualHardcore", "readManualSoftcore", "relayShowSpoilers", "relayShowWarnings", "rememberDesktopSize", "replicaChateauAvailable", "replicaNeverendingPartyAlways", "replicaWitchessSetAvailable", "requireBoxServants", "requireSewerTestItems", "restUsingCampAwayTent", "restUsingChateau", "ROMOfOptimalityAvailable", "safePickpocket", "schoolOfHardKnocksDiplomaAvailable", "scriptCascadingMenus", "serverAddsCustomCombat", "SHAWARMAInitiativeUnlocked", "showForbiddenStores", "showGainsPerUnit", "showIgnoringStorePrices", "showNoSummonOnly", "showTurnFreeOnly", "skeletonStoreAvailable", "sleazeAirportAlways", "snojoAvailable", "sortByEffect", "sortByRoom", "spacegateAlways", "spacegateVaccine1", "spacegateVaccine2", "spacegateVaccine3", "spaceInvaderDefeated", "spelunkyHints", "spiceMelangeUsed", "spookyAirportAlways", "stenchAirportAlways", "stopForFixedWanderer", "stopForUltraRare", "styxPixieVisited", "superconductorDefeated", "suppressInappropriateNags", "suppressPowerPixellation", "suppressMallPriceCacheMessages", "telegraphOfficeAvailable", "telescopeLookedHigh", "timeTowerAvailable", "trackLightsOut", "uneffectWithHotTub", "universalSeasoningActive", "universalSeasoningAvailable", "useBookOfEverySkillHardcore", "useBookOfEverySkillSoftcore", "useCrimboToysHardcore", "useCrimboToysSoftcore", "verboseMaximizer", "visitLoungeHardcore", "visitLoungeSoftcore", "visitRumpusHardcore", "visitRumpusSoftcore", "voteAlways", "wildfireBarrelCaulked", "wildfireDusted", "wildfireFracked", "wildfirePumpGreased", "wildfireSprinkled", "yearbookCameraPending", "youRobotScavenged", "_2002MrStoreCreditsCollected", "_affirmationCookieEaten", "_affirmationHateUsed", "_airFryerUsed", "_akgyxothUsed", "_alienAnimalMilkUsed", "_alienPlantPodUsed", "_allYearSucker", "_aprilShower", "_armyToddlerCast", "_aug1Cast", "_aug2Cast", "_aug3Cast", "_aug4Cast", "_aug5Cast", "_aug6Cast", "_aug7Cast", "_aug8Cast", "_aug9Cast", "_aug10Cast", "_aug11Cast", "_aug12Cast", "_aug13Cast", "_aug14Cast", "_aug15Cast", "_aug16Cast", "_aug17Cast", "_aug18Cast", "_aug19Cast", "_aug20Cast", "_aug21Cast", "_aug22Cast", "_aug23Cast", "_aug24Cast", "_aug25Cast", "_aug26Cast", "_aug27Cast", "_aug28Cast", "_aug29Cast", "_aug30Cast", "_aug31Cast", "_augTodayCast", "_authorsInkUsed", "_baconMachineUsed", "_bagOfCandy", "_bagOfCandyUsed", "_bagOTricksUsed", "_ballastTurtleUsed", "_ballInACupUsed", "_ballpit", "_barrelPrayer", "_bastilleLastBattleWon", "_beachCombing", "_bendHellUsed", "_blackMonolithUsed", "_blankoutUsed", "_bonersSummoned", "_bookOfEverySkillUsed", "_borrowedTimeUsed", "_bowleggedSwaggerUsed", "_bowlFullOfJellyUsed", "_boxOfHammersUsed", "_brainPreservationFluidUsed", "_brassDreadFlaskUsed", "_cameraUsed", "_canSeekBirds", "_carboLoaded", "_cargoPocketEmptied", "_ceciHatUsed", "_chateauDeskHarvested", "_chateauMonsterFought", "_chibiChanged", "_chronerCrossUsed", "_chronerTriggerUsed", "_chubbyAndPlumpUsed", "_circadianRhythmsRecalled", "_circleDrumUsed", "_clanFortuneBuffUsed", "_claraBellUsed", "_coalPaperweightUsed", "_cocoaDispenserUsed", "_cocktailShakerUsed", "_coldAirportToday", "_coldOne", "_communismUsed", "_confusingLEDClockUsed", "_controlPanelUsed", "_cookbookbatRecipeDrops", "_corruptedStardustUsed", "_cosmicSixPackConjured", "_crappyCameraUsed", "_creepyVoodooDollUsed", "_crimboTraining", "_crimboTree", "_cursedKegUsed", "_cursedMicrowaveUsed", "_dailyDungeonMalwareUsed", "_darkChocolateHeart", "_daycareFights", "_daycareNap", "_daycareSpa", "_daycareToday", "_defectiveTokenChecked", "_defectiveTokenUsed", "_dinseyGarbageDisposed", "_discoKnife", "_distentionPillUsed", "_dnaHybrid", "_docClocksThymeCocktailDrunk", "_drippingHallDoor1", "_drippingHallDoor2", "_drippingHallDoor3", "_drippingHallDoor4", "_drippyCaviarUsed", "_drippyNuggetUsed", "_drippyPilsnerUsed", "_drippyPlumUsed", "_drippyWineUsed", "_eldritchHorrorEvoked", "_eldritchTentacleFought", "_entauntaunedToday", "_envyfishEggUsed", "_epicMcTwistUsed", "_essentialTofuUsed", "_etchedHourglassUsed", "_eternalCarBatteryUsed", "_everfullGlassUsed", "_eyeAndATwistUsed", "_fancyChessSetUsed", "_falloutShelterSpaUsed", "_fancyHotDogEaten", "_farmerItemsCollected", "_favoriteBirdVisited", "_firedJokestersGun", "_fireExtinguisherRefilled", "_fireStartingKitUsed", "_fireworksShop", "_fireworksShopHatBought", "_fireworksShopEquipmentBought", "_fireworkUsed", "_fishyPipeUsed", "_floundryItemCreated", "_floundryItemUsed", "_freePillKeeperUsed", "_frToday", "_fudgeSporkUsed", "_garbageItemChanged", "_gingerBiggerAlligators", "_gingerbreadCityToday", "_gingerbreadClockAdvanced", "_gingerbreadClockVisited", "_gingerbreadColumnDestroyed", "_gingerbreadMobHitUsed", "_glennGoldenDiceUsed", "_glitchItemImplemented", "_gnollEyeUsed", "_governmentPerDiemUsed", "_grimBuff", "_guildManualUsed", "_guzzlrQuestAbandoned", "_hardKnocksDiplomaUsed", "_hippyMeatCollected", "_hobbyHorseUsed", "_holidayFunUsed", "_holoWristCrystal", "_hotAirportToday", "_hungerSauceUsed", "_hyperinflatedSealLungUsed", "_iceHotelRoomsRaided", "_iceSculptureUsed", "_incredibleSelfEsteemCast", "_infernoDiscoVisited", "_internetDailyDungeonMalwareBought", "_internetGallonOfMilkBought", "_internetPlusOneBought", "_internetPrintScreenButtonBought", "_internetViralVideoBought", "_interviewIsabella", "_interviewMasquerade", "_interviewVlad", "_inquisitorsUnidentifiableObjectUsed", "_ironicMoustache", "_jackassPlumberGame", "_jarlsCheeseSummoned", "_jarlsCreamSummoned", "_jarlsDoughSummoned", "_jarlsEggsSummoned", "_jarlsFruitSummoned", "_jarlsMeatSummoned", "_jarlsPotatoSummoned", "_jarlsVeggiesSummoned", "_jingleBellUsed", "_jukebox", "_kgbFlywheelCharged", "_kgbLeftDrawerUsed", "_kgbOpened", "_kgbRightDrawerUsed", "_kolConSixPackUsed", "_kolhsCutButNotDried", "_kolhsIsskayLikeAnAshtray", "_kolhsPoeticallyLicenced", "_kolhsSchoolSpirited", "_kudzuSaladEaten", "_lastCombatLost", "_lastCombatWon", "_latteBanishUsed", "_latteCopyUsed", "_latteDrinkUsed", "_legendaryBeat", "_licenseToChillUsed", "_lodestoneUsed", "_lookingGlass", "_loveTunnelToday", "_loveTunnelUsed", "_luckyGoldRingVolcoino", "_lunchBreak", "_lupineHormonesUsed", "_lyleFavored", "_madLiquorDrunk", "_madTeaParty", "_mafiaMiddleFingerRingUsed", "_managerialManipulationUsed", "_mansquitoSerumUsed", "_maydayDropped", "_mayoDeviceRented", "_mayoTankSoaked", "_meatballMachineUsed", "_meatifyMatterUsed", "_milkOfMagnesiumUsed", "_mimeArmyShotglassUsed", "_missGravesVermouthDrunk", "_missileLauncherUsed", "_molehillMountainUsed", "_momFoodReceived", "_mrBurnsgerEaten", "_muffinOrderedToday", "_mushroomGardenVisited", "_neverendingPartyToday", "_newYouQuestCompleted", "_olympicSwimmingPool", "_olympicSwimmingPoolItemFound", "_overflowingGiftBasketUsed", "_partyHard", "_pastaAdditive", "_perfectFreezeUsed", "_perfectlyFairCoinUsed", "_petePartyThrown", "_peteRiotIncited", "_photocopyUsed", "_pickyTweezersUsed", "_pingPongGame", "_pirateBellowUsed", "_pirateForkUsed", "_pixelOrbUsed", "_plumbersMushroomStewEaten", "_pneumaticityPotionUsed", "_portableSteamUnitUsed", "_pottedTeaTreeUsed", "_prToday", "_psychoJarFilled", "_psychoJarUsed", "_psychokineticHugUsed", "_rainStickUsed", "_redwoodRainStickUsed", "_replicaSnowconeTomeUsed", "_replicaResolutionLibramUsed", "_replicaSmithsTomeUsed", "_requestSandwichSucceeded", "_rhinestonesAcquired", "_seaJellyHarvested", "_setOfJacksUsed", "_sewingKitUsed", "_sexChanged", "_shadowAffinityToday", "_shadowForestLooted", "_shrubDecorated", "_silverDreadFlaskUsed", "_sitCourseCompleted", "_skateBuff1", "_skateBuff2", "_skateBuff3", "_skateBuff4", "_skateBuff5", "_sleazeAirportToday", "_sobrieTeaUsed", "_softwareGlitchTurnReceived", "_sotParcelReturned", "_spacegateMurderbot", "_spacegateRuins", "_spacegateSpant", "_spacegateToday", "_spacegateVaccine", "_spaghettiBreakfast", "_spaghettiBreakfastEaten", "_spinmasterLatheVisited", "_spinningWheel", "_spookyAirportToday", "_stabonicScrollUsed", "_steelyEyedSquintUsed", "_stenchAirportToday", "_stinkyCheeseBanisherUsed", "_strangeStalagmiteUsed", "_streamsCrossed", "_stuffedPocketwatchUsed", "_styxSprayUsed", "_summonAnnoyanceUsed", "_summonCarrotUsed", "_summonResortPassUsed", "_sweetToothUsed", "_syntheticDogHairPillUsed", "_tacoFlierUsed", "_telegraphOfficeToday", "_templeHiddenPower", "_tempuraAirUsed", "_thesisDelivered", "_timeSpinnerReplicatorUsed", "_toastSummoned", "_tonicDjinn", "_treasuryEliteMeatCollected", "_treasuryHaremMeatCollected", "_trivialAvocationsGame", "_tryptophanDartUsed", "_turtlePowerCast", "_twelveNightEnergyUsed", "_ultraMegaSourBallUsed", "_victorSpoilsUsed", "_villainLairCanLidUsed", "_villainLairColorChoiceUsed", "_villainLairDoorChoiceUsed", "_villainLairFirecrackerUsed", "_villainLairSymbologyChoiceUsed", "_villainLairWebUsed", "_vmaskBanisherUsed", "_voraciTeaUsed", "_volcanoItemRedeemed", "_volcanoSuperduperheatedMetal", "_voteToday", "_VYKEACafeteriaRaided", "_VYKEALoungeRaided", "_walfordQuestStartedToday", "_warbearBankUsed", "_warbearBreakfastMachineUsed", "_warbearGyrocopterUsed", "_warbearSodaMachineUsed", "_wildfireBarrelHarvested", "_witchessBuff", "_workshedItemUsed", "_zombieClover", "_preventScurvy", "lockedItem4637", "lockedItem4638", "lockedItem4639", "lockedItem4646", "lockedItem4647", "unknownRecipe3542", "unknownRecipe3543", "unknownRecipe3544", "unknownRecipe3545", "unknownRecipe3546", "unknownRecipe3547", "unknownRecipe3548", "unknownRecipe3749", "unknownRecipe3751", "unknownRecipe4172", "unknownRecipe4173", "unknownRecipe4174", "unknownRecipe5060", "unknownRecipe5061", "unknownRecipe5062", "unknownRecipe5063", "unknownRecipe5064", "unknownRecipe5066", "unknownRecipe5067", "unknownRecipe5069", "unknownRecipe5070", "unknownRecipe5072", "unknownRecipe5073", "unknownRecipe5670", "unknownRecipe5671", "unknownRecipe6501", "unknownRecipe6564", "unknownRecipe6565", "unknownRecipe6566", "unknownRecipe6567", "unknownRecipe6568", "unknownRecipe6569", "unknownRecipe6570", "unknownRecipe6571", "unknownRecipe6572", "unknownRecipe6573", "unknownRecipe6574", "unknownRecipe6575", "unknownRecipe6576", "unknownRecipe6577", "unknownRecipe6578", "unknownRecipe7752", "unknownRecipe7753", "unknownRecipe7754", "unknownRecipe7755", "unknownRecipe7756", "unknownRecipe7757", "unknownRecipe7758", "unknownRecipe10970", "unknownRecipe10971", "unknownRecipe10972", "unknownRecipe10973", "unknownRecipe10974", "unknownRecipe10975", "unknownRecipe10976", "unknownRecipe10977", "unknownRecipe10978", "unknownRecipe10988", "unknownRecipe10989", "unknownRecipe10990", "unknownRecipe10991", "unknownRecipe10992", "unknownRecipe11000"];
-var numericProperties = ["coinMasterIndex", "dailyDeedsVersion", "defaultDropdown1", "defaultDropdown2", "defaultDropdownSplit", "defaultLimit", "fixedThreadPoolSize", "itemManagerIndex", "lastBuffRequestType", "lastGlobalCounterDay", "lastImageCacheClear", "pingDefaultTestPings", "pingLoginCount", "pingLoginGoal", "pingLoginThreshold", "pingTestPings", "previousUpdateRevision", "relayDelayForSVN", "relaySkillButtonCount", "scriptButtonPosition", "statusDropdown", "svnThreadPoolSize", "toolbarPosition", "_beachTides", "_g9Effect", "8BitBonusTurns", "8BitScore", "addingScrolls", "affirmationCookiesEaten", "aminoAcidsUsed", "antagonisticSnowmanKitCost", "ascensionsToday", "asolDeferredPoints", "asolPointsPigSkinner", "asolPointsCheeseWizard", "asolPointsJazzAgent", "autoAbortThreshold", "autoAntidote", "autoBuyPriceLimit", "autumnatonQuestTurn", "availableCandyCredits", "availableDimes", "availableFunPoints", "availableMrStore2002Credits", "availableQuarters", "availableStoreCredits", "availableSwagger", "averageSwagger", "awolMedicine", "awolPointsBeanslinger", "awolPointsCowpuncher", "awolPointsSnakeoiler", "awolDeferredPointsBeanslinger", "awolDeferredPointsCowpuncher", "awolDeferredPointsSnakeoiler", "awolVenom", "bagOTricksCharges", "ballpitBonus", "bankedKarma", "bartenderTurnsUsed", "basementMallPrices", "basementSafetyMargin", "batmanFundsAvailable", "batmanBonusInitialFunds", "batmanTimeLeft", "bearSwagger", "beeCounter", "beGregariousCharges", "beGregariousFightsLeft", "birdformCold", "birdformHot", "birdformRoc", "birdformSleaze", "birdformSpooky", "birdformStench", "blackBartsBootyCost", "blackPuddingsDefeated", "blackForestProgress", "blankOutUsed", "bloodweiserDrunk", "bondPoints", "bondVillainsDefeated", "boneAbacusVictories", "booPeakProgress", "borisPoints", "breakableHandling", "breakableHandling1964", "breakableHandling9691", "breakableHandling9692", "breakableHandling9699", "breathitinCharges", "brodenBacteria", "brodenSprinkles", "buffBotMessageDisposal", "buffBotPhilanthropyType", "buffJimmyIngredients", "burnoutsDefeated", "burrowgrubSummonsRemaining", "camelSpit", "camerasUsed", "campAwayDecoration", "candyWitchTurnsUsed", "candyWitchCandyTotal", "carboLoading", "catBurglarBankHeists", "cellarLayout", "charitableDonations", "chasmBridgeProgress", "chefTurnsUsed", "chessboardsCleared", "chibiAlignment", "chibiBirthday", "chibiFitness", "chibiIntelligence", "chibiLastVisit", "chibiSocialization", "chilledToTheBone", "cinchoSaltAndLime", "cinderellaMinutesToMidnight", "cinderellaScore", "cocktailSummons", "commerceGhostCombats", "controlPanelOmega", "cornucopiasOpened", "cosmicBowlingBallReturnCombats", "cozyCounter6332", "cozyCounter6333", "cozyCounter6334", "craftingClay", "craftingLeather", "craftingStraw", "crimbo16BeardChakraCleanliness", "crimbo16BootsChakraCleanliness", "crimbo16BungChakraCleanliness", "crimbo16CrimboHatChakraCleanliness", "crimbo16GutsChakraCleanliness", "crimbo16HatChakraCleanliness", "crimbo16JellyChakraCleanliness", "crimbo16LiverChakraCleanliness", "crimbo16NippleChakraCleanliness", "crimbo16NoseChakraCleanliness", "crimbo16ReindeerChakraCleanliness", "crimbo16SackChakraCleanliness", "crimboTrainingSkill", "crimboTreeDays", "cubelingProgress", "currentExtremity", "currentHedgeMazeRoom", "currentMojoFilters", "currentNunneryMeat", "currentPortalEnergy", "currentReplicaStoreYear", "cursedMagnifyingGlassCount", "cyrptAlcoveEvilness", "cyrptCrannyEvilness", "cyrptNicheEvilness", "cyrptNookEvilness", "cyrptTotalEvilness", "darkGyfftePoints", "daycareEquipment", "daycareInstructors", "daycareLastScavenge", "daycareToddlers", "dbNemesisSkill1", "dbNemesisSkill2", "dbNemesisSkill3", "desertExploration", "desktopHeight", "desktopWidth", "dinseyFilthLevel", "dinseyFunProgress", "dinseyNastyBearsDefeated", "dinseySocialJusticeIProgress", "dinseySocialJusticeIIProgress", "dinseyTouristsFed", "dinseyToxicMultiplier", "doctorBagQuestLights", "doctorBagUpgrades", "dreadScroll1", "dreadScroll2", "dreadScroll3", "dreadScroll4", "dreadScroll5", "dreadScroll6", "dreadScroll7", "dreadScroll8", "dripAdventuresSinceAscension", "drippingHallAdventuresSinceAscension", "drippingTreesAdventuresSinceAscension", "drippyBatsUnlocked", "drippyJuice", "drippyOrbsClaimed", "drunkenSwagger", "edDefeatAbort", "edPoints", "eldritchTentaclesFought", "electricKoolAidEaten", "elfGratitude", "encountersUntilDMTChoice", "encountersUntilNEPChoice", "encountersUntilSRChoice", "ensorceleeLevel", "entauntaunedColdRes", "essenceOfAnnoyanceCost", "essenceOfBearCost", "extraRolloverAdventures", "falloutShelterLevel", "familiarSweat", "fingernailsClipped", "fistSkillsKnown", "flyeredML", "fossilB", "fossilD", "fossilN", "fossilP", "fossilS", "fossilW", "fratboysDefeated", "frenchGuardTurtlesFreed", "funGuyMansionKills", "garbageChampagneCharge", "garbageFireProgress", "garbageShirtCharge", "garbageTreeCharge", "garlandUpgrades", "getsYouDrunkTurnsLeft", "ghostPepperTurnsLeft", "gingerDigCount", "gingerLawChoice", "gingerMuscleChoice", "gingerTrainScheduleStudies", "gladiatorBallMovesKnown", "gladiatorBladeMovesKnown", "gladiatorNetMovesKnown", "glitchItemCost", "glitchItemImplementationCount", "glitchItemImplementationLevel", "glitchSwagger", "gloverPoints", "gnasirProgress", "goldenMrAccessories", "gongPath", "gooseDronesRemaining", "goreCollected", "gourdItemCount", "greyYouPoints", "grimoire1Summons", "grimoire2Summons", "grimoire3Summons", "grimstoneCharge", "guardTurtlesFreed", "guideToSafariCost", "guyMadeOfBeesCount", "guzzlrBronzeDeliveries", "guzzlrDeliveryProgress", "guzzlrGoldDeliveries", "guzzlrPlatinumDeliveries", "haciendaLayout", "hallowiener8BitRealm", "hallowienerCoinspiracy", "hareMillisecondsSaved", "hareTurnsUsed", "heavyRainsStartingThunder", "heavyRainsStartingRain", "heavyRainsStartingLightning", "heroDonationBoris", "heroDonationJarlsberg", "heroDonationSneakyPete", "hiddenApartmentProgress", "hiddenBowlingAlleyProgress", "hiddenHospitalProgress", "hiddenOfficeProgress", "hiddenTavernUnlock", "highTopPumped", "hippiesDefeated", "holidayHalsBookCost", "holidaySwagger", "homemadeRobotUpgrades", "homebodylCharges", "hpAutoRecovery", "hpAutoRecoveryTarget", "iceSwagger", "jarlsbergPoints", "jungCharge", "junglePuns", "knownAscensions", "kolhsTotalSchoolSpirited", "lastAnticheeseDay", "lastArcadeAscension", "lastBadMoonReset", "lastBangPotionReset", "lastBattlefieldReset", "lastBeardBuff", "lastBreakfast", "lastCartographyBooPeak", "lastCartographyCastleTop", "lastCartographyDarkNeck", "lastCartographyDefiledNook", "lastCartographyFratHouse", "lastCartographyFratHouseVerge", "lastCartographyGuanoJunction", "lastCartographyHauntedBilliards", "lastCartographyHippyCampVerge", "lastCartographyZeppelinProtesters", "lastCastleGroundUnlock", "lastCastleTopUnlock", "lastCellarReset", "lastChanceThreshold", "lastChasmReset", "lastColosseumRoundWon", "lastCouncilVisit", "lastCounterDay", "lastDesertUnlock", "lastDispensaryOpen", "lastDMTDuplication", "lastDwarfFactoryReset", "lastEVHelmetValue", "lastEVHelmetReset", "lastEmptiedStorage", "lastFilthClearance", "lastGoofballBuy", "lastGuildStoreOpen", "lastGuyMadeOfBeesReset", "lastFratboyCall", "lastFriarCeremonyAscension", "lastFriarsElbowNC", "lastFriarsHeartNC", "lastFriarsNeckNC", "lastHippyCall", "lastIslandUnlock", "lastKeyotronUse", "lastKingLiberation", "lastLightsOutTurn", "lastMushroomPlot", "lastMiningReset", "lastNemesisReset", "lastPaperStripReset", "lastPirateEphemeraReset", "lastPirateInsultReset", "lastPlusSignUnlock", "lastQuartetAscension", "lastQuartetRequest", "lastSecondFloorUnlock", "lastShadowForgeUnlockAdventure", "lastSkateParkReset", "lastStillBeatingSpleen", "lastTavernAscension", "lastTavernSquare", "lastTelescopeReset", "lastTempleAdventures", "lastTempleButtonsUnlock", "lastTempleUnlock", "lastThingWithNoNameDefeated", "lastTowelAscension", "lastTr4pz0rQuest", "lastTrainsetConfiguration", "lastVioletFogMap", "lastVoteMonsterTurn", "lastWartDinseyDefeated", "lastWuTangDefeated", "lastYearbookCameraAscension", "lastZapperWand", "lastZapperWandExplosionDay", "lawOfAveragesCost", "legacyPoints", "libramSummons", "lightsOutAutomation", "louvreDesiredGoal", "louvreGoal", "lovebugsAridDesert", "lovebugsBeachBuck", "lovebugsBooze", "lovebugsChroner", "lovebugsCoinspiracy", "lovebugsCyrpt", "lovebugsFreddy", "lovebugsFunFunds", "lovebugsHoboNickel", "lovebugsItemDrop", "lovebugsMeat", "lovebugsMeatDrop", "lovebugsMoxie", "lovebugsMuscle", "lovebugsMysticality", "lovebugsOilPeak", "lovebugsOrcChasm", "lovebugsPowder", "lovebugsWalmart", "lttQuestDifficulty", "lttQuestStageCount", "manaBurnSummonThreshold", "manaBurningThreshold", "manaBurningTrigger", "manorDrawerCount", "manualOfNumberologyCost", "mapToKokomoCost", "masksUnlocked", "maximizerMRUSize", "maximizerCombinationLimit", "maximizerEquipmentLevel", "maximizerEquipmentScope", "maximizerMaxPrice", "maximizerPriceLevel", "maxManaBurn", "mayflyExperience", "mayoLevel", "meansuckerPrice", "merkinVocabularyMastery", "miniAdvClass", "miniMartinisDrunk", "moleTunnelLevel", "monsterHabitatsFightsLeft", "mothershipProgress", "mpAutoRecovery", "mpAutoRecoveryTarget", "munchiesPillsUsed", "mushroomGardenCropLevel", "nextParanormalActivity", "nextQuantumFamiliarOwnerId", "nextQuantumFamiliarTurn", "noobPoints", "noobDeferredPoints", "noodleSummons", "nsContestants1", "nsContestants2", "nsContestants3", "nuclearAutumnPoints", "numericSwagger", "nunsVisits", "oilPeakProgress", "optimalSwagger", "optimisticCandleProgress", "palindomeDudesDefeated", "parasolUsed", "pendingMapReflections", "pingpongSkill", "pirateSwagger", "plantingDay", "plumberBadgeCost", "plumberCostumeCost", "plumberPoints", "poolSharkCount", "poolSkill", "primaryLabGooIntensity", "prismaticSummons", "procrastinatorLanguageFluency", "promptAboutCrafting", "puzzleChampBonus", "pyramidPosition", "quantumPoints", "reagentSummons", "reanimatorArms", "reanimatorLegs", "reanimatorSkulls", "reanimatorWeirdParts", "reanimatorWings", "recentLocations", "redSnapperProgress", "relayPort", "relocatePygmyJanitor", "relocatePygmyLawyer", "rockinRobinProgress", "ROMOfOptimalityCost", "rumpelstiltskinKidsRescued", "rumpelstiltskinTurnsUsed", "rwbMonsterCount", "safariSwagger", "sausageGrinderUnits", "schoolOfHardKnocksDiplomaCost", "schoolSwagger", "scrapbookCharges", "screechCombats", "scriptMRULength", "seaodesFound", "SeasoningSwagger", "sexChanges", "shenInitiationDay", "shockingLickCharges", "singleFamiliarRun", "skillBurn3", "skillBurn90", "skillBurn153", "skillBurn154", "skillBurn155", "skillBurn1019", "skillBurn5017", "skillBurn6014", "skillBurn6015", "skillBurn6016", "skillBurn6020", "skillBurn6021", "skillBurn6022", "skillBurn6023", "skillBurn6024", "skillBurn6026", "skillBurn6028", "skillBurn7323", "skillBurn14008", "skillBurn14028", "skillBurn14038", "skillBurn15011", "skillBurn15028", "skillBurn17005", "skillBurn22034", "skillBurn22035", "skillBurn23301", "skillBurn23302", "skillBurn23303", "skillBurn23304", "skillBurn23305", "skillBurn23306", "skillLevel46", "skillLevel47", "skillLevel48", "skillLevel117", "skillLevel118", "skillLevel121", "skillLevel128", "skillLevel134", "skillLevel144", "skillLevel180", "skillLevel188", "skillLevel227", "skillLevel7254", "slimelingFullness", "slimelingStacksDropped", "slimelingStacksDue", "smoresEaten", "smutOrcNoncombatProgress", "sneakyPetePoints", "snojoMoxieWins", "snojoMuscleWins", "snojoMysticalityWins", "sourceAgentsDefeated", "sourceEnlightenment", "sourceInterval", "sourcePoints", "sourceTerminalGram", "sourceTerminalPram", "sourceTerminalSpam", "spaceBabyLanguageFluency", "spacePirateLanguageFluency", "spelunkyNextNoncombat", "spelunkySacrifices", "spelunkyWinCount", "spookyPuttyCopiesMade", "spookyVHSTapeMonsterTurn", "statbotUses", "sugarCounter4178", "sugarCounter4179", "sugarCounter4180", "sugarCounter4181", "sugarCounter4182", "sugarCounter4183", "sugarCounter4191", "summonAnnoyanceCost", "sweat", "tacoDanCocktailSauce", "tacoDanFishMeat", "tavernLayout", "telescopeUpgrades", "tempuraSummons", "timeSpinnerMedals", "timesRested", "tomeSummons", "totalCharitableDonations", "trainsetPosition", "turtleBlessingTurns", "twinPeakProgress", "twoCRSPoints", "unicornHornInflation", "universalSeasoningCost", "usable1HWeapons", "usable1xAccs", "usable2HWeapons", "usable3HWeapons", "usableAccessories", "usableHats", "usableOffhands", "usableOther", "usablePants", "usableShirts", "valueOfAdventure", "valueOfInventory", "valueOfStill", "valueOfTome", "vintnerCharge", "vintnerWineLevel", "violetFogGoal", "walfordBucketProgress", "warehouseProgress", "welcomeBackAdv", "whetstonesUsed", "wolfPigsEvicted", "wolfTurnsUsed", "writingDesksDefeated", "xoSkeleltonXProgress", "xoSkeleltonOProgress", "yearbookCameraAscensions", "yearbookCameraUpgrades", "youRobotBody", "youRobotBottom", "youRobotLeft", "youRobotPoints", "youRobotRight", "youRobotTop", "zeppelinProtestors", "zigguratLianas", "zombiePoints", "_absintheDrops", "_abstractionDropsCrown", "_aguaDrops", "_xenomorphCharge", "_ancestralRecallCasts", "_antihangoverBonus", "_astralDrops", "_augSkillsCast", "_autumnatonQuests", "_backUpUses", "_badlyRomanticArrows", "_badgerCharge", "_balefulHowlUses", "_banderRunaways", "_bastilleCheese", "_bastilleGames", "_bastilleGameTurn", "_bastilleLastCheese", "_beanCannonUses", "_bearHugs", "_beerLensDrops", "_bellydancerPickpockets", "_benettonsCasts", "_birdsSoughtToday", "_boomBoxFights", "_boomBoxSongsLeft", "_bootStomps", "_boxingGloveArrows", "_brickoEyeSummons", "_brickoFights", "_campAwayCloudBuffs", "_campAwaySmileBuffs", "_candySummons", "_captainHagnkUsed", "_carnieCandyDrops", "_carrotNoseDrops", "_catBurglarCharge", "_catBurglarHeistsComplete", "_cheerleaderSteam", "_chestXRayUsed", "_chibiAdventures", "_chipBags", "_chocolateCigarsUsed", "_chocolateCoveredPingPongBallsUsed", "_chocolateSculpturesUsed", "_chocolatesUsed", "_chronolithActivations", "_chronolithNextCost", "_cinchUsed", "_cinchoRests", "_circadianRhythmsAdventures", "_clanFortuneConsultUses", "_clipartSummons", "_cloversPurchased", "_coldMedicineConsults", "_coldMedicineEquipmentTaken", "_companionshipCasts", "_cookbookbatCrafting", "_cosmicBowlingSkillsUsed", "_crimbo21ColdResistance", "_dailySpecialPrice", "_daycareGymScavenges", "_daycareRecruits", "_deckCardsDrawn", "_deluxeKlawSummons", "_demandSandwich", "_detectiveCasesCompleted", "_disavowed", "_dnaPotionsMade", "_donhosCasts", "_douseFoeUses", "_dreamJarDrops", "_drunkPygmyBanishes", "_edDefeats", "_edLashCount", "_elronsCasts", "_enamorangs", "_energyCollected", "_expertCornerCutterUsed", "_favorRareSummons", "_feastUsed", "_feelinTheRhythm", "_feelPrideUsed", "_feelExcitementUsed", "_feelHatredUsed", "_feelLonelyUsed", "_feelNervousUsed", "_feelEnvyUsed", "_feelDisappointedUsed", "_feelSuperiorUsed", "_feelLostUsed", "_feelNostalgicUsed", "_feelPeacefulUsed", "_fingertrapArrows", "_fireExtinguisherCharge", "_fragrantHerbsUsed", "_freeBeachWalksUsed", "_frButtonsPressed", "_fudgeWaspFights", "_gapBuffs", "_garbageFireDrops", "_garbageFireDropsCrown", "_genieFightsUsed", "_genieWishesUsed", "_gibbererAdv", "_gibbererCharge", "_gingerbreadCityTurns", "_glarkCableUses", "_glitchMonsterFights", "_gnomeAdv", "_godLobsterFights", "_goldenMoneyCharge", "_gongDrops", "_gothKidCharge", "_gothKidFights", "_greyYouAdventures", "_grimBrotherCharge", "_grimFairyTaleDrops", "_grimFairyTaleDropsCrown", "_grimoireConfiscatorSummons", "_grimoireGeekySummons", "_grimstoneMaskDrops", "_grimstoneMaskDropsCrown", "_grooseCharge", "_grooseDrops", "_grubbyWoolDrops", "_guzzlrDeliveries", "_guzzlrGoldDeliveries", "_guzzlrPlatinumDeliveries", "_hareAdv", "_hareCharge", "_highTopPumps", "_hipsterAdv", "_hoardedCandyDropsCrown", "_hoboUnderlingSummons", "_holoWristDrops", "_holoWristProgress", "_hotAshesDrops", "_hotJellyUses", "_hotTubSoaks", "_humanMuskUses", "_iceballUses", "_inigosCasts", "_jerksHealthMagazinesUsed", "_jiggleCheese", "_jiggleCream", "_jiggleLife", "_jiggleSteak", "_jitbCharge", "_juneCleaverFightsLeft", "_juneCleaverEncounters", "_juneCleaverStench", "_juneCleaverSpooky", "_juneCleaverSleaze", "_juneCleaverHot", "_juneCleaverCold", "_juneCleaverSkips", "_jungDrops", "_kgbClicksUsed", "_kgbDispenserUses", "_kgbTranquilizerDartUses", "_klawSummons", "_kloopCharge", "_kloopDrops", "_kolhsAdventures", "_kolhsSavedByTheBell", "_lastDailyDungeonRoom", "_lastSausageMonsterTurn", "_lastZomboEye", "_latteRefillsUsed", "_leafblowerML", "_legionJackhammerCrafting", "_llamaCharge", "_longConUsed", "_lovebugsBeachBuck", "_lovebugsChroner", "_lovebugsCoinspiracy", "_lovebugsFreddy", "_lovebugsFunFunds", "_lovebugsHoboNickel", "_lovebugsWalmart", "_loveChocolatesUsed", "_lynyrdSnareUses", "_machineTunnelsAdv", "_macrometeoriteUses", "_mafiaThumbRingAdvs", "_mayflowerDrops", "_mayflySummons", "_mediumSiphons", "_meteoriteAdesUsed", "_meteorShowerUses", "_micrometeoriteUses", "_mildEvilPerpetrated", "_miniMartiniDrops", "_monkeyPawWishesUsed", "_monsterHabitatsRecalled", "_monstersMapped", "_mushroomGardenFights", "_nanorhinoCharge", "_navelRunaways", "_neverendingPartyFreeTurns", "_newYouQuestSharpensDone", "_newYouQuestSharpensToDo", "_nextColdMedicineConsult", "_nextQuantumAlignment", "_nightmareFuelCharges", "_noobSkillCount", "_nuclearStockpileUsed", "_oilExtracted", "_olfactionsUsed", "_optimisticCandleDropsCrown", "_oreDropsCrown", "_otoscopeUsed", "_oysterEggsFound", "_pantsgivingBanish", "_pantsgivingCount", "_pantsgivingCrumbs", "_pantsgivingFullness", "_pasteDrops", "_peteJukeboxFixed", "_peteJumpedShark", "_petePeeledOut", "_pieDrops", "_piePartsCount", "_pixieCharge", "_pocketProfessorLectures", "_poisonArrows", "_pokeGrowFertilizerDrops", "_poolGames", "_powderedGoldDrops", "_powderedMadnessUses", "_powerfulGloveBatteryPowerUsed", "_powerPillDrops", "_powerPillUses", "_precisionCasts", "_radlibSummons", "_raindohCopiesMade", "_rapidPrototypingUsed", "_raveStealCount", "_reflexHammerUsed", "_resolutionAdv", "_resolutionRareSummons", "_riftletAdv", "_robinEggDrops", "_roboDrops", "_rogueProgramCharge", "_romanticFightsLeft", "_saberForceMonsterCount", "_saberForceUses", "_saberMod", "_saltGrainsConsumed", "_sandwormCharge", "_saplingsPlanted", "_sausageFights", "_sausagesEaten", "_sausagesMade", "_sealFigurineUses", "_sealScreeches", "_sealsSummoned", "_shadowBricksUsed", "_shadowRiftCombats", "_shatteringPunchUsed", "_shortOrderCookCharge", "_shrubCharge", "_sloppyDinerBeachBucks", "_smilesOfMrA", "_smithsnessSummons", "_snojoFreeFights", "_snojoParts", "_snokebombUsed", "_snowconeSummons", "_snowglobeDrops", "_snowSuitCount", "_sourceTerminalDigitizeMonsterCount", "_sourceTerminalDigitizeUses", "_sourceTerminalDuplicateUses", "_sourceTerminalEnhanceUses", "_sourceTerminalExtrudes", "_sourceTerminalPortscanUses", "_spaceFurDropsCrown", "_spacegatePlanetIndex", "_spacegateTurnsLeft", "_spaceJellyfishDrops", "_speakeasyDrinksDrunk", "_speakeasyFreeFights", "_spelunkerCharges", "_spelunkingTalesDrops", "_spikolodonSpikeUses", "_spookyJellyUses", "_stackLumpsUses", "_steamCardDrops", "_stickerSummons", "_stinkyCheeseCount", "_stressBallSqueezes", "_sugarSummons", "_sweatOutSomeBoozeUsed", "_taffyRareSummons", "_taffyYellowSummons", "_thanksgettingFoodsEaten", "_thingfinderCasts", "_thinknerdPackageDrops", "_thorsPliersCrafting", "_timeHelmetAdv", "_timeSpinnerMinutesUsed", "_tokenDrops", "_transponderDrops", "_turkeyBlastersUsed", "_turkeyBooze", "_turkeyMuscle", "_turkeyMyst", "_turkeyMoxie", "_unaccompaniedMinerUsed", "_unconsciousCollectiveCharge", "_universalSeasoningsUsed", "_universeCalculated", "_universeImploded", "_usedReplicaBatoomerang", "_vampyreCloakeFormUses", "_villainLairProgress", "_vitachocCapsulesUsed", "_vmaskAdv", "_voidFreeFights", "_volcanoItem1", "_volcanoItem2", "_volcanoItem3", "_volcanoItemCount1", "_volcanoItemCount2", "_volcanoItemCount3", "_voteFreeFights", "_VYKEACompanionLevel", "_warbearAutoAnvilCrafting", "_waxGlobDrops", "_whiteRiceDrops", "_witchessFights", "_xoHugsUsed", "_yellowPixelDropsCrown", "_zapCount", "_zombieSmashPocketsUsed"];
-var monsterProperties = ["beGregariousMonster", "cameraMonster", "chateauMonster", "clumsinessGroveBoss", "crappyCameraMonster", "crudeMonster", "enamorangMonster", "envyfishMonster", "glacierOfJerksBoss", "holdHandsMonster", "iceSculptureMonster", "lastCopyableMonster", "longConMonster", "maelstromOfLoversBoss", "makeFriendsMonster", "merkinLockkeyMonster", "monkeyPointMonster", "monsterHabitatsMonster", "motifMonster", "nosyNoseMonster", "olfactedMonster", "photocopyMonster", "rainDohMonster", "romanticTarget", "rufusDesiredEntity", "rwbMonster", "screencappedMonster", "spookyPuttyMonster", "spookyVHSTapeMonster", "stenchCursedMonster", "superficiallyInterestedMonster", "waxMonster", "yearbookCameraTarget", "_gallapagosMonster", "_jiggleCreamedMonster", "_latteMonster", "_nanorhinoBanishedMonster", "_newYouQuestMonster", "_relativityMonster", "_saberForceMonster", "_sourceTerminalDigitizeMonster", "_voteMonster"];
+var numericProperties = ["coinMasterIndex", "dailyDeedsVersion", "defaultDropdown1", "defaultDropdown2", "defaultDropdownSplit", "defaultLimit", "fixedThreadPoolSize", "itemManagerIndex", "lastBuffRequestType", "lastGlobalCounterDay", "lastImageCacheClear", "pingDefaultTestPings", "pingLoginCount", "pingLoginGoal", "pingLoginThreshold", "pingTestPings", "previousUpdateRevision", "relayDelayForSVN", "relaySkillButtonCount", "scriptButtonPosition", "statusDropdown", "svnThreadPoolSize", "toolbarPosition", "_beachTides", "_g9Effect", "8BitBonusTurns", "8BitScore", "addingScrolls", "affirmationCookiesEaten", "aminoAcidsUsed", "antagonisticSnowmanKitCost", "ascensionsToday", "asolDeferredPoints", "asolPointsPigSkinner", "asolPointsCheeseWizard", "asolPointsJazzAgent", "autoAbortThreshold", "autoAntidote", "autoBuyPriceLimit", "autumnatonQuestTurn", "availableCandyCredits", "availableDimes", "availableFunPoints", "availableMrStore2002Credits", "availableQuarters", "availableStoreCredits", "availableSwagger", "averageSwagger", "awolMedicine", "awolPointsBeanslinger", "awolPointsCowpuncher", "awolPointsSnakeoiler", "awolDeferredPointsBeanslinger", "awolDeferredPointsCowpuncher", "awolDeferredPointsSnakeoiler", "awolVenom", "bagOTricksCharges", "ballpitBonus", "bankedKarma", "bartenderTurnsUsed", "basementMallPrices", "basementSafetyMargin", "batmanFundsAvailable", "batmanBonusInitialFunds", "batmanTimeLeft", "bearSwagger", "beeCounter", "beGregariousCharges", "beGregariousFightsLeft", "birdformCold", "birdformHot", "birdformRoc", "birdformSleaze", "birdformSpooky", "birdformStench", "blackBartsBootyCost", "blackPuddingsDefeated", "blackForestProgress", "blankOutUsed", "bloodweiserDrunk", "bondPoints", "bondVillainsDefeated", "boneAbacusVictories", "booPeakProgress", "borisPoints", "breakableHandling", "breakableHandling1964", "breakableHandling9691", "breakableHandling9692", "breakableHandling9699", "breathitinCharges", "brodenBacteria", "brodenSprinkles", "buffBotMessageDisposal", "buffBotPhilanthropyType", "buffJimmyIngredients", "burnoutsDefeated", "burrowgrubSummonsRemaining", "camelSpit", "camerasUsed", "campAwayDecoration", "candyWitchTurnsUsed", "candyWitchCandyTotal", "carboLoading", "catBurglarBankHeists", "cellarLayout", "charitableDonations", "chasmBridgeProgress", "chefTurnsUsed", "chessboardsCleared", "chibiAlignment", "chibiBirthday", "chibiFitness", "chibiIntelligence", "chibiLastVisit", "chibiSocialization", "chilledToTheBone", "cinchoSaltAndLime", "cinderellaMinutesToMidnight", "cinderellaScore", "cocktailSummons", "commerceGhostCombats", "controlPanelOmega", "cornucopiasOpened", "cosmicBowlingBallReturnCombats", "cozyCounter6332", "cozyCounter6333", "cozyCounter6334", "craftingClay", "craftingLeather", "craftingStraw", "crimbo16BeardChakraCleanliness", "crimbo16BootsChakraCleanliness", "crimbo16BungChakraCleanliness", "crimbo16CrimboHatChakraCleanliness", "crimbo16GutsChakraCleanliness", "crimbo16HatChakraCleanliness", "crimbo16JellyChakraCleanliness", "crimbo16LiverChakraCleanliness", "crimbo16NippleChakraCleanliness", "crimbo16NoseChakraCleanliness", "crimbo16ReindeerChakraCleanliness", "crimbo16SackChakraCleanliness", "crimboTrainingSkill", "crimboTreeDays", "cubelingProgress", "currentExtremity", "currentHedgeMazeRoom", "currentMojoFilters", "currentNunneryMeat", "currentPortalEnergy", "currentReplicaStoreYear", "cursedMagnifyingGlassCount", "cyrptAlcoveEvilness", "cyrptCrannyEvilness", "cyrptNicheEvilness", "cyrptNookEvilness", "cyrptTotalEvilness", "darkGyfftePoints", "daycareEquipment", "daycareInstructors", "daycareLastScavenge", "daycareToddlers", "dbNemesisSkill1", "dbNemesisSkill2", "dbNemesisSkill3", "desertExploration", "desktopHeight", "desktopWidth", "dinseyFilthLevel", "dinseyFunProgress", "dinseyNastyBearsDefeated", "dinseySocialJusticeIProgress", "dinseySocialJusticeIIProgress", "dinseyTouristsFed", "dinseyToxicMultiplier", "doctorBagQuestLights", "doctorBagUpgrades", "dreadScroll1", "dreadScroll2", "dreadScroll3", "dreadScroll4", "dreadScroll5", "dreadScroll6", "dreadScroll7", "dreadScroll8", "dripAdventuresSinceAscension", "drippingHallAdventuresSinceAscension", "drippingTreesAdventuresSinceAscension", "drippyBatsUnlocked", "drippyJuice", "drippyOrbsClaimed", "drunkenSwagger", "edDefeatAbort", "edPoints", "eldritchTentaclesFought", "electricKoolAidEaten", "elfGratitude", "encountersUntilDMTChoice", "encountersUntilYachtzeeChoice", "encountersUntilNEPChoice", "encountersUntilSRChoice", "ensorceleeLevel", "entauntaunedColdRes", "essenceOfAnnoyanceCost", "essenceOfBearCost", "extraRolloverAdventures", "falloutShelterLevel", "familiarSweat", "fingernailsClipped", "fistSkillsKnown", "flyeredML", "fossilB", "fossilD", "fossilN", "fossilP", "fossilS", "fossilW", "fratboysDefeated", "frenchGuardTurtlesFreed", "funGuyMansionKills", "garbageChampagneCharge", "garbageFireProgress", "garbageShirtCharge", "garbageTreeCharge", "garlandUpgrades", "getsYouDrunkTurnsLeft", "ghostPepperTurnsLeft", "gingerDigCount", "gingerLawChoice", "gingerMuscleChoice", "gingerTrainScheduleStudies", "gladiatorBallMovesKnown", "gladiatorBladeMovesKnown", "gladiatorNetMovesKnown", "glitchItemCost", "glitchItemImplementationCount", "glitchItemImplementationLevel", "glitchSwagger", "gloverPoints", "gnasirProgress", "goldenMrAccessories", "gongPath", "gooseDronesRemaining", "goreCollected", "gourdItemCount", "greyYouPoints", "grimoire1Summons", "grimoire2Summons", "grimoire3Summons", "grimstoneCharge", "guardTurtlesFreed", "guideToSafariCost", "guyMadeOfBeesCount", "guzzlrBronzeDeliveries", "guzzlrDeliveryProgress", "guzzlrGoldDeliveries", "guzzlrPlatinumDeliveries", "haciendaLayout", "hallowiener8BitRealm", "hallowienerCoinspiracy", "hareMillisecondsSaved", "hareTurnsUsed", "heavyRainsStartingThunder", "heavyRainsStartingRain", "heavyRainsStartingLightning", "heroDonationBoris", "heroDonationJarlsberg", "heroDonationSneakyPete", "hiddenApartmentProgress", "hiddenBowlingAlleyProgress", "hiddenHospitalProgress", "hiddenOfficeProgress", "hiddenTavernUnlock", "highTopPumped", "hippiesDefeated", "holidayHalsBookCost", "holidaySwagger", "homemadeRobotUpgrades", "homebodylCharges", "hpAutoRecovery", "hpAutoRecoveryTarget", "iceSwagger", "jarlsbergPoints", "jungCharge", "junglePuns", "knownAscensions", "kolhsTotalSchoolSpirited", "lastAnticheeseDay", "lastArcadeAscension", "lastBadMoonReset", "lastBangPotionReset", "lastBattlefieldReset", "lastBeardBuff", "lastBreakfast", "lastCartographyBooPeak", "lastCartographyCastleTop", "lastCartographyDarkNeck", "lastCartographyDefiledNook", "lastCartographyFratHouse", "lastCartographyFratHouseVerge", "lastCartographyGuanoJunction", "lastCartographyHauntedBilliards", "lastCartographyHippyCampVerge", "lastCartographyZeppelinProtesters", "lastCastleGroundUnlock", "lastCastleTopUnlock", "lastCellarReset", "lastChanceThreshold", "lastChasmReset", "lastColosseumRoundWon", "lastCouncilVisit", "lastCounterDay", "lastDesertUnlock", "lastDispensaryOpen", "lastDMTDuplication", "lastDwarfFactoryReset", "lastEVHelmetValue", "lastEVHelmetReset", "lastEmptiedStorage", "lastFilthClearance", "lastGoofballBuy", "lastGuildStoreOpen", "lastGuyMadeOfBeesReset", "lastFratboyCall", "lastFriarCeremonyAscension", "lastFriarsElbowNC", "lastFriarsHeartNC", "lastFriarsNeckNC", "lastHippyCall", "lastIslandUnlock", "lastKeyotronUse", "lastKingLiberation", "lastLightsOutTurn", "lastMushroomPlot", "lastMiningReset", "lastNemesisReset", "lastPaperStripReset", "lastPirateEphemeraReset", "lastPirateInsultReset", "lastPlusSignUnlock", "lastQuartetAscension", "lastQuartetRequest", "lastSecondFloorUnlock", "lastShadowForgeUnlockAdventure", "lastSkateParkReset", "lastStillBeatingSpleen", "lastTavernAscension", "lastTavernSquare", "lastTelescopeReset", "lastTempleAdventures", "lastTempleButtonsUnlock", "lastTempleUnlock", "lastThingWithNoNameDefeated", "lastTowelAscension", "lastTr4pz0rQuest", "lastTrainsetConfiguration", "lastVioletFogMap", "lastVoteMonsterTurn", "lastWartDinseyDefeated", "lastWuTangDefeated", "lastYearbookCameraAscension", "lastZapperWand", "lastZapperWandExplosionDay", "lawOfAveragesCost", "legacyPoints", "libramSummons", "lightsOutAutomation", "louvreDesiredGoal", "louvreGoal", "lovebugsAridDesert", "lovebugsBeachBuck", "lovebugsBooze", "lovebugsChroner", "lovebugsCoinspiracy", "lovebugsCyrpt", "lovebugsFreddy", "lovebugsFunFunds", "lovebugsHoboNickel", "lovebugsItemDrop", "lovebugsMeat", "lovebugsMeatDrop", "lovebugsMoxie", "lovebugsMuscle", "lovebugsMysticality", "lovebugsOilPeak", "lovebugsOrcChasm", "lovebugsPowder", "lovebugsWalmart", "lttQuestDifficulty", "lttQuestStageCount", "manaBurnSummonThreshold", "manaBurningThreshold", "manaBurningTrigger", "manorDrawerCount", "manualOfNumberologyCost", "mapToKokomoCost", "masksUnlocked", "maximizerMRUSize", "maximizerCombinationLimit", "maximizerEquipmentLevel", "maximizerEquipmentScope", "maximizerMaxPrice", "maximizerPriceLevel", "maxManaBurn", "mayflyExperience", "mayoLevel", "meansuckerPrice", "merkinVocabularyMastery", "miniAdvClass", "miniMartinisDrunk", "moleTunnelLevel", "mothershipProgress", "mpAutoRecovery", "mpAutoRecoveryTarget", "munchiesPillsUsed", "mushroomGardenCropLevel", "nextParanormalActivity", "nextQuantumFamiliarOwnerId", "nextQuantumFamiliarTurn", "noobPoints", "noobDeferredPoints", "noodleSummons", "nsContestants1", "nsContestants2", "nsContestants3", "nuclearAutumnPoints", "numericSwagger", "nunsVisits", "oilPeakProgress", "optimalSwagger", "optimisticCandleProgress", "palindomeDudesDefeated", "parasolUsed", "pendingMapReflections", "pingpongSkill", "pirateSwagger", "plantingDay", "plumberBadgeCost", "plumberCostumeCost", "plumberPoints", "poolSharkCount", "poolSkill", "primaryLabGooIntensity", "prismaticSummons", "procrastinatorLanguageFluency", "promptAboutCrafting", "puzzleChampBonus", "pyramidPosition", "quantumPoints", "reagentSummons", "reanimatorArms", "reanimatorLegs", "reanimatorSkulls", "reanimatorWeirdParts", "reanimatorWings", "recentLocations", "redSnapperProgress", "relayPort", "relocatePygmyJanitor", "relocatePygmyLawyer", "rockinRobinProgress", "ROMOfOptimalityCost", "rumpelstiltskinKidsRescued", "rumpelstiltskinTurnsUsed", "rwbMonsterCount", "safariSwagger", "sausageGrinderUnits", "schoolOfHardKnocksDiplomaCost", "schoolSwagger", "scrapbookCharges", "screechCombats", "scriptMRULength", "seaodesFound", "SeasoningSwagger", "sexChanges", "shenInitiationDay", "shockingLickCharges", "singleFamiliarRun", "skillBurn3", "skillBurn90", "skillBurn153", "skillBurn154", "skillBurn155", "skillBurn1019", "skillBurn5017", "skillBurn6014", "skillBurn6015", "skillBurn6016", "skillBurn6020", "skillBurn6021", "skillBurn6022", "skillBurn6023", "skillBurn6024", "skillBurn6026", "skillBurn6028", "skillBurn7323", "skillBurn14008", "skillBurn14028", "skillBurn14038", "skillBurn15011", "skillBurn15028", "skillBurn17005", "skillBurn22034", "skillBurn22035", "skillBurn23301", "skillBurn23302", "skillBurn23303", "skillBurn23304", "skillBurn23305", "skillBurn23306", "skillLevel46", "skillLevel47", "skillLevel48", "skillLevel117", "skillLevel118", "skillLevel121", "skillLevel128", "skillLevel134", "skillLevel144", "skillLevel180", "skillLevel188", "skillLevel227", "skillLevel7254", "slimelingFullness", "slimelingStacksDropped", "slimelingStacksDue", "smoresEaten", "smutOrcNoncombatProgress", "sneakyPetePoints", "snojoMoxieWins", "snojoMuscleWins", "snojoMysticalityWins", "sourceAgentsDefeated", "sourceEnlightenment", "sourceInterval", "sourcePoints", "sourceTerminalGram", "sourceTerminalPram", "sourceTerminalSpam", "spaceBabyLanguageFluency", "spacePirateLanguageFluency", "spelunkyNextNoncombat", "spelunkySacrifices", "spelunkyWinCount", "spookyPuttyCopiesMade", "spookyVHSTapeMonsterTurn", "statbotUses", "sugarCounter4178", "sugarCounter4179", "sugarCounter4180", "sugarCounter4181", "sugarCounter4182", "sugarCounter4183", "sugarCounter4191", "summonAnnoyanceCost", "sweat", "tacoDanCocktailSauce", "tacoDanFishMeat", "tavernLayout", "telescopeUpgrades", "tempuraSummons", "timeSpinnerMedals", "timesRested", "tomeSummons", "totalCharitableDonations", "trainsetPosition", "turtleBlessingTurns", "twinPeakProgress", "twoCRSPoints", "unicornHornInflation", "universalSeasoningCost", "usable1HWeapons", "usable1xAccs", "usable2HWeapons", "usable3HWeapons", "usableAccessories", "usableHats", "usableOffhands", "usableOther", "usablePants", "usableShirts", "valueOfAdventure", "valueOfInventory", "valueOfStill", "valueOfTome", "vintnerCharge", "vintnerWineLevel", "violetFogGoal", "walfordBucketProgress", "warehouseProgress", "welcomeBackAdv", "whetstonesUsed", "wolfPigsEvicted", "wolfTurnsUsed", "writingDesksDefeated", "xoSkeleltonXProgress", "xoSkeleltonOProgress", "yearbookCameraAscensions", "yearbookCameraUpgrades", "youRobotBody", "youRobotBottom", "youRobotLeft", "youRobotPoints", "youRobotRight", "youRobotTop", "zeppelinProtestors", "zigguratLianas", "zombiePoints", "_absintheDrops", "_abstractionDropsCrown", "_aguaDrops", "_xenomorphCharge", "_ancestralRecallCasts", "_antihangoverBonus", "_astralDrops", "_augSkillsCast", "_autumnatonQuests", "_backUpUses", "_badlyRomanticArrows", "_badgerCharge", "_balefulHowlUses", "_banderRunaways", "_bastilleCheese", "_bastilleGames", "_bastilleGameTurn", "_bastilleLastCheese", "_beanCannonUses", "_bearHugs", "_beerLensDrops", "_bellydancerPickpockets", "_benettonsCasts", "_birdsSoughtToday", "_boomBoxFights", "_boomBoxSongsLeft", "_bootStomps", "_boxingGloveArrows", "_brickoEyeSummons", "_brickoFights", "_campAwayCloudBuffs", "_campAwaySmileBuffs", "_candySummons", "_captainHagnkUsed", "_carnieCandyDrops", "_carrotNoseDrops", "_catBurglarCharge", "_catBurglarHeistsComplete", "_cheerleaderSteam", "_chestXRayUsed", "_chibiAdventures", "_chipBags", "_chocolateCigarsUsed", "_chocolateCoveredPingPongBallsUsed", "_chocolateSculpturesUsed", "_chocolatesUsed", "_chronolithActivations", "_chronolithNextCost", "_cinchUsed", "_cinchoRests", "_circadianRhythmsAdventures", "_clanFortuneConsultUses", "_clipartSummons", "_cloversPurchased", "_coldMedicineConsults", "_coldMedicineEquipmentTaken", "_companionshipCasts", "_cookbookbatCrafting", "_cosmicBowlingSkillsUsed", "_crimbo21ColdResistance", "_dailySpecialPrice", "_daycareGymScavenges", "_daycareRecruits", "_deckCardsDrawn", "_deluxeKlawSummons", "_demandSandwich", "_detectiveCasesCompleted", "_disavowed", "_dnaPotionsMade", "_donhosCasts", "_douseFoeUses", "_dreamJarDrops", "_drunkPygmyBanishes", "_edDefeats", "_edLashCount", "_elronsCasts", "_enamorangs", "_energyCollected", "_expertCornerCutterUsed", "_favorRareSummons", "_feastUsed", "_feelinTheRhythm", "_feelPrideUsed", "_feelExcitementUsed", "_feelHatredUsed", "_feelLonelyUsed", "_feelNervousUsed", "_feelEnvyUsed", "_feelDisappointedUsed", "_feelSuperiorUsed", "_feelLostUsed", "_feelNostalgicUsed", "_feelPeacefulUsed", "_fingertrapArrows", "_fireExtinguisherCharge", "_fragrantHerbsUsed", "_freeBeachWalksUsed", "_frButtonsPressed", "_fudgeWaspFights", "_gapBuffs", "_garbageFireDrops", "_garbageFireDropsCrown", "_genieFightsUsed", "_genieWishesUsed", "_gibbererAdv", "_gibbererCharge", "_gingerbreadCityTurns", "_glarkCableUses", "_glitchMonsterFights", "_gnomeAdv", "_godLobsterFights", "_goldenMoneyCharge", "_gongDrops", "_gothKidCharge", "_gothKidFights", "_greyYouAdventures", "_grimBrotherCharge", "_grimFairyTaleDrops", "_grimFairyTaleDropsCrown", "_grimoireConfiscatorSummons", "_grimoireGeekySummons", "_grimstoneMaskDrops", "_grimstoneMaskDropsCrown", "_grooseCharge", "_grooseDrops", "_grubbyWoolDrops", "_guzzlrDeliveries", "_guzzlrGoldDeliveries", "_guzzlrPlatinumDeliveries", "_hareAdv", "_hareCharge", "_highTopPumps", "_hipsterAdv", "_hoardedCandyDropsCrown", "_hoboUnderlingSummons", "_holoWristDrops", "_holoWristProgress", "_hotAshesDrops", "_hotJellyUses", "_hotTubSoaks", "_humanMuskUses", "_iceballUses", "_inigosCasts", "_jerksHealthMagazinesUsed", "_jiggleCheese", "_jiggleCream", "_jiggleLife", "_jiggleSteak", "_jitbCharge", "_juneCleaverFightsLeft", "_juneCleaverEncounters", "_juneCleaverStench", "_juneCleaverSpooky", "_juneCleaverSleaze", "_juneCleaverHot", "_juneCleaverCold", "_juneCleaverSkips", "_jungDrops", "_kgbClicksUsed", "_kgbDispenserUses", "_kgbTranquilizerDartUses", "_klawSummons", "_kloopCharge", "_kloopDrops", "_kolhsAdventures", "_kolhsSavedByTheBell", "_lastDailyDungeonRoom", "_lastSausageMonsterTurn", "_lastZomboEye", "_latteRefillsUsed", "_leafblowerML", "_legionJackhammerCrafting", "_llamaCharge", "_longConUsed", "_lovebugsBeachBuck", "_lovebugsChroner", "_lovebugsCoinspiracy", "_lovebugsFreddy", "_lovebugsFunFunds", "_lovebugsHoboNickel", "_lovebugsWalmart", "_loveChocolatesUsed", "_lynyrdSnareUses", "_machineTunnelsAdv", "_macrometeoriteUses", "_mafiaThumbRingAdvs", "_mayflowerDrops", "_mayflySummons", "_mediumSiphons", "_meteoriteAdesUsed", "_meteorShowerUses", "_micrometeoriteUses", "_mildEvilPerpetrated", "_miniMartiniDrops", "_monkeyPawWishesUsed", "_monsterHabitatsFightsLeft", "_monsterHabitatsRecalled", "_monstersMapped", "_mushroomGardenFights", "_nanorhinoCharge", "_navelRunaways", "_neverendingPartyFreeTurns", "_newYouQuestSharpensDone", "_newYouQuestSharpensToDo", "_nextColdMedicineConsult", "_nextQuantumAlignment", "_nightmareFuelCharges", "_noobSkillCount", "_nuclearStockpileUsed", "_oilExtracted", "_olfactionsUsed", "_optimisticCandleDropsCrown", "_oreDropsCrown", "_otoscopeUsed", "_oysterEggsFound", "_pantsgivingBanish", "_pantsgivingCount", "_pantsgivingCrumbs", "_pantsgivingFullness", "_pasteDrops", "_peteJukeboxFixed", "_peteJumpedShark", "_petePeeledOut", "_pieDrops", "_piePartsCount", "_pixieCharge", "_pocketProfessorLectures", "_poisonArrows", "_pokeGrowFertilizerDrops", "_poolGames", "_powderedGoldDrops", "_powderedMadnessUses", "_powerfulGloveBatteryPowerUsed", "_powerPillDrops", "_powerPillUses", "_precisionCasts", "_questPartyFairItemsOpened", "_radlibSummons", "_raindohCopiesMade", "_rapidPrototypingUsed", "_raveStealCount", "_reflexHammerUsed", "_resolutionAdv", "_resolutionRareSummons", "_riftletAdv", "_robinEggDrops", "_roboDrops", "_rogueProgramCharge", "_romanticFightsLeft", "_saberForceMonsterCount", "_saberForceUses", "_saberMod", "_saltGrainsConsumed", "_sandwormCharge", "_saplingsPlanted", "_sausageFights", "_sausagesEaten", "_sausagesMade", "_sealFigurineUses", "_sealScreeches", "_sealsSummoned", "_shadowBricksUsed", "_shadowRiftCombats", "_shatteringPunchUsed", "_shortOrderCookCharge", "_shrubCharge", "_sloppyDinerBeachBucks", "_smilesOfMrA", "_smithsnessSummons", "_snojoFreeFights", "_snojoParts", "_snokebombUsed", "_snowconeSummons", "_snowglobeDrops", "_snowSuitCount", "_sourceTerminalDigitizeMonsterCount", "_sourceTerminalDigitizeUses", "_sourceTerminalDuplicateUses", "_sourceTerminalEnhanceUses", "_sourceTerminalExtrudes", "_sourceTerminalPortscanUses", "_spaceFurDropsCrown", "_spacegatePlanetIndex", "_spacegateTurnsLeft", "_spaceJellyfishDrops", "_speakeasyDrinksDrunk", "_speakeasyFreeFights", "_spelunkerCharges", "_spelunkingTalesDrops", "_spikolodonSpikeUses", "_spookyJellyUses", "_stackLumpsUses", "_steamCardDrops", "_stickerSummons", "_stinkyCheeseCount", "_stressBallSqueezes", "_sugarSummons", "_sweatOutSomeBoozeUsed", "_taffyRareSummons", "_taffyYellowSummons", "_thanksgettingFoodsEaten", "_thingfinderCasts", "_thinknerdPackageDrops", "_thorsPliersCrafting", "_timeHelmetAdv", "_timeSpinnerMinutesUsed", "_tokenDrops", "_transponderDrops", "_turkeyBlastersUsed", "_turkeyBooze", "_turkeyMuscle", "_turkeyMyst", "_turkeyMoxie", "_unaccompaniedMinerUsed", "_unconsciousCollectiveCharge", "_universalSeasoningsUsed", "_universeCalculated", "_universeImploded", "_usedReplicaBatoomerang", "_vampyreCloakeFormUses", "_villainLairProgress", "_vitachocCapsulesUsed", "_vmaskAdv", "_voidFreeFights", "_volcanoItem1", "_volcanoItem2", "_volcanoItem3", "_volcanoItemCount1", "_volcanoItemCount2", "_volcanoItemCount3", "_voteFreeFights", "_VYKEACompanionLevel", "_warbearAutoAnvilCrafting", "_waxGlobDrops", "_whiteRiceDrops", "_witchessFights", "_xoHugsUsed", "_yellowPixelDropsCrown", "_zapCount", "_zombieSmashPocketsUsed"];
+var monsterProperties = ["beGregariousMonster", "cameraMonster", "chateauMonster", "clumsinessGroveBoss", "crappyCameraMonster", "crudeMonster", "enamorangMonster", "envyfishMonster", "glacierOfJerksBoss", "holdHandsMonster", "iceSculptureMonster", "lastCopyableMonster", "longConMonster", "maelstromOfLoversBoss", "makeFriendsMonster", "merkinLockkeyMonster", "monkeyPointMonster", "motifMonster", "nosyNoseMonster", "olfactedMonster", "photocopyMonster", "rainDohMonster", "romanticTarget", "rufusDesiredEntity", "rwbMonster", "screencappedMonster", "spookyPuttyMonster", "spookyVHSTapeMonster", "stenchCursedMonster", "superficiallyInterestedMonster", "waxMonster", "yearbookCameraTarget", "_gallapagosMonster", "_jiggleCreamedMonster", "_latteMonster", "_monsterHabitatsMonster", "_nanorhinoBanishedMonster", "_newYouQuestMonster", "_relativityMonster", "_saberForceMonster", "_sourceTerminalDigitizeMonster", "_voteMonster"];
 var locationProperties = ["autumnatonQuestLocation", "currentJunkyardLocation", "doctorBagQuestLocation", "ghostLocation", "guzzlrQuestLocation", "nextSpookyravenElizabethRoom", "nextSpookyravenStephenRoom", "rwbLocation", "sourceOracleTarget", "_floundryBassLocation", "_floundryCarpLocation", "_floundryCodLocation", "_floundryHatchetfishLocation", "_floundryTroutLocation", "_floundryTunaLocation", "_sotParcelLocation"];
 var stringProperties = ["autoLogin", "browserBookmarks", "chatFontSize", "combatHotkey0", "combatHotkey1", "combatHotkey2", "combatHotkey3", "combatHotkey4", "combatHotkey5", "combatHotkey6", "combatHotkey7", "combatHotkey8", "combatHotkey9", "commandLineNamespace", "dailyDeedsOptions", "defaultBorderColor", "displayName", "externalEditor", "getBreakfast", "headerStates", "highlightList", "http.proxyHost", "http.proxyPassword", "http.proxyPort", "http.proxyUser", "https.proxyHost", "https.proxyPassword", "https.proxyPort", "https.proxyUser", "initialDesktop", "initialFrames", "lastRelayUpdate", "lastUserAgent", "lastUsername", "logPreferenceChangeFilter", "loginScript", "loginServerName", "loginWindowLogo", "logoutScript", "pingDefaultTestPage", "pingLatest", "pingLoginAbort", "pingLoginCheck", "pingLoginFail", "pingLongest", "pingShortest", "pingTestPage", "previousNotifyList", "previousUpdateVersion", "saveState", "saveStateActive", "scriptList", "swingLookAndFeel", "userAgent", "8BitColor", "afterAdventureScript", "autoOlfact", "autoPutty", "autumnatonUpgrades", "backupCameraMode", "banishedMonsters", "banishedPhyla", "banishingShoutMonsters", "batmanStats", "batmanZone", "batmanUpgrades", "battleAction", "beachHeadsUnlocked", "beforePVPScript", "betweenBattleScript", "boomBoxSong", "breakfastAlways", "breakfastHardcore", "breakfastSoftcore", "buffBotCasting", "buyScript", "cargoPocketsEmptied", "cargoPocketScraps", "chatbotScript", "chatPlayerScript", "chibiName", "choiceAdventureScript", "chosenTrip", "clanFortuneReply1", "clanFortuneReply2", "clanFortuneReply3", "clanFortuneWord1", "clanFortuneWord2", "clanFortuneWord3", "commerceGhostItem", "counterScript", "copperheadClubHazard", "crimbotChassis", "crimbotArm", "crimbotPropulsion", "crystalBallPredictions", "csServicesPerformed", "currentAstralTrip", "currentDistillateMods", "currentEasyBountyItem", "currentHardBountyItem", "currentHippyStore", "currentJunkyardTool", "currentLlamaForm", "currentMood", "currentPVPSeason", "currentPvpVictories", "currentSpecialBountyItem", "currentSITSkill", "customCombatScript", "cyrusAdjectives", "defaultFlowerLossMessage", "defaultFlowerWinMessage", "demonName1", "demonName2", "demonName3", "demonName4", "demonName5", "demonName6", "demonName7", "demonName8", "demonName9", "demonName10", "demonName11", "demonName12", "demonName13", "dinseyGatorStenchDamage", "dinseyRollercoasterStats", "doctorBagQuestItem", "dolphinItem", "duckAreasCleared", "duckAreasSelected", "edPiece", "enamorangMonsterTurn", "ensorcelee", "EVEDirections", "extraCosmeticModifiers", "familiarScript", "forbiddenStores", "gameProBossSpecialPower", "gooseReprocessed", "grimoireSkillsHardcore", "grimoireSkillsSoftcore", "grimstoneMaskPath", "guzzlrQuestClient", "guzzlrQuestBooze", "guzzlrQuestTier", "harvestGardenHardcore", "harvestGardenSoftcore", "hpAutoRecoveryItems", "invalidBuffMessage", "jickSwordModifier", "juneCleaverQueue", "kingLiberatedScript", "lassoTraining", "lastAdventure", "lastBangPotion819", "lastBangPotion820", "lastBangPotion821", "lastBangPotion822", "lastBangPotion823", "lastBangPotion824", "lastBangPotion825", "lastBangPotion826", "lastBangPotion827", "lastChanceBurn", "lastChessboard", "lastCombatEnvironments", "lastDwarfDiceRolls", "lastDwarfDigitRunes", "lastDwarfEquipmentRunes", "lastDwarfFactoryItem118", "lastDwarfFactoryItem119", "lastDwarfFactoryItem120", "lastDwarfFactoryItem360", "lastDwarfFactoryItem361", "lastDwarfFactoryItem362", "lastDwarfFactoryItem363", "lastDwarfFactoryItem364", "lastDwarfFactoryItem365", "lastDwarfFactoryItem910", "lastDwarfFactoryItem3199", "lastDwarfOfficeItem3208", "lastDwarfOfficeItem3209", "lastDwarfOfficeItem3210", "lastDwarfOfficeItem3211", "lastDwarfOfficeItem3212", "lastDwarfOfficeItem3213", "lastDwarfOfficeItem3214", "lastDwarfOreRunes", "lastDwarfHopper1", "lastDwarfHopper2", "lastDwarfHopper3", "lastDwarfHopper4", "lastEncounter", "lastMacroError", "lastMessageId", "lastPaperStrip3144", "lastPaperStrip4138", "lastPaperStrip4139", "lastPaperStrip4140", "lastPaperStrip4141", "lastPaperStrip4142", "lastPaperStrip4143", "lastPaperStrip4144", "lastPirateEphemera", "lastPorkoBoard", "lastPorkoPayouts", "lastPorkoExpected", "lastSlimeVial3885", "lastSlimeVial3886", "lastSlimeVial3887", "lastSlimeVial3888", "lastSlimeVial3889", "lastSlimeVial3890", "lastSlimeVial3891", "lastSlimeVial3892", "lastSlimeVial3893", "lastSlimeVial3894", "lastSlimeVial3895", "lastSlimeVial3896", "latteIngredients", "latteModifier", "latteUnlocks", "libramSkillsHardcore", "libramSkillsSoftcore", "louvreOverride", "lovePotion", "lttQuestName", "maximizerList", "maximizerMRUList", "mayoInMouth", "mayoMinderSetting", "merkinQuestPath", "mineLayout1", "mineLayout2", "mineLayout3", "mineLayout4", "mineLayout5", "mineLayout6", "mpAutoRecoveryItems", "muffinOnOrder", "nextAdventure", "nextDistillateMods", "nextQuantumFamiliarName", "nextQuantumFamiliarOwner", "nsChallenge2", "nsChallenge3", "nsChallenge4", "nsChallenge5", "nsTowerDoorKeysUsed", "oceanAction", "oceanDestination", "parkaMode", "pastaThrall1", "pastaThrall2", "pastaThrall3", "pastaThrall4", "pastaThrall5", "pastaThrall6", "pastaThrall7", "pastaThrall8", "peteMotorbikeTires", "peteMotorbikeGasTank", "peteMotorbikeHeadlight", "peteMotorbikeCowling", "peteMotorbikeMuffler", "peteMotorbikeSeat", "pieStuffing", "plantingDate", "plantingLength", "plantingScript", "plumberCostumeWorn", "pokefamBoosts", "postAscensionScript", "preAscensionScript", "questClumsinessGrove", "questDoctorBag", "questECoBucket", "questESlAudit", "questESlBacteria", "questESlCheeseburger", "questESlCocktail", "questESlDebt", "questESlFish", "questESlMushStash", "questESlSalt", "questESlSprinkles", "questESpClipper", "questESpEVE", "questESpFakeMedium", "questESpGore", "questESpJunglePun", "questESpOutOfOrder", "questESpSerum", "questESpSmokes", "questEStFishTrash", "questEStGiveMeFuel", "questEStNastyBears", "questEStSocialJusticeI", "questEStSocialJusticeII", "questEStSuperLuber", "questEStWorkWithFood", "questEStZippityDooDah", "questEUNewYou", "questF01Primordial", "questF02Hyboria", "questF03Future", "questF04Elves", "questF05Clancy", "questG01Meatcar", "questG02Whitecastle", "questG03Ego", "questG04Nemesis", "questG05Dark", "questG06Delivery", "questG07Myst", "questG08Moxie", "questG09Muscle", "questGlacierOfJerks", "questGuzzlr", "questI01Scapegoat", "questI02Beat", "questL02Larva", "questL03Rat", "questL04Bat", "questL05Goblin", "questL06Friar", "questL07Cyrptic", "questL08Trapper", "questL09Topping", "questL10Garbage", "questL11Black", "questL11Business", "questL11Curses", "questL11Desert", "questL11Doctor", "questL11MacGuffin", "questL11Manor", "questL11Palindome", "questL11Pyramid", "questL11Ron", "questL11Shen", "questL11Spare", "questL11Worship", "questL12HippyFrat", "questL12War", "questL13Final", "questL13Warehouse", "questLTTQuestByWire", "questM01Untinker", "questM02Artist", "questM03Bugbear", "questM05Toot", "questM06Gourd", "questM07Hammer", "questM08Baker", "questM09Rocks", "questM10Azazel", "questM11Postal", "questM12Pirate", "questM13Escape", "questM14Bounty", "questM15Lol", "questM16Temple", "questM17Babies", "questM18Swamp", "questM19Hippy", "questM20Necklace", "questM21Dance", "questM22Shirt", "questM23Meatsmith", "questM24Doc", "questM25Armorer", "questM26Oracle", "questMaelstromOfLovers", "questPAGhost", "questRufus", "questS01OldGuy", "questS02Monkees", "raveCombo1", "raveCombo2", "raveCombo3", "raveCombo4", "raveCombo5", "raveCombo6", "recoveryScript", "relayCounters", "retroCapeSuperhero", "retroCapeWashingInstructions", "royalty", "rufusDesiredArtifact", "rufusDesiredItems", "rufusQuestTarget", "rufusQuestType", "scriptMRUList", "seahorseName", "shadowLabyrinthGoal", "shadowRiftIngress", "shenQuestItem", "shrubGarland", "shrubGifts", "shrubLights", "shrubTopper", "sideDefeated", "sidequestArenaCompleted", "sidequestFarmCompleted", "sidequestJunkyardCompleted", "sidequestLighthouseCompleted", "sidequestNunsCompleted", "sidequestOrchardCompleted", "skateParkStatus", "snowsuit", "sourceTerminalChips", "sourceTerminalEducate1", "sourceTerminalEducate2", "sourceTerminalEnquiry", "sourceTerminalEducateKnown", "sourceTerminalEnhanceKnown", "sourceTerminalEnquiryKnown", "sourceTerminalExtrudeKnown", "spadingData", "spadingScript", "speakeasyName", "spelunkyStatus", "spelunkyUpgrades", "spookyravenRecipeUsed", "stationaryButton1", "stationaryButton2", "stationaryButton3", "stationaryButton4", "stationaryButton5", "streamCrossDefaultTarget", "sweetSynthesisBlacklist", "telescope1", "telescope2", "telescope3", "telescope4", "telescope5", "testudinalTeachings", "textColors", "thanksMessage", "tomeSkillsHardcore", "tomeSkillsSoftcore", "trackVoteMonster", "trainsetConfiguration", "trapperOre", "umbrellaState", "umdLastObtained", "vintnerWineEffect", "vintnerWineName", "vintnerWineType", "violetFogLayout", "volcanoMaze1", "volcanoMaze2", "volcanoMaze3", "volcanoMaze4", "volcanoMaze5", "walfordBucketItem", "warProgress", "watchedPreferences", "workteaClue", "yourFavoriteBird", "yourFavoriteBirdMods", "youRobotCPUUpgrades", "_bastilleBoosts", "_bastilleChoice1", "_bastilleChoice2", "_bastilleChoice3", "_bastilleCurrentStyles", "_bastilleEnemyCastle", "_bastilleEnemyName", "_bastilleLastBattleResults", "_bastilleLastEncounter", "_bastilleStats", "_beachHeadsUsed", "_beachLayout", "_beachMinutes", "_birdOfTheDay", "_birdOfTheDayMods", "_bittycar", "_campAwaySmileBuffSign", "_citizenZone", "_citizenZoneMods", "_cloudTalkMessage", "_cloudTalkSmoker", "_coatOfPaintModifier", "_dailySpecial", "_deckCardsSeen", "_feastedFamiliars", "_floristPlantsUsed", "_frAreasUnlocked", "_frHoursLeft", "_frMonstersKilled", "_horsery", "_horseryCrazyMox", "_horseryCrazyMus", "_horseryCrazyMys", "_horseryCrazyName", "_horseryCurrentName", "_horseryDarkName", "_horseryNormalName", "_horseryPaleName", "_jickJarAvailable", "_jiggleCheesedMonsters", "_lastCombatStarted", "_lastPirateRealmIsland", "_locketMonstersFought", "_mummeryMods", "_mummeryUses", "_newYouQuestSkill", "_noHatModifier", "_pantogramModifier", "_pottedPowerPlant", "_questESp", "_questPartyFair", "_questPartyFairProgress", "_questPartyFairQuest", "_roboDrinks", "_roninStoragePulls", "_spacegateAnimalLife", "_spacegateCoordinates", "_spacegateGear", "_spacegateHazards", "_spacegateIntelligentLife", "_spacegatePlanetName", "_spacegatePlantLife", "_stolenAccordions", "_tempRelayCounters", "_timeSpinnerFoodAvailable", "_unknownEasyBountyItem", "_unknownHardBountyItem", "_unknownSpecialBountyItem", "_untakenEasyBountyItem", "_untakenHardBountyItem", "_untakenSpecialBountyItem", "_userMods", "_villainLairColor", "_villainLairKey", "_voteLocal1", "_voteLocal2", "_voteLocal3", "_voteLocal4", "_voteMonster1", "_voteMonster2", "_voteModifier", "_VYKEACompanionType", "_VYKEACompanionRune", "_VYKEACompanionName"];
 var numericOrStringProperties = ["statusEngineering", "statusGalley", "statusMedbay", "statusMorgue", "statusNavigation", "statusScienceLab", "statusSonar", "statusSpecialOps", "statusWasteProcessing", "choiceAdventure2", "choiceAdventure3", "choiceAdventure4", "choiceAdventure5", "choiceAdventure6", "choiceAdventure7", "choiceAdventure8", "choiceAdventure9", "choiceAdventure10", "choiceAdventure11", "choiceAdventure12", "choiceAdventure14", "choiceAdventure15", "choiceAdventure16", "choiceAdventure17", "choiceAdventure18", "choiceAdventure19", "choiceAdventure20", "choiceAdventure21", "choiceAdventure22", "choiceAdventure23", "choiceAdventure24", "choiceAdventure25", "choiceAdventure26", "choiceAdventure27", "choiceAdventure28", "choiceAdventure29", "choiceAdventure40", "choiceAdventure41", "choiceAdventure42", "choiceAdventure45", "choiceAdventure46", "choiceAdventure47", "choiceAdventure71", "choiceAdventure72", "choiceAdventure73", "choiceAdventure74", "choiceAdventure75", "choiceAdventure76", "choiceAdventure77", "choiceAdventure86", "choiceAdventure87", "choiceAdventure88", "choiceAdventure89", "choiceAdventure90", "choiceAdventure91", "choiceAdventure105", "choiceAdventure106", "choiceAdventure107", "choiceAdventure108", "choiceAdventure109", "choiceAdventure110", "choiceAdventure111", "choiceAdventure112", "choiceAdventure113", "choiceAdventure114", "choiceAdventure115", "choiceAdventure116", "choiceAdventure117", "choiceAdventure118", "choiceAdventure120", "choiceAdventure123", "choiceAdventure125", "choiceAdventure126", "choiceAdventure127", "choiceAdventure129", "choiceAdventure131", "choiceAdventure132", "choiceAdventure135", "choiceAdventure136", "choiceAdventure137", "choiceAdventure138", "choiceAdventure139", "choiceAdventure140", "choiceAdventure141", "choiceAdventure142", "choiceAdventure143", "choiceAdventure144", "choiceAdventure145", "choiceAdventure146", "choiceAdventure147", "choiceAdventure148", "choiceAdventure149", "choiceAdventure151", "choiceAdventure152", "choiceAdventure153", "choiceAdventure154", "choiceAdventure155", "choiceAdventure156", "choiceAdventure157", "choiceAdventure158", "choiceAdventure159", "choiceAdventure160", "choiceAdventure161", "choiceAdventure162", "choiceAdventure163", "choiceAdventure164", "choiceAdventure165", "choiceAdventure166", "choiceAdventure167", "choiceAdventure168", "choiceAdventure169", "choiceAdventure170", "choiceAdventure171", "choiceAdventure172", "choiceAdventure177", "choiceAdventure178", "choiceAdventure180", "choiceAdventure181", "choiceAdventure182", "choiceAdventure184", "choiceAdventure185", "choiceAdventure186", "choiceAdventure187", "choiceAdventure188", "choiceAdventure189", "choiceAdventure191", "choiceAdventure197", "choiceAdventure198", "choiceAdventure199", "choiceAdventure200", "choiceAdventure201", "choiceAdventure202", "choiceAdventure203", "choiceAdventure204", "choiceAdventure205", "choiceAdventure206", "choiceAdventure207", "choiceAdventure208", "choiceAdventure211", "choiceAdventure212", "choiceAdventure213", "choiceAdventure214", "choiceAdventure215", "choiceAdventure216", "choiceAdventure217", "choiceAdventure218", "choiceAdventure219", "choiceAdventure220", "choiceAdventure221", "choiceAdventure222", "choiceAdventure223", "choiceAdventure224", "choiceAdventure225", "choiceAdventure230", "choiceAdventure272", "choiceAdventure273", "choiceAdventure276", "choiceAdventure277", "choiceAdventure278", "choiceAdventure279", "choiceAdventure280", "choiceAdventure281", "choiceAdventure282", "choiceAdventure283", "choiceAdventure284", "choiceAdventure285", "choiceAdventure286", "choiceAdventure287", "choiceAdventure288", "choiceAdventure289", "choiceAdventure290", "choiceAdventure291", "choiceAdventure292", "choiceAdventure293", "choiceAdventure294", "choiceAdventure295", "choiceAdventure296", "choiceAdventure297", "choiceAdventure298", "choiceAdventure299", "choiceAdventure302", "choiceAdventure303", "choiceAdventure304", "choiceAdventure305", "choiceAdventure306", "choiceAdventure307", "choiceAdventure308", "choiceAdventure309", "choiceAdventure310", "choiceAdventure311", "choiceAdventure317", "choiceAdventure318", "choiceAdventure319", "choiceAdventure320", "choiceAdventure321", "choiceAdventure322", "choiceAdventure326", "choiceAdventure327", "choiceAdventure328", "choiceAdventure329", "choiceAdventure330", "choiceAdventure331", "choiceAdventure332", "choiceAdventure333", "choiceAdventure334", "choiceAdventure335", "choiceAdventure336", "choiceAdventure337", "choiceAdventure338", "choiceAdventure339", "choiceAdventure340", "choiceAdventure341", "choiceAdventure342", "choiceAdventure343", "choiceAdventure344", "choiceAdventure345", "choiceAdventure346", "choiceAdventure347", "choiceAdventure348", "choiceAdventure349", "choiceAdventure350", "choiceAdventure351", "choiceAdventure352", "choiceAdventure353", "choiceAdventure354", "choiceAdventure355", "choiceAdventure356", "choiceAdventure357", "choiceAdventure358", "choiceAdventure360", "choiceAdventure361", "choiceAdventure362", "choiceAdventure363", "choiceAdventure364", "choiceAdventure365", "choiceAdventure366", "choiceAdventure367", "choiceAdventure372", "choiceAdventure376", "choiceAdventure387", "choiceAdventure388", "choiceAdventure389", "choiceAdventure390", "choiceAdventure391", "choiceAdventure392", "choiceAdventure393", "choiceAdventure395", "choiceAdventure396", "choiceAdventure397", "choiceAdventure398", "choiceAdventure399", "choiceAdventure400", "choiceAdventure401", "choiceAdventure402", "choiceAdventure403", "choiceAdventure423", "choiceAdventure424", "choiceAdventure425", "choiceAdventure426", "choiceAdventure427", "choiceAdventure428", "choiceAdventure429", "choiceAdventure430", "choiceAdventure431", "choiceAdventure432", "choiceAdventure433", "choiceAdventure435", "choiceAdventure438", "choiceAdventure439", "choiceAdventure442", "choiceAdventure444", "choiceAdventure445", "choiceAdventure446", "choiceAdventure447", "choiceAdventure448", "choiceAdventure449", "choiceAdventure451", "choiceAdventure452", "choiceAdventure453", "choiceAdventure454", "choiceAdventure455", "choiceAdventure456", "choiceAdventure457", "choiceAdventure458", "choiceAdventure460", "choiceAdventure461", "choiceAdventure462", "choiceAdventure463", "choiceAdventure464", "choiceAdventure465", "choiceAdventure467", "choiceAdventure468", "choiceAdventure469", "choiceAdventure470", "choiceAdventure471", "choiceAdventure472", "choiceAdventure473", "choiceAdventure474", "choiceAdventure475", "choiceAdventure477", "choiceAdventure478", "choiceAdventure480", "choiceAdventure483", "choiceAdventure484", "choiceAdventure485", "choiceAdventure486", "choiceAdventure488", "choiceAdventure489", "choiceAdventure490", "choiceAdventure491", "choiceAdventure496", "choiceAdventure497", "choiceAdventure502", "choiceAdventure503", "choiceAdventure504", "choiceAdventure505", "choiceAdventure506", "choiceAdventure507", "choiceAdventure509", "choiceAdventure510", "choiceAdventure511", "choiceAdventure512", "choiceAdventure513", "choiceAdventure514", "choiceAdventure515", "choiceAdventure517", "choiceAdventure518", "choiceAdventure519", "choiceAdventure521", "choiceAdventure522", "choiceAdventure523", "choiceAdventure527", "choiceAdventure528", "choiceAdventure529", "choiceAdventure530", "choiceAdventure531", "choiceAdventure532", "choiceAdventure533", "choiceAdventure534", "choiceAdventure535", "choiceAdventure536", "choiceAdventure538", "choiceAdventure539", "choiceAdventure542", "choiceAdventure543", "choiceAdventure544", "choiceAdventure546", "choiceAdventure548", "choiceAdventure549", "choiceAdventure550", "choiceAdventure551", "choiceAdventure552", "choiceAdventure553", "choiceAdventure554", "choiceAdventure556", "choiceAdventure557", "choiceAdventure558", "choiceAdventure559", "choiceAdventure560", "choiceAdventure561", "choiceAdventure562", "choiceAdventure563", "choiceAdventure564", "choiceAdventure565", "choiceAdventure566", "choiceAdventure567", "choiceAdventure568", "choiceAdventure569", "choiceAdventure571", "choiceAdventure572", "choiceAdventure573", "choiceAdventure574", "choiceAdventure575", "choiceAdventure576", "choiceAdventure577", "choiceAdventure578", "choiceAdventure579", "choiceAdventure581", "choiceAdventure582", "choiceAdventure583", "choiceAdventure584", "choiceAdventure594", "choiceAdventure595", "choiceAdventure596", "choiceAdventure597", "choiceAdventure598", "choiceAdventure599", "choiceAdventure600", "choiceAdventure603", "choiceAdventure604", "choiceAdventure616", "choiceAdventure634", "choiceAdventure640", "choiceAdventure654", "choiceAdventure655", "choiceAdventure656", "choiceAdventure657", "choiceAdventure658", "choiceAdventure664", "choiceAdventure669", "choiceAdventure670", "choiceAdventure671", "choiceAdventure672", "choiceAdventure673", "choiceAdventure674", "choiceAdventure675", "choiceAdventure676", "choiceAdventure677", "choiceAdventure678", "choiceAdventure679", "choiceAdventure681", "choiceAdventure683", "choiceAdventure684", "choiceAdventure685", "choiceAdventure686", "choiceAdventure687", "choiceAdventure688", "choiceAdventure689", "choiceAdventure690", "choiceAdventure691", "choiceAdventure692", "choiceAdventure693", "choiceAdventure694", "choiceAdventure695", "choiceAdventure696", "choiceAdventure697", "choiceAdventure698", "choiceAdventure700", "choiceAdventure701", "choiceAdventure705", "choiceAdventure706", "choiceAdventure707", "choiceAdventure708", "choiceAdventure709", "choiceAdventure710", "choiceAdventure711", "choiceAdventure712", "choiceAdventure713", "choiceAdventure714", "choiceAdventure715", "choiceAdventure716", "choiceAdventure717", "choiceAdventure721", "choiceAdventure725", "choiceAdventure729", "choiceAdventure733", "choiceAdventure737", "choiceAdventure741", "choiceAdventure745", "choiceAdventure749", "choiceAdventure753", "choiceAdventure771", "choiceAdventure778", "choiceAdventure780", "choiceAdventure781", "choiceAdventure783", "choiceAdventure784", "choiceAdventure785", "choiceAdventure786", "choiceAdventure787", "choiceAdventure788", "choiceAdventure789", "choiceAdventure791", "choiceAdventure793", "choiceAdventure794", "choiceAdventure795", "choiceAdventure796", "choiceAdventure797", "choiceAdventure803", "choiceAdventure805", "choiceAdventure808", "choiceAdventure809", "choiceAdventure813", "choiceAdventure815", "choiceAdventure830", "choiceAdventure832", "choiceAdventure833", "choiceAdventure834", "choiceAdventure835", "choiceAdventure837", "choiceAdventure838", "choiceAdventure839", "choiceAdventure840", "choiceAdventure841", "choiceAdventure842", "choiceAdventure851", "choiceAdventure852", "choiceAdventure853", "choiceAdventure854", "choiceAdventure855", "choiceAdventure856", "choiceAdventure857", "choiceAdventure858", "choiceAdventure866", "choiceAdventure873", "choiceAdventure875", "choiceAdventure876", "choiceAdventure877", "choiceAdventure878", "choiceAdventure879", "choiceAdventure880", "choiceAdventure881", "choiceAdventure882", "choiceAdventure888", "choiceAdventure889", "choiceAdventure918", "choiceAdventure919", "choiceAdventure920", "choiceAdventure921", "choiceAdventure923", "choiceAdventure924", "choiceAdventure925", "choiceAdventure926", "choiceAdventure927", "choiceAdventure928", "choiceAdventure929", "choiceAdventure930", "choiceAdventure931", "choiceAdventure932", "choiceAdventure940", "choiceAdventure941", "choiceAdventure942", "choiceAdventure943", "choiceAdventure944", "choiceAdventure945", "choiceAdventure946", "choiceAdventure950", "choiceAdventure955", "choiceAdventure957", "choiceAdventure958", "choiceAdventure959", "choiceAdventure960", "choiceAdventure961", "choiceAdventure962", "choiceAdventure963", "choiceAdventure964", "choiceAdventure965", "choiceAdventure966", "choiceAdventure970", "choiceAdventure973", "choiceAdventure974", "choiceAdventure975", "choiceAdventure976", "choiceAdventure977", "choiceAdventure979", "choiceAdventure980", "choiceAdventure981", "choiceAdventure982", "choiceAdventure983", "choiceAdventure988", "choiceAdventure989", "choiceAdventure993", "choiceAdventure998", "choiceAdventure1000", "choiceAdventure1003", "choiceAdventure1005", "choiceAdventure1006", "choiceAdventure1007", "choiceAdventure1008", "choiceAdventure1009", "choiceAdventure1010", "choiceAdventure1011", "choiceAdventure1012", "choiceAdventure1013", "choiceAdventure1015", "choiceAdventure1016", "choiceAdventure1017", "choiceAdventure1018", "choiceAdventure1019", "choiceAdventure1020", "choiceAdventure1021", "choiceAdventure1022", "choiceAdventure1023", "choiceAdventure1026", "choiceAdventure1027", "choiceAdventure1028", "choiceAdventure1029", "choiceAdventure1030", "choiceAdventure1031", "choiceAdventure1032", "choiceAdventure1033", "choiceAdventure1034", "choiceAdventure1035", "choiceAdventure1036", "choiceAdventure1037", "choiceAdventure1038", "choiceAdventure1039", "choiceAdventure1040", "choiceAdventure1041", "choiceAdventure1042", "choiceAdventure1044", "choiceAdventure1045", "choiceAdventure1046", "choiceAdventure1048", "choiceAdventure1051", "choiceAdventure1052", "choiceAdventure1053", "choiceAdventure1054", "choiceAdventure1055", "choiceAdventure1056", "choiceAdventure1057", "choiceAdventure1059", "choiceAdventure1060", "choiceAdventure1061", "choiceAdventure1062", "choiceAdventure1065", "choiceAdventure1067", "choiceAdventure1068", "choiceAdventure1069", "choiceAdventure1070", "choiceAdventure1071", "choiceAdventure1073", "choiceAdventure1077", "choiceAdventure1080", "choiceAdventure1081", "choiceAdventure1082", "choiceAdventure1083", "choiceAdventure1084", "choiceAdventure1085", "choiceAdventure1091", "choiceAdventure1094", "choiceAdventure1095", "choiceAdventure1096", "choiceAdventure1097", "choiceAdventure1102", "choiceAdventure1106", "choiceAdventure1107", "choiceAdventure1108", "choiceAdventure1110", "choiceAdventure1114", "choiceAdventure1115", "choiceAdventure1116", "choiceAdventure1118", "choiceAdventure1119", "choiceAdventure1120", "choiceAdventure1121", "choiceAdventure1122", "choiceAdventure1123", "choiceAdventure1171", "choiceAdventure1172", "choiceAdventure1173", "choiceAdventure1174", "choiceAdventure1175", "choiceAdventure1193", "choiceAdventure1195", "choiceAdventure1196", "choiceAdventure1197", "choiceAdventure1198", "choiceAdventure1199", "choiceAdventure1202", "choiceAdventure1203", "choiceAdventure1204", "choiceAdventure1205", "choiceAdventure1206", "choiceAdventure1207", "choiceAdventure1208", "choiceAdventure1209", "choiceAdventure1210", "choiceAdventure1211", "choiceAdventure1212", "choiceAdventure1213", "choiceAdventure1214", "choiceAdventure1215", "choiceAdventure1219", "choiceAdventure1222", "choiceAdventure1223", "choiceAdventure1224", "choiceAdventure1225", "choiceAdventure1226", "choiceAdventure1227", "choiceAdventure1228", "choiceAdventure1229", "choiceAdventure1236", "choiceAdventure1237", "choiceAdventure1238", "choiceAdventure1239", "choiceAdventure1240", "choiceAdventure1241", "choiceAdventure1242", "choiceAdventure1243", "choiceAdventure1244", "choiceAdventure1245", "choiceAdventure1246", "choiceAdventure1247", "choiceAdventure1248", "choiceAdventure1249", "choiceAdventure1250", "choiceAdventure1251", "choiceAdventure1252", "choiceAdventure1253", "choiceAdventure1254", "choiceAdventure1255", "choiceAdventure1256", "choiceAdventure1266", "choiceAdventure1280", "choiceAdventure1281", "choiceAdventure1282", "choiceAdventure1283", "choiceAdventure1284", "choiceAdventure1285", "choiceAdventure1286", "choiceAdventure1287", "choiceAdventure1288", "choiceAdventure1289", "choiceAdventure1290", "choiceAdventure1291", "choiceAdventure1292", "choiceAdventure1293", "choiceAdventure1294", "choiceAdventure1295", "choiceAdventure1296", "choiceAdventure1297", "choiceAdventure1298", "choiceAdventure1299", "choiceAdventure1300", "choiceAdventure1301", "choiceAdventure1302", "choiceAdventure1303", "choiceAdventure1304", "choiceAdventure1305", "choiceAdventure1307", "choiceAdventure1310", "choiceAdventure1312", "choiceAdventure1313", "choiceAdventure1314", "choiceAdventure1315", "choiceAdventure1316", "choiceAdventure1317", "choiceAdventure1318", "choiceAdventure1319", "choiceAdventure1321", "choiceAdventure1322", "choiceAdventure1323", "choiceAdventure1324", "choiceAdventure1325", "choiceAdventure1326", "choiceAdventure1327", "choiceAdventure1328", "choiceAdventure1332", "choiceAdventure1333", "choiceAdventure1335", "choiceAdventure1340", "choiceAdventure1341", "choiceAdventure1345", "choiceAdventure1389", "choiceAdventure1392", "choiceAdventure1397", "choiceAdventure1399", "choiceAdventure1405", "choiceAdventure1411", "choiceAdventure1415", "choiceAdventure1427", "choiceAdventure1428", "choiceAdventure1429", "choiceAdventure1430", "choiceAdventure1431", "choiceAdventure1432", "choiceAdventure1433", "choiceAdventure1434", "choiceAdventure1436", "choiceAdventure1460", "choiceAdventure1461", "choiceAdventure1467", "choiceAdventure1468", "choiceAdventure1469", "choiceAdventure1470", "choiceAdventure1471", "choiceAdventure1472", "choiceAdventure1473", "choiceAdventure1474", "choiceAdventure1475", "choiceAdventure1486", "choiceAdventure1487", "choiceAdventure1488", "choiceAdventure1489", "choiceAdventure1491", "choiceAdventure1494", "choiceAdventure1505"];
@@ -5609,26 +5718,26 @@ function isPhylumProperty(property) {
 }
 
 // node_modules/libram/dist/property.js
-function ownKeys2(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys2(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys2(Object(source), true).forEach(function(key) {
-      _defineProperty3(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys2(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread2(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys2(Object(t), true).forEach(function(r2) {
+      _defineProperty3(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys2(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _classCallCheck3(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -5704,30 +5813,30 @@ function _arrayLikeToArray2(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles(arr) {
@@ -5842,6 +5951,11 @@ var PropertiesManager = /* @__PURE__ */ function() {
     get: function get4() {
       return this.properties;
     }
+    /**
+     * Sets a collection of properties to the given values, storing the old values.
+     *
+     * @param propertiesToSet A Properties object, keyed by property name.
+     */
   }, {
     key: "set",
     value: function set2(propertiesToSet) {
@@ -5853,6 +5967,11 @@ var PropertiesManager = /* @__PURE__ */ function() {
         _set(propertyName, propertyValue);
       }
     }
+    /**
+     * Sets a collection of choice adventure properties to the given values, storing the old values.
+     *
+     * @param choicesToSet An object keyed by choice adventure number.
+     */
   }, {
     key: "setChoices",
     value: function setChoices(choicesToSet) {
@@ -5861,11 +5980,22 @@ var PropertiesManager = /* @__PURE__ */ function() {
         return ["choiceAdventure".concat(choiceNumber), choiceValue];
       })));
     }
+    /**
+     * Sets a single choice adventure property to the given value, storing the old value.
+     *
+     * @param choiceToSet The number of the choice adventure to set the property for.
+     * @param value The value to assign to that choice adventure.
+     */
   }, {
     key: "setChoice",
     value: function setChoice(choiceToSet, value) {
       this.setChoices(_defineProperty3({}, choiceToSet, value));
     }
+    /**
+     * Resets the given properties to their original stored value. Does not delete entries from the manager.
+     *
+     * @param properties Collection of properties to reset.
+     */
   }, {
     key: "reset",
     value: function reset() {
@@ -5880,11 +6010,19 @@ var PropertiesManager = /* @__PURE__ */ function() {
         }
       }
     }
+    /**
+     * Iterates over all stored values, setting each property back to its original stored value. Does not delete entries from the manager.
+     */
   }, {
     key: "resetAll",
     value: function resetAll() {
       setProperties(this.properties);
     }
+    /**
+     * Stops storing the original values of inputted properties.
+     *
+     * @param properties Properties for the manager to forget.
+     */
   }, {
     key: "clear",
     value: function clear() {
@@ -5898,11 +6036,21 @@ var PropertiesManager = /* @__PURE__ */ function() {
         }
       }
     }
+    /**
+     * Clears all properties.
+     */
   }, {
     key: "clearAll",
     value: function clearAll() {
       this.properties = {};
     }
+    /**
+     * Increases a numeric property to the given value if necessary.
+     *
+     * @param property The numeric property we want to potentially raise.
+     * @param value The minimum value we want that property to have.
+     * @returns Whether we needed to change the property.
+     */
   }, {
     key: "setMinimumValue",
     value: function setMinimumValue(property, value) {
@@ -5912,6 +6060,13 @@ var PropertiesManager = /* @__PURE__ */ function() {
       }
       return false;
     }
+    /**
+     * Decrease a numeric property to the given value if necessary.
+     *
+     * @param property The numeric property we want to potentially lower.
+     * @param value The maximum value we want that property to have.
+     * @returns Whether we needed to change the property.
+     */
   }, {
     key: "setMaximumValue",
     value: function setMaximumValue(property, value) {
@@ -5921,6 +6076,11 @@ var PropertiesManager = /* @__PURE__ */ function() {
       }
       return false;
     }
+    /**
+     * Creates a new PropertiesManager with identical stored values to this one.
+     *
+     * @returns A new PropertiesManager, with identical stored values to this one.
+     */
   }, {
     key: "clone",
     value: function clone() {
@@ -5928,6 +6088,14 @@ var PropertiesManager = /* @__PURE__ */ function() {
       newGuy.properties = this.storedValues;
       return newGuy;
     }
+    /**
+     * Clamps a numeric property, modulating it up or down to fit within a specified range
+     *
+     * @param property The numeric property to clamp
+     * @param min The lower bound for what we want the property to be allowed to be.
+     * @param max The upper bound for what we want the property to be allowed to be.
+     * @returns Whether we ended up changing the property or not.
+     */
   }, {
     key: "clamp",
     value: function clamp2(property, min, max) {
@@ -5938,6 +6106,12 @@ var PropertiesManager = /* @__PURE__ */ function() {
       this.setMaximumValue(property, max);
       return start !== get(property);
     }
+    /**
+     * Determines whether this PropertiesManager has identical stored values to another.
+     *
+     * @param other The PropertiesManager to compare to this one.
+     * @returns Whether their StoredValues are identical.
+     */
   }, {
     key: "equals",
     value: function equals(other) {
@@ -5952,6 +6126,12 @@ var PropertiesManager = /* @__PURE__ */ function() {
       }
       return true;
     }
+    /**
+     * Merges a PropertiesManager onto this one, letting the input win in the event that both PropertiesManagers have a value stored.
+     *
+     * @param other The PropertiesManager to be merged onto this one.
+     * @returns A new PropertiesManager with stored values from both its parents.
+     */
   }, {
     key: "merge",
     value: function merge(other) {
@@ -5959,6 +6139,12 @@ var PropertiesManager = /* @__PURE__ */ function() {
       newGuy.properties = _objectSpread2(_objectSpread2({}, this.properties), other.properties);
       return newGuy;
     }
+    /**
+     * Merges an arbitrary collection of PropertiesManagers, letting the rightmost PropertiesManager win in the event of verlap.
+     *
+     * @param mergees The PropertiesManagers to merge together.
+     * @returns A PropertiesManager that is just an amalgam of all the constituents.
+     */
   }], [{
     key: "merge",
     value: function merge() {
@@ -5992,8 +6178,8 @@ function _createForOfIteratorHelper2(o, allowArrayLike) {
         if (i >= o.length)
           return { done: true };
         return { done: false, value: o[i++] };
-      }, e: function e(_e2) {
-        throw _e2;
+      }, e: function e(_e) {
+        throw _e;
       }, f: F };
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -6005,9 +6191,9 @@ function _createForOfIteratorHelper2(o, allowArrayLike) {
     var step = it.next();
     normalCompletion = step.done;
     return step;
-  }, e: function e(_e3) {
+  }, e: function e(_e2) {
     didErr = true;
-    err = _e3;
+    err = _e2;
   }, f: function f() {
     try {
       if (!normalCompletion && it.return != null)
@@ -6024,30 +6210,30 @@ function _slicedToArray2(arr, i) {
 function _nonIterableRest2() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit2(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit2(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles2(arr) {
@@ -6496,30 +6682,30 @@ function _arrayLikeToArray4(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit3(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit3(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles3(arr) {
@@ -6931,41 +7117,94 @@ var Macro = /* @__PURE__ */ function() {
   }
   _createClass5(Macro2, [{
     key: "toString",
-    value: function toString() {
-      return (this.components.join(";") + ";").replace(/;;+/g, ";");
-    }
+    value: (
+      /**
+       * Convert macro to string.
+       *
+       * @returns BALLS macro
+       */
+      function toString() {
+        return (this.components.join(";") + ";").replace(/;;+/g, ";");
+      }
+    )
+    /**
+     * Gives your macro a new name to be used when saving an autoattack.
+     *
+     * @param name The name to be used when saving as an autoattack.
+     * @returns The macro in question
+     */
   }, {
     key: "rename",
     value: function rename(name) {
       this.name = name;
       return this;
     }
+    /**
+     * Creates a new Macro with a name other than the default name.
+     *
+     * @param name The name to assign this macro.
+     * @returns A new Macro with the assigned name.
+     */
   }, {
     key: "save",
-    value: function save() {
-      _set(Macro2.SAVED_MACRO_PROPERTY, this.toString());
-    }
+    value: (
+      /**
+       * Save a macro to a Mafia property for use in a consult script.
+       */
+      function save() {
+        _set(Macro2.SAVED_MACRO_PROPERTY, this.toString());
+      }
+    )
+    /**
+     * Load a saved macro from the Mafia property.
+     *
+     * @returns Loaded macro text
+     */
   }, {
     key: "step",
-    value: function step() {
-      var _ref, _this$components;
-      for (var _len = arguments.length, nextSteps = new Array(_len), _key = 0; _key < _len; _key++) {
-        nextSteps[_key] = arguments[_key];
+    value: (
+      /**
+       * Statefully add one or several steps to a macro.
+       *
+       * @param nextSteps The steps to add to the macro.
+       * @returns {Macro} This object itself.
+       */
+      function step() {
+        var _ref, _this$components;
+        for (var _len = arguments.length, nextSteps = new Array(_len), _key = 0; _key < _len; _key++) {
+          nextSteps[_key] = arguments[_key];
+        }
+        var nextStepsStrings = (_ref = []).concat.apply(_ref, _toConsumableArray2(nextSteps.map(function(x) {
+          return x instanceof Macro2 ? x.components : [x];
+        })));
+        (_this$components = this.components).push.apply(_this$components, _toConsumableArray2(nextStepsStrings.filter(function(s) {
+          return s.length > 0;
+        })));
+        return this;
       }
-      var nextStepsStrings = (_ref = []).concat.apply(_ref, _toConsumableArray2(nextSteps.map(function(x) {
-        return x instanceof Macro2 ? x.components : [x];
-      })));
-      (_this$components = this.components).push.apply(_this$components, _toConsumableArray2(nextStepsStrings.filter(function(s) {
-        return s.length > 0;
-      })));
-      return this;
-    }
+    )
+    /**
+     * Statefully add one or several steps to a macro.
+     *
+     * @param nextSteps The steps to add to the macro.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "submit",
-    value: function submit() {
-      var final = this.toString();
-      return (0, import_kolmafia6.visitUrl)("fight.php?action=macro&macrotext=".concat((0, import_kolmafia6.urlEncode)(final)), true, true);
-    }
+    value: (
+      /**
+       * Submit the built macro to KoL. Only works inside combat.
+       *
+       * @returns Contents of the fight page after macro submission
+       */
+      function submit() {
+        var final = this.toString();
+        return (0, import_kolmafia6.visitUrl)("fight.php?action=macro&macrotext=".concat((0, import_kolmafia6.urlEncode)(final)), true, true);
+      }
+    )
+    /**
+     * Set this macro as a KoL native autoattack.
+     */
   }, {
     key: "setAutoAttack",
     value: function setAutoAttack5() {
@@ -6981,57 +7220,182 @@ var Macro = /* @__PURE__ */ function() {
       (0, import_kolmafia6.visitUrl)("account.php?am=1&action=autoattack&value=".concat(99e6 + id, "&ajax=1"));
       Macro2.cachedAutoAttacks.set(this.name, this.toString());
     }
+    /**
+     * Renames the macro, then sets it as an autoattack.
+     *
+     * @param name The name to save the macro under as an autoattack.
+     */
   }, {
     key: "setAutoAttackAs",
     value: function setAutoAttackAs(name) {
       this.name = name;
       this.setAutoAttack();
     }
+    /**
+     * Clear all cached autoattacks, and delete all stored macros server-side.
+     */
   }, {
     key: "abort",
-    value: function abort2() {
-      return this.step("abort");
-    }
+    value: (
+      /**
+       * Add an "abort" step to this macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function abort2() {
+        return this.step("abort");
+      }
+    )
+    /**
+     * Create a new macro with an "abort" step.
+     *
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "abortWithWarning",
-    value: function abortWithWarning(warning) {
-      return this.step('abort "'.concat(warning, '"'));
-    }
+    value: (
+      /**
+       * Adds an "abort" step to this macro, with a warning message to print
+       *
+       * @param warning The warning message to print
+       * @returns  {Macro} This object itself.
+       */
+      function abortWithWarning(warning) {
+        return this.step('abort "'.concat(warning, '"'));
+      }
+    )
+    /**
+     * Create a new macro with an "abort" step to this macro, with a warning message to print
+     *
+     * @param warning The warning message to print
+     * @returns  {Macro} This object itself.
+     */
   }, {
     key: "runaway",
-    value: function runaway() {
-      return this.step("runaway");
-    }
+    value: (
+      /**
+       * Add a "runaway" step to this macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function runaway() {
+        return this.step("runaway");
+      }
+    )
+    /**
+     * Create a new macro with an "runaway" step.
+     *
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "if_",
-    value: function if_(condition, ifTrue) {
-      return this.step("if ".concat(Macro2.makeBALLSPredicate(condition))).step(ifTrue).step("endif");
-    }
+    value: (
+      /**
+       * Add an "if" statement to this macro.
+       *
+       * @param condition The BALLS condition for the if statement.
+       * @param ifTrue Continuation if the condition is true.
+       * @returns {Macro} This object itself.
+       */
+      function if_(condition, ifTrue) {
+        return this.step("if ".concat(Macro2.makeBALLSPredicate(condition))).step(ifTrue).step("endif");
+      }
+    )
+    /**
+     * Create a new macro with an "if" statement.
+     *
+     * @param condition The BALLS condition for the if statement.
+     * @param ifTrue Continuation if the condition is true.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "ifNot",
-    value: function ifNot(condition, ifTrue) {
-      return this.step("if !(".concat(Macro2.makeBALLSPredicate(condition), ")")).step(ifTrue).step("endif");
-    }
+    value: (
+      /**
+       * Add an "if" statement to this macro, inverting the condition.
+       *
+       * @param condition The BALLS condition for the if statement.
+       * @param ifTrue Continuation if the condition is true.
+       * @returns {Macro} This object itself.
+       */
+      function ifNot(condition, ifTrue) {
+        return this.step("if !(".concat(Macro2.makeBALLSPredicate(condition), ")")).step(ifTrue).step("endif");
+      }
+    )
+    /**
+     * Create a new macro with an "if" statement, inverting the condition.
+     *
+     * @param condition The BALLS condition for the if statement.
+     * @param ifTrue Continuation if the condition is true.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "while_",
-    value: function while_(condition, contents) {
-      return this.step("while ".concat(condition)).step(contents).step("endwhile");
-    }
+    value: (
+      /**
+       * Add a "while" statement to this macro.
+       *
+       * @param condition The BALLS condition for the if statement.
+       * @param contents Loop to repeat while the condition is true.
+       * @returns {Macro} This object itself.
+       */
+      function while_(condition, contents) {
+        return this.step("while ".concat(condition)).step(contents).step("endwhile");
+      }
+    )
+    /**
+     * Create a new macro with a "while" statement.
+     *
+     * @param condition The BALLS condition for the if statement.
+     * @param contents Loop to repeat while the condition is true.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "externalIf",
-    value: function externalIf(condition, ifTrue, ifFalse) {
-      if (condition)
-        return this.step(ifTrue);
-      else if (ifFalse)
-        return this.step(ifFalse);
-      else
-        return this;
-    }
+    value: (
+      /**
+       * Conditionally add a step to a macro based on a condition evaluated at the time of building the macro.
+       *
+       * @param condition The JS condition.
+       * @param ifTrue Continuation to add if the condition is true.
+       * @param ifFalse Optional input to turn this into an if...else statement.
+       * @returns {Macro} This object itself.
+       */
+      function externalIf(condition, ifTrue, ifFalse) {
+        if (condition)
+          return this.step(ifTrue);
+        else if (ifFalse)
+          return this.step(ifFalse);
+        else
+          return this;
+      }
+    )
+    /**
+     * Create a new macro with a condition evaluated at the time of building the macro.
+     *
+     * @param condition The JS condition.
+     * @param ifTrue Continuation to add if the condition is true.
+     * @param ifFalse Optional input to turn this into an if...else statement.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "repeat",
-    value: function repeat() {
-      return this.step("repeat");
-    }
+    value: (
+      /**
+       * Add a repeat step to the macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function repeat() {
+        return this.step("repeat");
+      }
+    )
+    /**
+     * Add one or more skill cast steps to the macro.
+     *
+     * @param skills Skills to cast.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "skill",
     value: function skill() {
@@ -7042,71 +7406,173 @@ var Macro = /* @__PURE__ */ function() {
         return "skill ".concat(skillBallsMacroName(skill2));
       })));
     }
+    /**
+     * Create a new macro with one or more skill cast steps.
+     *
+     * @param skills Skills to cast.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "trySkill",
-    value: function trySkill() {
-      for (var _len3 = arguments.length, skills = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        skills[_key3] = arguments[_key3];
+    value: (
+      /**
+       * Add one or more skill cast steps to the macro, where each step checks if you have the skill first.
+       *
+       * @param skills Skills to try casting.
+       * @returns {Macro} This object itself.
+       */
+      function trySkill() {
+        for (var _len3 = arguments.length, skills = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+          skills[_key3] = arguments[_key3];
+        }
+        return this.step.apply(this, _toConsumableArray2(skills.map(function(skill) {
+          return Macro2.if_("hasskill ".concat(skillBallsMacroName(skill)), Macro2.skill(skill));
+        })));
       }
-      return this.step.apply(this, _toConsumableArray2(skills.map(function(skill) {
-        return Macro2.if_("hasskill ".concat(skillBallsMacroName(skill)), Macro2.skill(skill));
-      })));
-    }
+    )
+    /**
+     * Create a new macro with one or more skill cast steps, where each step checks if you have the skill first.
+     *
+     * @param skills Skills to try casting.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "trySkillRepeat",
-    value: function trySkillRepeat() {
-      for (var _len4 = arguments.length, skills = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        skills[_key4] = arguments[_key4];
+    value: (
+      /**
+       * Add one or more skill-cast-and-repeat steps to the macro, where each step checks if you have the skill first.
+       *
+       * @param skills Skills to try repeatedly casting.
+       * @returns {Macro} This object itself.
+       */
+      function trySkillRepeat() {
+        for (var _len4 = arguments.length, skills = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+          skills[_key4] = arguments[_key4];
+        }
+        return this.step.apply(this, _toConsumableArray2(skills.map(function(skill) {
+          return Macro2.if_("hasskill ".concat(skillBallsMacroName(skill)), Macro2.skill(skill).repeat());
+        })));
       }
-      return this.step.apply(this, _toConsumableArray2(skills.map(function(skill) {
-        return Macro2.if_("hasskill ".concat(skillBallsMacroName(skill)), Macro2.skill(skill).repeat());
-      })));
-    }
+    )
+    /**
+     * Create a new macro with one or more skill-cast-and-repeat steps, where each step checks if you have the skill first.
+     *
+     * @param skills Skills to try repeatedly casting.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "item",
-    value: function item5() {
-      for (var _len5 = arguments.length, items = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        items[_key5] = arguments[_key5];
+    value: (
+      /**
+       * Add one or more item steps to the macro.
+       *
+       * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+       * @returns {Macro} This object itself.
+       */
+      function item5() {
+        for (var _len5 = arguments.length, items = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+          items[_key5] = arguments[_key5];
+        }
+        return this.step.apply(this, _toConsumableArray2(items.map(function(itemOrItems) {
+          return "use ".concat(itemOrItemsBallsMacroName(itemOrItems));
+        })));
       }
-      return this.step.apply(this, _toConsumableArray2(items.map(function(itemOrItems) {
-        return "use ".concat(itemOrItemsBallsMacroName(itemOrItems));
-      })));
-    }
+    )
+    /**
+     * Create a new macro with one or more item steps.
+     *
+     * @param items Items to use. Pass a tuple [item1, item2] to funksling.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "tryItem",
-    value: function tryItem() {
-      for (var _len6 = arguments.length, items = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-        items[_key6] = arguments[_key6];
+    value: (
+      /**
+       * Add one or more item steps to the macro, where each step checks to see if you have the item first.
+       *
+       * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+       * @returns {Macro} This object itself.
+       */
+      function tryItem() {
+        for (var _len6 = arguments.length, items = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+          items[_key6] = arguments[_key6];
+        }
+        return this.step.apply(this, _toConsumableArray2(items.map(function(item5) {
+          return Macro2.if_(itemOrItemsBallsMacroPredicate(item5), "use ".concat(itemOrItemsBallsMacroName(item5)));
+        })));
       }
-      return this.step.apply(this, _toConsumableArray2(items.map(function(item5) {
-        return Macro2.if_(itemOrItemsBallsMacroPredicate(item5), "use ".concat(itemOrItemsBallsMacroName(item5)));
-      })));
-    }
+    )
+    /**
+     * Create a new macro with one or more item steps, where each step checks to see if you have the item first.
+     *
+     * @param items Items to try using. Pass a tuple [item1, item2] to funksling.
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "attack",
-    value: function attack() {
-      return this.step("attack");
-    }
+    value: (
+      /**
+       * Add an attack step to the macro.
+       *
+       * @returns {Macro} This object itself.
+       */
+      function attack() {
+        return this.step("attack");
+      }
+    )
+    /**
+     * Create a new macro with an attack step.
+     *
+     * @returns {Macro} This object itself.
+     */
   }, {
     key: "ifHolidayWanderer",
-    value: function ifHolidayWanderer(macro) {
-      var todaysWanderers = getTodaysHolidayWanderers();
-      if (todaysWanderers.length === 0)
-        return this;
-      return this.if_(todaysWanderers.map(function(monster) {
-        return "monsterid ".concat(monster.id);
-      }).join(" || "), macro);
-    }
+    value: (
+      /**
+       * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, unmutated.
+       *
+       * @param macro The macro to place in the if_ statement
+       * @returns This macro with supplied macro wapped in if statement matching holiday wanderers
+       */
+      function ifHolidayWanderer(macro) {
+        var todaysWanderers = getTodaysHolidayWanderers();
+        if (todaysWanderers.length === 0)
+          return this;
+        return this.if_(todaysWanderers.map(function(monster) {
+          return "monsterid ".concat(monster.id);
+        }).join(" || "), macro);
+      }
+    )
+    /**
+     * Create a new macro starting with an ifHolidayWanderer step.
+     *
+     * @param macro The macro to place inside the if_ statement
+     * @returns New macro with supplied macro wrapped in if statement matching holiday wanderers
+     */
   }, {
     key: "ifNotHolidayWanderer",
-    value: function ifNotHolidayWanderer(macro) {
-      var todaysWanderers = getTodaysHolidayWanderers();
-      if (todaysWanderers.length === 0)
-        return this.step(macro);
-      return this.if_(todaysWanderers.map(function(monster) {
-        return "!monsterid ".concat(monster.id);
-      }).join(" && "), macro);
-    }
+    value: (
+      /**
+       * Create an if_ statement based on what holiday of loathing it currently is. On non-holidays, returns the original macro, with the input macro appended.
+       *
+       * @param macro The macro to place in the if_ statement.
+       * @returns This macro with supplied macro wrapped in if statement matching monsters that are not holiday wanderers
+       */
+      function ifNotHolidayWanderer(macro) {
+        var todaysWanderers = getTodaysHolidayWanderers();
+        if (todaysWanderers.length === 0)
+          return this.step(macro);
+        return this.if_(todaysWanderers.map(function(monster) {
+          return "!monsterid ".concat(monster.id);
+        }).join(" && "), macro);
+      }
+    )
+    /**
+     * Create a new macro starting with an ifNotHolidayWanderer step.
+     *
+     * @param macro The macro to place inside the if_ statement
+     * @returns New macro with supplied macro wrapped in if statement matching monsters that are not holiday wanderers
+     */
   }], [{
     key: "rename",
     value: function rename(name) {
@@ -7118,6 +7584,9 @@ var Macro = /* @__PURE__ */ function() {
       var _this;
       return (_this = new this()).step.apply(_this, _toConsumableArray2(get(Macro2.SAVED_MACRO_PROPERTY).split(";")));
     }
+    /**
+     * Clear the saved macro in the Mafia property.
+     */
   }, {
     key: "clearSaved",
     value: function clearSaved() {
@@ -7330,30 +7799,30 @@ function _slicedToArray4(arr, i) {
 function _nonIterableRest4() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit4(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit4(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles4(arr) {
@@ -7436,8 +7905,8 @@ function _createForOfIteratorHelper4(o, allowArrayLike) {
         if (i >= o.length)
           return { done: true };
         return { done: false, value: o[i++] };
-      }, e: function e(_e2) {
-        throw _e2;
+      }, e: function e(_e) {
+        throw _e;
       }, f: F };
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -7449,9 +7918,9 @@ function _createForOfIteratorHelper4(o, allowArrayLike) {
     var step = it.next();
     normalCompletion = step.done;
     return step;
-  }, e: function e(_e3) {
+  }, e: function e(_e2) {
     didErr = true;
-    err = _e3;
+    err = _e2;
   }, f: function f() {
     try {
       if (!normalCompletion && it.return != null)
@@ -7468,26 +7937,26 @@ function _taggedTemplateLiteral2(strings, raw) {
   }
   return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
-function ownKeys3(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys3(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread3(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys3(Object(source), true).forEach(function(key) {
-      _defineProperty5(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys3(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread3(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys3(Object(t), true).forEach(function(r2) {
+      _defineProperty5(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys3(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty5(obj, key, value) {
   key = _toPropertyKey6(key);
@@ -8000,6 +8469,11 @@ var Requirement = /* @__PURE__ */ function() {
     get: function get4() {
       return _classPrivateFieldGet(this, _maximizeOptions);
     }
+    /**
+     * Merges two requirements, concanating relevant arrays. Typically used in static form.
+     *
+     * @param other Requirement to merge with.
+     */
   }, {
     key: "merge",
     value: function merge(other) {
@@ -8023,11 +8497,29 @@ var Requirement = /* @__PURE__ */ function() {
         forceUpdate: optionsA.forceUpdate || optionsB.forceUpdate
       });
     }
+    /**
+     * Merges a set of requirements together, starting with an empty requirement.
+     *
+     * @param allRequirements Requirements to merge
+     * @returns Merged requirements
+     */
   }, {
     key: "maximize",
-    value: function maximize2() {
-      return maximizeCached(this.maximizeParameters, this.maximizeOptions);
-    }
+    value: (
+      /**
+       * Runs maximizeCached, using the maximizeParameters and maximizeOptions contained by this requirement.
+       *
+       * @returns Whether the maximize call succeeded.
+       */
+      function maximize2() {
+        return maximizeCached(this.maximizeParameters, this.maximizeOptions);
+      }
+    )
+    /**
+     * Merges requirements, and then runs maximizeCached on the combined requirement.
+     *
+     * @param requirements Requirements to maximize on
+     */
   }], [{
     key: "merge",
     value: function merge(allRequirements) {
@@ -8463,30 +8955,30 @@ function _arrayLikeToArray7(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit5(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit5(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles5(arr) {
@@ -8877,9 +9369,13 @@ function enhance(buff) {
   return (0, import_kolmafia12.cliExecute)("terminal enhance ".concat(buff.name));
 }
 var RolloverBuffs = {
+  /** +5 Familiar Weight */
   Familiar: $effect(_templateObject87 || (_templateObject87 = _taggedTemplateLiteral6(["familiar.enq"]))),
+  /** +25 ML */
   Monsters: $effect(_templateObject94 || (_templateObject94 = _taggedTemplateLiteral6(["monsters.enq"]))),
+  /** +5 Prismatic Resistance */
   Protect: $effect(_templateObject104 || (_templateObject104 = _taggedTemplateLiteral6(["protect.enq"]))),
+  /** +100% Muscle, +100% Mysticality, +100% Moxie */
   Stats: $effect(_templateObject114 || (_templateObject114 = _taggedTemplateLiteral6(["stats.enq"])))
 };
 function enquiry(rolloverBuff) {
@@ -8889,11 +9385,17 @@ function enquiry(rolloverBuff) {
   return (0, import_kolmafia12.cliExecute)("terminal enquiry ".concat(rolloverBuff.name));
 }
 var Skills = {
+  /** Collect Source essence from enemies once per combat */
   Extract: $skill(_templateObject124 || (_templateObject124 = _taggedTemplateLiteral6(["Extract"]))),
+  /** Stagger and create a wandering monster 1-3 times per day */
   Digitize: $skill(_templateObject134 || (_templateObject134 = _taggedTemplateLiteral6(["Digitize"]))),
+  /** Stagger and deal 25% of enemy HP in damage once per combat */
   Compress: $skill(_templateObject144 || (_templateObject144 = _taggedTemplateLiteral6(["Compress"]))),
+  /** Double monster's HP, attack, defence, attacks per round and item drops once per fight and once per day (five in The Source) */
   Duplicate: $skill(_templateObject154 || (_templateObject154 = _taggedTemplateLiteral6(["Duplicate"]))),
+  /** Causes government agent/Source Agent wanderer next turn once per combat and three times per day */
   Portscan: $skill(_templateObject164 || (_templateObject164 = _taggedTemplateLiteral6(["Portscan"]))),
+  /** Increase Max MP by 100% and recover 1000 MP once per combat with a 30 turn cooldown */
   Turbo: $skill(_templateObject174 || (_templateObject174 = _taggedTemplateLiteral6(["Turbo"])))
 };
 function educate(skills) {
@@ -9497,30 +9999,30 @@ function _arrayLikeToArray10(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit6(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit6(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles6(arr) {
@@ -9609,8 +10111,8 @@ function _createForOfIteratorHelper7(o, allowArrayLike) {
         if (i >= o.length)
           return { done: true };
         return { done: false, value: o[i++] };
-      }, e: function e(_e2) {
-        throw _e2;
+      }, e: function e(_e) {
+        throw _e;
       }, f: F };
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -9622,9 +10124,9 @@ function _createForOfIteratorHelper7(o, allowArrayLike) {
     var step = it.next();
     normalCompletion = step.done;
     return step;
-  }, e: function e(_e3) {
+  }, e: function e(_e2) {
     didErr = true;
-    err = _e3;
+    err = _e2;
   }, f: function f() {
     try {
       if (!normalCompletion && it.return != null)
@@ -9819,30 +10321,30 @@ function _arrayLikeToArray11(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit7(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit7(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles7(arr) {
@@ -10125,8 +10627,8 @@ function _createForOfIteratorHelper8(o, allowArrayLike) {
         if (i >= o.length)
           return { done: true };
         return { done: false, value: o[i++] };
-      }, e: function e(_e2) {
-        throw _e2;
+      }, e: function e(_e) {
+        throw _e;
       }, f: F };
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -10138,9 +10640,9 @@ function _createForOfIteratorHelper8(o, allowArrayLike) {
     var step = it.next();
     normalCompletion = step.done;
     return step;
-  }, e: function e(_e3) {
+  }, e: function e(_e2) {
     didErr = true;
-    err = _e3;
+    err = _e2;
   }, f: function f() {
     try {
       if (!normalCompletion && it.return != null)
@@ -10177,30 +10679,30 @@ function _arrayLikeToArray12(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit8(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit8(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles8(arr) {
@@ -10256,52 +10758,52 @@ function _toPrimitive9(input, hint) {
   return (hint === "string" ? String : Number)(input);
 }
 function _wrapRegExp() {
-  _wrapRegExp = function _wrapRegExp2(re, groups) {
-    return new BabelRegExp(re, void 0, groups);
+  _wrapRegExp = function _wrapRegExp2(e2, r2) {
+    return new BabelRegExp(e2, void 0, r2);
   };
-  var _super = RegExp.prototype, _groups = /* @__PURE__ */ new WeakMap();
-  function BabelRegExp(re, flags, groups) {
-    var _this = new RegExp(re, flags);
-    return _groups.set(_this, groups || _groups.get(re)), _setPrototypeOf4(_this, BabelRegExp.prototype);
+  var e = RegExp.prototype, r = /* @__PURE__ */ new WeakMap();
+  function BabelRegExp(e2, t, p) {
+    var o = new RegExp(e2, t);
+    return r.set(o, p || r.get(e2)), _setPrototypeOf4(o, BabelRegExp.prototype);
   }
-  function buildGroups(result, re) {
-    var g = _groups.get(re);
-    return Object.keys(g).reduce(function(groups, name) {
-      var i = g[name];
-      if ("number" == typeof i)
-        groups[name] = result[i];
+  function buildGroups(e2, t) {
+    var p = r.get(t);
+    return Object.keys(p).reduce(function(r2, t2) {
+      var o = p[t2];
+      if ("number" == typeof o)
+        r2[t2] = e2[o];
       else {
-        for (var k = 0; void 0 === result[i[k]] && k + 1 < i.length; )
-          k++;
-        groups[name] = result[i[k]];
+        for (var i = 0; void 0 === e2[o[i]] && i + 1 < o.length; )
+          i++;
+        r2[t2] = e2[o[i]];
       }
-      return groups;
+      return r2;
     }, /* @__PURE__ */ Object.create(null));
   }
-  return _inherits4(BabelRegExp, RegExp), BabelRegExp.prototype.exec = function(str) {
-    var result = _super.exec.call(this, str);
-    if (result) {
-      result.groups = buildGroups(result, this);
-      var indices = result.indices;
-      indices && (indices.groups = buildGroups(indices, this));
+  return _inherits4(BabelRegExp, RegExp), BabelRegExp.prototype.exec = function(r2) {
+    var t = e.exec.call(this, r2);
+    if (t) {
+      t.groups = buildGroups(t, this);
+      var p = t.indices;
+      p && (p.groups = buildGroups(p, this));
     }
-    return result;
-  }, BabelRegExp.prototype[Symbol.replace] = function(str, substitution) {
-    if ("string" == typeof substitution) {
-      var groups = _groups.get(this);
-      return _super[Symbol.replace].call(this, str, substitution.replace(/\$<([^>]+)>/g, function(_, name) {
-        var group = groups[name];
-        return "$" + (Array.isArray(group) ? group.join("$") : group);
+    return t;
+  }, BabelRegExp.prototype[Symbol.replace] = function(t, p) {
+    if ("string" == typeof p) {
+      var o = r.get(this);
+      return e[Symbol.replace].call(this, t, p.replace(/\$<([^>]+)>/g, function(e2, r2) {
+        var t2 = o[r2];
+        return "$" + (Array.isArray(t2) ? t2.join("$") : t2);
       }));
     }
-    if ("function" == typeof substitution) {
-      var _this = this;
-      return _super[Symbol.replace].call(this, str, function() {
-        var args = arguments;
-        return "object" != typeof args[args.length - 1] && (args = [].slice.call(args)).push(buildGroups(args, _this)), substitution.apply(this, args);
+    if ("function" == typeof p) {
+      var i = this;
+      return e[Symbol.replace].call(this, t, function() {
+        var e2 = arguments;
+        return "object" != typeof e2[e2.length - 1] && (e2 = [].slice.call(e2)).push(buildGroups(e2, i)), p.apply(this, e2);
       });
     }
-    return _super[Symbol.replace].call(this, str, substitution);
+    return e[Symbol.replace].call(this, t, p);
   }, _wrapRegExp.apply(this, arguments);
 }
 function _inherits4(subClass, superClass) {
@@ -10346,16 +10848,31 @@ var Clan = /* @__PURE__ */ function() {
         throw new Error("You are no longer a member of this clan");
       }
     }
+    /**
+     * Join clan
+     *
+     * @returns Joined clan
+     */
   }, {
     key: "join",
     value: function join() {
       return Clan2.join(this.id);
     }
+    /**
+     * Check that this clan is the player's current clan
+     *
+     * @returns Whether this is the current clan
+     */
   }, {
     key: "check",
     value: function check() {
       return (0, import_kolmafia20.visitUrl)("clan_hall.php").includes("<b>".concat(this.name, "</b>"));
     }
+    /**
+     * Determine the monster that is currently in the current clan's fax machine if any
+     *
+     * @returns The current fax monster
+     */
   }, {
     key: "getCurrentFax",
     value: function getCurrentFax() {
@@ -10369,6 +10886,11 @@ var Clan = /* @__PURE__ */ function() {
         return null;
       return import_kolmafia20.Monster.get(monsterName);
     }
+    /**
+     * List available ranks (name, degree and id) from the current clan
+     *
+     * @returns List of ranks
+     */
   }, {
     key: "getRanks",
     value: function getRanks() {
@@ -10388,6 +10910,15 @@ var Clan = /* @__PURE__ */ function() {
         };
       }).filter(notNull);
     }
+    /**
+     * Add a player to the current clan's whitelist.
+     * If the player is already in the whitelist this will change their rank or title.
+     *
+     * @param player Player id or name
+     * @param rankName Rank to give the player. If not provided they will be given the lowest rank
+     * @param title Title to give the player. If not provided, will be blank
+     * @returns Success
+     */
   }, {
     key: "addPlayerToWhitelist",
     value: function addPlayerToWhitelist(player, rankName) {
@@ -10405,6 +10936,12 @@ var Clan = /* @__PURE__ */ function() {
       var result = (0, import_kolmafia20.visitUrl)("clan_whitelist.php?action=add&pwd&addwho=".concat(playerId, "&level=").concat(rank.id, "&title=").concat(title));
       return result.includes("added to whitelist.") || result.includes("That player is already on the whitelist");
     }
+    /**
+     * Remove a player from the current clan's whitelist
+     *
+     * @param player Player id or name
+     * @returns Success
+     */
   }, {
     key: "removePlayerFromWhitelist",
     value: function removePlayerFromWhitelist(player) {
@@ -10413,6 +10950,11 @@ var Clan = /* @__PURE__ */ function() {
       var result = (0, import_kolmafia20.visitUrl)("clan_whitelist.php?action=updatewl&pwd&who=".concat(playerId, "&remove=Remove"));
       return result.includes("Whitelist updated.");
     }
+    /**
+     * Return the amount of meat in the current clan's coffer
+     *
+     * @returns Amount of meat
+     */
   }, {
     key: "getMeatInCoffer",
     value: function getMeatInCoffer() {
@@ -10421,6 +10963,12 @@ var Clan = /* @__PURE__ */ function() {
       var _ref = page.match(/Your <b>Clan Coffer<\/b> contains ([\d,]+) Meat./) || ["0", "0"], _ref2 = _slicedToArray8(_ref, 2), meat = _ref2[1];
       return parseNumber(meat);
     }
+    /**
+     * Add the given amount of meat to the current clan's coffer.
+     *
+     * @param amount Amount of meat to put in coffer
+     * @returns Success
+     */
   }, {
     key: "putMeatInCoffer",
     value: function putMeatInCoffer(amount) {
@@ -10444,7 +10992,7 @@ var Clan = /* @__PURE__ */ function() {
           for (_iterator.s(); !(_step = _iterator.n()).done; ) {
             var foldable = _step.value;
             var quantityToFold = Math.min(needed, (0, import_kolmafia20.availableAmount)(foldable));
-            for (var _i3 = 0; _i3 < quantityToFold; _i3++) {
+            for (var _i2 = 0; _i2 < quantityToFold; _i2++) {
               (0, import_kolmafia20.cliExecute)("fold ".concat(item5.name));
               needed--;
             }
@@ -10456,8 +11004,8 @@ var Clan = /* @__PURE__ */ function() {
           _iterator.f();
         }
         (0, import_kolmafia20.refreshStash)();
-        for (var _i2 = 0, _arr2 = [item5].concat(_toConsumableArray4(foldGroup)); _i2 < _arr2.length; _i2++) {
-          var matchingItem = _arr2[_i2];
+        for (var _i = 0, _arr = [item5].concat(_toConsumableArray4(foldGroup)); _i < _arr.length; _i++) {
+          var matchingItem = _arr[_i];
           var quantityToTake = Math.min(needed, (0, import_kolmafia20.stashAmount)(matchingItem));
           if (quantityToTake === 0)
             continue;
@@ -10535,6 +11083,12 @@ var Clan = /* @__PURE__ */ function() {
         }
       }
     }
+    /**
+     * Join a clan
+     *
+     * @param clanIdOrName Clan id or name
+     * @returns Instance of joined clan
+     */
   }, {
     key: "join",
     value: function join(clanIdOrName) {
@@ -10562,6 +11116,13 @@ var Clan = /* @__PURE__ */ function() {
       }
       return Clan2._join(clanId);
     }
+    /**
+     * Execute callback as a member of a clan and then restore prior membership
+     *
+     * @param clanIdOrName Clan id or name
+     * @param callback Actions to carry out while member of specified can
+     * @returns Return value from callback
+     */
   }, {
     key: "with",
     value: function _with(clanIdOrName, callback) {
@@ -10586,11 +11147,21 @@ var Clan = /* @__PURE__ */ function() {
         });
       }, callback);
     }
+    /**
+     * Get the player's current clan
+     *
+     * @returns Player's clan
+     */
   }, {
     key: "get",
     value: function get4() {
       return new Clan2((0, import_kolmafia20.getClanId)(), (0, import_kolmafia20.getClanName)());
     }
+    /**
+     * Get list of clans to which the player is whitelisted
+     *
+     * @returns List of clans
+     */
   }, {
     key: "getWhitelisted",
     value: function getWhitelisted() {
@@ -10615,6 +11186,7 @@ var _templateObject416;
 var _templateObject514;
 var _templateObject613;
 var _templateObject712;
+var _class;
 var _templateObject811;
 var _templateObject98;
 var _templateObject105;
@@ -10662,30 +11234,30 @@ function _arrayLikeToArray13(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit9(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit9(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles9(arr) {
@@ -10778,26 +11350,41 @@ var CommunityService = /* @__PURE__ */ function() {
     get: function get4() {
       return this.choice;
     }
+    /**
+     * @returns The primary stat the test measures, used primarily as memorable shorthand in place of test names.
+     */
   }, {
     key: "statName",
     get: function get4() {
       return this.stat;
     }
+    /**
+     * @returns The name of the test, used primarily as part of the string property "csServicesPerformed"
+     */
   }, {
     key: "name",
     get: function get4() {
       return this.property;
     }
+    /**
+     *  @returns The predicted number of turns this test will take given your character's current state.
+     */
   }, {
     key: "prediction",
     get: function get4() {
       return this.predictor();
     }
+    /**
+     * @returns A Requirement object, if applicable, that aligns with the things needed to maximize for this particular test.
+     */
   }, {
     key: "requirement",
     get: function get4() {
       return this.maximizeRequirements;
     }
+    /**
+     * Start the time & turn counter for the Test in question.
+     */
   }, {
     key: "startTimer",
     value: function startTimer() {
@@ -10809,15 +11396,30 @@ var CommunityService = /* @__PURE__ */ function() {
     }
   }, {
     key: "isDone",
-    value: function isDone() {
-      return get("csServicesPerformed").includes(this.property);
-    }
+    value: (
+      /**
+       * Checks the "csServicesPerformed" property to see whether mafia currently believes this test is complete.
+       *
+       * @returns Whether mafia currently believes this test is complete.
+       */
+      function isDone() {
+        return get("csServicesPerformed").includes(this.property);
+      }
+    )
+    /**
+     * Maximizes based on the Requirement associated with this particular test.
+     */
   }, {
     key: "maximize",
     value: function maximize2() {
       if (this.maximizeRequirements)
         this.maximizeRequirements.maximize();
     }
+    /**
+     * Attempts to turn in the test to the Council of Loathing.
+     *
+     * @returns Whether mafia believes the test is complete at the end of this function.
+     */
   }, {
     key: "do",
     value: function _do() {
@@ -10827,6 +11429,13 @@ var CommunityService = /* @__PURE__ */ function() {
       var councilText = (0, import_kolmafia21.runChoice)(this.choice);
       return this._verifyIsDone(councilText);
     }
+    /**
+     * Wrapper function that prepares for a test and then completes it, adding time and turn details to the log.
+     *
+     * @param prepare A function that does all necessary preparations for this CS test, including choosing your outfit. Optionally returns the number of turns you expect to spend preparing for the test.
+     * @param maxTurns We will run the test iff the predicted/actual turns is less than or equal to this parameter.
+     * @returns "completed", "failed", or "already completed".
+     */
   }, {
     key: "run",
     value: function run(prepare) {
@@ -10869,6 +11478,11 @@ var CommunityService = /* @__PURE__ */ function() {
     value: function _verifyIsDone(councilText) {
       return !councilText.includes("<input type=hidden name=option value=".concat(this.choice, ">"));
     }
+    /**
+     * Checks council.php to verify that a test is complete; more reliable than isDone, but requires an additional pagehit.
+     *
+     * @returns Whether council.php suggests that the test is complete.
+     */
   }, {
     key: "verifyIsDone",
     value: function verifyIsDone() {
@@ -10880,21 +11494,36 @@ var CommunityService = /* @__PURE__ */ function() {
       var match = councilText.match("<input type=hidden name=option value=".concat(this.id, ">.*?Perform Service \\((\\d+) Adventures\\)"));
       return match ? parseInt(match[1]) : 0;
     }
+    /**
+     * Checks council.php for the number of turns this test will take; more reliable than prediction, but requires an additional pagehit.
+     *
+     * @returns The number of turns to complete this test according to council.php.
+     */
   }, {
     key: "actualCost",
     value: function actualCost() {
       return this._actualCost(visitCouncil());
     }
+    /**
+     * A log of the predicted turns, actual turns, and duration of each CS test performed.
+     */
   }], [{
     key: "startTimer",
-    value: function startTimer(name) {
-      if (!this.taskTimers.has(name)) {
-        this.taskTimers.set(name, {
-          time: Date.now(),
-          turns: (0, import_kolmafia21.myTurncount)()
-        });
+    value: (
+      /**
+       * Start the time & turn counter for the given task
+       *
+       * @param name The name of the task to start the counter of
+       */
+      function startTimer(name) {
+        if (!this.taskTimers.has(name)) {
+          this.taskTimers.set(name, {
+            time: Date.now(),
+            turns: (0, import_kolmafia21.myTurncount)()
+          });
+        }
       }
-    }
+    )
   }, {
     key: "logTask",
     value: function logTask(name, action) {
@@ -10913,59 +11542,68 @@ var CommunityService = /* @__PURE__ */ function() {
     }
   }, {
     key: "printLog",
-    value: function printLog() {
-      var colour = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "blue";
-      var logEntries = Object.entries(CommunityService2.log);
-      for (var _i = 0, _logEntries = logEntries; _i < _logEntries.length; _i++) {
-        var _logEntries$_i = _slicedToArray9(_logEntries[_i], 2), testName = _logEntries$_i[0], testEntry = _logEntries$_i[1];
-        var type = testEntry.type, predictedTurns = testEntry.predictedTurns, turnCost = testEntry.turnCost, seconds = testEntry.seconds;
-        if (type === "test") {
-          (0, import_kolmafia21.print)("We predicted the ".concat(testName, " test would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour);
-          (0, import_kolmafia21.print)("".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour);
-        } else {
-          if (!(predictedTurns === 0 && turnCost === 0)) {
-            (0, import_kolmafia21.print)("We predicted the task ".concat(testName, " would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour);
+    value: (
+      /**
+       * Prints turncount and time details of the test in question.
+       *
+       * @param colour The colour (or color) you'd like the log to be printed in.
+       */
+      function printLog() {
+        var colour = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "blue";
+        var logEntries = Object.entries(CommunityService2.log);
+        for (var _i = 0, _logEntries = logEntries; _i < _logEntries.length; _i++) {
+          var _logEntries$_i = _slicedToArray9(_logEntries[_i], 2), testName = _logEntries$_i[0], testEntry = _logEntries$_i[1];
+          var type = testEntry.type, predictedTurns = testEntry.predictedTurns, turnCost = testEntry.turnCost, seconds = testEntry.seconds;
+          if (type === "test") {
+            (0, import_kolmafia21.print)("We predicted the ".concat(testName, " test would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour);
+            (0, import_kolmafia21.print)("".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour);
+          } else {
+            if (!(predictedTurns === 0 && turnCost === 0)) {
+              (0, import_kolmafia21.print)("We predicted the task ".concat(testName, " would take ").concat(predictedTurns, " turns, ").concat(predictedTurns === turnCost ? "and" : "but", " it took ").concat(turnCost, " turns."), colour);
+            }
+            (0, import_kolmafia21.print)("The task ".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour);
           }
-          (0, import_kolmafia21.print)("The task ".concat(testName, " took ").concat(seconds.toFixed(1), " seconds."), colour);
         }
+        var totalTime = sum(logEntries, function(_ref3) {
+          var _ref4 = _slicedToArray9(_ref3, 2), testEntry2 = _ref4[1];
+          return testEntry2.seconds;
+        });
+        (0, import_kolmafia21.print)("All together, you have spent ".concat(totalTime.toFixed(1), " seconds during this Community Service run"), colour);
       }
-      var totalTime = sum(logEntries, function(_ref3) {
-        var _ref4 = _slicedToArray9(_ref3, 2), testEntry2 = _ref4[1];
-        return testEntry2.seconds;
-      });
-      (0, import_kolmafia21.print)("All together, you have spent ".concat(totalTime.toFixed(1), " seconds during this Community Service run"), colour);
-    }
+    )
+    // Below, we have the tests themselves.
   }]);
   return CommunityService2;
 }();
+_class = CommunityService;
 _defineProperty9(CommunityService, "taskTimers", /* @__PURE__ */ new Map());
 _defineProperty9(CommunityService, "log", {});
-_defineProperty9(CommunityService, "HP", new CommunityService(1, "HP", "Donate Blood", function() {
+_defineProperty9(CommunityService, "HP", new _class(1, "HP", "Donate Blood", function() {
   return 60 - Math.floor(((0, import_kolmafia21.myMaxhp)() - (0, import_kolmafia21.myBuffedstat)($stat(_templateObject811 || (_templateObject811 = _taggedTemplateLiteral12(["muscle"])))) - 3) / 30);
 }, new Requirement(["HP"], {})));
-_defineProperty9(CommunityService, "Muscle", new CommunityService(2, "Muscle", "Feed The Children", statCommunityServicePredictor($stat(_templateObject98 || (_templateObject98 = _taggedTemplateLiteral12(["Muscle"])))), new Requirement(["Muscle"], {})));
-_defineProperty9(CommunityService, "Mysticality", new CommunityService(3, "Mysticality", "Build Playground Mazes", statCommunityServicePredictor($stat(_templateObject105 || (_templateObject105 = _taggedTemplateLiteral12(["Mysticality"])))), new Requirement(["Mysticality"], {})));
-_defineProperty9(CommunityService, "Moxie", new CommunityService(4, "Moxie", "Feed Conspirators", statCommunityServicePredictor($stat(_templateObject115 || (_templateObject115 = _taggedTemplateLiteral12(["Moxie"])))), new Requirement(["Moxie"], {})));
-_defineProperty9(CommunityService, "FamiliarWeight", new CommunityService(5, "Familiar Weight", "Breed More Collies", function() {
+_defineProperty9(CommunityService, "Muscle", new _class(2, "Muscle", "Feed The Children", statCommunityServicePredictor($stat(_templateObject98 || (_templateObject98 = _taggedTemplateLiteral12(["Muscle"])))), new Requirement(["Muscle"], {})));
+_defineProperty9(CommunityService, "Mysticality", new _class(3, "Mysticality", "Build Playground Mazes", statCommunityServicePredictor($stat(_templateObject105 || (_templateObject105 = _taggedTemplateLiteral12(["Mysticality"])))), new Requirement(["Mysticality"], {})));
+_defineProperty9(CommunityService, "Moxie", new _class(4, "Moxie", "Feed Conspirators", statCommunityServicePredictor($stat(_templateObject115 || (_templateObject115 = _taggedTemplateLiteral12(["Moxie"])))), new Requirement(["Moxie"], {})));
+_defineProperty9(CommunityService, "FamiliarWeight", new _class(5, "Familiar Weight", "Breed More Collies", function() {
   return 60 - Math.floor((baseWeight() + (0, import_kolmafia21.weightAdjustment)()) / 5);
 }, new Requirement(["Familiar Weight"], {})));
-_defineProperty9(CommunityService, "WeaponDamage", new CommunityService(6, "Weapon Damage", "Reduce Gazelle Population", function() {
+_defineProperty9(CommunityService, "WeaponDamage", new _class(6, "Weapon Damage", "Reduce Gazelle Population", function() {
   var weaponPower = (0, import_kolmafia21.getPower)((0, import_kolmafia21.equippedItem)($slot(_templateObject125 || (_templateObject125 = _taggedTemplateLiteral12(["weapon"])))));
   var offhandPower = (0, import_kolmafia21.toSlot)((0, import_kolmafia21.equippedItem)($slot(_templateObject135 || (_templateObject135 = _taggedTemplateLiteral12(["off-hand"]))))) === $slot(_templateObject145 || (_templateObject145 = _taggedTemplateLiteral12(["weapon"]))) ? (0, import_kolmafia21.getPower)((0, import_kolmafia21.equippedItem)($slot(_templateObject155 || (_templateObject155 = _taggedTemplateLiteral12(["off-hand"]))))) : 0;
   var familiarPower = (0, import_kolmafia21.toSlot)((0, import_kolmafia21.equippedItem)($slot(_templateObject165 || (_templateObject165 = _taggedTemplateLiteral12(["familiar"]))))) === $slot(_templateObject175 || (_templateObject175 = _taggedTemplateLiteral12(["weapon"]))) ? (0, import_kolmafia21.getPower)((0, import_kolmafia21.equippedItem)($slot(_templateObject185 || (_templateObject185 = _taggedTemplateLiteral12(["familiar"]))))) : 0;
   var multiplier = have($effect(_templateObject195 || (_templateObject195 = _taggedTemplateLiteral12(["Bow-Legged Swagger"])))) ? 2 : 1;
   return 60 - Math.floor(multiplier * (get2("Weapon Damage") - 0.15 * (weaponPower + offhandPower + familiarPower)) / 50 + 1e-3) - Math.floor(multiplier * get2("Weapon Damage Percent") / 50 + 1e-3);
 }, new Requirement(["Weapon Damage", "Weapon Damage Percent"], {})));
-_defineProperty9(CommunityService, "SpellDamage", new CommunityService(7, "Spell Damage", "Make Sausage", function() {
+_defineProperty9(CommunityService, "SpellDamage", new _class(7, "Spell Damage", "Make Sausage", function() {
   var dragonfishDamage = (0, import_kolmafia21.myFamiliar)() === $familiar(_templateObject205 || (_templateObject205 = _taggedTemplateLiteral12(["Magic Dragonfish"]))) ? (0, import_kolmafia21.numericModifier)($familiar(_templateObject2110 || (_templateObject2110 = _taggedTemplateLiteral12(["Magic Dragonfish"]))), "Spell Damage Percent", baseWeight() + (0, import_kolmafia21.weightAdjustment)(), $item.none) : 0;
   return 60 - Math.floor(get2("Spell Damage") / 50 + 1e-3) - Math.floor((get2("Spell Damage Percent") - dragonfishDamage) / 50 + 1e-3);
 }, new Requirement(["Spell Damage", "Spell Damage Percent"], {})));
-_defineProperty9(CommunityService, "Noncombat", new CommunityService(8, "Non-Combat", "Be a Living Statue", function() {
+_defineProperty9(CommunityService, "Noncombat", new _class(8, "Non-Combat", "Be a Living Statue", function() {
   var noncombatRate = -1 * get2("Combat Rate");
   var unsoftcappedRate = noncombatRate > 25 ? 25 + (noncombatRate - 25) * 5 : noncombatRate;
   return 60 - 3 * Math.floor(unsoftcappedRate / 5);
 }, new Requirement(["-combat"], {})));
-_defineProperty9(CommunityService, "BoozeDrop", new CommunityService(9, "Item Drop", "Make Margaritas", function() {
+_defineProperty9(CommunityService, "BoozeDrop", new _class(9, "Item Drop", "Make Margaritas", function() {
   var mummingCostume = MummingTrunk_exports.currentCostumes().get((0, import_kolmafia21.myFamiliar)());
   var mummingBuff = mummingCostume && mummingCostume[0] === "Item Drop" ? mummingCostume[1] : 0;
   var familiarItemDrop = (0, import_kolmafia21.numericModifier)((0, import_kolmafia21.myFamiliar)(), "Item Drop", baseWeight() + (0, import_kolmafia21.weightAdjustment)(), (0, import_kolmafia21.equippedItem)($slot(_templateObject225 || (_templateObject225 = _taggedTemplateLiteral12(["familiar"]))))) + mummingBuff - (0, import_kolmafia21.numericModifier)((0, import_kolmafia21.equippedItem)($slot(_templateObject235 || (_templateObject235 = _taggedTemplateLiteral12(["familiar"])))), "Item Drop");
@@ -10975,10 +11613,10 @@ _defineProperty9(CommunityService, "BoozeDrop", new CommunityService(9, "Item Dr
 }, new Requirement(["Item Drop", "2 Booze Drop"], {
   preventEquip: $items(_templateObject275 || (_templateObject275 = _taggedTemplateLiteral12(["broken champagne bottle"])))
 })));
-_defineProperty9(CommunityService, "HotRes", new CommunityService(10, "Hot Resistance", "Clean Steam Tunnels", function() {
+_defineProperty9(CommunityService, "HotRes", new _class(10, "Hot Resistance", "Clean Steam Tunnels", function() {
   return 60 - get2("Hot Resistance");
 }, new Requirement(["Hot Resistance"], {})));
-_defineProperty9(CommunityService, "CoilWire", new CommunityService(11, "Coil Wire", "Coil Wire", function() {
+_defineProperty9(CommunityService, "CoilWire", new _class(11, "Coil Wire", "Coil Wire", function() {
   return 60;
 }, new Requirement([], {})));
 _defineProperty9(CommunityService, "donate", function() {
@@ -11378,6 +12016,17 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return this;
     }
+    /**
+     * Add a macro to perform as an autoattack for this monster. If multiple
+     * macros are given for the same monster, they are concatinated.
+     *
+     * @param macro The macro to perform as autoattack.
+     * @param monsters Which monsters to use the macro on. If not given, add the
+     *  macro as a general macro.
+     * @param prepend If true, add the macro before all previous autoattack
+     *    macros for the same monster. If false, add after all previous macros.
+     * @returns this
+     */
   }, {
     key: "autoattack",
     value: function autoattack(macro, monsters, prepend) {
@@ -11411,6 +12060,13 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return this;
     }
+    /**
+     * Add a macro to perform at the start of combat.
+     * @param macro The macro to perform.
+     * @param prepend If true, add the macro before all previous starting
+     *    macros. If false, add after all previous starting macros.
+     * @returns this
+     */
   }, {
     key: "startingMacro",
     value: function startingMacro(macro, prepend) {
@@ -11422,6 +12078,15 @@ var CombatStrategy = /* @__PURE__ */ function() {
         this.starting_macro.push(macro);
       return this;
     }
+    /**
+     * Add an action to perform for this monster. Only one action can be set for
+     * each monster; any previous actions are overwritten.
+     *
+     * @param action The action to perform.
+     * @param monsters Which monsters to use the action on. If not given, set the
+     *  action as the general action for all monsters.
+     * @returns this
+     */
   }, {
     key: "action",
     value: function action(_action, monsters) {
@@ -11444,6 +12109,19 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return this;
     }
+    /**
+     * Add a separate entry in the grimoire-generated CCS file for the specified
+     * monster. If multiple entries are given for the same monster, they are
+     * concatinated.
+     *
+     * This should typically be only used rarely, on monsters for which KoL does
+     * not support macros in combat (e.g. rampaging adding machine).
+     *
+     * @param entry The entry to add for the given monster.
+     * @param monsters Which monsters to add the entry to.
+     * @param prepend If true, add the entry before all previous entries. If
+     *   false, add after all previous entries.
+     */
   }, {
     key: "ccs",
     value: function ccs(entry, monsters, prepend) {
@@ -11468,6 +12146,10 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return this;
     }
+    /**
+     * Check if the provided action was requested for any monsters, or for the
+     * general action.
+     */
   }, {
     key: "can",
     value: function can(action) {
@@ -11475,11 +12157,17 @@ var CombatStrategy = /* @__PURE__ */ function() {
         return true;
       return Array.from(this.actions.values()).includes(action);
     }
+    /**
+     * Return the general action (if it exists).
+     */
   }, {
     key: "getDefaultAction",
     value: function getDefaultAction() {
       return this.default_action;
     }
+    /**
+     * Return all monsters where the provided action was requested.
+     */
   }, {
     key: "where",
     value: function where(action) {
@@ -11488,12 +12176,18 @@ var CombatStrategy = /* @__PURE__ */ function() {
         return _this.actions.get(key) === action;
       });
     }
+    /**
+     * Return the requested action (if it exists) for the provided monster.
+     */
   }, {
     key: "currentStrategy",
     value: function currentStrategy(monster) {
       var _a;
       return (_a = this.actions.get(monster)) !== null && _a !== void 0 ? _a : this.default_action;
     }
+    /**
+     * Perform a deep copy of this combat strategy.
+     */
   }, {
     key: "clone",
     value: function clone() {
@@ -11551,6 +12245,14 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return result;
     }
+    /**
+     * Compile this combat strategy into a complete macro.
+     *
+     * @param resources The resources to use to fulfil actions.
+     * @param defaults Macros to perform for each action without a resource.
+     * @param location The adventuring location, if known.
+     * @returns The compiled macro.
+     */
   }, {
     key: "compile",
     value: function compile(resources, defaults, location) {
@@ -11582,6 +12284,11 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return result;
     }
+    /**
+     * Compile the autoattack of this combat strategy into a complete macro.
+     *
+     * @returns The compiled autoattack macro.
+     */
   }, {
     key: "compileAutoattack",
     value: function compileAutoattack() {
@@ -11596,6 +12303,11 @@ var CombatStrategy = /* @__PURE__ */ function() {
         result.step.apply(result, _toConsumableArray5(this.default_autoattack.map(undelay)));
       return result;
     }
+    /**
+     * Compile the CCS entries of this combat strategy into a single array.
+     *
+     * @returns The lines of a CCS file, not including the [default] macro.
+     */
   }, {
     key: "compileCcs",
     value: function compileCcs() {
@@ -11613,6 +12325,20 @@ var CombatStrategy = /* @__PURE__ */ function() {
       }
       return result;
     }
+    /**
+     * For advanced users, this method will generate a fluent API for requesting
+     * actions. That is, it allows you to do
+     *   combat.banish(monster1).kill(monster2)
+     * instead of
+     *   combat.action("banish", monster1).action("kill", monster2)
+     *
+     * Example usage:
+     *   const myActions = ["kill", "banish"] as const;
+     *   class MyCombatStrategy extends CombatStrategy.withActions(myActions) {}
+     *
+     *   const foo: MyCombatStrategy = new MyCombatStrategy();
+     *   const bar: MyCombatStrategy = foo.banish($monster`crate`).kill($monster`tumbleweed`);
+     */
   }], [{
     key: "withActions",
     value: function withActions(actions) {
@@ -11664,6 +12390,9 @@ var CompressedMacro = /* @__PURE__ */ function() {
       else
         (_a = this.components.get(macro_text)) === null || _a === void 0 ? void 0 : _a.push(monster);
     }
+    /**
+     * Compile the compressed form of the macro.
+     */
   }, {
     key: "compile",
     value: function compile() {
@@ -11691,16 +12420,26 @@ var CombatResources = /* @__PURE__ */ function() {
         return;
       this.resources.set(action, resource);
     }
+    /**
+     * Return true if the provided action has a resource provided.
+     */
   }, {
     key: "has",
     value: function has(action) {
       return this.resources.has(action);
     }
+    /**
+     * Return all provided combat resources.
+     */
   }, {
     key: "all",
     value: function all() {
       return Array.from(this.resources.values());
     }
+    /**
+     * Get the macro provided by the resource for this action, or undefined if
+     * no resource was provided.
+     */
   }, {
     key: "getMacro",
     value: function getMacro(action) {
@@ -11789,26 +12528,26 @@ var _templateObject642;
 var _templateObject652;
 var _templateObject662;
 var _templateObject672;
-function ownKeys4(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys4(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread4(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys4(Object(source), true).forEach(function(key) {
-      _defineProperty10(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys4(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread4(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys4(Object(t), true).forEach(function(r2) {
+      _defineProperty10(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys4(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty10(obj, key, value) {
   key = _toPropertyKey13(key);
@@ -11825,30 +12564,30 @@ function _slicedToArray10(arr, i) {
 function _nonIterableRest10() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit10(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit10(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles10(arr) {
@@ -11996,11 +12735,16 @@ var Outfit = /* @__PURE__ */ function() {
   }
   _createClass13(Outfit2, [{
     key: "equippedAmount",
-    value: function equippedAmount3(item5) {
-      return _toConsumableArray6(this.equips.values()).filter(function(i) {
-        return i === item5;
-      }).length;
-    }
+    value: (
+      /**
+       * Check how many of an item is equipped on the outfit.
+       */
+      function equippedAmount3(item5) {
+        return _toConsumableArray6(this.equips.values()).filter(function(i) {
+          return i === item5;
+        }).length;
+      }
+    )
   }, {
     key: "isAvailable",
     value: function isAvailable(item5) {
@@ -12013,6 +12757,9 @@ var Outfit = /* @__PURE__ */ function() {
         return false;
       return true;
     }
+    /**
+     * Check whether an item is equipped on the outfit, optionally in a specific slot.
+     */
   }, {
     key: "haveEquipped",
     value: function haveEquipped5(item5, slot) {
@@ -12113,24 +12860,52 @@ var Outfit = /* @__PURE__ */ function() {
           return void 0;
       }
     }
+    /**
+     * Returns the bonus value associated with a given item.
+     *
+     * @param item The item to check the bonus of.
+     * @returns The bonus assigned to that item.
+     */
   }, {
     key: "getBonus",
     value: function getBonus(item5) {
       var _a;
       return (_a = this.bonuses.get(item5)) !== null && _a !== void 0 ? _a : 0;
     }
+    /**
+     * Applies a value to any existing bonus this item has, using a rule assigned by the `reducer` parameter
+     *
+     * @param item The item to try to apply a bonus to.
+     * @param value The value to try to apply.
+     * @param reducer Function that combines new and current bonus
+     * @returns The total assigned bonus to that item.
+     */
   }, {
     key: "applyBonus",
     value: function applyBonus(item5, value, reducer) {
       var previous = this.getBonus(item5);
       return this.setBonus(item5, reducer(value, previous));
     }
+    /**
+     * Sets the bonus value of an item equal to a given value, overriding any current bonus assigned.
+     *
+     * @param item The item to try to apply a bonus to.
+     * @param value The value to try to apply.
+     * @returns The total assigned bonus to that item.
+     */
   }, {
     key: "setBonus",
     value: function setBonus(item5, value) {
       this.bonuses.set(item5, value);
       return value;
     }
+    /**
+     * Adds a value to any existing bonus this item has
+     *
+     * @param item The item to try to add a bonus to.
+     * @param value The value to try to add.
+     * @returns The total assigned bonus to that item.
+     */
   }, {
     key: "addBonus",
     value: function addBonus(item5, value) {
@@ -12138,6 +12913,12 @@ var Outfit = /* @__PURE__ */ function() {
         return a + b;
       });
     }
+    /**
+     * Apply the given items' bonuses to the outfit, using a rule given by the reducer
+     *
+     * @param items A map containing items and their bonuses
+     * @param reducer A way of combining new bonuses with existing bonuses
+     */
   }, {
     key: "applyBonuses",
     value: function applyBonuses(items, reducer) {
@@ -12153,6 +12934,11 @@ var Outfit = /* @__PURE__ */ function() {
         _iterator.f();
       }
     }
+    /**
+     * Sets the bonuses of the given items, overriding existing bonuses
+     *
+     * @param items Map containing items and bonuses
+     */
   }, {
     key: "setBonuses",
     value: function setBonuses(items) {
@@ -12160,6 +12946,11 @@ var Outfit = /* @__PURE__ */ function() {
         return a;
       });
     }
+    /**
+     * Adds the bonuses of the given items to any existing bonuses they ahave
+     *
+     * @param items Map containing items and bonuses
+     */
   }, {
     key: "addBonuses",
     value: function addBonuses(items) {
@@ -12212,8 +13003,8 @@ var Outfit = /* @__PURE__ */ function() {
       var _this$avoid;
       var _a, _b, _c, _d, _e, _f;
       var succeeded = true;
-      for (var _i2 = 0, _outfitSlots2 = outfitSlots; _i2 < _outfitSlots2.length; _i2++) {
-        var slotName = _outfitSlots2[_i2];
+      for (var _i = 0, _outfitSlots2 = outfitSlots; _i < _outfitSlots2.length; _i++) {
+        var slotName = _outfitSlots2[_i];
         var slot = (_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject256 || (_templateObject256 = _taggedTemplateLiteral13(["familiar"])))], ["offhand", $slot(_templateObject266 || (_templateObject266 = _taggedTemplateLiteral13(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia24.toSlot)(slotName);
         var itemOrItems = spec[slotName];
         if (itemOrItems !== void 0 && !this.equip(itemOrItems, slot))
@@ -12262,6 +13053,13 @@ var Outfit = /* @__PURE__ */ function() {
       this.afterDress.apply(this, _toConsumableArray6((_f = spec.afterDress) !== null && _f !== void 0 ? _f : []));
       return succeeded;
     }
+    /**
+     * Equip the first thing that can be equipped to the outfit.
+     *
+     * @param things The things to equip.
+     * @param slot The slot to equip them.
+     * @returns True if one of the things is equipped, and false otherwise.
+     */
   }, {
     key: "equipFirst",
     value: function equipFirst(things, slot) {
@@ -12272,6 +13070,25 @@ var Outfit = /* @__PURE__ */ function() {
         return _this.equip(val, slot);
       });
     }
+    /**
+     * Equip a thing to the outfit.
+     *
+     * If no slot is given, then the thing will be equipped wherever possible
+     * (possibly using dual-wielding, any of the accessory slots, or as
+     * familiar equipment). If it is impossible to add this thing anywhere to
+     * the outfit, this function will return false.
+     *
+     * If a slot is given, the item will be equipped only in that slot. If the
+     * slot is filled with a different item, this function will return false.
+     *
+     * If the thing is already equipped in the provided slot, or if no slot is
+     * given and the thing is already equipped in any slot, this function will
+     * return true and not change the outfit.
+     *
+     * @param thing The thing or things to equip.
+     * @param slot The slot to equip them.
+     * @returns True if the thing was sucessfully equipped, and false otherwise.
+     */
   }, {
     key: "equip",
     value: function equip7(thing, slot) {
@@ -12293,32 +13110,52 @@ var Outfit = /* @__PURE__ */ function() {
     }
   }, {
     key: "bjornify",
-    value: function bjornify(target) {
-      var _this = this;
-      var current = this.riders.get($slot(_templateObject276 || (_templateObject276 = _taggedTemplateLiteral13(["buddy-bjorn"]))));
-      if (current) {
-        if (Array.isArray(target) ? target.includes(current) : current === target) {
-          return true;
+    value: (
+      /**
+       * Add a bjornified familiar to the outfit.
+       *
+       * This function does *not* equip the buddy bjorn itself; it must be equipped separately.
+       *
+       * If a familiar is already specified for the buddy bjorn that is different from the provided target, this function will return false and not change the buddy bjorn.
+       * @param target The familiar to bjornify, or a ranked list of familiars to try to bjornify.
+       * @returns True if we successfully set the bjorn to a valid target.
+       */
+      function bjornify(target) {
+        var _this = this;
+        var current = this.riders.get($slot(_templateObject276 || (_templateObject276 = _taggedTemplateLiteral13(["buddy-bjorn"]))));
+        if (current) {
+          if (Array.isArray(target) ? target.includes(current) : current === target) {
+            return true;
+          }
+          return false;
         }
-        return false;
+        if (Array.isArray(target)) {
+          var fam = target.find(function(f) {
+            return have(f) && _this.familiar !== f && _this.riders.get($slot(_templateObject285 || (_templateObject285 = _taggedTemplateLiteral13(["crown-of-thrones"])))) !== f;
+          });
+          if (fam) {
+            this.riders.set($slot(_templateObject294 || (_templateObject294 = _taggedTemplateLiteral13(["buddy-bjorn"]))), fam);
+            return true;
+          }
+          return false;
+        } else {
+          if (have(target) && this.familiar !== target && !Array.from(this.riders.values()).includes(target)) {
+            this.riders.set($slot(_templateObject304 || (_templateObject304 = _taggedTemplateLiteral13(["buddy-bjorn"]))), target);
+            return true;
+          }
+          return false;
+        }
       }
-      if (Array.isArray(target)) {
-        var fam = target.find(function(f) {
-          return have(f) && _this.familiar !== f && _this.riders.get($slot(_templateObject285 || (_templateObject285 = _taggedTemplateLiteral13(["crown-of-thrones"])))) !== f;
-        });
-        if (fam) {
-          this.riders.set($slot(_templateObject294 || (_templateObject294 = _taggedTemplateLiteral13(["buddy-bjorn"]))), fam);
-          return true;
-        }
-        return false;
-      } else {
-        if (have(target) && this.familiar !== target && !Array.from(this.riders.values()).includes(target)) {
-          this.riders.set($slot(_templateObject304 || (_templateObject304 = _taggedTemplateLiteral13(["buddy-bjorn"]))), target);
-          return true;
-        }
-        return false;
-      }
-    }
+    )
+    /**
+     * Add anenthroned familiar to the outfit.
+     *
+     * This function does *not* equip the crown of thrones itself; it must be equipped separately.
+     *
+     * If a familiar is already specified for the crown of thrones that is different from the provided target, this function will return false and not change the crown of thrones.
+     * @param target The familiar to enthrone, or a ranked list of familiars to try to enthrone.
+     * @returns True if we successfully set the enthrone to a valid target.
+     */
   }, {
     key: "enthrone",
     value: function enthrone(target) {
@@ -12347,13 +13184,29 @@ var Outfit = /* @__PURE__ */ function() {
         return false;
       }
     }
+    /**
+     * Set the provided modes for items that may be equipped in the outfit.
+     *
+     * This function does *not* equip items for the set modes; they must be
+     * equipped separately.
+     *
+     * If a mode is already set for an item that is different from the provided
+     * mode, this function will return false and not change the mode for that
+     * item. (But other modes might still be changed if they are compatible.)
+     *
+     * Note that the superhero and instuctions of a retrocape can be set
+     * independently (`undefined` is treated as "don't care").
+     *
+     * @param modes Modes to set in this outfit.
+     * @returns True if all modes were sucessfully set, and false otherwise.
+     */
   }, {
     key: "setModes",
     value: function setModes(modes) {
       var _a, _b;
       var compatible = true;
-      for (var _i3 = 0, _modeableCommands = modeableCommands2; _i3 < _modeableCommands.length; _i3++) {
-        var mode = _modeableCommands[_i3];
+      for (var _i2 = 0, _modeableCommands = modeableCommands2; _i2 < _modeableCommands.length; _i2++) {
+        var mode = _modeableCommands[_i2];
         if (mode === "retrocape")
           continue;
         if (this.modes[mode] && modes[mode] && this.modes[mode] !== modes[mode]) {
@@ -12373,12 +13226,29 @@ var Outfit = /* @__PURE__ */ function() {
       this.modes = _objectSpread4(_objectSpread4({}, modes), this.modes);
       return compatible;
     }
+    /**
+     * Check if it is possible to equip a thing to this outfit using .equip().
+     *
+     * This does not change the current outfit.
+     *
+     * @param thing The thing to equip.
+     * @param slot The slot to equip them.
+     * @returns True if this thing can be equipped.
+     */
   }, {
     key: "canEquip",
     value: function canEquip3(thing, slot) {
       var outfit2 = this.clone();
       return outfit2.equip(thing, slot);
     }
+    /**
+     * Check if it is possible to equip a thing to this outfit using .equip(); if it is, do so.
+     *
+     * This does change the current outfit.
+     * @param thing The thing to equip.
+     * @param slot The slot to equip them.
+     * @returns True if this thing was successfully equipped.
+     */
   }, {
     key: "tryEquip",
     value: function tryEquip(thing, slot) {
@@ -12396,6 +13266,9 @@ var Outfit = /* @__PURE__ */ function() {
       var _this$preActions;
       (_this$preActions = this.preActions).push.apply(_this$preActions, arguments);
     }
+    /**
+     * Equip this outfit.
+     */
   }, {
     key: "_dress",
     value: function _dress(refreshed) {
@@ -12470,8 +13343,8 @@ var Outfit = /* @__PURE__ */ function() {
       } finally {
         _iterator5.f();
       }
-      for (var _i4 = 0, _missingAccessories = missingAccessories; _i4 < _missingAccessories.length; _i4++) {
-        var accessory = _missingAccessories[_i4];
+      for (var _i3 = 0, _missingAccessories = missingAccessories; _i3 < _missingAccessories.length; _i3++) {
+        var accessory = _missingAccessories[_i3];
         var unusedSlot = accessorySlots.find(function(slot2) {
           return !usedSlots.has(slot2);
         });
@@ -12547,8 +13420,8 @@ var Outfit = /* @__PURE__ */ function() {
       } finally {
         _iterator7.f();
       }
-      for (var _i5 = 0, _arr2 = [[$slot(_templateObject516 || (_templateObject516 = _taggedTemplateLiteral13(["buddy-bjorn"]))), $item(_templateObject523 || (_templateObject523 = _taggedTemplateLiteral13(["Buddy Bjorn"]))), import_kolmafia24.myBjornedFamiliar], [$slot(_templateObject533 || (_templateObject533 = _taggedTemplateLiteral13(["crown-of-thrones"]))), $item(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral13(["Crown of Thrones"]))), import_kolmafia24.myEnthronedFamiliar]]; _i5 < _arr2.length; _i5++) {
-        var _arr2$_i = _slicedToArray10(_arr2[_i5], 3), rider = _arr2$_i[0], throne = _arr2$_i[1], checkingFunction = _arr2$_i[2];
+      for (var _i4 = 0, _arr = [[$slot(_templateObject516 || (_templateObject516 = _taggedTemplateLiteral13(["buddy-bjorn"]))), $item(_templateObject523 || (_templateObject523 = _taggedTemplateLiteral13(["Buddy Bjorn"]))), import_kolmafia24.myBjornedFamiliar], [$slot(_templateObject533 || (_templateObject533 = _taggedTemplateLiteral13(["crown-of-thrones"]))), $item(_templateObject542 || (_templateObject542 = _taggedTemplateLiteral13(["Crown of Thrones"]))), import_kolmafia24.myEnthronedFamiliar]]; _i4 < _arr.length; _i4++) {
+        var _arr$_i = _slicedToArray10(_arr[_i4], 3), rider = _arr$_i[0], throne = _arr$_i[1], checkingFunction = _arr$_i[2];
         var wanted = this.riders.get(rider);
         if (_toConsumableArray6(this.equips.values()).includes(throne) && wanted && checkingFunction() !== wanted) {
           throw "Failed to fully dress: (expected ".concat(rider, " ").concat(wanted, ")");
@@ -12582,6 +13455,9 @@ var Outfit = /* @__PURE__ */ function() {
         _iterator9.f();
       }
     }
+    /**
+     * Build an Outfit identical to this outfit.
+     */
   }, {
     key: "clone",
     value: function clone() {
@@ -12598,6 +13474,9 @@ var Outfit = /* @__PURE__ */ function() {
       result.afterDress.apply(result, _toConsumableArray6(this.postActions));
       return result;
     }
+    /**
+     * Build an OutfitSpec identical to this outfit.
+     */
   }, {
     key: "spec",
     value: function spec() {
@@ -12611,8 +13490,8 @@ var Outfit = /* @__PURE__ */ function() {
       };
       if (this.familiar)
         result.familiar = this.familiar;
-      for (var _i6 = 0, _outfitSlots2 = outfitSlots; _i6 < _outfitSlots2.length; _i6++) {
-        var slotName = _outfitSlots2[_i6];
+      for (var _i5 = 0, _outfitSlots2 = outfitSlots; _i5 < _outfitSlots2.length; _i5++) {
+        var slotName = _outfitSlots2[_i5];
         var entry = this.equips.get((_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject582 || (_templateObject582 = _taggedTemplateLiteral13(["familiar"])))], ["offhand", $slot(_templateObject592 || (_templateObject592 = _taggedTemplateLiteral13(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia24.toSlot)(slotName));
         if (entry)
           result[slotName] = entry;
@@ -12641,8 +13520,8 @@ var Outfit = /* @__PURE__ */ function() {
       if (outfit2.equip(familiar)) {
         throw "Failed to create outfit from current state (expected: familiar ".concat(familiar, ")");
       }
-      for (var _i7 = 0, _outfitSlots3 = outfitSlots; _i7 < _outfitSlots3.length; _i7++) {
-        var slotName = _outfitSlots3[_i7];
+      for (var _i6 = 0, _outfitSlots3 = outfitSlots; _i6 < _outfitSlots3.length; _i6++) {
+        var slotName = _outfitSlots3[_i6];
         var slot = (_a = (/* @__PURE__ */ new Map([["famequip", $slot(_templateObject623 || (_templateObject623 = _taggedTemplateLiteral13(["familiar"])))], ["offhand", $slot(_templateObject632 || (_templateObject632 = _taggedTemplateLiteral13(["off-hand"])))]])).get(slotName)) !== null && _a !== void 0 ? _a : (0, import_kolmafia24.toSlot)(slotName);
         var item5 = (0, import_kolmafia24.equippedItem)(slot);
         if (!outfit2.equip(item5, slot)) {
@@ -12750,30 +13629,30 @@ function _slicedToArray11(arr, i) {
 function _nonIterableRest11() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit11(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit11(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles11(arr) {
@@ -12839,26 +13718,26 @@ function _arrayLikeToArray16(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function ownKeys5(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys5(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread5(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys5(Object(source), true).forEach(function(key) {
-      _defineProperty11(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys5(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread5(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys5(Object(t), true).forEach(function(r2) {
+      _defineProperty11(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys5(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty11(obj, key, value) {
   key = _toPropertyKey14(key);
@@ -12942,6 +13821,10 @@ var Engine = /* @__PURE__ */ function() {
         return _this.available(task);
       });
     }
+    /**
+     * Continually get the next task and execute it.
+     * @param actions If given, only perform up to this many tasks.
+     */
   }, {
     key: "run",
     value: function run(actions) {
@@ -12952,12 +13835,23 @@ var Engine = /* @__PURE__ */ function() {
         this.execute(task);
       }
     }
+    /**
+     * Close the engine and reset all properties.
+     * After this has been called, this object should not be used.
+     */
   }, {
     key: "destruct",
     value: function destruct() {
       this.propertyManager.resetAll();
       (0, import_kolmafia25.setAutoAttack)(0);
     }
+    /**
+     * Check if the given task is available at this moment.
+     * @returns true if all dependencies are complete and the task is ready.
+     *  Note that dependencies are not checked transitively. That is, if
+     *  A depends on B which depends on C, then A is ready if B is complete
+     *  (regardless of if C is complete or not).
+     */
   }, {
     key: "available",
     value: function available2(task) {
@@ -12985,6 +13879,11 @@ var Engine = /* @__PURE__ */ function() {
         return false;
       return true;
     }
+    /**
+     * Perform all steps to execute the provided task.
+     * This is the main entry point for the Engine.
+     * @param task The current executing task.
+     */
   }, {
     key: "execute",
     value: function execute(task) {
@@ -13022,6 +13921,10 @@ var Engine = /* @__PURE__ */ function() {
       this.markAttempt(task);
       this.checkLimits(task, postcondition);
     }
+    /**
+     * Acquire all items for the task.
+     * @param task The current executing task.
+     */
   }, {
     key: "acquireItems",
     value: function acquireItems(task) {
@@ -13056,6 +13959,10 @@ var Engine = /* @__PURE__ */ function() {
         _iterator4.f();
       }
     }
+    /**
+     * Acquire all effects for the task.
+     * @param task The current executing task.
+     */
   }, {
     key: "acquireEffects",
     value: function acquireEffects(task) {
@@ -13091,6 +13998,10 @@ var Engine = /* @__PURE__ */ function() {
         _iterator5.f();
       }
     }
+    /**
+     * Create an outfit for the task with all required equipment.
+     * @param task The current executing task.
+     */
   }, {
     key: "createOutfit",
     value: function createOutfit(task) {
@@ -13105,6 +14016,11 @@ var Engine = /* @__PURE__ */ function() {
       }
       return outfit2;
     }
+    /**
+     * Equip the outfit for the task.
+     * @param task The current executing task.
+     * @param outfit The outfit for the task, possibly augmented by the engine.
+     */
   }, {
     key: "dress",
     value: function dress(task, outfit2) {
@@ -13112,10 +14028,29 @@ var Engine = /* @__PURE__ */ function() {
         (0, import_kolmafia25.setLocation)(task.do);
       outfit2.dress();
     }
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    /**
+     * Perform any engine-specific customization for the outfit and combat plan.
+     *
+     * This is a natural method to override in order to:
+     *   * Enable the use of any resources in the outfit or combat (e.g., allocate banishers).
+     *   * Equip a default outfit.
+     *   * Determine additional monster macros at a global level (e.g., use flyers).
+     * @param task The current executing task.
+     * @param outfit The outfit for the task.
+     * @param combat The combat strategy so far for the task.
+     * @param resources The combat resources assigned so far for the task.
+     */
   }, {
     key: "customize",
     value: function customize(task, outfit2, combat, resources) {
     }
+    /* eslint-enable @typescript-eslint/no-unused-vars */
+    /**
+     * Set the choice settings for the task.
+     * @param task The current executing task.
+     * @param manager The property manager to use.
+     */
   }, {
     key: "setChoices",
     value: function setChoices(task, manager) {
@@ -13127,6 +14062,12 @@ var Engine = /* @__PURE__ */ function() {
         manager.setChoice(parseInt(key), undelay(func));
       }
     }
+    /**
+     * Save the combat macro for this task.
+     * @param task The current executing task.
+     * @param task_combat The completed combat strategy far for the task.
+     * @param task_resources The combat resources assigned for the task.
+     */
   }, {
     key: "setCombat",
     value: function setCombat(task, task_combat, task_resources) {
@@ -13151,12 +14092,20 @@ var Engine = /* @__PURE__ */ function() {
         (0, import_kolmafia25.setAutoAttack)(0);
       }
     }
+    /**
+     * Do any task-specific preparation.
+     * @param task The current executing task.
+     */
   }, {
     key: "prepare",
     value: function prepare(task) {
       var _a;
       (_a = task.prepare) === null || _a === void 0 ? void 0 : _a.call(task);
     }
+    /**
+     * Actually perform the task.
+     * @param task The current executing task.
+     */
   }, {
     key: "do",
     value: function _do(task) {
@@ -13169,17 +14118,36 @@ var Engine = /* @__PURE__ */ function() {
       if ((0, import_kolmafia25.choiceFollowsFight)())
         (0, import_kolmafia25.runChoice)(-1);
     }
+    /**
+     * Check if the task.do should be immediately repeated without any prep.
+     *
+     * By default, this is only used to repeat a task if we hit one of:
+     *   1. Halloweener dog noncombats,
+     *   2. June cleaver noncombats,
+     *   3. Lil' Doctor™ bag noncombat, or
+     *   4. Turtle taming noncombats.
+     * @param task The current executing task.
+     * @returns True if the task should be immediately repeated.
+     */
   }, {
     key: "shouldRepeatAdv",
     value: function shouldRepeatAdv(task) {
       return task.do instanceof import_kolmafia25.Location && lastEncounterWasWanderingNC();
     }
+    /**
+     * Do any task-specific wrapup activities.
+     * @param task The current executing task.
+     */
   }, {
     key: "post",
     value: function post(task) {
       var _a;
       (_a = task.post) === null || _a === void 0 ? void 0 : _a.call(task);
     }
+    /**
+     * Mark that an attempt was made on the current task.
+     * @param task The current executing task.
+     */
   }, {
     key: "markAttempt",
     value: function markAttempt(task) {
@@ -13187,6 +14155,11 @@ var Engine = /* @__PURE__ */ function() {
         this.attempts[task.name] = 0;
       this.attempts[task.name]++;
     }
+    /**
+     * Check if the task has passed any of its internal limits.
+     * @param task The task to check.
+     * @throws An error if any of the internal limits have been passed.
+     */
   }, {
     key: "checkLimits",
     value: function checkLimits(task, postcondition) {
@@ -13215,6 +14188,10 @@ var Engine = /* @__PURE__ */ function() {
     value: function getDefaultSettings() {
       return this.constructor.defaultSettings;
     }
+    /**
+     * Initialize properties for the script.
+     * @param manager The properties manager to use.
+     */
   }, {
     key: "initPropertiesManager",
     value: function initPropertiesManager(manager) {
@@ -13264,8 +14241,10 @@ function maxSongs() {
   return have($skill(_templateObject100 || (_templateObject100 = _taggedTemplateLiteral14(["Mariachi Memory"])))) ? 4 : 3;
 }
 var wanderingNCs = /* @__PURE__ */ new Set([
+  // Halloweener dog noncombats
   "Wooof! Wooooooof!",
   "Playing Fetch*",
+  // June cleaver noncombats
   "Aunts not Ants",
   "Bath Time",
   "Beware of Aligator",
@@ -13275,7 +14254,9 @@ var wanderingNCs = /* @__PURE__ */ new Set([
   "Poetic Justice",
   "Summer Days",
   "Teacher's Pet",
+  // Lil' Doctor™ bag noncombat
   "A Pound of Cure",
+  // Turtle taming noncombats
   "Nantucket Snapper",
   "Blue Monday",
   "Capital!",
@@ -13317,6 +14298,7 @@ var wanderingNCs = /* @__PURE__ */ new Set([
 ]);
 var zoneSpecificNCs = /* @__PURE__ */ new Map([
   ["The Horror...", ["Frat House"]]
+  // Duplicate choice name
 ]);
 function lastEncounterWasWanderingNC() {
   var _a;
@@ -13330,26 +14312,26 @@ function lastEncounterWasWanderingNC() {
 }
 
 // node_modules/grimoire-kolmafia/dist/route.js
-function ownKeys6(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys6(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread6(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys6(Object(source), true).forEach(function(key) {
-      _defineProperty12(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys6(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread6(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys6(Object(t), true).forEach(function(r2) {
+      _defineProperty12(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys6(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty12(obj, key, value) {
   key = _toPropertyKey15(key);
@@ -13532,6 +14514,7 @@ var config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
     setting: "",
     default: false
   }),
+  // preferences
   main_clan: Args.string({
     help: "Clan with a fully stocked VIP lounge",
     default: ""
@@ -13543,6 +14526,7 @@ var config = Args.create("seventyhccs", "Automate 1/70 Community Service.", {
   skills_to_perm: Args.skills({
     help: "A list of skills to perm by name or id number"
   }),
+  // hidden preferences
   MEAT_SAFE_LIMIT: Args.number({
     default: 2e3,
     help: "Don't spend meat on sausages below this value",
@@ -13595,30 +14579,30 @@ function _arrayLikeToArray18(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit12(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit12(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles12(arr) {
@@ -13878,6 +14862,7 @@ function _taggedTemplateLiteral16(strings, raw) {
   return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } }));
 }
 var notAllowList = [
+  // protonic ghosts
   $monster(_templateObject108 || (_templateObject108 = _taggedTemplateLiteral16(["boneless blobghost"]))),
   $monster(_templateObject227 || (_templateObject227 = _taggedTemplateLiteral16(["Emily Koops, a spooky lime"]))),
   $monster(_templateObject321 || (_templateObject321 = _taggedTemplateLiteral16(["The ghost of Ebenoozer Screege"]))),
@@ -13891,9 +14876,11 @@ var notAllowList = [
   $monster(_templateObject118 || (_templateObject118 = _taggedTemplateLiteral16(["The ghost of Waldo the Carpathian"]))),
   $monster(_templateObject127 || (_templateObject127 = _taggedTemplateLiteral16(["The Headless Horseman"]))),
   $monster(_templateObject137 || (_templateObject137 = _taggedTemplateLiteral16(["The Icewoman"]))),
+  // tunnel of L.O.V.E.
   $monster(_templateObject147 || (_templateObject147 = _taggedTemplateLiteral16(["LOV Enforcer"]))),
   $monster(_templateObject157 || (_templateObject157 = _taggedTemplateLiteral16(["LOV Engineer"]))),
   $monster(_templateObject167 || (_templateObject167 = _taggedTemplateLiteral16(["LOV Equivocator"]))),
+  // witchess
   $monster(_templateObject177 || (_templateObject177 = _taggedTemplateLiteral16(["Witchess Pawn"]))),
   $monster(_templateObject187 || (_templateObject187 = _taggedTemplateLiteral16(["Witchess Knight"]))),
   $monster(_templateObject197 || (_templateObject197 = _taggedTemplateLiteral16(["Witchess Bishop"]))),
@@ -13902,12 +14889,14 @@ var notAllowList = [
   $monster(_templateObject228 || (_templateObject228 = _taggedTemplateLiteral16(["Witchess King"]))),
   $monster(_templateObject237 || (_templateObject237 = _taggedTemplateLiteral16(["Witchess Witch"]))),
   $monster(_templateObject247 || (_templateObject247 = _taggedTemplateLiteral16(["Witchess Queen"]))),
+  // more free combats
   $monster(_templateObject257 || (_templateObject257 = _taggedTemplateLiteral16(["sausage goblin"]))),
   $monster(_templateObject267 || (_templateObject267 = _taggedTemplateLiteral16(["X-32-F Combat Training Snowman"]))),
   $monster(_templateObject277 || (_templateObject277 = _taggedTemplateLiteral16(["Eldritch Tentacle"]))),
   $monster(_templateObject286 || (_templateObject286 = _taggedTemplateLiteral16(["Sssshhsssblllrrggghsssssggggrrgglsssshhssslblgl"]))),
   $monster(_templateObject295 || (_templateObject295 = _taggedTemplateLiteral16(["piranha plant"]))),
   $monster(_templateObject305 || (_templateObject305 = _taggedTemplateLiteral16(["God Lobster"]))),
+  // Goth Kid Wanderers
   $monster(_templateObject3110 || (_templateObject3110 = _taggedTemplateLiteral16(["Black Crayon Beast"]))),
   $monster(_templateObject325 || (_templateObject325 = _taggedTemplateLiteral16(["Black Crayon Beetle"]))),
   $monster(_templateObject335 || (_templateObject335 = _taggedTemplateLiteral16(["Black Crayon Constellation"]))),
@@ -13930,11 +14919,13 @@ var notAllowList = [
   $monster(_templateObject504 || (_templateObject504 = _taggedTemplateLiteral16(["Black Crayon Slime"]))),
   $monster(_templateObject519 || (_templateObject519 = _taggedTemplateLiteral16(["Black Crayon Spiraling Shape"]))),
   $monster(_templateObject524 || (_templateObject524 = _taggedTemplateLiteral16(["Black Crayon Undead Thing"]))),
+  // Hipster Wanderers
   $monster(_templateObject534 || (_templateObject534 = _taggedTemplateLiteral16(["angry bassist"]))),
   $monster(_templateObject543 || (_templateObject543 = _taggedTemplateLiteral16(["blue-haired girl"]))),
   $monster(_templateObject553 || (_templateObject553 = _taggedTemplateLiteral16(["evil ex-girlfriend"]))),
   $monster(_templateObject563 || (_templateObject563 = _taggedTemplateLiteral16(["peeved roommate"]))),
   $monster(_templateObject573 || (_templateObject573 = _taggedTemplateLiteral16(["random scenester"]))),
+  // BRICKOS
   $monster(_templateObject583 || (_templateObject583 = _taggedTemplateLiteral16(["BRICKO ooze"]))),
   $monster(_templateObject593 || (_templateObject593 = _taggedTemplateLiteral16(["BRICKO bat"]))),
   $monster(_templateObject603 || (_templateObject603 = _taggedTemplateLiteral16(["BRICKO oyster"]))),
@@ -13942,20 +14933,25 @@ var notAllowList = [
   $monster(_templateObject624 || (_templateObject624 = _taggedTemplateLiteral16(["BRICKO elephant"]))),
   $monster(_templateObject633 || (_templateObject633 = _taggedTemplateLiteral16(["BRICKO octopus"]))),
   $monster(_templateObject643 || (_templateObject643 = _taggedTemplateLiteral16(["BRICKO python"]))),
+  // voter monsters
   $monster(_templateObject653 || (_templateObject653 = _taggedTemplateLiteral16(["angry ghost"]))),
   $monster(_templateObject663 || (_templateObject663 = _taggedTemplateLiteral16(["annoyed snake"]))),
   $monster(_templateObject673 || (_templateObject673 = _taggedTemplateLiteral16(["government bureaucrat"]))),
   $monster(_templateObject682 || (_templateObject682 = _taggedTemplateLiteral16(["slime blob"]))),
   $monster(_templateObject692 || (_templateObject692 = _taggedTemplateLiteral16(["terrible mutant"]))),
+  // deep machine tunnels
   $monster(_templateObject702 || (_templateObject702 = _taggedTemplateLiteral16(["Perceiver of Sensations"]))),
   $monster(_templateObject716 || (_templateObject716 = _taggedTemplateLiteral16(["Performer of Actions"]))),
   $monster(_templateObject723 || (_templateObject723 = _taggedTemplateLiteral16(["Thinker of Thoughts"]))),
+  // neverending party
   $monster(_templateObject732 || (_templateObject732 = _taggedTemplateLiteral16(["biker"]))),
   $monster(_templateObject742 || (_templateObject742 = _taggedTemplateLiteral16(["burnout"]))),
   $monster(_templateObject752 || (_templateObject752 = _taggedTemplateLiteral16(["jock"]))),
   $monster(_templateObject762 || (_templateObject762 = _taggedTemplateLiteral16(["party girl"]))),
   $monster(_templateObject772 || (_templateObject772 = _taggedTemplateLiteral16(['"plain" girl']))),
+  // toxic teacups
   $monster(_templateObject782 || (_templateObject782 = _taggedTemplateLiteral16(["toxic beastie"]))),
+  // shadow rifts
   $monster(_templateObject792 || (_templateObject792 = _taggedTemplateLiteral16(["shadow bat"]))),
   $monster(_templateObject802 || (_templateObject802 = _taggedTemplateLiteral16(["shadow cow"]))),
   $monster(_templateObject815 || (_templateObject815 = _taggedTemplateLiteral16(["shadow devil"]))),
@@ -13968,6 +14964,7 @@ var notAllowList = [
   $monster(_templateObject882 || (_templateObject882 = _taggedTemplateLiteral16(["shadow spider"]))),
   $monster(_templateObject892 || (_templateObject892 = _taggedTemplateLiteral16(["shadow stalk"]))),
   $monster(_templateObject902 || (_templateObject902 = _taggedTemplateLiteral16(["shadow tree"]))),
+  // Boss(es)
   $monster(_templateObject913 || (_templateObject913 = _taggedTemplateLiteral16(["Mother Slime"])))
 ].map(function(m) {
   return "!monsterid ".concat(m.id);
@@ -14034,30 +15031,30 @@ function _slicedToArray13(arr, i) {
 function _nonIterableRest13() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit13(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit13(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles13(arr) {
@@ -14077,8 +15074,8 @@ function _createForOfIteratorHelper13(o, allowArrayLike) {
         if (i >= o.length)
           return { done: true };
         return { done: false, value: o[i++] };
-      }, e: function e(_e2) {
-        throw _e2;
+      }, e: function e(_e) {
+        throw _e;
       }, f: F };
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -14090,9 +15087,9 @@ function _createForOfIteratorHelper13(o, allowArrayLike) {
     var step = it.next();
     normalCompletion = step.done;
     return step;
-  }, e: function e(_e3) {
+  }, e: function e(_e2) {
     didErr = true;
-    err = _e3;
+    err = _e2;
   }, f: function f() {
     try {
       if (!normalCompletion && it.return != null)
@@ -14155,14 +15152,14 @@ function getPantogramPants() {
   if (!have($item(_templateObject1010 || (_templateObject1010 = _taggedTemplateLiteral17(["portable pantogram"])))) || have($item(_templateObject1110 || (_templateObject1110 = _taggedTemplateLiteral17(["pantogram pants"])))))
     return;
   var m = (/* @__PURE__ */ new Map([[$stat(_templateObject1210 || (_templateObject1210 = _taggedTemplateLiteral17(["Muscle"]))), 1], [$stat(_templateObject1310 || (_templateObject1310 = _taggedTemplateLiteral17(["Mysticality"]))), 2], [$stat(_templateObject149 || (_templateObject149 = _taggedTemplateLiteral17(["Moxie"]))), 3]])).get((0, import_kolmafia29.myPrimestat)());
-  var element;
-  (function(element2) {
+  var element = /* @__PURE__ */ function(element2) {
     element2[element2["hot"] = 1] = "hot";
     element2[element2["cold"] = 2] = "cold";
     element2[element2["spooky"] = 3] = "spooky";
     element2[element2["sleaze"] = 4] = "sleaze";
     element2[element2["stench"] = 5] = "stench";
-  })(element || (element = {}));
+    return element2;
+  }({});
   var e = element.spooky;
   var s1 = "-2,0";
   var s2 = "-2,0";
@@ -14189,18 +15186,6 @@ function spendAllMpOnLibrams() {
   while ((0, import_kolmafia29.myMp)() > (0, import_kolmafia29.mpCost)($skill(_templateObject188 || (_templateObject188 = _taggedTemplateLiteral17(["Summon BRICKOs"])))))
     castBestLibram();
 }
-var MoonSign;
-(function(MoonSign2) {
-  MoonSign2[MoonSign2["Mongoose"] = 1] = "Mongoose";
-  MoonSign2[MoonSign2["Wallaby"] = 2] = "Wallaby";
-  MoonSign2[MoonSign2["Vole"] = 3] = "Vole";
-  MoonSign2[MoonSign2["Platypus"] = 4] = "Platypus";
-  MoonSign2[MoonSign2["Opossum"] = 5] = "Opossum";
-  MoonSign2[MoonSign2["Marmot"] = 6] = "Marmot";
-  MoonSign2[MoonSign2["Wombat"] = 7] = "Wombat";
-  MoonSign2[MoonSign2["Blender"] = 8] = "Blender";
-  MoonSign2[MoonSign2["Packrat"] = 9] = "Packrat";
-})(MoonSign || (MoonSign = {}));
 function vote() {
   assert((0, import_kolmafia29.myClass)() === $class(_templateObject2210 || (_templateObject2210 = _taggedTemplateLiteral17(["Sauceror"]))), "Don't yet know how to run this as a ".concat((0, import_kolmafia29.myClass)()));
   (0, import_kolmafia29.visitUrl)("place.php?whichplace=town_right&action=townright_vote");
@@ -14266,30 +15251,30 @@ function _arrayLikeToArray20(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit14(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit14(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles14(arr) {
@@ -14378,6 +15363,7 @@ function innerElf() {
     choices: {
       326: 1
     },
+    // Showdown: (1) fight mother slime (2) leave
     do: $location(_templateObject1311 || (_templateObject1311 = _taggedTemplateLiteral18(["The Slime Tube"]))),
     post: function() {
       Clan.join(config.main_clan);
@@ -14485,26 +15471,26 @@ var _templateObject903;
 var _templateObject917;
 var _templateObject923;
 var _templateObject933;
-function ownKeys7(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys7(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread7(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys7(Object(source), true).forEach(function(key) {
-      _defineProperty13(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys7(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread7(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys7(Object(t), true).forEach(function(r2) {
+      _defineProperty13(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys7(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty13(obj, key, value) {
   key = _toPropertyKey16(key);
@@ -14544,8 +15530,8 @@ function _createForOfIteratorHelper14(o, allowArrayLike) {
         if (i >= o.length)
           return { done: true };
         return { done: false, value: o[i++] };
-      }, e: function e(_e2) {
-        throw _e2;
+      }, e: function e(_e) {
+        throw _e;
       }, f: F };
     }
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -14557,9 +15543,9 @@ function _createForOfIteratorHelper14(o, allowArrayLike) {
     var step = it.next();
     normalCompletion = step.done;
     return step;
-  }, e: function e(_e3) {
+  }, e: function e(_e2) {
     didErr = true;
-    err = _e3;
+    err = _e2;
   }, f: function f() {
     try {
       if (!normalCompletion && it.return != null)
@@ -14576,30 +15562,30 @@ function _slicedToArray15(arr, i) {
 function _nonIterableRest15() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit15(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit15(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles15(arr) {
@@ -14741,6 +15727,7 @@ var CoilWire = {
     do: function() {
       return (0, import_kolmafia31.useSkill)($skill(_templateObject1312 || (_templateObject1312 = _taggedTemplateLiteral19(["Communism!"]))));
     }
+    // +1 meat
   }, {
     name: "Chateau Desk",
     completed: function() {
@@ -14749,6 +15736,7 @@ var CoilWire = {
     do: function() {
       return (0, import_kolmafia31.visitUrl)("place.php?whichplace=chateau&action=chateau_desk1");
     }
+    // +1000 meat
   }, darkHorse(), {
     name: "SongBoom\u2122",
     completed: function() {
@@ -14815,6 +15803,7 @@ var CoilWire = {
     [$item(_templateObject346 || (_templateObject346 = _taggedTemplateLiteral19(["toy accordion"]))), function() {
       return (0, import_kolmafia31.retrieveItem)($item(_templateObject355 || (_templateObject355 = _taggedTemplateLiteral19(["toy accordion"]))));
     }],
+    // -135 meat
     [$skill(_templateObject365 || (_templateObject365 = _taggedTemplateLiteral19(["Seek out a Bird"]))), function() {
       return (0, import_kolmafia31.use)($item(_templateObject375 || (_templateObject375 = _taggedTemplateLiteral19(["Bird-a-Day calendar"]))));
     }]
@@ -14912,6 +15901,7 @@ var CoilWire = {
     choices: {
       297: 3
     },
+    // Gravy Fairy Ring: (1) gaffle some mushrooms (2) take fairy gravy boat (3) leave the ring alone
     do: function() {
       return mapMonster($location(_templateObject564 || (_templateObject564 = _taggedTemplateLiteral19(["The Haiku Dungeon"]))), $monster(_templateObject574 || (_templateObject574 = _taggedTemplateLiteral19(["amateur ninja"]))));
     },
@@ -14988,6 +15978,7 @@ var CoilWire = {
     combat: new CombatStrategy().ccs(
       "item ".concat($item(_templateObject743 || (_templateObject743 = _taggedTemplateLiteral19(["DNA extraction syringe"]))), "\n          skill ").concat($skill(_templateObject753 || (_templateObject753 = _taggedTemplateLiteral19(["Open a Big Red Present"]))), "\n          twiddle your thumbs\n          skill ").concat($skill(_templateObject763 || (_templateObject763 = _taggedTemplateLiteral19(["Use the Force"])))),
       $monster(_templateObject773 || (_templateObject773 = _taggedTemplateLiteral19(["cocktail shrimp"])))
+      // + 2000 meat
     ).macro(Macro.abort())
   }, {
     name: "Sausage Goblin",
@@ -15046,6 +16037,7 @@ var CoilWire = {
       return runTest(CommunityService.CoilWire);
     },
     effects: [$effect(_templateObject843 || (_templateObject843 = _taggedTemplateLiteral19(["[1458]Blood Sugar Sauce Magic"])))],
+    // 1457 for other classes
     outfit: {
       hat: $item(_templateObject853 || (_templateObject853 = _taggedTemplateLiteral19(["Iunion Crown"]))),
       back: $item(_templateObject863 || (_templateObject863 = _taggedTemplateLiteral19(["unwrapped knock-off retro superhero cape"]))),
@@ -15166,6 +16158,7 @@ var DonateQuest = {
     completed: function() {
       return have($item(_templateObject161 || (_templateObject161 = _taggedTemplateLiteral21(["Rufus's shadow lodestone"]))));
     },
+    // Calling Rufus Back: (1) "Yes!" (6) Hang up
     choices: {
       1498: 1
     },
@@ -15398,30 +16391,30 @@ function _arrayLikeToArray22(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit16(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit16(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles16(arr) {
@@ -16022,30 +17015,30 @@ function _slicedToArray17(arr, i) {
 function _nonIterableRest17() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function _iterableToArrayLimit17(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit17(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles17(arr) {
@@ -16086,26 +17079,26 @@ function _arrayLikeToArray23(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function ownKeys8(object, enumerableOnly) {
-  var keys = Object.keys(object);
+function ownKeys8(e, r) {
+  var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    enumerableOnly && (symbols = symbols.filter(function(sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return keys;
+  return t;
 }
-function _objectSpread8(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys8(Object(source), true).forEach(function(key) {
-      _defineProperty14(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys8(Object(source)).forEach(function(key) {
-      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+function _objectSpread8(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys8(Object(t), true).forEach(function(r2) {
+      _defineProperty14(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys8(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
     });
   }
-  return target;
+  return e;
 }
 function _defineProperty14(obj, key, value) {
   key = _toPropertyKey17(key);
@@ -16316,6 +17309,7 @@ var Leveling = {
     do: function() {
       return (0, import_kolmafia34.useSkill)($skill(_templateObject506 || (_templateObject506 = _taggedTemplateLiteral25(["Summon Alice's Army Cards"]))));
     }
+    // 5 mp
   }, {
     name: "Ointment of the Occult",
     completed: function() {
@@ -16336,6 +17330,7 @@ var Leveling = {
     do: function() {
       return (0, import_kolmafia34.useSkill)($skill(_templateObject575 || (_templateObject575 = _taggedTemplateLiteral25(["Chubby and Plump"]))));
     }
+    // 50 mp
   }, {
     name: "Use box of familiar jacks",
     completed: function() {
@@ -16405,6 +17400,7 @@ var Leveling = {
     choices: {
       1215: 1
     },
+    // Setting the Clock: (1) set the clock forward 5 turns (2) skip
     do: $location(_templateObject729 || (_templateObject729 = _taggedTemplateLiteral25(["Gingerbread Civic Center"]))),
     effects: $effects(_templateObject734 || (_templateObject734 = _taggedTemplateLiteral25(["Ode to Booze"]))),
     outfit: {
@@ -16449,9 +17445,13 @@ var Leveling = {
     },
     effects: [
       $effect(_templateObject864 || (_templateObject864 = _taggedTemplateLiteral25(["A Girl Named Sue"]))),
+      // Skills
       $effect(_templateObject874 || (_templateObject874 = _taggedTemplateLiteral25(["Blood Bond"]))),
+      // Class skills
       $effect(_templateObject884 || (_templateObject884 = _taggedTemplateLiteral25(["Empathy"]))),
+      // 15 mp, -720 meat
       $effect(_templateObject894 || (_templateObject894 = _taggedTemplateLiteral25(["Leash of Linguini"])))
+      // 12 mp
     ]
   }, {
     name: "Wish Effects",
@@ -16494,6 +17494,7 @@ var Leveling = {
       assert(get("_deckCardsSeen").includes("Christmas Card"), "Failed to record christmas card draw?");
     },
     effects: $effects(_templateObject1119 || (_templateObject1119 = _taggedTemplateLiteral25(["Inscrutable Gaze, Ode to Booze"]))),
+    // 10 + 50 mp
     outfit: {
       familiar: $familiar(_templateObject1123 || (_templateObject1123 = _taggedTemplateLiteral25(["Frumious Bandersnatch"])))
     },
@@ -16506,6 +17507,7 @@ var Leveling = {
     do: function() {
       return (0, import_kolmafia34.use)($item(_templateObject1223 || (_templateObject1223 = _taggedTemplateLiteral25(["glittery mascara"]))));
     },
+    // -21 meat
     post: function() {
       return assert($effect(_templateObject1233 || (_templateObject1233 = _taggedTemplateLiteral25(["Glittering Eyelashes"]))));
     }
@@ -16548,6 +17550,7 @@ var Leveling = {
     combat: new CombatStrategy().macro(function() {
       return Macro.externalIf(!haveItemOrEffect($item(_templateObject1363 || (_templateObject1363 = _taggedTemplateLiteral25(["imported taffy"])))), Macro.skill($skill(_templateObject1373 || (_templateObject1373 = _taggedTemplateLiteral25(["Feel Envy"])))));
     }, $monster(_templateObject1382 || (_templateObject1382 = _taggedTemplateLiteral25(["goblin flapper"])))).macro(DefaultMacro),
+    // Don't abort on unexpected monsters
     effects: [
       $effect(_templateObject1392 || (_templateObject1392 = _taggedTemplateLiteral25(["Broad-Spectrum Vaccine"]))),
       $effect(_templateObject1402 || (_templateObject1402 = _taggedTemplateLiteral25(["Favored by Lyle"]))),
@@ -16562,6 +17565,7 @@ var Leveling = {
       $effect(_templateObject1492 || (_templateObject1492 = _taggedTemplateLiteral25(["Warlock, Warstock, and Warbarrel"]))),
       $effect(_templateObject1502 || (_templateObject1502 = _taggedTemplateLiteral25(["items.enh"]))),
       $effect(_templateObject1517 || (_templateObject1517 = _taggedTemplateLiteral25(["meat.enh"]))),
+      // Beach comb (requres >0 turns available)
       $effect(_templateObject1522 || (_templateObject1522 = _taggedTemplateLiteral25(["Cold as Nice"]))),
       $effect(_templateObject1532 || (_templateObject1532 = _taggedTemplateLiteral25(["A Brush with Grossness"]))),
       $effect(_templateObject1542 || (_templateObject1542 = _taggedTemplateLiteral25(["Do I Know You From Somewhere?"]))),
@@ -16573,32 +17577,59 @@ var Leveling = {
       $effect(_templateObject1602 || (_templateObject1602 = _taggedTemplateLiteral25(["Resting Beach Face"]))),
       $effect(_templateObject1616 || (_templateObject1616 = _taggedTemplateLiteral25(["We're All Made of Starfish"]))),
       $effect(_templateObject1622 || (_templateObject1622 = _taggedTemplateLiteral25(["You Learned Something Maybe!"]))),
+      // Skills
       $effect(_templateObject1632 || (_templateObject1632 = _taggedTemplateLiteral25(["Big"]))),
+      // 15 mp
       $effect(_templateObject1642 || (_templateObject1642 = _taggedTemplateLiteral25(["Blessing of the Bird"]))),
+      // 10 mp
       $effect(_templateObject1652 || (_templateObject1652 = _taggedTemplateLiteral25(["Blessing of your favorite Bird"]))),
+      // 50 mp
       $effect(_templateObject1662 || (_templateObject1662 = _taggedTemplateLiteral25(["Blood Bubble"]))),
       $effect(_templateObject1672 || (_templateObject1672 = _taggedTemplateLiteral25(["Carol of the Bulls"]))),
+      // 30 mp
       $effect(_templateObject1682 || (_templateObject1682 = _taggedTemplateLiteral25(["Carol of the Hells"]))),
+      // 30 mp
       $effect(_templateObject1692 || (_templateObject1692 = _taggedTemplateLiteral25(["Carol of the Thrills"]))),
+      // 30 mp
       $effect(_templateObject1702 || (_templateObject1702 = _taggedTemplateLiteral25(["Feeling Excited"]))),
       $effect(_templateObject1715 || (_templateObject1715 = _taggedTemplateLiteral25(["Feeling Peaceful"]))),
       $effect(_templateObject1722 || (_templateObject1722 = _taggedTemplateLiteral25(["Frenzied, Bloody"]))),
       $effect(_templateObject1732 || (_templateObject1732 = _taggedTemplateLiteral25(["Inscrutable Gaze"]))),
+      // 10 mp, used above
       $effect(_templateObject1742 || (_templateObject1742 = _taggedTemplateLiteral25(["Ruthlessly Efficient"]))),
+      // 10 mp
       $effect(_templateObject1752 || (_templateObject1752 = _taggedTemplateLiteral25(["Singer's Faithful Ocelot"]))),
+      // 15 mp
       $effect(_templateObject1762 || (_templateObject1762 = _taggedTemplateLiteral25(["Walberg's Dim Bulb"]))),
+      // 5 mp
+      // Class skills
       $effect(_templateObject1772 || (_templateObject1772 = _taggedTemplateLiteral25(["Astral Shell"]))),
+      // 10 mp
       $effect(_templateObject1782 || (_templateObject1782 = _taggedTemplateLiteral25(["Curiosity of Br'er Tarrypin"]))),
+      // 10 mp
       $effect(_templateObject1792 || (_templateObject1792 = _taggedTemplateLiteral25(["Elemental Saucesphere"]))),
+      // 10 mp
       $effect(_templateObject1802 || (_templateObject1802 = _taggedTemplateLiteral25(["Flimsy Shield of the Pastalord"]))),
+      // 20 mp
       $effect(_templateObject1815 || (_templateObject1815 = _taggedTemplateLiteral25(["Ghostly Shell"]))),
+      // 6 mp
       $effect(_templateObject1822 || (_templateObject1822 = _taggedTemplateLiteral25(["Sauce Monocle"]))),
+      // 20 mp
       $effect(_templateObject1832 || (_templateObject1832 = _taggedTemplateLiteral25(["Springy Fusilli"]))),
+      // 10 mp
+      // Batteries
       $effect(_templateObject1842 || (_templateObject1842 = _taggedTemplateLiteral25(["AAA-Charged"]))),
+      // +30 MP
+      // Song(s)
       $effect(_templateObject1852 || (_templateObject1852 = _taggedTemplateLiteral25(["Ode to Booze"]))),
+      // 50 mp
       $effect(_templateObject1862 || (_templateObject1862 = _taggedTemplateLiteral25(["Polka of Plenty"]))),
+      // 7 mp
       $effect(_templateObject1872 || (_templateObject1872 = _taggedTemplateLiteral25(["Stevedave's Shanty of Superiority"]))),
+      // 30 mp
+      // Dread Song
       $effect(_templateObject1882 || (_templateObject1882 = _taggedTemplateLiteral25(["Song of Sauce"])))
+      // 100 mp
     ]
   }, {
     name: "Tunnel of L.O.V.E.",
@@ -16606,6 +17637,13 @@ var Leveling = {
       return get("_loveTunnelUsed");
     },
     prepare: spendAllMpOnLibrams,
+    // 1222 The Tunnel of L.O.V.E.: (1) enter the tunnel (2) leave
+    // 1223 L.O.V. Entrance: (1) fight the enforcer (2) skip
+    // 1224 L.O.V. Equipment Room: (1) take the cardigan (2) take the epaulettes (3) take the earrings (4) skip
+    // 1225 L.O.V. Engine Room: (1) fight the engineer (2) skip
+    // 1226 L.O.V. Emergency Room: (1) Lovebotamy (2) Open Heart Surgery (3) Wandering Eye Surgery (4) skip
+    // 1227 L.O.V. Elbow Room: (1) fight the equivocator (2) skip
+    // 1228 L.O.V. Emporium: (1) enamorang (2) emotionizer (3) chocolate (4) bouquet (5) elephant (6) toast (7) skip
     choices: {
       1222: 1,
       1223: 1,
@@ -16718,6 +17756,7 @@ var Leveling = {
     completed: function() {
       return get("questRufus") !== "unstarted";
     },
+    // Calling Rufus: (1) I'll fight the entity (2) I'll find the artifact (3) I'll collect the goods (4) Hang up
     choices: {
       1497: 1
     },
@@ -16794,6 +17833,7 @@ var Leveling = {
         return have($item(_templateObject2522 || (_templateObject2522 = _taggedTemplateLiteral25(["God Lobster's Ring"])))) ? 2 : 1;
       }
     },
+    // Granted a Boon: (1) equipment (2) blessing (3) experience
     do: function() {
       return (0, import_kolmafia34.visitUrl)("main.php?fightgodlobster=1");
     },
@@ -16883,6 +17923,7 @@ var Leveling = {
     choices: {
       1119: -1
     },
+    // Shining Mauve Backwards In Time
     do: $location(_templateObject2882 || (_templateObject2882 = _taggedTemplateLiteral25(["The Deep Machine Tunnels"]))),
     outfit: function() {
       return _objectSpread8(_objectSpread8({}, levelingOutfit($location(_templateObject2892 || (_templateObject2892 = _taggedTemplateLiteral25(["The Deep Machine Tunnels"]))))), {}, {
@@ -16899,6 +17940,15 @@ var Leveling = {
     completed: function() {
       return get("_voteFreeFights") > 0;
     },
+    // 1467 Poetic Justice: (1) Moxie stats (2) Myst stats (3) 5 Adventures & Beaten up
+    // 1468 Aunts not Ants: (1) Moxie stats (2) Muscle stats (3) +10 stats per fight, -20% to all stats
+    // 1469 Beware of Aligator: (1) +20 ML (2) Awesome booze (3) 1500 meat
+    // 1470 Teacher's Pet: (1) Sleaze Res + DA (2) Teacher's pen (3)  Muscle stats
+    // 1471 Lost and Found: (1) Meat potion (2) Myst stats (3) Meat, Muscle stats + Beaten up
+    // 1472 Summer Days: (1) -5% Combat Frequency potion (2) Good food (3) Moxie stats
+    // 1473 Bath Time: (1) Muscle + gob of wet hair (2) Resists + DA (3) Hot res + Init
+    // 1474 Delicious Sprouts: (1) Myst stats (2) Good food (3) Muscle stats
+    // 1475 Hypnotic Master: (1) Mother's necklace (2) Muscle stats (3) random effects
     choices: {
       1467: 3,
       1468: 4,
@@ -17165,6 +18215,7 @@ var SpellDamageQuest = {
     do: function() {
       return (0, import_kolmafia35.create)($item(_templateObject351 || (_templateObject351 = _taggedTemplateLiteral26(["cordial of concentration"]))));
     },
+    // -63 meat
     post: function() {
       return assert($item(_templateObject439 || (_templateObject439 = _taggedTemplateLiteral26(["cordial of concentration"]))));
     }
@@ -17555,30 +18606,30 @@ function _arrayLikeToArray24(arr, len) {
     arr2[i] = arr[i];
   return arr2;
 }
-function _iterableToArrayLimit18(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s, _e, _x, _r, _arr = [], _n = true, _d = false;
+function _iterableToArrayLimit18(r, l) {
+  var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+  if (null != t) {
+    var e, n, i, u, a = [], f = true, o = false;
     try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i)
+      if (i = (t = t.call(r)).next, 0 === l) {
+        if (Object(t) !== t)
           return;
-        _n = false;
+        f = false;
       } else
-        for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = true)
+        for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = true)
           ;
-    } catch (err) {
-      _d = true, _e = err;
+    } catch (r2) {
+      o = true, n = r2;
     } finally {
       try {
-        if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r))
+        if (!f && null != t.return && (u = t.return(), Object(u) !== u))
           return;
       } finally {
-        if (_d)
-          throw _e;
+        if (o)
+          throw n;
       }
     }
-    return _arr;
+    return a;
   }
 }
 function _arrayWithHoles18(arr) {
@@ -17616,7 +18667,9 @@ function main() {
   try {
     engine.propertyManager.setChoices({
       1340: 2,
+      // Is There A Doctor In The House?: (1) accept quest (2) decline the quest (3) decline all quests for today
       1387: 3
+      // Using the Force: (1) banish (2) find friends (3) force item drops
     });
     while (!get("kingLiberated")) {
       var task = engine.getNextTask();
