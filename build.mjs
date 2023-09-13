@@ -5,6 +5,7 @@ import babel from "esbuild-plugin-babel";
 build({
   entryPoints: { seventyhccs: "src/main.ts" },
   bundle: true,
+  minifyWhitespace: true,
   platform: "node",
   target: "rhino1.7.14",
   external: ["kolmafia"],
