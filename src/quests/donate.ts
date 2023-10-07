@@ -64,7 +64,7 @@ export const DonateQuest: Quest<Task> = {
           .repeat()
           .setAutoAttack();
       },
-      choices: { 1133: 1 },
+      choices: { 768: 1, 1133: 1 },
       do: () => use(1, $item`Batfellow comic`),
       post: () => set("_batfellowToday", true),
       outfit: () => {
