@@ -7,6 +7,7 @@ import {
   pvpAttacksLeft,
   Slot,
   totalTurnsPlayed,
+  use,
   userConfirm,
   visitUrl,
 } from "kolmafia";
@@ -72,6 +73,7 @@ export function prepAndAscendIfNecessary() {
     prepareToAscend();
     visitUrl("council.php");
     visitUrl("charsheet.php");
+    use(3, $item`campfire smoke`);
 
     const toPerm = new Map(
       (config.skills_to_perm ?? []).filter((s) => have(s)).map((s) => [s, Lifestyle.hardcore])

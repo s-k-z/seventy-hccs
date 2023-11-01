@@ -51,12 +51,12 @@ export const DonateQuest: Quest<Task> = {
     {
       name: "Grab Comic",
       ready: () => storageAmount($item`Batfellow comic`) > 0,
-      completed: () => itemAmount($item`Batfellow comic`) > 0 || get("_batfellowToday", false),
+      completed: () => itemAmount($item`Batfellow comic`) > 0 || get("_batfellowToday", 1) > 1,
       do: () => takeStorage(1, $item`Batfellow comic`),
     },
     {
       name: "Enter the Batfellow",
-      completed: () => !have($item`Batfellow comic`) || get("_batfellowToday", false),
+      completed: () => !have($item`Batfellow comic`) || get("_batfellowToday", 1) > 1,
       acquire: [{ item: $item`tiny stillsuit` }],
       prepare: () => {
         spendAllMpOnLibrams();
@@ -66,7 +66,7 @@ export const DonateQuest: Quest<Task> = {
       },
       choices: { 768: 1, 1133: 1 },
       do: () => use(1, $item`Batfellow comic`),
-      post: () => set("_batfellowToday", true),
+      post: () => set("_batfellowToday", get("_batfellowToday", 0) + 1),
       outfit: () => {
         const stillFam = $familiar`Shorter-Order Cook`;
         equip(stillFam, $item`tiny stillsuit`);
