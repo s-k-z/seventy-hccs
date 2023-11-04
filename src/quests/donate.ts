@@ -51,12 +51,12 @@ export const DonateQuest: Quest<Task> = {
     {
       name: "Grab Comic",
       ready: () => storageAmount($item`Batfellow comic`) > 0,
-      completed: () => itemAmount($item`Batfellow comic`) > 0 || get("_batfellowToday", 1) > 0,
+      completed: () => itemAmount($item`Batfellow comic`) > 0 || get("_batfellowToday", 0) > 0,
       do: () => takeStorage(1, $item`Batfellow comic`),
     },
     {
       name: "Enter the Batfellow",
-      completed: () => !have($item`Batfellow comic`) || get("_batfellowToday", 1) > 0,
+      completed: () => !have($item`Batfellow comic`) || get("_batfellowToday", 0) > 0,
       acquire: [{ item: $item`tiny stillsuit` }],
       prepare: () => {
         spendAllMpOnLibrams();
